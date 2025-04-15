@@ -1,5 +1,5 @@
 // Middleware de autenticación y autorización
-const jwt = require('jsonwebtoken');
+const jose = require('jose');
 
 /**
  * Protege rutas verificando el token JWT
@@ -24,18 +24,29 @@ exports.protect = async (req, res, next) => {
       });
     }
 
-    // Verificar token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // Verificar token con jose
+    const encoder = new TextEncoder();
+    const secretKey = encoder.encode(process.env.JWT_SECRET);
     
-    // Almacenar usuario en req (en un entorno real se buscaría en la base de datos)
-    req.user = { id: decoded.id, role: decoded.role };
-    
-    next();
+    try {
+      const { payload } = await jose.jwtVerify(token, secretKey);
+      
+      // Almacenar usuario en req (en un entorno real se buscaría en la base de datos)
+      req.user = { id: payload.id, role: payload.role };
+      
+      next();
+    } catch (jwtError) {
+      console.error(`Error de JWT: ${jwtError.message}`);
+      return res.status(401).json({
+        success: false,
+        error: 'Token inválido o expirado'
+      });
+    }
   } catch (err) {
     console.error(`Error de autenticación: ${err.message}`);
     return res.status(401).json({
       success: false,
-      error: 'Token inválido o expirado'
+      error: 'Error al procesar la autenticación'
     });
   }
 };

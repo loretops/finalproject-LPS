@@ -1,5 +1,6 @@
 // API route para acceso seguro a documentos
-import jwt from 'jsonwebtoken';
+// Usando jose en lugar de jsonwebtoken para compatibilidad con Edge/Browser
+import * as jose from 'jose';
 
 export default async function handler(req, res) {
   // Solo permitir peticiones GET
@@ -22,11 +23,18 @@ export default async function handler(req, res) {
       });
     }
 
-    // Verificar el token
+    // Verificar el token usando jose
     let decodedToken;
     try {
-      decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+      // Crear clave de firma a partir del secreto
+      const encoder = new TextEncoder();
+      const secretKey = encoder.encode(process.env.JWT_SECRET);
+      
+      // Verificar el token
+      const { payload } = await jose.jwtVerify(token, secretKey);
+      decodedToken = payload;
     } catch (error) {
+      console.error('Error verificando token:', error);
       return res.status(401).json({ 
         success: false, 
         error: 'Token inválido o expirado' 

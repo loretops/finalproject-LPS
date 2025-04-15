@@ -1,6 +1,6 @@
 // Utilidades para gestión segura de documentos
 const CryptoJS = require('crypto-js');
-const jwt = require('jsonwebtoken');
+const jose = require('jose');
 
 /**
  * Genera URL firmada para acceso temporal a documento
@@ -9,17 +9,24 @@ const jwt = require('jsonwebtoken');
  * @param {Number} expiresIn - Tiempo de validez en segundos (defecto 1 hora)
  * @returns {String} URL firmada con token temporal
  */
-exports.generateSecureDocumentUrl = (documentId, user, expiresIn = 3600) => {
-  // Crear token de acceso temporal
-  const token = jwt.sign(
-    {
-      documentId,
-      userId: user.id,
-      purpose: 'document-access'
-    },
-    process.env.JWT_SECRET,
-    { expiresIn }
-  );
+exports.generateSecureDocumentUrl = async (documentId, user, expiresIn = 3600) => {
+  // Usar jose para crear un token JWT compatible con browser/edge
+  const encoder = new TextEncoder();
+  const secretKey = encoder.encode(process.env.JWT_SECRET);
+  
+  // Crear el payload del token
+  const payload = {
+    documentId,
+    userId: user.id,
+    purpose: 'document-access'
+  };
+  
+  // Firmar el token con jose (debe ser await ya que es asíncrono)
+  const token = await new jose.SignJWT(payload)
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime(`${expiresIn}s`)
+    .sign(secretKey);
 
   // En un entorno real, esto podría ser una URL a un controlador que 
   // verifica el token y sirve el documento desde almacenamiento seguro

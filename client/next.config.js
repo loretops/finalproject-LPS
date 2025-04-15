@@ -12,6 +12,26 @@ const nextConfig = {
           : '/api/:path*',
       },
     ]
+  },
+  // Configuración webpack para manejar módulos Node.js en el cliente
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Configuración para módulos que solo funcionan en Node.js
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        crypto: require.resolve('crypto-browserify'),
+        stream: require.resolve('stream-browserify'),
+        util: require.resolve('util/'),
+        buffer: require.resolve('buffer/'),
+        process: require.resolve('process/browser'),
+        fs: false,
+        path: false,
+        net: false,
+        tls: false
+      };
+    }
+    
+    return config;
   }
 }
 
