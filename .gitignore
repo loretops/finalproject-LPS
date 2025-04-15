@@ -2,6 +2,7 @@
 
 ## Dependencias
 /node_modules
+/client/node_modules
 /.pnp
 .pnp.js
 
@@ -9,20 +10,16 @@
 /coverage
 
 ## Next.js
-/.next/
-/out/
+/client/.next/
+/client/out/
 
 ## Production
 /build
+/client/build
 
 ## Misc
 .DS_Store
 *.pem
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 
 ## Debug
 npm-debug.log*
@@ -37,4 +34,14 @@ yarn-error.log*
 
 ## Excepciones
 # Pero incluir las imágenes de documentación
-!docs/images/ 
+!docs/images/
+
+## Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+## Vercel
+.vercel 

@@ -1,0 +1,179 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String                @id @default(uuid())
+  email               String                @unique
+  passwordHash        String                
+  role                String                // visitor, socio, gestor
+  status              String                @default("pending") // active, pending, banned
+  failedLoginAttempts Int                   @default(0) // Seguridad para bloquear cuentas
+  lastLoginAt         DateTime?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  
+  // Relaciones
+  invitationsSent     Invitation[]          @relation("SentInvitations")
+  expressedInterests  ExpressedInterest[]
+  investments         Investment[]
+  notificationsReceived Notification[]
+  projectsCreated     Project[]
+  accessLogs          UserAccessLog[]
+  documentAccess      DocumentAccessLog[]
+
+  @@map("users")
+}
+
+model Invitation {
+  id          String     @id @default(uuid())
+  email       String
+  token       String     @unique
+  invitedById String     // Usuario que envió la invitación
+  invitedBy   User       @relation("SentInvitations", fields: [invitedById], references: [id])
+  status      String     @default("pending") // pending, accepted, expired
+  createdAt   DateTime   @default(now())
+  expiresAt   DateTime
+  
+  @@map("invitations")
+}
+
+model Project {
+  id                 String               @id @default(uuid())
+  title              String
+  description        String
+  status             String               @default("draft") // draft, published, closed
+  minimumInvestment  Decimal
+  targetAmount       Decimal
+  currentAmount      Decimal              @default(0)
+  expectedRoi        Decimal?
+  location           String?
+  propertyType       String?
+  publishedAt        DateTime?
+  createdById        String
+  createdBy          User                 @relation(fields: [createdById], references: [id])
+  createdAt          DateTime             @default(now())
+  
+  // Relaciones
+  documents          ProjectDocument[]
+  expressedInterests ExpressedInterest[]
+  investments        Investment[]
+  updates            ProjectUpdate[]
+  
+  @@map("projects")
+}
+
+model ProjectDocument {
+  id          String   @id @default(uuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+  fileUrl     String
+  fileType    String
+  accessLevel String   // public, socios, inversores
+  documentType String  // economico, legal, planos, etc.
+  isEncrypted Boolean  @default(true) // Marca documentos sensibles
+  createdAt   DateTime @default(now())
+  
+  // Trazabilidad de accesos
+  accessLogs  DocumentAccessLog[]
+  
+  @@map("project_documents")
+}
+
+model ExpressedInterest {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+  expressedAt DateTime @default(now())
+  
+  @@map("expressed_interests")
+}
+
+model Investment {
+  id                String   @id @default(uuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id])
+  projectId         String
+  project           Project  @relation(fields: [projectId], references: [id])
+  amount            Decimal
+  investedAt        DateTime @default(now())
+  status            String   @default("pending") // pending, confirmed, cancelled
+  contractReference String?
+  
+  // Seguimiento de cambios para auditoría
+  logs              InvestmentLog[]
+  
+  @@map("investments")
+}
+
+model InvestmentLog {
+  id           String    @id @default(uuid())
+  investmentId String
+  investment   Investment @relation(fields: [investmentId], references: [id])
+  action       String     // created, updated, confirmed, cancelled
+  previousData String?    // JSON con estado anterior (encriptado)
+  newData      String?    // JSON con cambios (encriptado)
+  createdAt    DateTime  @default(now())
+  
+  @@map("investment_logs")
+}
+
+model ProjectUpdate {
+  id          String   @id @default(uuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+  title       String
+  description String
+  videoUrl    String?
+  createdAt   DateTime @default(now())
+  
+  @@map("project_updates")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  content   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  @@map("notifications")
+}
+
+// Modelos para seguridad y auditoría
+
+model UserAccessLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  action    String   // login, logout, failed_login, password_change, etc.
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  
+  @@map("user_access_logs")
+}
+
+model DocumentAccessLog {
+  id          String          @id @default(uuid())
+  documentId  String
+  document    ProjectDocument @relation(fields: [documentId], references: [id])
+  userId      String
+  user        User            @relation(fields: [userId], references: [id])
+  action      String          // view, download, print_attempt
+  ipAddress   String?
+  createdAt   DateTime        @default(now())
+  
+  @@map("document_access_logs")
+}

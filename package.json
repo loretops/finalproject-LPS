@@ -1,0 +1,26 @@
+{
+  "name": "coopco",
+  "version": "1.0.0",
+  "description": "Plataforma digital exclusiva para un club privado de inversores inmobiliarios",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js",
+    "build": "cd client && npm run build"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "jsonwebtoken": "^9.0.2",
+    "helmet": "^7.0.0",
+    "express-rate-limit": "^6.7.0",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "xss-clean": "^0.1.4",
+    "hpp": "^0.2.3",
+    "crypto-js": "^4.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

@@ -72,3 +72,119 @@ Basado en las historias de usuario y tickets proporcionados, aquí hay una hoja 
    - Desplegar la aplicación en las plataformas elegidas.
 
 Esta hoja de ruta proporciona un enfoque estructurado para desarrollar el MVP, asegurando que las funcionalidades principales se prioricen y se construyan en una secuencia lógica.
+
+## Instalación y Despliegue
+
+### Desarrollo Local
+
+1. Clonar el repositorio:
+   ```
+   git clone <url-del-repositorio>
+   cd coopco
+   ```
+
+2. Instalar dependencias del servidor:
+   ```
+   npm install
+   ```
+
+3. Instalar dependencias del cliente:
+   ```
+   cd client
+   npm install
+   cd ..
+   ```
+
+4. Configurar variables de entorno:
+   - Duplicar el archivo `.env.example` a `.env`
+   - Editar `.env` con tus configuraciones
+
+5. Iniciar en modo desarrollo:
+   ```
+   npm run dev
+   ```
+
+### Despliegue en Producción
+
+#### Frontend (Vercel/Netlify)
+
+1. Conectar repositorio a Vercel o Netlify
+2. Configurar:
+   - Directorio de construcción: `client`
+   - Comando de construcción: `npm run build`
+   - Directorio de salida: `.next`
+
+#### Backend (Heroku/Render)
+
+1. Conectar repositorio a Heroku o Render
+2. Configurar variables de entorno
+3. Desplegar automáticamente desde la rama principal
+
+#### Base de Datos (Heroku Postgres/ElephantSQL)
+
+1. Crear una base de datos en el proveedor
+2. Obtener la URL de conexión
+3. Configurar la variable de entorno `DATABASE_URL`
+
+### Seguridad y Confidencialidad de Datos
+
+Para garantizar la seguridad y confidencialidad de los datos en el proyecto COOPCO, se han implementado las siguientes medidas:
+
+#### 1. Seguridad en la Autenticación y Autorización
+
+- **JWT con caducidad**: Los tokens de acceso caducan después de un tiempo definido.
+- **Sistema de roles**: Acceso restringido según el tipo de usuario (visitante, socio, gestor, inversor).
+- **Middleware de protección**: Rutas protegidas que verifican permisos.
+- **Almacenamiento seguro de contraseñas**: Utilizando bcrypt para hash de contraseñas.
+
+#### 2. Protección de Documentos Sensibles
+
+- **Visualización sin descarga**: Los documentos se muestran en visores embebidos que evitan la descarga.
+- **Marcas de agua dinámicas**: Los documentos se muestran con marcas de agua que indican el usuario y fecha.
+- **URLs temporales**: Los enlaces a documentos son temporales y generados por usuario.
+- **Encriptación de documentos**: Los documentos confidenciales se almacenan encriptados en la base de datos.
+
+#### 3. Registro de Actividad y Auditoría
+
+- **Log de acceso**: Registro de cada acceso a documentos sensibles.
+- **Historial de cambios**: Seguimiento de modificaciones en inversiones.
+- **Registro de IP y dispositivo**: Para detectar actividades sospechosas.
+
+#### 4. Seguridad en las Comunicaciones
+
+- **HTTPS obligatorio**: Todas las comunicaciones están cifradas.
+- **CORS configurado**: Restricción de dominios que pueden acceder a la API.
+- **Headers de seguridad**: Configurados con helmet para evitar vulnerabilidades comunes.
+- **Rate limiting**: Protección contra ataques de fuerza bruta.
+
+#### 5. Seguridad en la Base de Datos
+
+- **Datos sensibles encriptados**: La información confidencial se guarda encriptada.
+- **Acceso restringido**: La base de datos sólo es accesible desde la aplicación.
+- **Validación de datos**: Para prevenir inyecciones SQL.
+
+#### 6. Consideraciones para el Despliegue Seguro
+
+**En Backend (Heroku/Render)**:
+- Configurar variables de entorno para secretos
+- Habilitar HTTPS y certificados SSL
+- Configurar políticas de firewall para limitar accesos
+
+**En Base de Datos (ElephantSQL)**:
+- Usar contraseñas robustas
+- Habilitar SSL para conexiones
+- Configurar backups automáticos cifrados
+
+**En Frontend (Vercel/Netlify)**:
+- Configurar CSP (Content Security Policy)
+- Implementar SRI (Subresource Integrity) para recursos externos
+- Habilitar HSTS para forzar HTTPS
+
+#### 7. Cumplimiento de Normativas
+
+- El sistema está diseñado considerando principios de GDPR/RGPD:
+  - Consentimiento para datos personales
+  - Derecho al olvido (eliminación de datos)
+  - Limitación del propósito de recogida de datos
+  - Registro de acceso a datos sensibles
+
