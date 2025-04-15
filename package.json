@@ -5,22 +5,53 @@
   "scripts": {
     "start": "node server/index.js",
     "dev": "nodemon server/index.js",
-    "build": "cd client && npm run build"
+    "dev:client": "cd client && npm run dev",
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:client\"",
+    "build": "cd client && npm run build",
+    "build:client": "cd client && npm run build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:generate": "npx prisma generate",
+    "prisma:studio": "npx prisma studio",
+    "prepare": "husky install",
+    "test": "mocha server/tests/**/*.test.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "jose": "^4.14.6",
-    "helmet": "^7.0.0",
-    "express-rate-limit": "^6.7.0",
+    "@prisma/client": "^6.6.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
-    "xss-clean": "^0.1.4",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
+    "helmet": "^7.0.0",
     "hpp": "^0.2.3",
-    "crypto-js": "^4.1.1"
+    "jose": "^4.14.6",
+    "uuid": "^11.1.0",
+    "xss-clean": "^0.1.4"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "chai": "^5.2.0",
+    "concurrently": "^8.2.1",
+    "eslint": "^8.49.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "mocha": "^11.1.0",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.3",
+    "sinon": "^20.0.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   }
 }

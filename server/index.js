@@ -9,12 +9,13 @@ const app = express();
 
 // Middleware de seguridad
 app.use(helmet()); // Proporciona cabeceras HTTP seguras
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.CLIENT_URL 
-    : 'http://localhost:3000',
-  credentials: true // Necesario para cookies/autenticación
-}));
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:3000',
+    credentials: true, // Necesario para cookies/autenticación
+  })
+);
 app.use(express.json({ limit: '1mb' })); // Limita el tamaño de payloads
 
 // Middleware para prevenir ataques de fuerza bruta
@@ -32,14 +33,14 @@ app.get('/', (req, res) => {
   res.json({ message: '¡Hola Mundo desde COOPCO API!' });
 });
 
-// Importar rutas adicionales (comentado por ahora)
-// const routes = require('./routes');
-// app.use('/api', routes);
+// Importar rutas adicionales
+const routes = require('./routes');
+app.use('/api', routes);
 
 // Puerto
 const PORT = process.env.PORT || 5000;
 
 // Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`Servidor funcionando en el puerto ${PORT}`);
+  console.info(`Servidor funcionando en el puerto ${PORT}`);
 });
