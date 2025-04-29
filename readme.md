@@ -137,6 +137,15 @@ Crear una plataforma exclusiva que conecte a un club privado de inversores con o
 ### **1.4. Instrucciones de instalación:**
 > Documenta de manera precisa las instrucciones para instalar y poner en marcha el proyecto en local (librerías, backend, frontend, servidor, base de datos, migraciones y semillas de datos, etc.)
 
+Para instalar y configurar el proyecto en tu entorno local, consulta nuestra [guía detallada de configuración](docs/technical/setup.md) que incluye:
+
+- Requisitos previos y dependencias
+- Configuración de variables de entorno
+- Instalación de dependencias
+- Configuración de la base de datos PostgreSQL
+- Solución a problemas comunes como puertos en uso
+- Verificación de la instalación
+
 ---
 
 ## 2. Arquitectura del Sistema

@@ -298,3 +298,56 @@ Index y estudia todo el proyecto a fondo, como experto desarrollador full-satck:
 
 <!-- 
 Eres un experto en desarrollo de software y conoces las buenas prácticas para la creación de pull requests. En base a los tickets de trabajo, crea los pull requests. Da todo el detalle requerido para desarrollar la tarea de inicio a fin, teniendo en cuenta las buenas prácticas al respecto. -->
+```
+
+
+## 8. Requisitos y configuración
+
+- REVISA @env-example.md . No hace falt aañdir URLs tipo FRONTEND_URL, por ejemplo?
+
+# Prompts
+
+## Sistema
+
+### Crear estructura de carpetas
+```
+Basandote en @readme.md , crea la estructura de carpetas, pero no desarrolles nada aún
+```
+
+### Iniciar servicio PostgreSQL
+```
+ejecuta brew services start postgresql
+```
+
+### Documentar problemas con PostgreSQL
+```
+documenta @setup.md con tu respuesta, para tenerlo en cuenta en el futuro. Añadelo también en @readme.md en el lugar más adecuado
+```
+
+### Configurar schema de Prisma
+```
+npx prisma generate --schema=./backend/prisma/schema.prisma
+Environment variables loaded from .env
+Prisma schema loaded from backend/prisma/schema.prisma
+Error: 
+You don't have any datasource defined in your schema.prisma.
+You can define a datasource like this:
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+More information in our documentation:
+https://pris.ly/d/prisma-schema
+```
+
+### Ejecutar migraciones de Prisma
+```
+Tienes la conexion a la base de datos en @env-example.md . Ejecuta npx prisma migrate dev --schema=./backend/prisma/schema.prisma
+```
+
+### Iniciar aplicación y verificar funcionamiento
+```
+haz una prueba sencilla de que el proyecto ha arrancado correctamente: frontend, backend y bases de datos
+```

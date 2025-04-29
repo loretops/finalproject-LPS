@@ -100,6 +100,23 @@ GRANT ALL PRIVILEGES ON DATABASE coopco TO coopco_user;
 \q
 ```
 
+#### Configuración de permisos para Prisma Migrate
+
+Para que Prisma Migrate funcione correctamente, el usuario de la base de datos necesita permisos adicionales. Ejecuta estos comandos si encuentras errores al ejecutar migraciones:
+
+```bash
+# Dar permisos para crear bases de datos (necesario para la base de datos "shadow" de Prisma)
+psql -U postgres -c "ALTER USER coopco_user CREATEDB;"
+
+# Si encuentras errores de permiso en el schema public
+psql -U postgres -c "GRANT ALL ON SCHEMA public TO coopco_user;"
+
+# Si los problemas persisten, puedes otorgar permisos de superusuario (solo para desarrollo)
+psql -U postgres -c "ALTER ROLE coopco_user WITH SUPERUSER;"
+```
+
+> ⚠️ **Advertencia:** Otorgar permisos de superusuario no es recomendable en entornos de producción. Para producción, concede solo los permisos mínimos necesarios.
+
 #### 4.3. Ejecutar Migraciones con Prisma
 
 ```bash
@@ -208,6 +225,44 @@ Tu instalación está completa si:
 - Verifica la URL de conexión en `.env`
 - Asegúrate de que PostgreSQL está en ejecución
 - Confirma que el usuario tiene permisos adecuados
+
+### Problemas con PostgreSQL
+
+Si encuentras el error `Input/output error` al iniciar PostgreSQL con `brew services start postgresql`, prueba estos pasos:
+
+1. Intenta iniciarlo con permisos de administrador:
+   ```bash
+   sudo brew services start postgresql
+   ```
+
+2. Si el comando anterior funciona, ten en cuenta que esto cambia los permisos de algunos directorios a root:admin, lo que requerirá eliminación manual con sudo cuando actualices o desinstales PostgreSQL.
+
+3. Para futuros inicios, considera reparar los permisos para poder iniciar PostgreSQL sin sudo:
+   ```bash
+   # Reiniciar PostgreSQL correctamente
+   sudo brew services stop postgresql
+   sudo chown -R $(whoami):admin /opt/homebrew/var/postgresql
+   brew services start postgresql
+   ```
+
+### Problemas con Prisma Migrate
+
+Si encuentras errores al ejecutar `prisma migrate dev`, asegúrate de que:
+
+1. El usuario de PostgreSQL tiene permisos para crear bases de datos (necesario para la base de datos "shadow" que usa Prisma):
+   ```bash
+   psql -U postgres -c "ALTER USER tu_usuario CREATEDB;"
+   ```
+
+2. El usuario tiene permisos sobre el schema public:
+   ```bash
+   psql -U postgres -c "GRANT ALL ON SCHEMA public TO tu_usuario;"
+   ```
+
+3. Si los problemas persisten, solo para entornos de desarrollo, puedes otorgar permisos de superusuario:
+   ```bash
+   psql -U postgres -c "ALTER ROLE tu_usuario WITH SUPERUSER;"
+   ```
 
 ### Problemas al iniciar el servidor
 
