@@ -108,6 +108,42 @@ Bien, en base a esta arquitectura enfocada a un programador junior, haz una dexr
 Revisa la estructura de archivos propuesta en @readme.md . Para un desarrollador junior, te parece mejor esa, o la que hal al final de @arquitectura.md ? 
 ```
 
+**Prompt 10:**
+```
+Revisa el archivo @readme.md porque vamos a revisar la arquitectura del proyecto: 
+* Eres un experto arquitecto de sistemas, con experiencia en proyectos similares al descrito. Revisa la arquitectira propuesta de backend y frontend. Quiero usar buenas prácticas DDD, SOLID, DRY y patrones de diseño. Ten en cuenta que yo soy una programadora junior, que el proyecto que quiero sacer adelante es un MVP, y necesito que sea fácil de mantener, y en el futuro se p ueda escalar. Antes de cambiar nada, dime qué sugieres. Quiero que analices la estructura de carpetas- las tecnologías usadas- la arquitectura de backend y frontend- todos los pasos para levantar el entorno, incluida la base de datos.
+No te olvides de las @rules.mdc 
+```
+
+**Prompt 11:**
+```
+Quiero que hagas lo siguientes pasos:
+1. Cambiar la estructura de carpetas para que en vez de ser cliente y servidor sean frontend y backend según tus conocimientos como experto en arquietctura de sistemas. esta estructura debes cambiarla en aquellos archivos del proyecto donde esté definida. 
+2. según la consulta anterior, valora si debes aplicar mejor DDD tal y como propones para separar la lógica de negocio
+3. Evalua si vale la pena implementar más la arquitectura hexagonal según los criterios que me indicas (Faltan puertos claramente definidos, no hay adaptadores primarios/secundarios explícitos)
+4. valora también si vale la pena aplicar más los principios SOLID según idicas (La dependencia en Express está acoplada directamente a los controladores, no se ve inyección de dependencias clara)
+5. Crea un archivo en la documentación que incluya toda la información necesaria para levantar el entorno(Instalación de dependencias, configuración de variables de entorno, preparación y migración de la base de datos, ejecución del servidor de desarrollo, testing inicial). Para ello además quiero que tengas en cuenta que como estoy haciendo muchas pruebas, y se quedan en uso los puertos, cada vez que reinicio los servidores tengo problemas con los puertos. Busca una forma para que se puedan hacer esas pruebas sin tener ese problema. 
+6. revisa los archivos de documentación y dime cómo documentarias mejor respondiendo más al "por qué" que al "qué"
+7. valora si es bueno usar JsDoc para ayudar al autocompletado en la documentación
+8. Valora este punto: Monitorización y logging: Implementa logging estructurado, prepara el sistema para monitorización básica
+
+Para todo ten en cuenta mi posición como programadora junior, y que no quiero un proyecto complejo, sino quiero que sea sencillo, fácil de mantener, aunque si quiero que en el futuro sea escalable.
+```
+
+**Prompt 12:**
+```
+Tengo más consultas: 
+1. Para la estrcutura de carpetas, incluirías prisma dentro del backend?, o mejor lo mantenemos fuera?
+2. Revisa el archivo propuesto de @monitoring-logging.md , y dime si para desarrollar el proyecto con CURSOS y Claude, verdaderamente me aporta un valor añadido y me va a facilitar el desarrollo, o si por el contrario me va a comoplicar todo
+3. Qué me recomiendas mas para reiniciar servidores al hacer pruebas: usar cross-port-killer, o crear un script que haga todo "manualmente"?
+```
+
+**Prompt 13:**
+```
+Pues vamos a llevar a cabo el punto 1, y por tanto actualizar los archivos necesarios son ese cambios, y el punto 3, y actualizar los archivos necesarios con el cambio. 
+Además valora si sería mejor poner toda la documentación, o parte de ella, dentro de docs
+Revisa todo el proyecto para no dejarte atrás ninguna actualización ni vinculo
+```
 
 ## 3. Modelo de Datos
 
@@ -130,6 +166,26 @@ revisa el modelo de datos del archivo y siendo un experto en arquitectura de bas
 ```
 Crees que todas las mejoras son imprescinidbles para un MVP? 
 ```
+
+**Prompt 5:**
+```
+Creo que has hecho un buen trabajo con @user-stories.md , pero quizá deberías revisar el modelo de datos descrito en @readme.md  para ver si cumple lo indicado en esas historias de usuario. Puedes aplicar un punto de vista crítico, como experto en bases de datos, y si ves que no está bien definido algo en las hsitorias de usurio respecto a la base de datos, indicamelo, o incluso te permito cambiar ese detalle de la historia de usuario. 
+
+Si haces cambios actualiza todo lo necesario en el @readme.md : 3.1. Diagrama del modelo de datos, 3.2. Descripción de entidades principales. 
+```
+
+**Prompt 6:**
+```
+El modelo de datos propuesto lo veo algo complejo.
+Actúa como un Arquitecto de Sistemas y DBA experto en el diseño de sistemas escalables usando DDD. Eres experto en recomendar el tipo de base de datos adecuado, que sea SQL.
+Has sido contratada para asistir y guiar en las decisiones relacionadas con este MVP. Revisa todo el proyecto.
+Como te decía, analiza si es demasiado compleja la base de datos, y sin embargo quizá falta alguna entidad como la tabla para los roles de usuario. Mira a ver si puedes mejorar esta estructura y normalizarla. 
+Usemos solo SQL. Indica qué índices serán necesarios para este sistema.
+
+Con las mejoras que vayas a hacer del modelo de datos debes actualizar el @readme.md (tanto el diagrama ERD como la descripción de entidades principales), y también actualiza las @user-stories.md si hiciera falta.
+```
+
+## 4. Especificación de la API
 
 ## 5. Historias de Usuario
 
@@ -167,6 +223,22 @@ De todas las historias de usuario que desarrolles, destaca las 3 más importante
 ¿Estas son todas las historias de usuario necesarias?
 
 Si falta alguna, añádela, y si: quiero que prepares  una tabla priorizada de todas las historias con etiquetas MoSCoW, y crea un backlog inicial en markdown
+```
+
+**Prompt 5:**
+```
+Ahora vamos a revisar las historias de usuario: Eres un experto en producto.
+ A estas historias de usuario @user-stories.md  le falta detalle técnico y específico para permitir al developer ser totalmente autónomo a la hora de completarla.
+ Por favor entiende la necesidad y proporciona una historia mejorada que sea más clara, específica y concisa acorde a las mejores prácticas de producto, incluyendo descripción completa de la funcionalidad, lista exhaustiva de campos a tocar, estructura y URL de los endpoints necesarios, ficheros a modificar acorde a la arquitectura y buenas prácticas, pasos para que la tarea se asuma como completada, cómo actualizar la documentación que sea relevante o crear tests unitarios, y requisitos no funcionales relativos a seguridad, rendimiento, etc. Actualiza @user-stories.md  en formato markdown, y no olvides las@rules.mdc 
+
+En @readme.md tambiñen hay historias de usuario. Actualiza esas historias de usuario igualmente con el mismo contenido que en @user-stories.md 
+```
+
+**prompt 6:**
+```
+Bien, pero revisa estos puntos:
+1. Están TODAS histroias de usuario definidas por completo? Al menos mantiene las necesarias para el MVP @user-stories.md , y desarrollalas enteras
+2. Por qué has creado un uevo archivo de prompts, y por qué añades el prompt diferente a cómo yo lo he escrito? siemptre debes usar @prompts.md y seguir las @rules.mdc 
 ```
 
 ## 6. Tickets de Trabajo

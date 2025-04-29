@@ -51,20 +51,25 @@
 ## 📦 Estructura de carpetas
 
 ```
-/client          → Next.js app
+/frontend        → Next.js app
   /pages
   /components
   /utils
   /services
 
-/server          → Node.js API
-  /controllers
-  /routes
-  /services
-  /middlewares
-  /models
+/backend         → Node.js API
+  /domain        → Entidades y lógica de negocio core
+  /application   → Casos de uso
+  /infrastructure → Implementaciones concretas
+    /database    → Acceso a datos y Prisma
+    /external    → Servicios externos (email, storage, etc.)
+  /interfaces    → API, controladores, rutas
+  /prisma        → Esquemas y migraciones de base de datos
 
-/prisma          → Esquemas y migraciones de base de datos
+/docs            → Documentación del proyecto
+  /architecture  → Diagramas y diseño del sistema
+  /technical     → Guías técnicas y configuración
+  /product       → Documentación del producto
 
 /scripts         → Tareas automatizadas (invitaciones, informes)
 
@@ -190,16 +195,20 @@ graph TB
 ## 📦 Arquitectura simplificada para un desarrollador junior
 
 ```
-📁 /client (Next.js)
+📁 /frontend (Next.js)
   ├── /pages
   ├── /components
   └── /services (llamadas API)
 
-📁 /server (Node.js + Express)
+📁 /backend (Node.js + Express)
   ├── /routes (agrupadas en un archivo único)
   ├── /controllers
   ├── /middleware (auth básico)
   └── /prisma (modelo de datos)
+
+📁 /docs (Documentación)
+  ├── /technical (guías de configuración)
+  └── /images (recursos visuales)
 
 🗃️ PostgreSQL (Railway o Supabase para hosting)
 

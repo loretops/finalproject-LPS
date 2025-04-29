@@ -372,23 +372,32 @@ Esto permite modularidad, mantenibilidad y escalabilidad progresiva sin complica
 
 ```
 .
-├── client/                      # Aplicación frontend (Next.js)
+├── frontend/                     # Aplicación frontend (Next.js)
 │   ├── pages/                  # Rutas del sitio (cada archivo es una página)
 │   ├── components/             # Componentes reutilizables de interfaz
 │   ├── services/               # Funciones para interactuar con el backend (fetch, axios)
 │   ├── context/                # Contextos globales (auth, usuario, etc.)
 │   └── styles/                 # Estilos globales y por componente
 │
-├── server/                      # Backend (Node.js + Express)
-│   ├── index.js                # Punto de entrada del servidor
-│   ├── routes.js               # Todas las rutas agrupadas aquí
-│   ├── controllers/            # Funciones que manejan la lógica de cada ruta
-│   ├── middleware/             # Middleware de autenticación y roles
-│   └── utils/                  # Funciones auxiliares (validaciones, tokens, etc.)
+├── backend/                     # Backend (Node.js + Express)
+│   ├── domain/                # Entidades y lógica de negocio core
+│   ├── application/           # Casos de uso e implementación de lógica de negocio
+│   ├── infrastructure/        # Implementaciones concretas
+│   │   ├── database/         # Acceso a datos y repositorios
+│   │   └── external/         # Servicios externos (email, storage, etc.)
+│   ├── interfaces/            # API, controladores, rutas
+│   ├── middleware/            # Middleware de autenticación y validación
+│   └── prisma/                # ORM y modelo de datos
+│       ├── schema.prisma     # Definición de las tablas y relaciones
+│       └── migrations/       # Migraciones generadas por Prisma
 │
-├── prisma/                     # ORM y modelo de datos
-│   ├── schema.prisma          # Definición de las tablas y relaciones
-│   └── migrations/            # Migraciones generadas por Prisma
+├── docs/                       # Documentación del proyecto
+│   ├── technical/             # Guías técnicas y configuración
+│   ├── architecture/          # Diagramas y diseño del sistema
+│   ├── product/               # Documentación del producto
+│   └── images/                # Recursos visuales
+│
+├── scripts/                    # Scripts de utilidad para desarrollo y deploy
 │
 ├── .env                        # Variables de entorno (conexiones, claves API, etc.)
 ├── package.json                # Dependencias y scripts
@@ -400,18 +409,21 @@ Esto permite modularidad, mantenibilidad y escalabilidad progresiva sin complica
 
 | Carpeta | Propósito |
 |---------|-----------|
-| `client/` | Código del frontend. Gestiona la interfaz, navegación y llamadas a la API |
+| `frontend/` | Código del frontend. Gestiona la interfaz, navegación y llamadas a la API |
 | `pages/` | Cada archivo representa una página con ruta automática (/login, /proyectos, etc.) |
 | `components/` | Elementos reutilizables: botones, formularios, tarjetas, etc. |
 | `services/` | Módulo donde se centralizan todas las llamadas a la API del backend |
 | `context/` | Manejo de contexto global para sesión, usuario, etc. |
-| `server/` | Backend Express. Gestiona peticiones, lógica de negocio y conexión a la BBDD |
-| `routes.js` | Agrupa y exporta todas las rutas de forma sencilla |
-| `controllers/` | Código que ejecuta las acciones al recibir una petición |
+| `backend/` | Backend Express con patrón de arquitectura hexagonal simplificado |
+| `domain/` | Entidades y reglas de negocio, independientes de infraestructura |
+| `application/` | Casos de uso que implementan la lógica de negocio |
+| `infrastructure/` | Implementaciones técnicas: acceso a BD, servicios externos |
+| `interfaces/` | Controladores API, rutas y presentadores |
 | `middleware/` | Funciones que controlan el acceso, verificación de tokens y roles |
-| `utils/` | Funciones auxiliares para validaciones, generación de tokens, etc. |
-| `prisma/` | ORM y definición del modelo de datos (schema + migraciones) |
+| `prisma/` | ORM, esquema de base de datos y migraciones |
 | `.env` | Configuración de variables sensibles (URL DB, claves Cloudinary...) |
+| `docs/` | Documentación completa del proyecto |
+| `scripts/` | Scripts de utilidad para automatizar tareas |
 
 ### 🎯 Beneficios de esta estructura
 
@@ -444,11 +456,22 @@ Esto permite modularidad, mantenibilidad y escalabilidad progresiva sin complica
 
 ```
 erDiagram
-    users ||--o{ invitations : has
-    users ||--o{ expressed_interests : expresses
+    roles ||--o{ users : has
+    users ||--o{ invitations : creates
     users ||--o{ investments : makes
     users ||--o{ notifications : receives
     users ||--o{ projects : creates
+    users ||--o{ verification_tokens : has
+    users ||--o{ interests : expresses
+    users ||--o{ messages : sends
+    users ||--o{ document_views : views
+
+    roles {
+        UUID id PK
+        VARCHAR name
+        VARCHAR description
+        TIMESTAMP created_at
+    }
 
     invitations {
         UUID id PK
@@ -460,88 +483,163 @@ erDiagram
         TIMESTAMP expires_at
     }
 
+    verification_tokens {
+        UUID id PK
+        UUID user_id FK
+        VARCHAR token
+        BOOLEAN used
+        TIMESTAMP created_at
+        TIMESTAMP expires_at
+    }
+
     users {
         UUID id PK
-        VARCHAR email
+        VARCHAR email "UNIQUE, idx"
         TEXT password_hash
-        VARCHAR role
+        UUID role_id FK "idx"
         VARCHAR status
+        BOOLEAN email_verified
+        TIMESTAMP email_verified_at
+        INTEGER failed_login_attempts
+        TIMESTAMP locked_until
         TIMESTAMP created_at
         TIMESTAMP updated_at
     }
 
     projects ||--o{ project_documents : has
-    projects ||--o{ expressed_interests : receives
     projects ||--o{ investments : receives
     projects ||--o{ project_updates : has
+    projects ||--o{ interests : receives
+    projects ||--o{ conversations : relates_to
 
     projects {
         UUID id PK
-        VARCHAR title
+        VARCHAR title "idx"
         TEXT description
-        VARCHAR status
+        VARCHAR status "idx"
         DECIMAL minimum_investment
         DECIMAL target_amount     
         DECIMAL current_amount    
         DECIMAL expected_roi      
-        VARCHAR location          
-        VARCHAR property_type     
+        VARCHAR location "idx"       
+        VARCHAR property_type "idx"    
+        BOOLEAN draft
         TIMESTAMP published_at
         UUID created_by FK
-        TIMESTAMP created_at
+        UUID published_by FK
+        TIMESTAMP created_at "idx"
     }
 
     project_documents {
         UUID id PK
-        UUID project_id FK
+        UUID project_id FK "idx"
         TEXT file_url
-        VARCHAR file_type
+        VARCHAR file_type "idx"
         VARCHAR access_level
-        VARCHAR document_type  
+        VARCHAR document_type "idx"
+        VARCHAR security_level
         TIMESTAMP created_at
     }
 
-    expressed_interests {
+    document_views {
         UUID id PK
+        UUID document_id FK
         UUID user_id FK
-        UUID project_id FK
-        TIMESTAMP expressed_at
+        VARCHAR ip_address
+        TIMESTAMP viewed_at "idx"
+    }
+
+    interests {
+        UUID id PK
+        UUID user_id FK "idx"
+        UUID project_id FK "idx"
+        VARCHAR status
+        TEXT notes
+        TIMESTAMP created_at
+        VARCHAR user_project_unique "virtual"
     }
 
     investments {
         UUID id PK
-        UUID user_id FK
-        UUID project_id FK
+        UUID user_id FK "idx"
+        UUID project_id FK "idx"
         DECIMAL amount
-        TIMESTAMP invested_at
+        TIMESTAMP invested_at "idx"
         VARCHAR status          
+        TEXT notes
         TEXT contract_reference 
     }
 
     project_updates {
         UUID id PK
-        UUID project_id FK
+        UUID project_id FK "idx"
         VARCHAR title
-        TEXT description
+        TEXT content
         TEXT video_url
+        DATE update_date "idx"
+        UUID created_by FK
         TIMESTAMP created_at
     }
 
     notifications {
         UUID id PK
-        UUID user_id FK
+        UUID user_id FK "idx"
+        VARCHAR type "idx"
         TEXT content
-        BOOLEAN read
+        UUID related_id
+        BOOLEAN read "idx"
+        TIMESTAMP created_at "idx"
+    }
+
+    conversations ||--o{ messages : contains
+    conversations ||--o{ conversation_participants : has
+
+    conversations {
+        UUID id PK
+        UUID project_id FK "idx"
+        VARCHAR title
         TIMESTAMP created_at
     }
+
+    conversation_participants {
+        UUID id PK
+        UUID conversation_id FK "idx"
+        UUID user_id FK "idx"
+        TIMESTAMP joined_at
+        VARCHAR unique_participant "virtual"
+    }
+
+    messages {
+        UUID id PK
+        UUID conversation_id FK "idx"
+        UUID sender_id FK "idx"
+        TEXT content
+        BOOLEAN read "idx"
+        TIMESTAMP created_at "idx"
+    }
 ```
-![Diagrama Modelo de Datos](docs/images/modelo_datos.png)
+
+![Modelo de datos](docs/images/modelo-datos.png)
 
 
 
 ### **3.2. Descripción de entidades principales:**
 
-#### 1. users
+#### 1. roles
+Representa los diferentes roles que puede tener un usuario en el sistema.
+
+| Campo | Tipo de Dato | Descripción | Restricciones |
+|-------|-------------|-------------|---------------|
+| id | UUID | Identificador único del rol | PK, NOT NULL, UNIQUE |
+| name | VARCHAR | Nombre del rol (visitor, partner, investor, manager) | NOT NULL, UNIQUE |
+| description | VARCHAR | Descripción del rol | NOT NULL |
+| created_at | TIMESTAMP | Fecha de creación | NOT NULL, DEFAULT: now() |
+
+##### Índices
+- PRIMARY KEY en `id`
+- UNIQUE en `name`
+
+#### 2. users
 Representa a los usuarios del sistema, incluyendo visitantes registrados, socios e inversores, y gestores.
 
 | Campo | Tipo de Dato | Descripción | Restricciones |
@@ -549,19 +647,32 @@ Representa a los usuarios del sistema, incluyendo visitantes registrados, socios
 | id | UUID | Identificador único del usuario | PK, NOT NULL, UNIQUE |
 | email | VARCHAR | Email del usuario | NOT NULL, UNIQUE |
 | password_hash | TEXT | Hash de la contraseña | NOT NULL |
-| role | VARCHAR | Rol del usuario (visitor, socio, gestor) | NOT NULL, CHECK en valores permitidos |
-| status | VARCHAR | Estado del usuario (active, pending, banned) | NOT NULL, DEFAULT: 'pending' |
+| role_id | UUID | Rol del usuario | FK → roles.id, NOT NULL |
+| status | VARCHAR | Estado del usuario (pending, active, inactive, banned) | NOT NULL, DEFAULT: 'pending' |
+| email_verified | BOOLEAN | Indica si el email ha sido verificado | NOT NULL, DEFAULT: false |
+| email_verified_at | TIMESTAMP | Fecha de verificación del email | NULLABLE |
+| failed_login_attempts | INTEGER | Número de intentos fallidos de login | NOT NULL, DEFAULT: 0 |
+| locked_until | TIMESTAMP | Fecha hasta la que la cuenta está bloqueada | NULLABLE |
 | created_at | TIMESTAMP | Fecha de creación de la cuenta | NOT NULL, DEFAULT: now() |
 | updated_at | TIMESTAMP | Fecha de última actualización del perfil | NOT NULL, DEFAULT: now() |
 
+##### Índices
+- PRIMARY KEY en `id`
+- UNIQUE en `email`
+- INDEX en `role_id`
+- INDEX en `status` y `email_verified` (para consultas de filtrado)
+
 ##### Relaciones
 - 🔑 id → invitations.invited_by
-- 🔑 id → expressed_interests.user_id
 - 🔑 id → investments.user_id
 - 🔑 id → notifications.user_id
 - 🔑 id → projects.created_by
+- 🔑 id → verification_tokens.user_id
+- 🔑 id → interests.user_id
+- 🔑 id → messages.sender_id
+- 🔑 id → document_views.user_id
 
-#### 2. projects
+#### 3. projects
 Oportunidades de inversión inmobiliaria publicadas por los gestores.
 
 | Campo | Tipo de Dato | Descripción | Restricciones |
@@ -569,24 +680,35 @@ Oportunidades de inversión inmobiliaria publicadas por los gestores.
 | id | UUID | Identificador único del proyecto | PK, NOT NULL, UNIQUE |
 | title | VARCHAR | Título del proyecto | NOT NULL |
 | description | TEXT | Descripción general | NOT NULL |
-| status | VARCHAR | Estado (draft, published, closed, etc.) | NOT NULL, DEFAULT: 'draft' |
+| status | VARCHAR | Estado (draft, published, closed, funded) | NOT NULL, DEFAULT: 'draft' |
 | minimum_investment | DECIMAL | Inversión mínima por usuario | NOT NULL, CHECK > 0 |
 | target_amount | DECIMAL | Monto total a captar | NOT NULL, CHECK > 0 |
 | current_amount | DECIMAL | Monto ya invertido | DEFAULT: 0, CHECK >= 0 |
 | expected_roi | DECIMAL | Retorno estimado | CHECK >= 0 |
 | location | VARCHAR | Ubicación de la propiedad | NULLABLE |
 | property_type | VARCHAR | Tipo (residencial, comercial, etc.) | NULLABLE |
+| draft | BOOLEAN | Indica si es un borrador | NOT NULL, DEFAULT: true |
 | published_at | TIMESTAMP | Fecha de publicación | NULLABLE |
 | created_by | UUID | Usuario gestor que creó el proyecto | FK → users.id, NOT NULL |
+| published_by | UUID | Usuario gestor que publicó el proyecto | FK → users.id, NULLABLE |
 | created_at | TIMESTAMP | Fecha de creación | NOT NULL, DEFAULT: now() |
+
+##### Índices
+- PRIMARY KEY en `id`
+- INDEX en `status` (para filtrar por estado)
+- INDEX en `property_type` (para filtrar por tipo)
+- INDEX en `location` (para búsquedas geográficas)
+- INDEX en `created_at` (para ordenar por fecha)
+- INDEX en `published_at` (para ordenar proyectos publicados)
 
 ##### Relaciones
 - 🔑 id → project_documents.project_id
-- 🔑 id → expressed_interests.project_id
 - 🔑 id → investments.project_id
 - 🔑 id → project_updates.project_id
+- 🔑 id → interests.project_id
+- 🔑 id → conversations.project_id
 
-#### 3. investments
+#### 4. investments
 Inversiones realizadas en un proyecto.
 
 | Campo | Tipo de Dato | Descripción | Restricciones |
@@ -596,8 +718,197 @@ Inversiones realizadas en un proyecto.
 | project_id | UUID | Proyecto en el que invierte | FK → projects.id, NOT NULL |
 | amount | DECIMAL | Monto invertido | NOT NULL, CHECK > 0 |
 | invested_at | TIMESTAMP | Fecha de inversión | NOT NULL, DEFAULT: now() |
-| status | VARCHAR | Estado (pending, confirmed, etc.) | NOT NULL, DEFAULT: 'pending' |
+| status | VARCHAR | Estado (pending, confirmed, cancelled) | NOT NULL, DEFAULT: 'pending' |
+| notes | TEXT | Notas adicionales del inversor | NULLABLE |
 | contract_reference | TEXT | Identificador del contrato legal | NULLABLE |
+
+##### Índices
+- PRIMARY KEY en `id`
+- INDEX en `user_id` (para consultar inversiones de un usuario)
+- INDEX en `project_id` (para consultar inversiones en un proyecto)
+- INDEX en `invested_at` (para ordenar cronológicamente)
+- INDEX en `status` (para filtrar por estado)
+
+#### 5. invitations
+Invitaciones enviadas a potenciales socios para unirse al club.
+
+| Campo | Tipo de Dato | Descripción | Restricciones |
+|-------|-------------|-------------|---------------|
+| id | UUID | Identificador único de la invitación | PK, NOT NULL |
+| email | VARCHAR | Email del invitado | NOT NULL |
+| token | VARCHAR | Token único de invitación | NOT NULL, UNIQUE |
+| invited_by | UUID | Usuario que realiza la invitación | FK → users.id, NOT NULL |
+| status | VARCHAR | Estado (pending, used, expired) | NOT NULL, DEFAULT: 'pending' |
+| created_at | TIMESTAMP | Fecha de creación | NOT NULL, DEFAULT: now() |
+| expires_at | TIMESTAMP | Fecha de expiración | NOT NULL |
+
+##### Índices
+- PRIMARY KEY en `id`
+- UNIQUE en `token`
+- INDEX en `email` (para verificar invitaciones duplicadas)
+- INDEX en `status` y `expires_at` (para expirar invitaciones)
+
+#### 6. project_documents
+Documentos asociados a un proyecto, como archivos legales, técnicos, imágenes, etc.
+
+| Campo | Tipo de Dato | Descripción | Restricciones |
+|-------|-------------|-------------|---------------|
+| id | UUID | Identificador único del documento | PK, NOT NULL |
+| project_id | UUID | Proyecto al que pertenece | FK → projects.id, NOT NULL |
+| file_url | TEXT | URL del archivo | NOT NULL |
+| file_type | VARCHAR | Tipo de archivo (pdf, docx, etc.) | NOT NULL |
+| document_type | VARCHAR | Categoría (legal, economic, technical, image, video) | NOT NULL |
+| access_level | VARCHAR | Nivel de acceso (public, partner, investor) | NOT NULL |
+| security_level | VARCHAR | Nivel de seguridad (downloadable, view_only, watermarked) | NOT NULL, DEFAULT: 'view_only' |
+| created_at | TIMESTAMP | Fecha de creación | NOT NULL, DEFAULT: now() |
+
+##### Índices
+- PRIMARY KEY en `id`
+- INDEX en `project_id` (para consultar documentos de un proyecto)
+- INDEX en `document_type` (para filtrar por tipo)
+- INDEX en `file_type` (para filtrar por formato)
+
+#### 7. verification_tokens
+Tokens para verificación de email al registrarse.
+
+| Campo | Tipo de Dato | Descripción | Restricciones |
+|-------|-------------|-------------|---------------|
+| id | UUID | Identificador único | PK, NOT NULL |
+| user_id | UUID | Usuario al que pertenece | FK → users.id, NOT NULL |
+| token | VARCHAR | Token único de verificación | NOT NULL, UNIQUE |
+| used | BOOLEAN | Indica si ya fue utilizado | NOT NULL, DEFAULT: false |
+| created_at | TIMESTAMP | Fecha de creación | NOT NULL, DEFAULT: now() |
+| expires_at | TIMESTAMP | Fecha de expiración | NOT NULL |
+
+##### Índices
+- PRIMARY KEY en `id`
+- UNIQUE en `token`
+- INDEX en `user_id`
+- INDEX en `expires_at` (para expirar tokens)
+
+#### 8. interests
+Expresiones de interés en proyectos sin compromiso de inversión.
+
+| Campo | Tipo de Dato | Descripción | Restricciones |
+|-------|-------------|-------------|---------------|
+| id | UUID | Identificador único | PK, NOT NULL |
+| user_id | UUID | Usuario interesado | FK → users.id, NOT NULL |
+| project_id | UUID | Proyecto de interés | FK → projects.id, NOT NULL |
+| status | VARCHAR | Estado (active, converted, declined) | NOT NULL, DEFAULT: 'active' |
+| notes | TEXT | Comentarios adicionales | NULLABLE |
+| created_at | TIMESTAMP | Fecha de creación | NOT NULL, DEFAULT: now() |
+
+##### Índices
+- PRIMARY KEY en `id`
+- UNIQUE en (user_id, project_id) (para evitar intereses duplicados)
+- INDEX en `user_id` (para consultar intereses de un usuario)
+- INDEX en `project_id` (para consultar intereses en un proyecto)
+- INDEX en `status` (para filtrar por estado)
+
+#### 9. conversations
+Conversaciones entre usuarios, por ejemplo entre gestores y socios interesados.
+
+| Campo | Tipo de Dato | Descripción | Restricciones |
+|-------|-------------|-------------|---------------|
+| id | UUID | Identificador único | PK, NOT NULL |
+| project_id | UUID | Proyecto relacionado (opcional) | FK → projects.id, NULLABLE |
+| title | VARCHAR | Título de la conversación | NOT NULL |
+| created_at | TIMESTAMP | Fecha de creación | NOT NULL, DEFAULT: now() |
+
+##### Índices
+- PRIMARY KEY en `id`
+- INDEX en `project_id` (para consultar conversaciones sobre un proyecto)
+
+#### 10. conversation_participants
+Participantes en una conversación.
+
+| Campo | Tipo de Dato | Descripción | Restricciones |
+|-------|-------------|-------------|---------------|
+| id | UUID | Identificador único | PK, NOT NULL |
+| conversation_id | UUID | Conversación | FK → conversations.id, NOT NULL |
+| user_id | UUID | Usuario participante | FK → users.id, NOT NULL |
+| joined_at | TIMESTAMP | Fecha de unión | NOT NULL, DEFAULT: now() |
+
+##### Índices
+- PRIMARY KEY en `id`
+- UNIQUE en (conversation_id, user_id) (para evitar participantes duplicados)
+- INDEX en `conversation_id` (para consultar participantes)
+- INDEX en `user_id` (para consultar conversaciones de un usuario)
+
+#### 11. messages
+Mensajes intercambiados en las conversaciones.
+
+| Campo | Tipo de Dato | Descripción | Restricciones |
+|-------|-------------|-------------|---------------|
+| id | UUID | Identificador único | PK, NOT NULL |
+| conversation_id | UUID | Conversación a la que pertenece | FK → conversations.id, NOT NULL |
+| sender_id | UUID | Usuario que envía el mensaje | FK → users.id, NOT NULL |
+| content | TEXT | Contenido del mensaje | NOT NULL |
+| read | BOOLEAN | Indica si ha sido leído | NOT NULL, DEFAULT: false |
+| created_at | TIMESTAMP | Fecha de creación | NOT NULL, DEFAULT: now() |
+
+##### Índices
+- PRIMARY KEY en `id`
+- INDEX en `conversation_id` (para consultar mensajes de una conversación)
+- INDEX en `sender_id` (para consultar mensajes enviados por un usuario)
+- INDEX en `read` (para filtrar mensajes no leídos)
+- INDEX en `created_at` (para ordenar cronológicamente)
+
+#### 12. project_updates
+Actualizaciones periódicas sobre el progreso de los proyectos.
+
+| Campo | Tipo de Dato | Descripción | Restricciones |
+|-------|-------------|-------------|---------------|
+| id | UUID | Identificador único | PK, NOT NULL |
+| project_id | UUID | Proyecto al que pertenece | FK → projects.id, NOT NULL |
+| title | VARCHAR | Título de la actualización | NOT NULL |
+| content | TEXT | Contenido (formato Markdown) | NOT NULL |
+| video_url | TEXT | URL del vídeo asociado | NULLABLE |
+| update_date | DATE | Fecha de la actualización | NOT NULL |
+| created_by | UUID | Usuario que crea la actualización | FK → users.id, NOT NULL |
+| created_at | TIMESTAMP | Fecha de creación | NOT NULL, DEFAULT: now() |
+
+##### Índices
+- PRIMARY KEY en `id`
+- INDEX en `project_id` (para consultar actualizaciones de un proyecto)
+- INDEX en `update_date` (para ordenar cronológicamente)
+
+#### 13. notifications
+Notificaciones para los usuarios sobre eventos relevantes.
+
+| Campo | Tipo de Dato | Descripción | Restricciones |
+|-------|-------------|-------------|---------------|
+| id | UUID | Identificador único | PK, NOT NULL |
+| user_id | UUID | Usuario destinatario | FK → users.id, NOT NULL |
+| type | VARCHAR | Tipo (new_investment, project_update, new_interest, message) | NOT NULL |
+| content | TEXT | Contenido de la notificación | NOT NULL |
+| related_id | UUID | ID de la entidad relacionada | NULLABLE |
+| read | BOOLEAN | Indica si ha sido leída | NOT NULL, DEFAULT: false |
+| created_at | TIMESTAMP | Fecha de creación | NOT NULL, DEFAULT: now() |
+
+##### Índices
+- PRIMARY KEY en `id`
+- INDEX en `user_id` (para consultar notificaciones de un usuario)
+- INDEX en `read` (para filtrar notificaciones no leídas)
+- INDEX en `type` (para filtrar por tipo)
+- INDEX en `created_at` (para ordenar cronológicamente)
+
+#### 14. document_views
+Registros de visualizaciones de documentos para auditoría.
+
+| Campo | Tipo de Dato | Descripción | Restricciones |
+|-------|-------------|-------------|---------------|
+| id | UUID | Identificador único | PK, NOT NULL |
+| document_id | UUID | Documento visualizado | FK → project_documents.id, NOT NULL |
+| user_id | UUID | Usuario que visualiza | FK → users.id, NOT NULL |
+| ip_address | VARCHAR | Dirección IP del cliente | NOT NULL |
+| viewed_at | TIMESTAMP | Fecha de visualización | NOT NULL, DEFAULT: now() |
+
+##### Índices
+- PRIMARY KEY en `id`
+- INDEX en `document_id` (para consultar visualizaciones de un documento)
+- INDEX en `user_id` (para consultar documentos vistos por un usuario)
+- INDEX en `viewed_at` (para ordenar cronológicamente)
 
 ---
 
@@ -615,23 +926,78 @@ Inversiones realizadas en un proyecto.
 **Quiero** registrarme mediante una invitación exclusiva,  
 **Para** acceder a la zona privada como socio del club.
 
-#### Descripción
-Solo los usuarios que reciben una invitación personalizada del gestor pueden acceder al área privada del Club de Socios.
+#### Descripción técnica detallada
+El sistema debe permitir que solo los usuarios con invitación válida puedan registrarse. Esto involucra:
+1. Un token único generado al enviar la invitación, almacenado en la base de datos
+2. Un enlace que incluye este token y se envía por email
+3. Una página de registro que verifica la validez y caducidad del token
+4. El formulario de registro que recoge los datos del usuario
+5. Una confirmación por correo electrónico para validar la cuenta
 
-#### Criterios de Aceptación
-- **Dado que** el gestor ha enviado una invitación al email del usuario
-- **Cuando** el usuario accede al enlace recibido y completa su registro
-- **Entonces** su cuenta queda validada y puede iniciar sesión como socio
+#### Campos y modelos de datos
+- **Modelo `Invitation`**:
+  - `id`: UUID (PK)
+  - `email`: string (email del invitado)
+  - `token`: string (código único aleatorio de al menos 32 caracteres)
+  - `status`: enum ('pending', 'used', 'expired')
+  - `invited_by`: UUID (FK a User)
+  - `created_at`: timestamp
+  - `expires_at`: timestamp (por defecto 7 días después de la creación)
 
-#### Notas adicionales
-Se requiere un sistema de generación de enlaces únicos con expiración y validación por email.
+- **Modelo `User` (campos adicionales)**:
+  - `role`: enum ('visitor', 'partner', 'investor', 'manager')
+  - `status`: enum ('pending', 'active', 'inactive', 'banned')
+  - `invitation_id`: UUID (opcional, FK a Invitation)
 
-#### Tareas
-- Diseñar el modelo de invitaciones (estructura y caducidad)
-- Crear la vista del formulario de registro para invitados
-- Implementar verificación del enlace (válido/no válido/caducado)
-- Integrar confirmación por correo electrónico
-- Vincular usuario a rol "socio"
+#### Endpoints API
+- **GET** `/api/auth/invitation/:token` - Verificar validez del token
+  - Respuesta 200: `{ valid: boolean, email: string, expired: boolean }`
+  - Respuesta 404: Token no encontrado
+
+- **POST** `/api/auth/register` - Registrar nuevo usuario
+  - Body: `{ email, password, name, token }`
+  - Respuesta 201: Usuario creado
+  - Respuesta 400: Datos inválidos o token expirado
+
+#### Archivos a modificar/crear
+- **Backend**:
+  - `backend/domain/entities/user.js` - Definir entidad User
+  - `backend/domain/entities/invitation.js` - Definir entidad Invitation
+  - `backend/application/services/authService.js` - Servicio para registro y validación
+  - `backend/interfaces/controllers/authController.js` - Controlador para endpoints
+  - `backend/interfaces/routes/authRoutes.js` - Rutas de autenticación
+  - `backend/prisma/schema.prisma` - Definir modelos Prisma
+
+- **Frontend**:
+  - `frontend/pages/invitation/[token].js` - Página de validación de invitación
+  - `frontend/pages/register.js` - Formulario de registro
+  - `frontend/services/authService.js` - Comunicación con la API
+  - `frontend/components/auth/RegisterForm.jsx` - Componente de formulario
+
+#### Criterios de aceptación técnicos
+1. El token de invitación debe ser criptográficamente seguro (32+ bytes aleatorios)
+2. Las invitaciones no usadas deben expirar automáticamente después de 7 días
+3. Un email solo puede tener una invitación activa a la vez
+4. La contraseña debe cifrarse con bcrypt (factor de coste 12+)
+5. El nuevo usuario debe tener el rol de 'partner' automáticamente
+6. La API debe validar todos los campos del formulario (email, contraseña, etc.)
+7. El sistema de registro debe incluir protección contra ataques de fuerza bruta
+
+#### Tests unitarios requeridos
+- Verificación de validez de token (activo, expirado, usado)
+- Creación de usuario al registrarse
+- Validación de formato de email y fortaleza de contraseña
+- Comportamiento ante tokens duplicados o manipulados
+
+#### Documentación a actualizar
+- Documentar el proceso de invitación en docs/technical/auth.md
+- Actualizar el modelo de datos en la documentación correspondiente
+
+#### Requisitos no funcionales
+- **Seguridad**: Implementar rate limiting para prevenir abusos (max 10 intentos por IP/hora)
+- **Rendimiento**: La verificación del token debe responder en <200ms
+- **Usabilidad**: Mensajes de error claros y específicos
+- **Accesibilidad**: Formulario compatible con WCAG 2.1 nivel AA
 
 ### 🥈 HISTORIA 2 – Ver oportunidades de inversión (Must Have)
 
@@ -639,23 +1005,87 @@ Se requiere un sistema de generación de enlaces únicos con expiración y valid
 **Quiero** ver las oportunidades de inversión disponibles,  
 **Para** decidir si deseo invertir en alguna de ellas.
 
-#### Descripción
-El socio autenticado puede consultar las fichas de los proyectos con información detallada: rentabilidad, estudio económico, planos, fotos, vídeo, etc.
+#### Descripción técnica detallada
+Implementar un sistema que permita a los socios autenticados ver un listado y detalle de las oportunidades de inversión disponibles. La información debe ser completa y bien estructurada, incluyendo datos económicos, ubicación, documentación, multimedia, y permitir filtrado.
 
-#### Criterios de Aceptación
-- **Dado que** un socio está autenticado
-- **Cuando** accede al área de oportunidades
-- **Entonces** puede visualizar fichas de inversión detalladas (ocultas al público)
+#### Campos y modelos de datos
+- **Modelo `Project`** (oportunidad de inversión):
+  - `id`: UUID (PK)
+  - `title`: string
+  - `description`: text
+  - `status`: enum ('draft', 'published', 'closed', 'funded')
+  - `minimum_investment`: decimal
+  - `target_amount`: decimal
+  - `current_amount`: decimal
+  - `expected_roi`: decimal (porcentaje)
+  - `location`: string
+  - `property_type`: string
+  - `published_at`: timestamp
+  - `created_by`: UUID (FK a User)
+  - `created_at`: timestamp
 
-#### Notas adicionales
-Toda esta información debe almacenarse de forma segura. No accesible sin login. Vídeos deben estar protegidos contra descarga o enlace directo.
+- **Modelo `ProjectDocument`**:
+  - `id`: UUID (PK)
+  - `project_id`: UUID (FK a Project)
+  - `file_url`: string
+  - `file_type`: string
+  - `document_type`: enum ('legal', 'economic', 'technical', 'image', 'video')
+  - `access_level`: enum ('public', 'partner', 'investor')
+  - `created_at`: timestamp
 
-#### Tareas
-- Definir modelo de datos de las oportunidades
-- Crear interfaz para mostrar fichas de inversión
-- Integrar visor multimedia (fotos, vídeo)
-- Control de permisos: solo socios autenticados
-- Cargar estudio económico y documentación en vista protegida
+#### Endpoints API
+- **GET** `/api/projects` - Listar proyectos disponibles
+  - Query params: `status`, `property_type`, `min_roi`, `location`
+  - Respuesta 200: Array de proyectos con datos básicos
+  
+- **GET** `/api/projects/:id` - Detalle completo de un proyecto
+  - Respuesta 200: Objeto proyecto con todos sus documentos y datos
+  - Respuesta 404: Proyecto no encontrado
+
+- **GET** `/api/projects/:id/documents` - Listar documentos de un proyecto
+  - Query params: `document_type`
+  - Respuesta 200: Array de documentos filtrados por tipo
+
+#### Archivos a modificar/crear
+- **Backend**:
+  - `backend/domain/entities/project.js` - Definir entidad Project
+  - `backend/domain/entities/projectDocument.js` - Definir entidad ProjectDocument
+  - `backend/application/services/projectService.js` - Servicio para gestión de proyectos
+  - `backend/interfaces/controllers/projectController.js` - Controlador de endpoints
+  - `backend/interfaces/routes/projectRoutes.js` - Rutas de proyectos
+  - `backend/middleware/authMiddleware.js` - Middleware para verificar rol de socio
+
+- **Frontend**:
+  - `frontend/pages/projects/index.js` - Página de listado de proyectos
+  - `frontend/pages/projects/[id].js` - Página de detalle de proyecto
+  - `frontend/components/projects/ProjectList.jsx` - Componente de listado
+  - `frontend/components/projects/ProjectDetail.jsx` - Componente de detalle
+  - `frontend/components/projects/DocumentViewer.jsx` - Visor de documentos
+  - `frontend/services/projectService.js` - Comunicación con la API
+
+#### Criterios de aceptación técnicos
+1. Solo usuarios con rol 'partner' o superior pueden ver los proyectos
+2. Los proyectos deben mostrarse paginados (10 por página) con ordenación
+3. Las imágenes deben cargarse de forma optimizada y progresiva
+4. Los vídeos deben reproducirse en streaming con controles de calidad
+5. La vista de detalle debe incluir todos los documentos y medios asociados
+6. El sistema debe implementar caching para mejorar rendimiento
+
+#### Tests unitarios requeridos
+- Filtrado correcto de proyectos por diferentes criterios
+- Validación de permisos de acceso según rol
+- Carga correcta de documentos asociados
+- Comportamiento ante datos inválidos o faltantes
+
+#### Documentación a actualizar
+- Actualizar docs/api/projects.md con los endpoints implementados
+- Documentar sistema de permisos en docs/technical/permissions.md
+
+#### Requisitos no funcionales
+- **Rendimiento**: Tiempo de carga inicial <1s, paginación <500ms
+- **Seguridad**: Validar permisos de usuario en cada endpoint
+- **Escalabilidad**: Implementar consultas optimizadas para grandes volúmenes
+- **Experiencia**: Interfaz responsive con viewport optimizado para tablets
 
 ### 🥉 HISTORIA 3 – Marcar "Invierto" (Must Have)
 
@@ -663,23 +1093,216 @@ Toda esta información debe almacenarse de forma segura. No accesible sin login.
 **Quiero** poder indicar que deseo invertir en un proyecto y cuánto,  
 **Para** que el gestor y los demás socios conozcan mi compromiso.
 
-#### Descripción
-Permite a los socios señalar su interés formal con un importe determinado, que se registra y muestra como parte del progreso de financiación.
+#### Descripción técnica detallada
+Implementar una funcionalidad que permita a los socios registrar su intención formal de invertir en un proyecto, indicando el monto específico. El sistema debe validar que el monto cumpla con los requisitos mínimos, actualizar el estado del proyecto y notificar tanto al gestor como a los demás socios.
 
-#### Criterios de Aceptación
-- **Dado que** el socio ha accedido a una oportunidad de inversión
-- **Cuando** pulsa "Invierto" e introduce el importe
-- **Entonces** el sistema registra el dato y actualiza el porcentaje de inversión comprometida, notificando al gestor y a los socios
+#### Campos y modelos de datos
+- **Modelo `Investment`**:
+  - `id`: UUID (PK)
+  - `user_id`: UUID (FK a User)
+  - `project_id`: UUID (FK a Project)
+  - `amount`: decimal (monto a invertir)
+  - `invested_at`: timestamp
+  - `status`: enum ('pending', 'confirmed', 'cancelled')
+  - `notes`: text (opcional)
+  - `contract_reference`: string (opcional)
 
-#### Notas adicionales
-Puede haber un mínimo de inversión. Se debe validar el importe y evitar duplicidades.
+- **Modelo `Notification`**:
+  - `id`: UUID (PK)
+  - `user_id`: UUID (FK a User, destinatario)
+  - `type`: enum ('new_investment', 'project_update', 'system')
+  - `content`: text
+  - `read`: boolean
+  - `created_at`: timestamp
+  - `related_id`: UUID (opcional, referencia a la entidad relacionada)
 
-#### Tareas
-- Diseñar formulario para entrada de importe
-- Validar importe ≥ mínimo
-- Registrar en base de datos como "inversión comprometida"
-- Generar notificación a otros socios
-- Actualizar progreso de inversión en el panel del proyecto
+#### Endpoints API
+- **POST** `/api/investments` - Registrar una nueva inversión
+  - Body: `{ project_id, amount, notes }`
+  - Respuesta 201: Inversión registrada correctamente
+  - Respuesta 400: Datos inválidos o monto inferior al mínimo
+  
+- **GET** `/api/investments/user` - Listar inversiones del usuario
+  - Query params: `status`
+  - Respuesta 200: Array de inversiones con datos del proyecto
+
+- **GET** `/api/projects/:id/investments` - Listar inversiones de un proyecto
+  - Respuesta 200: Array con inversiones y porcentaje de financiación alcanzado
+
+#### Archivos a modificar/crear
+- **Backend**:
+  - `backend/domain/entities/investment.js` - Definir entidad Investment
+  - `backend/domain/entities/notification.js` - Definir entidad Notification
+  - `backend/application/services/investmentService.js` - Servicio de inversiones
+  - `backend/application/services/notificationService.js` - Servicio de notificaciones
+  - `backend/interfaces/controllers/investmentController.js` - Controlador
+  - `backend/interfaces/routes/investmentRoutes.js` - Rutas
+  - `backend/prisma/schema.prisma` - Nuevos modelos Prisma
+
+- **Frontend**:
+  - `frontend/pages/projects/[id]/invest.js` - Página de formulario de inversión
+  - `frontend/components/investments/InvestmentForm.jsx` - Componente de formulario
+  - `frontend/components/projects/InvestmentProgress.jsx` - Barra de progreso
+  - `frontend/components/notifications/Notification.jsx` - Componente de notificación
+  - `frontend/services/investmentService.js` - Comunicación con la API
+
+#### Criterios de aceptación técnicos
+1. La inversión debe actualizarse en tiempo real para otros usuarios
+2. El monto mínimo debe validarse tanto en frontend como backend
+3. Las notificaciones deben enviarse por email y dentro de la plataforma
+4. El sistema debe manejar concurrencia para evitar sobrefinanciación
+5. La barra de progreso debe actualizarse automáticamente
+6. El gestor debe recibir una notificación especial con detalles completos
+
+#### Tests unitarios requeridos
+- Validación de monto mínimo en diferentes escenarios
+- Integridad transaccional al registrar inversión
+- Generación correcta de notificaciones
+- Actualización del estado del proyecto según inversiones
+
+#### Documentación a actualizar
+- Actualizar manual de usuario en docs/user/investing.md
+- Documentar flujo de notificaciones en docs/technical/notifications.md
+
+#### Requisitos no funcionales
+- **Seguridad**: Validar que el usuario tenga rol 'partner' y el proyecto esté activo
+- **Disponibilidad**: Operación crítica con alta disponibilidad (99.9%)
+- **Auditoría**: Registro completo de eventos para trazabilidad
+- **Rendimiento**: Operación completa <2s incluyendo notificaciones
+
+### HISTORIA 4 – Ver documentos seguros (Should Have)
+
+**Como** inversor,  
+**Quiero** poder ver los documentos legales y técnicos de un proyecto,  
+**Para** conocer todos los detalles sin posibilidad de descargarlos.
+
+#### Descripción técnica detallada
+Implementar un visor de documentos que permita a los inversores consultar documentación sensible (contratos, informes técnicos, etc.) con restricciones que impidan su descarga o captura, manteniendo la información segura mientras se garantiza la transparencia.
+
+#### Campos y modelos de datos
+- Ya mencionados en historias anteriores (ProjectDocument)
+- Nuevos campos para seguimiento:
+  - `document_views`: tabla para auditoría de visualizaciones
+  - `watermark_config`: configuración de marcas de agua personalizadas
+
+#### Endpoints API
+- **GET** `/api/documents/:id/view` - Servir documento para visualización
+  - Response: Documento con protecciones aplicadas
+  - Seguridad: Token JWT específico para un solo documento y sesión
+
+#### Archivos a modificar/crear
+- **Backend**:
+  - `backend/services/secureDocumentService.js` - Servicio para gestión segura
+  - `backend/middleware/documentViewMiddleware.js` - Middleware de auditoría
+
+- **Frontend**:
+  - `frontend/components/documents/SecureDocumentViewer.jsx` - Visor seguro
+  - `frontend/hooks/useSecureDocument.js` - Hook para gestión de visualización
+
+#### Criterios de aceptación técnicos
+1. Impedir capturas de pantalla cuando sea técnicamente posible
+2. Aplicar marca de agua con identificación del usuario
+3. Limitar el tiempo de visualización por sesión
+4. Registrar todas las visualizaciones para auditoría
+
+### HISTORIA 5 – Mensajería interna (Should Have)
+
+**Como** socio o inversor,  
+**Quiero** poder comunicarme con los gestores a través de la plataforma,  
+**Para** resolver dudas o solicitar información adicional sobre proyectos.
+
+#### Descripción técnica detallada
+Implementar un sistema de mensajería interna que permita la comunicación directa entre usuarios y gestores, con soporte para conversaciones, notificaciones y seguimiento de temas relacionados con proyectos específicos.
+
+#### Campos y modelos de datos
+- **Modelo `Message`**:
+  - `id`: UUID (PK)
+  - `sender_id`: UUID (FK a User)
+  - `receiver_id`: UUID (FK a User)
+  - `project_id`: UUID (opcional, FK a Project)
+  - `subject`: string
+  - `content`: text
+  - `read`: boolean
+  - `created_at`: timestamp
+
+#### Endpoints API
+- **POST** `/api/messages` - Enviar mensaje
+- **GET** `/api/messages` - Listar conversaciones
+- **GET** `/api/messages/:conversationId` - Ver hilo completo
+
+#### Archivos a modificar/crear
+- **Backend**:
+  - `backend/domain/entities/message.js` - Entidad mensaje
+  - `backend/application/services/messageService.js` - Servicio de mensajes
+
+- **Frontend**:
+  - `frontend/pages/messages/index.js` - Bandeja de entrada
+  - `frontend/components/messages/MessageThread.jsx` - Hilo de mensajes
+
+#### Criterios de aceptación técnicos
+1. Notificaciones en tiempo real mediante WebSockets
+2. Indicador visual de mensajes no leídos
+3. Posibilidad de adjuntar referencias a proyectos
+4. Búsqueda por contenido y filtrado por fecha
+
+### HISTORIA 6 – Informes semanales de proyecto (Could Have)
+
+**Como** inversor,  
+**Quiero** ver informes periódicos sobre mis inversiones,  
+**Para** seguir el progreso y estar informado de cualquier incidencia.
+
+#### Descripción técnica detallada
+Desarrollar un sistema que permita a los gestores publicar informes periódicos sobre el avance de los proyectos, con elementos estructurados (progreso de obra, hitos financieros, actualizaciones legales) y que los inversores puedan consultarlos de forma organizada.
+
+#### Campos y modelos de datos
+- **Modelo `ProjectUpdate`**:
+  - `id`: UUID (PK)
+  - `project_id`: UUID (FK a Project)
+  - `title`: string
+  - `content`: text (formateado con Markdown)
+  - `type`: enum ('weekly', 'milestone', 'alert')
+  - `progress_percentage`: integer
+  - `published_at`: timestamp
+  - `created_by`: UUID (FK a User)
+
+#### Endpoints API
+- **POST** `/api/projects/:id/updates` - Publicar actualización
+- **GET** `/api/projects/:id/updates` - Listar actualizaciones
+- **GET** `/api/updates/:id` - Ver detalle de actualización
+
+#### Archivos a modificar/crear
+- **Backend**:
+  - `backend/domain/entities/projectUpdate.js` - Entidad actualización
+  - `backend/application/services/updateService.js` - Servicio de actualizaciones
+
+- **Frontend**:
+  - `frontend/pages/projects/[id]/updates/index.js` - Lista de informes
+  - `frontend/components/projects/UpdateDetail.jsx` - Detalle de informe
+
+#### Criterios de aceptación técnicos
+1. Soporte para contenido multimedia en informes
+2. Gráficos de progreso y comparativas con cronograma
+3. Notificación automática a inversores al publicarse
+4. Versionado de informes para auditoría
+
+### Tabla priorizada de historias de usuario (MoSCoW)
+
+| ID | Historia de Usuario | Prioridad | Complejidad | Dependencias | Estimación |
+|----|-------------------|-----------|------------|-------------|------------|
+| US01 | Registro mediante invitación | Must Have | Media | Ninguna | 8 puntos |
+| US02 | Ver oportunidades de inversión | Must Have | Alta | US01 | 13 puntos |
+| US03 | Marcar "Invierto" | Must Have | Alta | US01, US02 | 13 puntos |
+| US04 | Ver documentos seguros | Should Have | Media | US01, US02 | 8 puntos |
+| US05 | Mensajería interna | Should Have | Media | US01 | 8 puntos |
+| US06 | Informes semanales de proyecto | Could Have | Media | US01, US03 | 8 puntos |
+| US07 | Marcar "Me interesa" | Should Have | Baja | US01, US02 | 5 puntos |
+| US08 | Enviar invitaciones (gestores) | Must Have | Baja | Ninguna | 5 puntos |
+| US09 | Publicar oportunidad de inversión | Must Have | Alta | Ninguna | 13 puntos |
+| US10 | Autenticación de usuarios | Must Have | Media | US01 | 8 puntos |
+| US11 | Gestionar socios inactivos | Could Have | Media | US01, US07 | 8 puntos |
+| US12 | Ver streaming en directo | Could Have | Alta | US01, US03 | 13 puntos |
+| US13 | Recibir notificaciones | Should Have | Media | US01 | 8 puntos |
+| US14 | Ver panel de control (gestor) | Should Have | Alta | US08, US09 | 13 puntos |
 
 ---
 
