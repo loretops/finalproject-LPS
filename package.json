@@ -5,12 +5,13 @@
   "main": "backend/server.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
-    "dev:frontend": "cd frontend && next dev -p 3001",
-    "dev:backend": "cd backend && nodemon server.js",
+    "dev:frontend": "(lsof -t -i:3001 | xargs kill -9 || true) && cd frontend && next dev -p 3001",
+    "dev:backend": "(lsof -t -i:8001 | xargs kill -9 || true) && cd backend && nodemon server.js",
     "build": "cd frontend && npm run build",
     "start": "node backend/server.js",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:unit": "echo \"Error: no test specified\" && exit 1"
   },
   "prisma": {
     "seed": "node backend/prisma/seed.js"
