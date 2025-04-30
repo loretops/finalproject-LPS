@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -8,11 +9,31 @@ export default function Home() {
       margin: '0 auto', 
       fontFamily: 'Arial, sans-serif' 
     }}>
-      <header style={{ marginBottom: '2rem', textAlign: 'center' }}>
+      <header style={{
+        marginBottom: '2rem',
+        textAlign: 'center',
+        position: 'relative'
+      }}>
         <h1 style={{ fontSize: '2.5rem', color: '#333' }}>COOPCO</h1>
         <p style={{ fontSize: '1.2rem', color: '#666' }}>
           Plataforma exclusiva para club privado de inversores inmobiliarios
         </p>
+        <div style={{
+          position: 'absolute',
+          top: '1rem',
+          right: '1rem'
+        }}>
+          <Link href="/login" style={{
+              padding: '0.5rem 1rem',
+              backgroundColor: '#0070f3',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '5px',
+              fontSize: '1rem'
+            }}>
+            Acceder
+          </Link>
+        </div>
       </header>
 
       <main>

@@ -283,15 +283,7 @@ Destaca, de los tickets creados, un ticket de backend, uno de frontend y uno de 
 
 **Prompt 2:**
 ```
-Si, quiero que hagas todos los tickets, pero asegúrate de que se trate de un MVP. No quiero un proyecto complejo de inicio. Si tienes que volver a escribirlos, hazlo. Y ponlo todo en un archivo tickets.md en markdown
-```
-
-**Prompt 3:**
-```
-Eres un experto desarrollador full-satck y product manager. Tienes toda la documentación preparada para empezar a desarrollar la primera historia de usuario. Estudiala, y vete desarrollando cada ticket para la primra historia de usuario a desarrollar. Conoces  los componentes de un buen ticket de trabajo. Da todo el detalle requerido para desarrollar la tarea de inicio a fin teniendo en cuenta las buenas prácticas al respecto. 
-
-No hagas nada todavía, solo crea los tickets en @tickets.md por orden de ejecución. 
-Acuerdate de las @rules.mdc 
+ok, pero no quiero que se rompa nada de lo que ya está desarrollado. ten cuidado. haz las pruebas que necesites para no estropear lo que ya funciona
 ```
 
 ## 7. Pull requests
@@ -359,3 +351,54 @@ Tienes la conexion a la base de datos en @env-example.md . Ejecuta npx prisma mi
 ```
 haz una prueba sencilla de que el proyecto ha arrancado correctamente: frontend, backend y bases de datos
 ```
+
+## Historia de Usuario 1: Registro mediante invitación
+
+*   [X] Vamos a empezar el desarrollo. Comienza por el primer ticket de `docs/product/tickets.md`.
+*   [ ] si, adelante con la opción B
+*   [ ] si, adelante con este enfoque. Puedes mantener la contraseña que has propuesto
+*   [ ] haz tu la llamada con curl
+*   [ ] vuelve a probar el curl
+*   [ ] com olos reviso?
+*   [ ] 1] Login error in AuthController: data and hash arguments required
+*   [ ] Si, empieza por el paso que propones. Donde crear el archivo debe ser conforme a la estructura y arquitectura definidas. Puedes revisar los archivos que necesites, especialmente el `@readme.md`. te estás olvidando ultimamente de las `@rules.mdc`
+*   [ ] ya he econtrado el problema. He probado el login, y ha funcionado. Vamos a por el siguiente paso del ticket
+*   [ ] Entnces, esta todo el ticket 1? Entonces pasaremos al ticket 2
+*   [ ] Me parece bien dedciar tiempo a escribir los test para el login, antes de pasar al siguiente ticket
+*   [ ] qué opinas tu? Si no lo ves importante y necesario no hagas los tests.
+*   [ ] vamos apor el ticket 2. Y no te olvides de las @rules.mdc
+*   [ ] Pues quizá no estaba bien definido el orden de los tickets. Entonces, no sería más conveniente empezar por el ticket 3?
+*   [ ] si, adelante con el ticket 4
+*   [ ] Qué conviene hacer primero: ¿el ticket2? o el ticket 4?
+*   [ ] sigue el plan de accion y pruebas que me has propuesto, pero vamos paso a paso
+*   [ ] escribe los tests. Hazlo en el archivo más conveniente usando buenas prácticas, y bajo tu conocimiento como experto en tests
+*   [ ] si, adelante
+*   [ ] me refiero a que quiero que los emails se envñien de verdad. Y quiero hacer pruebas con tests siempre que consideres, y según que ticklets estés desarrollando considera los tipos de tests que debes hacer, según tu gran experiencia en este campo. Y también habrá que hacer pruebas en el frontend
+*   [ ] He hecho la prueba real y ha funcionado. Si consideras recomendable para mi proyecto hacer el resto de tests que propones, adelante. Y sino, pasaremos al siguiente paso
+*   [ ] si, me parece perfecto. Adelante
+*   [ ] si, haz las pruebas con curl
+*   [ ] si, adelante con el frontend del ticket 6
+*   [ ] Revisa qué tickets están hechos @tickets.md y cuales serían los siguientes pasos, sin olvidarte de los test que sean necesarios. Y no te olvides de @rules.mdc 
+*   [ ] Me sigue sorprendiendo que, después de haber analizado cada archivo del proyecto, sigas queriendo crear archivos con extensión jsx. ¿No son generalmente .js? 
+Te voy a volver a pedir lo que te he pedido al principio, pero debes ser totalmente coherente con lo que ya está desarrollado, y con el @readme.md , admás de tener en cuenta las @rules.mdc 
+@tickets.md Revisa los tickets definidos para la historia de usuario 1. Revisa TODO el proyecto, y conluye qué tickets están termindos y cuales serían los próximos pasos para terminar lo que falta, sin olvidarte de los tests que creas oportunos. Y no olvides las rules.mdc
+*   [ ] si, adelante. Completa el ticket 6
+*   [ ] antes lo voy a probar desde el frontend, pero no tengo acceso a invitations desde el dashboard
+*   [ ] ok, ha funcionado muy bien el envío de la invitación desde el frontend, pero no puedo ver qué invitaciones he enviado y en qué estado se encuentran. ¿Esta tarea está defibida en algún ticket?
+*   [ ] si, sigue con el siguiente ticket que lo estás haciendo muy bien. Deben cumplirse todos los criterios de aceptación. te estás olvidando siempre de las @rules.mdc
+```
+
+## Análisis de Tickets y Próximos Pasos
+
+- `@readme.md @tickets.md Estudia e indexa todo el proyecto. Dime cual es el siguiente ticket a desarrollar`
+```
+- `si, y para relleneralo revisa ticket a ticket su estado actual`
+```
+
+- `si, con mucho cuidado. Paso a paso. Comrpobando cada uno de ellos. Antes de nada, asugurate que la entidad user tenga firstname y lastname`
+```
+
+- `si, pero veo una inchoerencia en el. ticket10, porque habla de name, cuando debe ser firstname y lastname`
+```
+
+\n- `he hecho pruebas de registro desde el front y me da este error: Name, email, password and invitation token are required`\n- `Invalid prisma.user.create() invocation in /Users/loretopardodesantayanagalbis/Sites/localhost/finalproject-LPS/backend/application/use_cases/registerUser.js:72:37 [...] Unknown argument \`email_verified\`. Did you mean \`emailVerified\`?`

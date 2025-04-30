@@ -316,13 +316,14 @@
 **Descripción:** Crear el formulario de registro que usarán los nuevos socios para crear su cuenta después de recibir una invitación válida.
 
 **Criterios de Aceptación:**
-- El formulario captura nombre, email, contraseña y confirmación
+- El formulario captura nombre (**firstName**), apellidos (**lastName**), email, contraseña y confirmación
 - Valida que la contraseña cumpla los requisitos de seguridad
 - Muestra feedback en tiempo real sobre la fortaleza de la contraseña
 - El email viene precargado y no es editable si viene de un token válido
 - Envía correctamente los datos al endpoint de registro (Ticket #8)
 - Maneja errores de validación con mensajes claros
 - Redirige a página de confirmación tras registro exitoso
+- Los campos **firstName** y **lastName** son obligatorios.
 
 **Prioridad:** Alta
 
@@ -333,7 +334,7 @@
 **Etiquetas:** Frontend, UI/UX, Seguridad, MVP
 
 **Tareas:**
-1. Crear componente de formulario con todos los campos necesarios
+1. Crear componente de formulario con todos los campos necesarios (**firstName, lastName**, email, password, confirmPassword)
 2. Implementar validación del lado del cliente
 3. Conectar con API para envío de datos (usando servicio de Ticket #2)
 4. Desarrollar indicador de fortaleza de contraseña

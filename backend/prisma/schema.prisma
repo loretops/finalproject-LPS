@@ -12,6 +12,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// Definición de Enums
+enum InvitationStatus {
+  PENDING
+  USED
+  EXPIRED
+}
+
 // Definición de los modelos basados en el diagrama ER
 // Roles de usuario
 model Role {
@@ -27,17 +34,19 @@ model Role {
 // Usuarios del sistema
 model User {
   id                  String               @id @default(uuid())
-  email               String               @unique
-  passwordHash        String               @map("password_hash")
-  roleId              String               @map("role_id")
-  status              String               @default("pending")
-  emailVerified       Boolean              @default(false) @map("email_verified")
-  emailVerifiedAt     DateTime?            @map("email_verified_at")
-  failedLoginAttempts Int                  @default(0) @map("failed_login_attempts")
-  lockedUntil         DateTime?            @map("locked_until")
-  createdAt           DateTime             @default(now()) @map("created_at")
-  updatedAt           DateTime             @updatedAt @map("updated_at")
-  role                Role                 @relation(fields: [roleId], references: [id])
+  firstName           String             @map("first_name")
+  lastName            String             @map("last_name")
+  email               String             @unique
+  passwordHash        String             @map("password_hash")
+  roleId              String             @map("role_id")
+  status              String             @default("pending")
+  emailVerified       Boolean            @default(false) @map("email_verified")
+  emailVerifiedAt     DateTime?          @map("email_verified_at")
+  failedLoginAttempts Int                @default(0) @map("failed_login_attempts")
+  lockedUntil         DateTime?          @map("locked_until")
+  createdAt           DateTime           @default(now()) @map("created_at")
+  updatedAt           DateTime           @updatedAt @map("updated_at")
+  role                Role               @relation(fields: [roleId], references: [id])
   invitationsSent     Invitation[]
   investments         Investment[]
   notifications       Notification[]
@@ -57,14 +66,14 @@ model User {
 
 // Invitaciones para unirse al club
 model Invitation {
-  id        String   @id @default(uuid())
+  id        String           @id @default(uuid())
   email     String
-  token     String   @unique
-  invitedBy String   @map("invited_by")
-  status    String   @default("pending")
-  createdAt DateTime @default(now()) @map("created_at")
-  expiresAt DateTime @map("expires_at")
-  inviter   User     @relation(fields: [invitedBy], references: [id])
+  token     String           @unique
+  invitedBy String           @map("invited_by")
+  status    InvitationStatus @default(PENDING)
+  createdAt DateTime         @default(now()) @map("created_at")
+  expiresAt DateTime         @map("expires_at")
+  inviter   User             @relation(fields: [invitedBy], references: [id])
 
   @@index([email])
   @@index([status, expiresAt])

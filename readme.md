@@ -463,8 +463,7 @@ Esto permite modularidad, mantenibilidad y escalabilidad progresiva sin complica
 
 > Recomendamos usar mermaid para el modelo de datos, y utilizar todos los parámetros que permite la sintaxis para dar el máximo detalle, por ejemplo las claves primarias y foráneas.
 
-```
-erDiagram
+```erDiagram
     roles ||--o{ users : has
     users ||--o{ invitations : creates
     users ||--o{ investments : makes
@@ -487,7 +486,7 @@ erDiagram
         VARCHAR email
         VARCHAR token
         UUID invited_by FK
-        VARCHAR status
+        InvitationStatus status // <-- Cambiado a Enum
         TIMESTAMP created_at
         TIMESTAMP expires_at
     }
@@ -503,6 +502,8 @@ erDiagram
 
     users {
         UUID id PK
+        VARCHAR firstName
+        VARCHAR lastName
         VARCHAR email "UNIQUE, idx"
         TEXT password_hash
         UUID role_id FK "idx"
@@ -654,6 +655,8 @@ Representa a los usuarios del sistema, incluyendo visitantes registrados, socios
 | Campo | Tipo de Dato | Descripción | Restricciones |
 |-------|-------------|-------------|---------------|
 | id | UUID | Identificador único del usuario | PK, NOT NULL, UNIQUE |
+| firstName | VARCHAR | Nombre del usuario | NOT NULL |
+| lastName | VARCHAR | Apellidos del usuario | NOT NULL |
 | email | VARCHAR | Email del usuario | NOT NULL, UNIQUE |
 | password_hash | TEXT | Hash de la contraseña | NOT NULL |
 | role_id | UUID | Rol del usuario | FK → roles.id, NOT NULL |
@@ -747,7 +750,7 @@ Invitaciones enviadas a potenciales socios para unirse al club.
 | email | VARCHAR | Email del invitado | NOT NULL |
 | token | VARCHAR | Token único de invitación | NOT NULL, UNIQUE |
 | invited_by | UUID | Usuario que realiza la invitación | FK → users.id, NOT NULL |
-| status | VARCHAR | Estado (pending, used, expired) | NOT NULL, DEFAULT: 'pending' |
+| status | InvitationStatus | Estado (PENDING, USED, EXPIRED) | Enum, NOT NULL, DEFAULT: 'PENDING' |
 | created_at | TIMESTAMP | Fecha de creación | NOT NULL, DEFAULT: now() |
 | expires_at | TIMESTAMP | Fecha de expiración | NOT NULL |
 

@@ -8,4 +8,6 @@ alwaysApply: true
 - Piensa lo que vas a hacer **paso a paso**
 - Si tienes dudas **pregúntame**, antes de hacer nada
 - Quiero un **proyecto sencillo**, **fácil de mantener**, y que **en el futuro pueda ser escalable**
-- Si se hace algún cambio en el modelo de bases de datos **revisa la actualización en el diseño, diagramas, esqyemas y la popria base de datos**
+- Si se hace algún cambio en el modelo de bases de datos **revisa la actualización en el diseño, diagramas, esquemas y la popria base de datos**
+- Todo lo que hagas en el frontend debe cumplir **buenas practicas de UI y UX**
+- Cada vez que vayas comprobando satisfactoriamente los criterios de aceptación de un ticket, así como su total desarrollo, o los fallos del mismo, así como los tests, debes **actualizar el archivo  docs/development_status.md**
