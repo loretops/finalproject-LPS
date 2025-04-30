@@ -286,6 +286,14 @@ Destaca, de los tickets creados, un ticket de backend, uno de frontend y uno de 
 Si, quiero que hagas todos los tickets, pero asegúrate de que se trate de un MVP. No quiero un proyecto complejo de inicio. Si tienes que volver a escribirlos, hazlo. Y ponlo todo en un archivo tickets.md en markdown
 ```
 
+**Prompt 3:**
+```
+Eres un experto desarrollador full-satck y product manager. Tienes toda la documentación preparada para empezar a desarrollar la primera historia de usuario. Estudiala, y vete desarrollando cada ticket para la primra historia de usuario a desarrollar. Conoces  los componentes de un buen ticket de trabajo. Da todo el detalle requerido para desarrollar la tarea de inicio a fin teniendo en cuenta las buenas prácticas al respecto. 
+
+No hagas nada todavía, solo crea los tickets en @tickets.md por orden de ejecución. 
+Acuerdate de las @rules.mdc 
+```
+
 ## 7. Pull requests
 
 **Prompt 1:**
