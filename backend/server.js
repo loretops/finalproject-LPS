@@ -1,3 +1,5 @@
+require('dotenv').config({ path: '../.env' });
+
 // Importaciones
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
