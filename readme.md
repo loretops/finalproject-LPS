@@ -20,15 +20,14 @@ Loreto Pardo de Santayana Galbis
 COOPCO
 
 ### **0.3. Descripción breve del proyecto:**
-Plataforma digital exclusiva para un club privado de inversores inmobiliarios que permite acceder a oportunidades cuidadosamente seleccionadas, con toda la información relevante para evaluar el potencial de rentabilidad, expresar interés, invertir mediante préstamos participativos y seguir el desarrollo del proyecto en tiempo real. Diseñada para garantizar transparencia, seguridad y eficiencia, está orientada a personas que buscan invertir en bienes raíces con confianza y control.
+Plataforma digital exclusiva para un club privado de inversores inmobiliarios que permite acceder a oportunidades cuidadosamente seleccionadas, con toda la información relevante para evaluar el potencial de rentabilidad, expresar interés, invertir mediante préstamos participativos y seguir el desarrollo del proyecto en tiempo real. Diseñada para garantizar transparencia, seguridad y eficiencia, está orientada a personas que buscan invertir en proyectos inmobiliarios con confianza y control.
 
 ### **0.4. URL del proyecto:**
 
 > Puede ser pública o privada, en cuyo caso deberás compartir los accesos de manera segura. Puedes enviarlos a [alvaro@lidr.co](mailto:alvaro@lidr.co) usando algún servicio como [onetimesecret](https://onetimesecret.com/).
 
 ### 0.5. URL o archivo comprimido del repositorio
-
-> Puedes tenerlo alojado en público o en privado, en cuyo caso deberás compartir los accesos de manera segura. Puedes enviarlos a [alvaro@lidr.co](mailto:alvaro@lidr.co) usando algún servicio como [onetimesecret](https://onetimesecret.com/). También puedes compartir por correo un archivo zip con el contenido
+https://github.com/loretops/finalproject-LPS
 
 
 ---
@@ -356,7 +355,7 @@ La arquitectura sigue el patrón por capas (layered architecture) combinado con 
 
 ## 🧠 Descripción de Alto Nivel del Proyecto
 
-El proyecto es una plataforma web para inversión inmobiliaria privada, con acceso restringido mediante invitación. Los usuarios pueden consultar oportunidades de inversión, expresar interés, invertir, y hacer seguimiento del estado del proyecto.
+El proyecto es una plataforma web para inversión inmobiliaria privada, con acceso restringido mediante invitación. Los usuarios pueden consultar oportunidades de inversión, expresar interén, invertir, y hacer seguimiento del estado del proyecto.
 
 ### 🔧 Tecnología usada
 
@@ -444,16 +443,345 @@ Esto permite modularidad, mantenibilidad y escalabilidad progresiva sin complica
 
 
 ### **2.4. Infraestructura y despliegue**
-
 > Detalla la infraestructura del proyecto, incluyendo un diagrama en el formato que creas conveniente, y explica el proceso de despliegue que se sigue
+
+#### Infraestructura de Desarrollo Local
+
+La infraestructura para el desarrollo local de COOPCO está diseñada para ser sencilla y replicable en el entorno de cualquier desarrollador. Se basa en los siguientes componentes principales:
+
+1.  **Entorno de Ejecución:**
+    *   **Node.js:** Se requiere una versión LTS estable para ejecutar tanto el frontend (Next.js) como el backend (Node.js/Express).
+    *   **Gestor de Paquetes:** `npm` o `yarn` para gestionar las dependencias de ambos proyectos (frontend y backend).
+
+2.  **Base de Datos:**
+    *   **PostgreSQL:** Se utiliza un servidor PostgreSQL que puede ser instalado directamente en el sistema operativo del desarrollador o, preferiblemente, ejecutado dentro de un contenedor Docker para asegurar la consistencia entre entornos y simplificar la configuración inicial. Prisma ORM gestiona las conexiones, migraciones y el esquema.
+
+3.  **Servicios Externos (Simulación Local):**
+    *   **Almacenamiento (Cloudinary/S3):** Durante el desarrollo local, se utilizan cuentas de desarrollo gratuitas o se simulan las subidas/bajadas de archivos para evitar costes y complejidades. Las credenciales se gestionan mediante variables de entorno.
+    *   **Servicio de Email (SendGrid/Mailgun):** Se emplean servicios como `Mailtrap` o `Ethereal` para capturar los emails enviados en desarrollo sin enviarlos realmente, o se usan las API keys de desarrollo de los proveedores reales con precaución.
+    *   **Servicio de Vídeo (YouTube/Vimeo):** Se utilizan enlaces de prueba o vídeos de muestra durante el desarrollo.
+
+4.  **Variables de Entorno:**
+    *   Un archivo `.env` en la raíz de los proyectos `frontend` y `backend` almacena toda la configuración sensible y específica del entorno (cadenas de conexión a la BD, claves API de servicios externos, secretos JWT, etc.). Se proporciona un archivo `.env.example` como plantilla.
+
+#### Diagrama de Infraestructura Local Simplificado
+
+```mermaid
+graph TD
+    subgraph "Máquina del Desarrollador"
+        Dev[Desarrollador] --> CodeEditor[Editor de Código]
+
+        subgraph "Procesos Locales"
+            FrontendApp[Frontend Next.js] 
+            BackendApp[Backend Node/Express]
+            DB[(PostgreSQL)]
+            CodeEditor --> FrontendApp
+            CodeEditor --> BackendApp
+            BackendApp --> DB
+            FrontendApp --> BackendApp
+        end
+
+        subgraph "Servicios Externos"
+            ExtStorage[Almacenamiento]
+            ExtEmail[Email Service]
+            ExtVideo[Video Service]
+            BackendApp --> ExtStorage
+            BackendApp --> ExtEmail
+            BackendApp --> ExtVideo
+        end
+
+        subgraph "Herramientas"
+            NodeJS[Node.js]
+            NPM[npm/yarn]
+            Docker[Docker]
+            PrismaCLI[Prisma CLI]
+            Dev --> NodeJS
+            Dev --> NPM
+            Dev --> Docker
+            Dev --> PrismaCLI
+            FrontendApp --> NodeJS
+            BackendApp --> NodeJS
+            DB --> Docker
+        end
+    end
+
+    style Dev fill:#f9f,stroke:#333
+    style FrontendApp fill:#bbf,stroke:#333
+    style BackendApp fill:#bfb,stroke:#333
+    style DB fill:#fbb,stroke:#333
+    style ExtStorage fill:#ffd,stroke:#333
+    style ExtEmail fill:#ffd,stroke:#333
+    style ExtVideo fill:#ffd,stroke:#333
+    style NodeJS fill:#eee,stroke:#333
+    style NPM fill:#eee,stroke:#333
+    style Docker fill:#eee,stroke:#333
+    style PrismaCLI fill:#eee,stroke:#333
+```
+
+*Diagrama simplificado de la interacción de componentes en el entorno de desarrollo local.*
+![Diagrama de Infraestructura Local](docs/images/infraestructura_local.png) 
+
+#### Proceso de Despliegue (Esbozo Inicial para Producción)
+
+Aunque el enfoque actual es el desarrollo local, se esboza una posible estrategia de despliegue a producción:
+
+1.  **Opción 1: Servidor VPS (Virtual Private Server)**
+    *   **Infraestructura:** Contratar un VPS (ej. DigitalOcean, Linode, OVHcloud) con Linux.
+    *   **Dominio:** Comprar y configurar un dominio (ej. `coopco.com` o `app.coopco.com`).
+    *   **Despliegue:**
+        *   Instalar Node.js, PostgreSQL (o conectar a una base de datos gestionada externa), y un servidor web como Nginx en el VPS.
+        *   Configurar Nginx como proxy inverso para las aplicaciones Node.js (frontend y backend).
+        *   Clonar el repositorio en el VPS.
+        *   Configurar las variables de entorno de producción.
+        *   Construir las aplicaciones (`npm run build` para frontend y backend si es necesario).
+        *   Utilizar un gestor de procesos como `pm2` para ejecutar las aplicaciones Node.js de forma persistente.
+        *   Configurar certificados SSL (ej. con Let's Encrypt).
+        *   El despliegue podría automatizarse con scripts o herramientas como Capistrano, o manualmente mediante SSH y Git.
+
+2.  **Opción 2: Plataformas Cloud Modernas (PaaS/Serverless)**
+    *   **Frontend (Next.js):** Despliegue en plataformas optimizadas como **Vercel** o **Netlify**.
+    *   **Backend (Node.js/Express):** Despliegue en servicios como **Heroku**, **AWS Elastic Beanstalk**, **Google Cloud Run**, o utilizando contenedores **Docker** orquestados.
+    *   **Base de Datos (PostgreSQL):** Utilización de servicios de bases de datos gestionadas (**AWS RDS**, **Google Cloud SQL**, **Heroku Postgres**).
+    *   **Ventajas:** Mayor escalabilidad automática, menor gestión de la infraestructura base, CI/CD más integrado.
+    *   **Consideración:** Puede implicar una curva de aprendizaje diferente y potencialmente mayores costes a escala.
+
+3.  **Consideraciones Comunes (para ambas opciones):**
+    *   **CI/CD:** Implementar un pipeline de Integración Continua y Despliegue Continuo (GitHub Actions, GitLab CI) para automatizar pruebas, construcción y despliegue.
+    *   **Servicios Externos:** Configurar las cuentas de producción de Cloudinary/S3, SendGrid/Mailgun, etc., con claves API seguras.
+    *   **Seguridad:** Configurar firewalls, gestionar secretos de forma segura, aplicar parches de seguridad regularmente (especialmente relevante en VPS).
+
+*La elección final dependerá de factores como el presupuesto, la experiencia técnica, los requisitos de escalabilidad y el nivel de control deseado sobre la infraestructura. Esta sección se detallará más adelante.*
+
 
 ### **2.5. Seguridad**
 
 > Enumera y describe las prácticas de seguridad principales que se han implementado en el proyecto, añadiendo ejemplos si procede
 
+#### Prácticas implementadas actualmente (MVP)
+
+La seguridad del proyecto se ha planteado desde las fases iniciales del desarrollo, implementando varias medidas esenciales para proteger datos y usuarios. En esta fase MVP, nos hemos enfocado en:
+
+1. **Autenticación segura:**
+   * Almacenamiento de contraseñas con hashing bcrypt (factor de coste 12)
+   * Sistema de tokens JWT para gestión de sesiones
+   * Verificación de invitaciones con tokens criptográficamente seguros (`crypto.randomBytes`)
+   * Expiración automática de tokens de invitación (7 días)
+
+2. **Control de acceso basado en roles:**
+   * Middleware de autenticación JWT (`jwtAuthMiddleware.js`)
+   * Middleware de autorización por roles (`roleAuthMiddleware.js`)
+   * Restricción de rutas críticas a usuarios con roles específicos (ej: solo gestores pueden enviar invitaciones)
+
+3. **Validación de datos:**
+   * Validación tanto en frontend como en backend para entradas de usuario
+   * Validación de formato de email y fortaleza de contraseñas
+   * Verificación de que el email registrado coincide con el de la invitación
+
+4. **Seguridad de datos:**
+   * Manejo de secretos a través de variables de entorno (no hardcodeados)
+   * Mensajes de error genéricos para evitar enumeración de usuarios
+   * Prevención de divulgación de información sensible en respuestas API
+
+5. **Configuración básica CORS:**
+   * Control de dominios permitidos para acceder a la API
+   * Especificación de cabeceras y métodos permitidos
+
+#### Mejoras de seguridad a implementar en fases posteriores
+
+Para versiones futuras del proyecto, se planifican las siguientes mejoras de seguridad:
+
+1. **Protección adicional de documentos:**
+   * Marcas de agua dinámicas con datos del usuario para documentos visibles
+   * Sistema anti-captura de pantalla cuando sea técnicamente posible
+   * Tokens de acceso temporales para documentos confidenciales
+
+2. **Seguridad de API avanzada:**
+   * Implementación de rate limiting para prevenir ataques por fuerza bruta
+   * Headers de seguridad adicionales (CSP, X-Content-Type-Options, etc.)
+   * Validación más exhaustiva con esquemas JSON (joi, zod, yup)
+
+3. **Auditoría y monitorización:**
+   * Registro detallado de eventos de seguridad
+   * Alertas por actividad sospechosa
+   * Detección de intentos de inicio de sesión anómalos
+
+4. **Seguridad en producción:**
+   * Uso de HTTPS con certificados válidos
+   * Configuración segura de cookies (HttpOnly, Secure, SameSite)
+   * Escaneo periódico de dependencias vulnerables
+
+Este enfoque gradual nos permite tener una base segura en el MVP mientras se planifica una estrategia más robusta para el producto final, equilibrando la seguridad con la facilidad de desarrollo y mantenimiento para un programador junior.
+
 ### **2.6. Tests**
 
 > Describe brevemente algunos de los tests realizados
+
+El proyecto implementa una estrategia de pruebas en múltiples niveles, siguiendo buenas prácticas de calidad de software. A continuación se describen los diferentes tipos de tests implementados:
+
+#### Tests Unitarios
+
+Estos tests verifican componentes aislados del sistema, enfocándose en funciones específicas y sus resultados:
+
+- **Tests de Controladores**: Verifican que los controladores HTTP manejan correctamente las solicitudes y respuestas, validando parámetros y devolviendo los códigos de estado apropiados.
+  
+  ```javascript
+  // Ejemplo en backend/tests/controllers/auth.controller.test.js
+  it('should return 400 if required fields are missing', async () => {
+    req.body = { email: mockEmail, password: mockPassword }; // Missing name and token
+    await authController.register(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+      message: expect.stringContaining('All fields are required')
+    }));
+  });
+  ```
+
+- **Tests de Servicios**: Prueban los servicios de negocio que implementan la lógica principal de la aplicación.
+
+  ```javascript
+  // Ejemplo en backend/tests/services/invitationService.test.js
+  it('should create a new invitation and attempt to send email', async () => {
+    const testEmail = 'new_invitee@test.com';
+    const invitation = await invitationService.createInvitation(testEmail, testUser.id);
+    
+    // Verificaciones
+    expect(invitation).toBeDefined();
+    expect(invitation.email).toBe(testEmail);
+    expect(invitation.token).toBeDefined();
+    expect(invitation.status).toBe(InvitationStatus.PENDING);
+    
+    // Check if the mocked email function was called
+    expect(emailService.sendInvitationEmail).toHaveBeenCalledTimes(1);
+    expect(emailService.sendInvitationEmail).toHaveBeenCalledWith(testEmail, expect.any(String));
+  });
+  ```
+
+#### Tests de Integración
+
+Verifican la interacción entre múltiples componentes del sistema, asegurando que funcionen correctamente juntos:
+
+- **Tests de API REST**: Utilizan `supertest` para ejecutar solicitudes HTTP reales contra el servidor Express y validar las respuestas completas:
+
+  ```javascript
+  // Ejemplo en backend/tests/integration/auth.test.js
+  it('should return 200 OK and a JWT for valid credentials', async () => {
+    const credentials = {
+      email: 'manager@example.com',
+      password: 'password123'
+    };
+
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send(credentials)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+    expect(response.body).toHaveProperty('token');
+    expect(response.body.token).toBeTruthy();
+  });
+  ```
+
+- **Tests de Flujos Completos**: Prueban secuencias de operaciones, como la validación de invitaciones:
+
+  ```javascript
+  // Ejemplo en backend/tests/integration/auth.test.js - Validación de tokens
+  it('should return 200 OK and status valid for a valid token', async () => {
+    const response = await request(app)
+      .get(`/api/auth/invitation/${validInvitationData.token}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+    expect(response.body).toEqual({ status: 'valid', email: 'valid@test.com' });
+  });
+
+  it('should return 410 Gone for a used token', async () => {
+    const response = await request(app)
+      .get(`/api/auth/invitation/${usedInvitationData.token}`)
+      .expect('Content-Type', /json/)
+      .expect(410);
+    expect(response.body).toHaveProperty('status', 'invalid');
+  });
+  ```
+
+#### Tests de Componentes React
+
+Verifican que los componentes React renderizan correctamente y manejan las interacciones del usuario:
+
+- **Tests de Renderizado**: Comprueban que los componentes se renderizan con los props correctos y muestran el contenido esperado:
+
+  ```javascript
+  // Ejemplo en frontend/tests/pages/register.test.js
+  test('renders RegistrationForm when not authenticated and token/email are present', () => {
+    setupMocks(false, { token: mockToken, email: mockEmail });
+    render(<RegisterPage />);
+
+    expect(screen.getByText(/completa tu registro/i)).toBeInTheDocument();
+    expect(screen.getByTestId('mock-registration-form')).toBeInTheDocument();
+    expect(screen.getByTestId('token-prop')).toHaveTextContent(mockToken);
+  });
+  ```
+
+- **Tests de Comportamiento**: Simulan interacciones del usuario y verifican que los componentes responden correctamente:
+
+  ```javascript
+  // Ejemplo en frontend/components/Auth/RegistrationForm.test.js
+  test('shows error if passwords do not match', async () => {
+    const firstNameInput = screen.getByLabelText(/^nombre/i);
+    const lastNameInput = screen.getByLabelText(/apellidos/i);
+    const passwordInput = screen.getByLabelText(/^contraseña/i);
+    const confirmPasswordInput = screen.getByLabelText(/confirmar contraseña/i);
+    const submitButton = screen.getByRole('button', { name: /completar registro/i });
+
+    await user.type(firstNameInput, 'Test');
+    await user.type(lastNameInput, 'User');
+    await user.type(passwordInput, 'Password123');
+    await user.type(confirmPasswordInput, 'PasswordMismatch');
+    await user.click(submitButton);
+    
+    expect(await screen.findByText(/las contraseñas no coinciden/i)).toBeInTheDocument();
+    expect(authService.register).not.toHaveBeenCalled();
+  });
+  ```
+
+#### Características de la estrategia de pruebas
+
+- **Mocks y Stubs**: Se utilizan para aislar componentes y simular dependencias (como servicios externos o la base de datos):
+
+  ```javascript
+  // Ejemplo de mock de servicio de email
+  jest.mock('../../application/services/emailService', () => ({
+    sendInvitationEmail: jest.fn().mockResolvedValue({ messageId: 'mock-email-id' })
+  }));
+  ```
+
+- **Configuración de entorno**: Se configura un entorno de prueba específico con datos de prueba y usuarios simulados:
+
+  ```javascript
+  // Configuración de tests de invitación
+  beforeAll(async () => {
+    // Crear usuario de prueba para invitaciones
+    testUser = await createTestUser();
+    if (!testUser) throw new Error('Failed to create test user');
+  });
+  ```
+
+- **Limpieza entre pruebas**: Se restablece el estado entre pruebas para garantizar el aislamiento:
+
+  ```javascript
+  beforeEach(() => {
+    // Reset mocks before each test
+    jest.clearAllMocks();
+    user = userEvent.setup();
+  });
+
+  afterAll(async () => {
+    // Cleanup created test invitations
+    for (const invitation of createdInvitations) {
+      await cleanupInvitation(invitation.id);
+    }
+  });
+  ```
+
+Esta estrategia de pruebas en múltiples niveles ayuda a detectar problemas temprano en el ciclo de desarrollo y asegura que los componentes individuales y el sistema en conjunto funcionen según lo esperado. Para el MVP, los tests se centran en las funcionalidades críticas como autenticación, invitaciones y registro de usuarios.
 
 ---
 
@@ -928,6 +1256,381 @@ Registros de visualizaciones de documentos para auditoría.
 
 > Si tu backend se comunica a través de API, describe los endpoints principales (máximo 3) en formato OpenAPI. Opcionalmente puedes añadir un ejemplo de petición y de respuesta para mayor claridad
 
+```yaml
+openapi: 3.0.3
+info:
+  title: COOPCO API
+  description: API para la plataforma exclusiva de inversión inmobiliaria
+  version: 1.0.0
+servers:
+  - url: http://localhost:8001/api
+    description: Servidor de desarrollo
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje de error
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: [draft, published, closed, funded]
+        minimum_investment:
+          type: number
+          format: decimal
+        target_amount:
+          type: number
+          format: decimal
+        current_amount:
+          type: number
+          format: decimal
+        expected_roi:
+          type: number
+          format: decimal
+        location:
+          type: string
+        property_type:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+paths:
+  /auth/login:
+    post:
+      summary: Iniciar sesión
+      description: Autentica al usuario y devuelve un token JWT
+      tags:
+        - Autenticación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Token JWT para autenticar peticiones futuras
+        '400':
+          description: Datos de entrada inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /projects:
+    get:
+      summary: Listar oportunidades de inversión
+      description: Devuelve un listado de proyectos de inversión disponibles con opción de filtrado
+      tags:
+        - Proyectos
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, published, closed, funded]
+          description: Filtrar por estado del proyecto
+        - name: property_type
+          in: query
+          schema:
+            type: string
+          description: Filtrar por tipo de propiedad
+        - name: min_roi
+          in: query
+          schema:
+            type: number
+            format: float
+          description: Filtrar por rentabilidad mínima
+        - name: location
+          in: query
+          schema:
+            type: string
+          description: Filtrar por ubicación
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Número de página para paginación
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+          description: Número de resultados por página
+      responses:
+        '200':
+          description: Listado de proyectos encontrados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Project'
+                  pagination:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      page:
+                        type: integer
+                      limit:
+                        type: integer
+                      totalPages:
+                        type: integer
+        '401':
+          description: No autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: No autorizado (no tiene rol de socio o superior)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /investments:
+    post:
+      summary: Registrar inversión
+      description: Permite a un socio registrar su intención de invertir en un proyecto
+      tags:
+        - Inversiones
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - project_id
+                - amount
+              properties:
+                project_id:
+                  type: string
+                  format: uuid
+                  description: ID del proyecto en el que se invierte
+                amount:
+                  type: number
+                  format: decimal
+                  description: Cantidad a invertir
+                notes:
+                  type: string
+                  description: Notas o comentarios adicionales
+      responses:
+        '201':
+          description: Inversión registrada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  project_id:
+                    type: string
+                    format: uuid
+                  amount:
+                    type: number
+                    format: decimal
+                  status:
+                    type: string
+                    enum: [pending, confirmed, cancelled]
+                  invested_at:
+                    type: string
+                    format: date-time
+                  message:
+                    type: string
+        '400':
+          description: Datos inválidos o monto inferior al mínimo requerido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: No autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: No autorizado (no tiene rol de socio)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Proyecto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+```
+
+### Ejemplos de petición y respuesta
+
+#### Login
+
+**Petición:**
+```http
+POST /api/auth/login HTTP/1.1
+Host: localhost:8001
+Content-Type: application/json
+
+{
+  "email": "manager@example.com",
+  "password": "password123"
+}
+```
+
+**Respuesta (200 OK):**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTY3ODkwIiwiZW1haWwiOiJtYW5hZ2VyQGV4YW1wbGUuY29tIiwicm9sZSI6Im1hbmFnZXIiLCJpYXQiOjE2ODI1MDcwMDAsImV4cCI6MTY4MjUxMDYwMH0.8FR4nVMUBcD8aLJKYBJ-JlptULaOmL4KhzRJbVx_U8s"
+}
+```
+
+#### Listar proyectos
+
+**Petición:**
+```http
+GET /api/projects?status=published&property_type=residential&min_roi=5&page=1&limit=10 HTTP/1.1
+Host: localhost:8001
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**Respuesta (200 OK):**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "data": [
+    {
+      "id": "8f7e6d5c-4b3a-2a1b-0c9d-8f7e6d5c4b3a",
+      "title": "Residencial Las Encinas",
+      "description": "Desarrollo de 24 viviendas de lujo en zona exclusiva",
+      "status": "published",
+      "minimum_investment": 50000.00,
+      "target_amount": 2500000.00,
+      "current_amount": 1200000.00,
+      "expected_roi": 12.5,
+      "location": "Madrid, España",
+      "property_type": "residential",
+      "created_at": "2023-09-15T10:30:00Z",
+      "published_at": "2023-09-20T14:00:00Z"
+    },
+    {
+      "id": "1a2b3c4d-5e6f-7g8h-9i0j-1a2b3c4d5e6f",
+      "title": "Oficinas Distrito Financiero",
+      "description": "Reforma de edificio para uso comercial en zona prime",
+      "status": "published",
+      "minimum_investment": 100000.00,
+      "target_amount": 5000000.00,
+      "current_amount": 2000000.00,
+      "expected_roi": 8.75,
+      "location": "Barcelona, España",
+      "property_type": "commercial",
+      "created_at": "2023-08-05T09:15:00Z",
+      "published_at": "2023-08-10T11:30:00Z"
+    }
+  ],
+  "pagination": {
+    "total": 8,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 1
+  }
+}
+```
+
+#### Registrar inversión
+
+**Petición:**
+```http
+POST /api/investments HTTP/1.1
+Host: localhost:8001
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+{
+  "project_id": "8f7e6d5c-4b3a-2a1b-0c9d-8f7e6d5c4b3a",
+  "amount": 75000.00,
+  "notes": "Primera inversión en el proyecto"
+}
+```
+
+**Respuesta (201 Created):**
+```http
+HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+  "id": "a1b2c3d4-e5f6-g7h8-i9j0-a1b2c3d4e5f6",
+  "project_id": "8f7e6d5c-4b3a-2a1b-0c9d-8f7e6d5c4b3a",
+  "amount": 75000.00,
+  "status": "pending",
+  "invested_at": "2023-10-25T14:35:12Z",
+  "message": "Inversión registrada correctamente. Será revisada por el gestor."
+}
+```
+
 ---
 
 ## 5. Historias de Usuario
@@ -957,9 +1660,10 @@ El sistema debe permitir que solo los usuarios con invitación válida puedan re
   - `expires_at`: timestamp (por defecto 7 días después de la creación)
 
 - **Modelo `User` (campos adicionales)**:
-  - `role`: enum ('visitor', 'partner', 'investor', 'manager')
+  - `role_id`: UUID (FK a Role, para asignar rol de 'partner')
   - `status`: enum ('pending', 'active', 'inactive', 'banned')
-  - `invitation_id`: UUID (opcional, FK a Invitation)
+  - `email_verified`: boolean (por defecto false)
+  - `email_verified_at`: timestamp (opcional)
 
 #### Endpoints API
 - **GET** `/api/auth/invitation/:token` - Verificar validez del token
@@ -1121,200 +1825,71 @@ Implementar una funcionalidad que permita a los socios registrar su intención f
 
 - **Modelo `Notification`**:
   - `id`: UUID (PK)
-  - `user_id`: UUID (FK a User, destinatario)
-  - `type`: enum ('new_investment', 'project_update', 'system')
+  - `user_id`: UUID (FK a User)
+  - `type`: enum ('new_investment', 'project_update', 'message')
   - `content`: text
+  - `related_id`: UUID (proyecto o inversión relacionada)
   - `read`: boolean
   - `created_at`: timestamp
-  - `related_id`: UUID (opcional, referencia a la entidad relacionada)
 
 #### Endpoints API
-- **POST** `/api/investments` - Registrar una nueva inversión
-  - Body: `{ project_id, amount, notes }`
-  - Respuesta 201: Inversión registrada correctamente
-  - Respuesta 400: Datos inválidos o monto inferior al mínimo
-  
-- **GET** `/api/investments/user` - Listar inversiones del usuario
-  - Query params: `status`
-  - Respuesta 200: Array de inversiones con datos del proyecto
+- **POST** `/api/projects/:id/invest` - Registrar intención de inversión
+  - Body: `{ amount, notes }`
+  - Respuesta 201: Inversión registrada
+  - Respuesta 400: Datos inválidos o monto insuficiente
+  - Respuesta 403: Usuario sin permisos o proyecto no disponible
 
-- **GET** `/api/projects/:id/investments` - Listar inversiones de un proyecto
-  - Respuesta 200: Array con inversiones y porcentaje de financiación alcanzado
+- **GET** `/api/projects/:id/investments` - Listar inversiones en un proyecto
+  - Respuesta 200: Array de inversiones en el proyecto
+  
+- **GET** `/api/users/me/investments` - Listar mis inversiones
+  - Respuesta 200: Array de inversiones del usuario actual
 
 #### Archivos a modificar/crear
 - **Backend**:
   - `backend/domain/entities/investment.js` - Definir entidad Investment
   - `backend/domain/entities/notification.js` - Definir entidad Notification
-  - `backend/application/services/investmentService.js` - Servicio de inversiones
-  - `backend/application/services/notificationService.js` - Servicio de notificaciones
+  - `backend/application/services/investmentService.js` - Lógica de inversiones
+  - `backend/application/services/notificationService.js` - Lógica de notificaciones
   - `backend/interfaces/controllers/investmentController.js` - Controlador
-  - `backend/interfaces/routes/investmentRoutes.js` - Rutas
-  - `backend/prisma/schema.prisma` - Nuevos modelos Prisma
+  - `backend/interfaces/routes/investmentRoutes.js` - Rutas de inversión
+  - `backend/prisma/schema.prisma` - Añadir modelos nuevos
 
 - **Frontend**:
-  - `frontend/pages/projects/[id]/invest.js` - Página de formulario de inversión
-  - `frontend/components/investments/InvestmentForm.jsx` - Componente de formulario
-  - `frontend/components/projects/InvestmentProgress.jsx` - Barra de progreso
-  - `frontend/components/notifications/Notification.jsx` - Componente de notificación
+  - `frontend/components/projects/InvestmentForm.jsx` - Formulario de inversión
+  - `frontend/components/projects/InvestmentSummary.jsx` - Resumen de inversiones
+  - `frontend/pages/account/investments.js` - Página de mis inversiones
   - `frontend/services/investmentService.js` - Comunicación con la API
 
 #### Criterios de aceptación técnicos
-1. La inversión debe actualizarse en tiempo real para otros usuarios
-2. El monto mínimo debe validarse tanto en frontend como backend
-3. Las notificaciones deben enviarse por email y dentro de la plataforma
-4. El sistema debe manejar concurrencia para evitar sobrefinanciación
-5. La barra de progreso debe actualizarse automáticamente
-6. El gestor debe recibir una notificación especial con detalles completos
+1. Validar que el monto sea >= al mínimo establecido para el proyecto
+2. Actualizar el campo `current_amount` del proyecto al registrar inversión
+3. Crear notificaciones automáticas para todos los socios
+4. La operación debe ser transaccional (todo o nada)
+5. Un usuario solo puede tener una inversión activa por proyecto
+6. Implementar bloqueo optimista para evitar condiciones de carrera
 
 #### Tests unitarios requeridos
-- Validación de monto mínimo en diferentes escenarios
-- Integridad transaccional al registrar inversión
-- Generación correcta de notificaciones
-- Actualización del estado del proyecto según inversiones
+- Validación correcta de montos mínimos
+- Creación correcta de notificaciones
+- Actualización del total invertido en el proyecto
+- Manejo de errores y transacciones
 
 #### Documentación a actualizar
-- Actualizar manual de usuario en docs/user/investing.md
-- Documentar flujo de notificaciones en docs/technical/notifications.md
+- Agregar docs/technical/investment-flow.md explicando el proceso
+- Actualizar docs/api/investments.md con los endpoints
+- Documentar el diagrama de flujo del proceso
 
 #### Requisitos no funcionales
-- **Seguridad**: Validar que el usuario tenga rol 'partner' y el proyecto esté activo
-- **Disponibilidad**: Operación crítica con alta disponibilidad (99.9%)
-- **Auditoría**: Registro completo de eventos para trazabilidad
-- **Rendimiento**: Operación completa <2s incluyendo notificaciones
+- **Seguridad**: Verificar permisos y validar origen de la solicitud
+- **Integridad**: Garantizar consistencia transaccional
+- **Rendimiento**: Optimizar consultas para que el proceso tome <500ms
+- **Concurrencia**: Manejar múltiples inversiones simultáneas correctamente
+- **Auditoría**: Registrar todas las operaciones para trazabilidad
 
-### HISTORIA 4 – Ver documentos seguros (Should Have)
+---
 
-**Como** inversor,  
-**Quiero** poder ver los documentos legales y técnicos de un proyecto,  
-**Para** conocer todos los detalles sin posibilidad de descargarlos.
-
-#### Descripción técnica detallada
-Implementar un visor de documentos que permita a los inversores consultar documentación sensible (contratos, informes técnicos, etc.) con restricciones que impidan su descarga o captura, manteniendo la información segura mientras se garantiza la transparencia.
-
-#### Campos y modelos de datos
-- Ya mencionados en historias anteriores (ProjectDocument)
-- Nuevos campos para seguimiento:
-  - `document_views`: tabla para auditoría de visualizaciones
-  - `watermark_config`: configuración de marcas de agua personalizadas
-
-#### Endpoints API
-- **GET** `/api/documents/:id/view` - Servir documento para visualización
-  - Response: Documento con protecciones aplicadas
-  - Seguridad: Token JWT específico para un solo documento y sesión
-
-#### Archivos a modificar/crear
-- **Backend**:
-  - `backend/services/secureDocumentService.js` - Servicio para gestión segura
-  - `backend/middleware/documentViewMiddleware.js` - Middleware de auditoría
-
-- **Frontend**:
-  - `frontend/components/documents/SecureDocumentViewer.jsx` - Visor seguro
-  - `frontend/hooks/useSecureDocument.js` - Hook para gestión de visualización
-
-#### Criterios de aceptación técnicos
-1. Impedir capturas de pantalla cuando sea técnicamente posible
-2. Aplicar marca de agua con identificación del usuario
-3. Limitar el tiempo de visualización por sesión
-4. Registrar todas las visualizaciones para auditoría
-
-### HISTORIA 5 – Mensajería interna (Should Have)
-
-**Como** socio o inversor,  
-**Quiero** poder comunicarme con los gestores a través de la plataforma,  
-**Para** resolver dudas o solicitar información adicional sobre proyectos.
-
-#### Descripción técnica detallada
-Implementar un sistema de mensajería interna que permita la comunicación directa entre usuarios y gestores, con soporte para conversaciones, notificaciones y seguimiento de temas relacionados con proyectos específicos.
-
-#### Campos y modelos de datos
-- **Modelo `Message`**:
-  - `id`: UUID (PK)
-  - `sender_id`: UUID (FK a User)
-  - `receiver_id`: UUID (FK a User)
-  - `project_id`: UUID (opcional, FK a Project)
-  - `subject`: string
-  - `content`: text
-  - `read`: boolean
-  - `created_at`: timestamp
-
-#### Endpoints API
-- **POST** `/api/messages` - Enviar mensaje
-- **GET** `/api/messages` - Listar conversaciones
-- **GET** `/api/messages/:conversationId` - Ver hilo completo
-
-#### Archivos a modificar/crear
-- **Backend**:
-  - `backend/domain/entities/message.js` - Entidad mensaje
-  - `backend/application/services/messageService.js` - Servicio de mensajes
-
-- **Frontend**:
-  - `frontend/pages/messages/index.js` - Bandeja de entrada
-  - `frontend/components/messages/MessageThread.jsx` - Hilo de mensajes
-
-#### Criterios de aceptación técnicos
-1. Notificaciones en tiempo real mediante WebSockets
-2. Indicador visual de mensajes no leídos
-3. Posibilidad de adjuntar referencias a proyectos
-4. Búsqueda por contenido y filtrado por fecha
-
-### HISTORIA 6 – Informes semanales de proyecto (Could Have)
-
-**Como** inversor,  
-**Quiero** ver informes periódicos sobre mis inversiones,  
-**Para** seguir el progreso y estar informado de cualquier incidencia.
-
-#### Descripción técnica detallada
-Desarrollar un sistema que permita a los gestores publicar informes periódicos sobre el avance de los proyectos, con elementos estructurados (progreso de obra, hitos financieros, actualizaciones legales) y que los inversores puedan consultarlos de forma organizada.
-
-#### Campos y modelos de datos
-- **Modelo `ProjectUpdate`**:
-  - `id`: UUID (PK)
-  - `project_id`: UUID (FK a Project)
-  - `title`: string
-  - `content`: text (formateado con Markdown)
-  - `type`: enum ('weekly', 'milestone', 'alert')
-  - `progress_percentage`: integer
-  - `published_at`: timestamp
-  - `created_by`: UUID (FK a User)
-
-#### Endpoints API
-- **POST** `/api/projects/:id/updates` - Publicar actualización
-- **GET** `/api/projects/:id/updates` - Listar actualizaciones
-- **GET** `/api/updates/:id` - Ver detalle de actualización
-
-#### Archivos a modificar/crear
-- **Backend**:
-  - `backend/domain/entities/projectUpdate.js` - Entidad actualización
-  - `backend/application/services/updateService.js` - Servicio de actualizaciones
-
-- **Frontend**:
-  - `frontend/pages/projects/[id]/updates/index.js` - Lista de informes
-  - `frontend/components/projects/UpdateDetail.jsx` - Detalle de informe
-
-#### Criterios de aceptación técnicos
-1. Soporte para contenido multimedia en informes
-2. Gráficos de progreso y comparativas con cronograma
-3. Notificación automática a inversores al publicarse
-4. Versionado de informes para auditoría
-
-### Tabla priorizada de historias de usuario (MoSCoW)
-
-| ID | Historia de Usuario | Prioridad | Complejidad | Dependencias | Estimación |
-|----|-------------------|-----------|------------|-------------|------------|
-| US01 | Registro mediante invitación | Must Have | Media | Ninguna | 8 puntos |
-| US02 | Ver oportunidades de inversión | Must Have | Alta | US01 | 13 puntos |
-| US03 | Marcar "Invierto" | Must Have | Alta | US01, US02 | 13 puntos |
-| US04 | Ver documentos seguros | Should Have | Media | US01, US02 | 8 puntos |
-| US05 | Mensajería interna | Should Have | Media | US01 | 8 puntos |
-| US06 | Informes semanales de proyecto | Could Have | Media | US01, US03 | 8 puntos |
-| US07 | Marcar "Me interesa" | Should Have | Baja | US01, US02 | 5 puntos |
-| US08 | Enviar invitaciones (gestores) | Must Have | Baja | Ninguna | 5 puntos |
-| US09 | Publicar oportunidad de inversión | Must Have | Alta | Ninguna | 13 puntos |
-| US10 | Autenticación de usuarios | Must Have | Media | US01 | 8 puntos |
-| US11 | Gestionar socios inactivos | Could Have | Media | US01, US07 | 8 puntos |
-| US12 | Ver streaming en directo | Could Have | Alta | US01, US03 | 13 puntos |
-| US13 | Recibir notificaciones | Should Have | Media | US01 | 8 puntos |
-| US14 | Ver panel de control (gestor) | Should Have | Alta | US08, US09 | 13 puntos |
+Para ver todas las historias de usuario completamente documentadas, consulta el documento detallado: [Historias de Usuario Completas](docs/product/user-stories.md)
 
 ---
 
@@ -1322,116 +1897,102 @@ Desarrollar un sistema que permita a los gestores publicar informes periódicos 
 
 > Documenta 3 de los tickets de trabajo principales del desarrollo, uno de backend, uno de frontend, y uno de bases de datos. Da todo el detalle requerido para desarrollar la tarea de inicio a fin teniendo en cuenta las buenas prácticas al respecto.
 
-### 🎟️ Ticket 1: Backend - Registro de Inversión con Validación y Notificación
+### 🎟️ Ticket 1: Backend - Servicio de gestión de invitaciones
 
-**Título:** Registro de Inversión con Validación de Mínimos y Notificación a Socios
-
-#### Descripción
-Implementar una funcionalidad backend que permita al socio registrado indicar el importe que desea invertir en una oportunidad activa. El sistema debe validar que se cumpla el mínimo requerido (ya sea un importe fijo o un % del total del proyecto), registrar la inversión, y notificar al resto de socios que una parte del capital ya ha sido comprometida.
-
-#### Criterios de Aceptación
-- **Dado que** un socio está logueado y accede al detalle de una oportunidad activa
-- **Cuando** pulsa "Invertir" y especifica una cantidad
-- **Entonces** el sistema valida el importe mínimo, lo registra y dispara una notificación al resto de socios
-
-Si la cantidad es inválida o inferior al mínimo, se devuelve error y el registro no se guarda.
-
-El sistema debe ser transaccional para evitar inconsistencias por inversión simultánea.
-
-#### Detalles Técnicos
-- **Prioridad:** Alta
-- **Estimación:** 8 puntos de historia
-- **Asignado a:** Equipo de Backend
-- **Etiquetas:** Backend, Inversión, Validación, Notificación, Sprint 1
-
-#### Comentarios
-- Validar que el usuario sea socio autorizado
-- Crear endpoint REST: POST /api/investments
-- Enviar notificación (email + notificación interna) al resto de socios del club que no hayan invertido aún
-- Revisar lógica de validación de inversión mínima: debe poder configurarse a nivel de cada oportunidad
-
-#### Enlaces
-- Documento de Reglas de Inversión
-- Diagrama de flujo del proceso de inversión
-
-#### Historial de Cambios
-- 14/04/2025: Creado por Product Manager
-- 15/04/2025: Añadido requerimiento de transaccionalidad por Tech Lead
-
-### 🎟️ Ticket 2: Frontend - Vista de Detalle de Oportunidad
-
-**Título:** Vista Detallada de Oportunidad con Simulación Económica y Multimedia
+**Título:** Implementar servicio de invitaciones
 
 #### Descripción
-Diseñar e implementar una vista completa en la parte privada de socios que muestre el detalle de una oportunidad de inversión. Esta vista debe incluir los datos clave del proyecto, estudio económico, estudio de mercado, vídeo explicativo, planos, galería de fotos, y la posibilidad de simular el retorno de inversión.
+Crear los servicios de backend para gestionar el ciclo de vida completo de las invitaciones: generación, validación, expiración y uso. (Nota: Incluye la lógica para *crear* una invitación, que será usada por la UI del gestor).
 
 #### Criterios de Aceptación
-- **Dado que** el socio está autenticado y accede a una oportunidad
-- **Cuando** se carga la página
-- **Entonces** se muestra el título, resumen, importe total, rentabilidad estimada, vídeo, plano, fotos y botón "Me interesa" o "Invertir"
-
-El módulo de simulación permite introducir un importe deseado y devuelve una estimación del retorno.
-
-Si el usuario no es socio, la página no debe permitir acceso.
-
-#### Detalles Técnicos
-- **Prioridad:** Alta
-- **Estimación:** 13 puntos de historia
-- **Asignado a:** Equipo de Frontend
-- **Etiquetas:** Frontend, Inversión, Multimedia, Simulación, Sprint 2
-
-#### Comentarios
-- Utilizar framework React y diseño responsive
-- Incluir componentes embebidos para vídeo (vía iframe o reproductor HTML5)
-- Mostrar planos en slider o visor PDF integrado
-- Preparar módulo de simulación como componente independiente reutilizable
-- Asegurarse de aplicar control de acceso a nivel de ruta y componente
-
-#### Enlaces
-- Figma del diseño UI/UX
-- API de Oportunidades: `/api/opportunities/:id`
-
-#### Historial de Cambios
-- 14/04/2025: Creado por Product Manager
-- 15/04/2025: Añadido requerimiento de control de acceso por Tech Lead
-
-### 🎟️ Ticket 3: Base de Datos - Creación de Tablas de Inversión
-
-**Título:** Diseño y Creación de Tablas de Inversión e Historial de Inversión
-
-#### Descripción
-Diseñar y crear la estructura de base de datos necesaria para registrar todas las inversiones que los socios realizan en las oportunidades disponibles. Incluir tabla principal investments y tabla asociada investment_logs para trazabilidad.
-
-#### Criterios de Aceptación
-- **Dado que** un socio invierte en una oportunidad
-- **Cuando** se guarda el registro
-- **Entonces** los datos se almacenan correctamente en las tablas investments e investment_logs
-
-Las tablas deben estar normalizadas y tener claves foráneas válidas hacia users y opportunities.
-
-El sistema debe soportar registros con múltiples inversiones por socio en distintas oportunidades.
+- Se genera correctamente un token único y criptográficamente seguro
+- Se puede verificar si un token es válido o ha expirado
+- Se gestiona correctamente la actualización de estado (usado, expirado)
+- Se implementa la lógica para asegurar que solo hay una invitación activa por email
+- Se registra toda la información necesaria (quién invitó, cuándo, etc.)
+- Incluye una función para *crear* una nueva invitación asociada a un email y al gestor que invita
 
 #### Detalles Técnicos
 - **Prioridad:** Alta
 - **Estimación:** 5 puntos de historia
-- **Asignado a:** Equipo de Base de Datos
-- **Etiquetas:** Base de Datos, Inversión, Estructura, Sprint 1
+- **Asignado a:** Equipo de Backend
+- **Etiquetas:** Backend, Seguridad, MVP
 
-#### Comentarios
-- Crear tabla `investments` con campos:
-  - id, user_id, opportunity_id, amount, timestamp, status
-- Crear tabla `investment_logs` con campos:
-  - id, investment_id, action, actor_id, timestamp, notes
-- Crear índices para búsquedas por usuario y por oportunidad
-- Documentar relaciones en el modelo de datos (ER Diagram)
+#### Tareas
+1. Crear servicio para generar tokens seguros
+2. Implementar verificación de tokens
+3. Desarrollar lógica de expiración automática
+4. Validar unicidad de invitación por email
+5. Implementar función para marcar token como usado después del registro
+6. Implementar función para crear una nueva invitación en la base de datos
+7. Agregar tests unitarios
 
-#### Enlaces
-- Esquema inicial del modelo entidad-relación
-- Conexión con microservicio de inversiones (diagrama técnico)
 
-#### Historial de Cambios
-- 14/04/2025: Creado por Arquitecto de Datos
-- 15/04/2025: Confirmada clave compuesta user_id + opportunity_id para evitar duplicidades
+
+### 🎟️ Ticket 2: Frontend - Formulario de registro para nuevos socios
+
+**Título:** Implementar formulario de registro para nuevos socios
+
+#### Descripción
+Crear el formulario de registro que usarán los nuevos socios para crear su cuenta después de recibir una invitación válida.
+
+#### Criterios de Aceptación
+- El formulario captura nombre (**firstName**), apellidos (**lastName**), email, contraseña y confirmación
+- Valida que la contraseña cumpla los requisitos de seguridad
+- Muestra feedback en tiempo real sobre la fortaleza de la contraseña
+- El email viene precargado y no es editable si viene de un token válido
+- Envía correctamente los datos al endpoint de registro
+- Maneja errores de validación con mensajes claros
+- Redirige a página de confirmación tras registro exitoso
+- Los campos **firstName** y **lastName** son obligatorios
+
+#### Detalles Técnicos
+- **Prioridad:** Alta
+- **Estimación:** 5 puntos de historia
+- **Asignado a:** Equipo de Frontend
+- **Etiquetas:** Frontend, UI/UX, Seguridad, MVP
+
+#### Tareas
+1. Crear componente de formulario con todos los campos necesarios (**firstName, lastName**, email, password, confirmPassword)
+2. Implementar validación del lado del cliente
+3. Conectar con API para envío de datos
+4. Desarrollar indicador de fortaleza de contraseña
+5. Implementar manejo de errores y mensajes de validación
+6. Asegurar accesibilidad (WCAG 2.1 nivel AA)
+7. Hacer pruebas de usabilidad en diferentes dispositivos
+8. Asegurar que el campo email esté pre-rellenado y deshabilitado cuando corresponda
+
+
+
+### 🎟️ Ticket 3: Base de Datos - Configuración y modelo para invitaciones
+
+**Título:** Implementar modelo de datos para invitaciones y migrations
+
+#### Descripción
+Crear el modelo de datos para gestionar invitaciones de usuarios al club. Implementar la estructura de base de datos que almacene tokens de invitación, estados, fechas de expiración y relaciones con usuarios.
+
+#### Criterios de Aceptación
+- El modelo Invitation tiene todos los campos requeridos (id, email, token, status, invited_by, created_at, expires_at)
+- Se han creado las migraciones de Prisma correctamente
+- Los tipos de datos son apropiados (UUID para IDs, enum para status, etc.)
+- Las relaciones entre modelos están correctamente definidas
+- Se ha implementado la expiración automática (7 días por defecto)
+
+#### Detalles Técnicos
+- **Prioridad:** Alta
+- **Estimación:** 3 puntos de historia
+- **Asignado a:** Equipo de Backend
+- **Etiquetas:** Backend, Base de datos, Prisma, MVP
+
+#### Tareas
+1. Actualizar el esquema Prisma con el modelo Invitation
+2. Definir relaciones con el modelo User
+3. Crear enumeraciones para estados (pending, used, expired)
+4. Generar migraciones
+5. Implementar índices para búsquedas eficientes por email y token
+6. Ejecutar migraciones en entorno de desarrollo
+
+
 
 ---
 
