@@ -1,0 +1,285 @@
+// Este archivo define el modelo de datos para Prisma ORM
+// Documentación: https://pris.ly/d/prisma-schema
+
+// Configuración de la conexión a la base de datos
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Configuración del generador de cliente
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Definición de Enums
+enum InvitationStatus {
+  PENDING
+  USED
+  EXPIRED
+}
+
+// Definición de los modelos basados en el diagrama ER
+// Roles de usuario
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String
+  createdAt   DateTime @default(now()) @map("created_at")
+  users       User[]
+
+  @@map("roles")
+}
+
+// Usuarios del sistema
+model User {
+  id                  String               @id @default(uuid())
+  firstName           String             @map("first_name")
+  lastName            String             @map("last_name")
+  email               String             @unique
+  passwordHash        String             @map("password_hash")
+  roleId              String             @map("role_id")
+  status              String             @default("pending")
+  emailVerified       Boolean            @default(false) @map("email_verified")
+  emailVerifiedAt     DateTime?          @map("email_verified_at")
+  failedLoginAttempts Int                @default(0) @map("failed_login_attempts")
+  lockedUntil         DateTime?          @map("locked_until")
+  createdAt           DateTime           @default(now()) @map("created_at")
+  updatedAt           DateTime           @updatedAt @map("updated_at")
+  role                Role               @relation(fields: [roleId], references: [id])
+  invitationsSent     Invitation[]
+  investments         Investment[]
+  notifications       Notification[]
+  createdProjects     Project[]            @relation("ProjectCreator")
+  publishedProjects   Project[]            @relation("ProjectPublisher")
+  verificationTokens  VerificationToken[]
+  interests           Interest[]
+  messagesSent        Message[]
+  documentViews       DocumentView[]
+  projectUpdates      ProjectUpdate[]
+  conversations       ConversationParticipant[]
+
+  @@index([roleId])
+  @@index([status, emailVerified])
+  @@map("users")
+}
+
+// Invitaciones para unirse al club
+model Invitation {
+  id        String           @id @default(uuid())
+  email     String
+  token     String           @unique
+  invitedBy String           @map("invited_by")
+  status    InvitationStatus @default(PENDING)
+  createdAt DateTime         @default(now()) @map("created_at")
+  expiresAt DateTime         @map("expires_at")
+  inviter   User             @relation(fields: [invitedBy], references: [id])
+
+  @@index([email])
+  @@index([status, expiresAt])
+  @@map("invitations")
+}
+
+// Tokens de verificación para email
+model VerificationToken {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  token     String   @unique
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  expiresAt DateTime @map("expires_at")
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("verification_tokens")
+}
+
+// Proyectos de inversión
+model Project {
+  id                String            @id @default(uuid())
+  title             String
+  description       String
+  status            String            @default("draft")
+  minimumInvestment Decimal           @map("minimum_investment")
+  targetAmount      Decimal           @map("target_amount")
+  currentAmount     Decimal           @default(0) @map("current_amount")
+  expectedRoi       Decimal           @map("expected_roi")
+  location          String?
+  propertyType      String?           @map("property_type")
+  draft             Boolean           @default(true)
+  publishedAt       DateTime?         @map("published_at")
+  createdBy         String            @map("created_by")
+  publishedBy       String?           @map("published_by")
+  createdAt         DateTime          @default(now()) @map("created_at")
+  creator           User              @relation("ProjectCreator", fields: [createdBy], references: [id])
+  publisher         User?             @relation("ProjectPublisher", fields: [publishedBy], references: [id])
+  documents         ProjectDocument[]
+  investments       Investment[]
+  updates           ProjectUpdate[]
+  interests         Interest[]
+  conversations     Conversation[]
+
+  @@index([status])
+  @@index([propertyType])
+  @@index([location])
+  @@index([createdAt])
+  @@index([publishedAt])
+  @@map("projects")
+}
+
+// Documentos asociados a proyectos
+model ProjectDocument {
+  id           String        @id @default(uuid())
+  projectId    String        @map("project_id")
+  fileUrl      String        @map("file_url")
+  fileType     String        @map("file_type")
+  documentType String        @map("document_type")
+  accessLevel  String        @map("access_level")
+  securityLevel String       @default("view_only") @map("security_level")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  project      Project       @relation(fields: [projectId], references: [id])
+  views        DocumentView[]
+
+  @@index([projectId])
+  @@index([documentType])
+  @@index([fileType])
+  @@map("project_documents")
+}
+
+// Registro de vistas de documentos
+model DocumentView {
+  id          String         @id @default(uuid())
+  documentId  String         @map("document_id")
+  userId      String         @map("user_id")
+  ipAddress   String         @map("ip_address")
+  viewedAt    DateTime       @default(now()) @map("viewed_at")
+  document    ProjectDocument @relation(fields: [documentId], references: [id])
+  user        User           @relation(fields: [userId], references: [id])
+
+  @@index([documentId])
+  @@index([userId])
+  @@index([viewedAt])
+  @@map("document_views")
+}
+
+// Expresiones de interés en proyectos
+model Interest {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  projectId String   @map("project_id")
+  status    String   @default("active")
+  notes     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id])
+  project   Project  @relation(fields: [projectId], references: [id])
+
+  @@unique([userId, projectId])
+  @@index([userId])
+  @@index([projectId])
+  @@index([status])
+  @@map("interests")
+}
+
+// Inversiones realizadas
+model Investment {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  projectId         String   @map("project_id")
+  amount            Decimal
+  investedAt        DateTime @default(now()) @map("invested_at")
+  status            String   @default("pending")
+  notes             String?
+  contractReference String?  @map("contract_reference")
+  user              User     @relation(fields: [userId], references: [id])
+  project           Project  @relation(fields: [projectId], references: [id])
+
+  @@index([userId])
+  @@index([projectId])
+  @@index([investedAt])
+  @@index([status])
+  @@map("investments")
+}
+
+// Actualizaciones de proyectos
+model ProjectUpdate {
+  id          String   @id @default(uuid())
+  projectId   String   @map("project_id")
+  title       String
+  content     String
+  videoUrl    String?  @map("video_url")
+  updateDate  DateTime @map("update_date")
+  createdBy   String   @map("created_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+  project     Project  @relation(fields: [projectId], references: [id])
+  creator     User     @relation(fields: [createdBy], references: [id])
+
+  @@index([projectId])
+  @@index([updateDate])
+  @@map("project_updates")
+}
+
+// Notificaciones para usuarios
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  type      String
+  content   String
+  relatedId String?  @map("related_id")
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([read])
+  @@index([type])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+// Conversaciones
+model Conversation {
+  id          String                    @id @default(uuid())
+  projectId   String?                   @map("project_id")
+  title       String
+  createdAt   DateTime                  @default(now()) @map("created_at")
+  project     Project?                  @relation(fields: [projectId], references: [id])
+  participants ConversationParticipant[]
+  messages    Message[]
+
+  @@index([projectId])
+  @@map("conversations")
+}
+
+// Participantes de conversaciones
+model ConversationParticipant {
+  id             String       @id @default(uuid())
+  conversationId String       @map("conversation_id")
+  userId         String       @map("user_id")
+  joinedAt       DateTime     @default(now()) @map("joined_at")
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
+
+  @@unique([conversationId, userId])
+  @@index([conversationId])
+  @@index([userId])
+  @@map("conversation_participants")
+}
+
+// Mensajes
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String       @map("conversation_id")
+  senderId       String       @map("sender_id")
+  content        String
+  read           Boolean      @default(false)
+  createdAt      DateTime     @default(now()) @map("created_at")
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  sender         User         @relation(fields: [senderId], references: [id])
+
+  @@index([conversationId])
+  @@index([senderId])
+  @@index([read])
+  @@index([createdAt])
+  @@map("messages")
+}
