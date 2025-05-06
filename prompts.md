@@ -284,13 +284,9 @@ Tengo un problema con el repositorio, y es que he ido haciendo commit y push en 
 
 **Prompt 2:**
 ```
-@readme.md Tengo que documentar las Pull Request en @readme.md , como parte de la docume ntación de alto nivelq ue tengo que presentar, y como parte de la documenatción de un proyecto bien desarrollado, pero no sé muy bien qué debo poner. ¿Me puedes ayudar? Puedes revisar los cambios del repositorio
+@readme.md Tengo que documentar las Pull Request en @readme.md , como parte de la documentación de alto nivel que tengo que presentar, y como parte de la documenatción de un proyecto bien desarrollado, pero no sé muy bien qué debo poner. ¿Me puedes ayudar? Puedes revisar los cambios del repositorio
 ```
 
-**Prompt 3:**
-```
-Ok, pues haz una PR y posteriormente documenta el @readme.md con los datos que necesites para documentar la sección Pull requests. Te indico aqui los commits de la rama para que te hagas una idea de lo que se ha hecho:
-```
 
 ## 8. Seguridad
 

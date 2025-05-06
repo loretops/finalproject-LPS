@@ -2000,9 +2000,24 @@ Crear el modelo de datos para gestionar invitaciones de usuarios al club. Implem
 
 > Documenta 3 de las Pull Requests realizadas durante la ejecución del proyecto
 
-**Pull Request 1**
+**Pull Request 1: Configuración Inicial del Proyecto, HU1 y Documentación Base**
+*   **Número y Título:** #1 - initial project setup AND HU1
+*   **Enlace:** [https://github.com/loretops/finalproject-LPS/pull/1](https://github.com/loretops/finalproject-LPS/pull/1)
+*   **Fecha de Creación:** 6 de Mayo de 2024 (Estado: Abierta)
+*   **Autor(a):** loretops
+*   **Propósito:** Esta Pull Request integra los primeros 11 commits del proyecto, que incluyen la configuración inicial del backend y frontend, la estructura de directorios, la implementación de la Historia de Usuario 1 (Registro mediante invitación), y la documentación base (README, tickets, prompts). También incluye correcciones como la de ignorar el directorio `.next` de frontend. Representa el primer gran avance funcional y estructural del proyecto.
 
 **Pull Request 2**
+*   **Número y Título:**
+*   **Enlace:**
+*   **Fecha de Fusión:**
+*   **Autor(es):**
+*   **Propósito:**
 
 **Pull Request 3**
+*   **Número y Título:**
+*   **Enlace:**
+*   **Fecha de Fusión:**
+*   **Autor(es):**
+*   **Propósito:**
 
