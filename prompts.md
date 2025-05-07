@@ -211,6 +211,21 @@ Por favor entiende la necesidad y proporciona una historia mejorada que sea más
 En @readme.md también hay historias de usuario. Actualiza esas historias de usuario igualmente con el mismo contenido que en @user-stories.md 
 ```
 
+**Prompt 6:**
+```
+Quier empezar la HU2, pero echo de menos, en esta historia de usuario, que se indique la necesidad de que el gestor pueda crear, o gestionar, en general, oportunidades de inversión, porque no encuentro este requerimiento en ningún punto de @user-stories.md 
+```
+
+**Prompt 7:**
+```
+Me parece bien el enfoque 1, secuencial. Hay algún punto de la documentación del proyecto @docs donde se indique el orden que se debe seguir en el desarrollo de las historias de usuario? Porque quiero dejar reflejado el orden adecuado en el propio archivo @user-stories.md 
+```
+
+**Prompt 8:**
+```
+@user-stories.md 
+Revisa todas las historias de usuario, y haz una tabla priorizada según el orden lógco de desarrollo y dependencias.
+```
 
 ## 6. Tickets de Trabajo
 
@@ -275,6 +290,15 @@ Están en estos tickets la configuración necesaria para el enñvio de las invit
 si, reorganizalo @tickets.md  segun las dependencias técnicas. Y revisa que cubra requerimientos de frontend, backend y bases de datos definidas en la histroia de usuario 1 @user-stories.md , pero no añadas nada que no sea necesario para el MVP
 ```
 
+**Prompt 6:**
+```
+@readme.md @tickets.md @development_status.md 
+Fijate en los tickets escritos para la HU1. A mi me parece que están muy bien. 
+
+Quiero hacer lo mismo para la siguiente historia de usuario, que es la 10, así que habría que añadir los tickets a contonuación en el archivo@tickets.md, y preparar el archivo @development_status.md para ir haciendo seguimiento del desarrollo de los mismos . Así que como experto desarrollador full-satck y product manager, con toda la documentación de la que dispones. Como te he dicho, debes dar todo el detalle requerido para desarrollar la tarea de inicio a fin, teniendo en cuenta las buenas prácticas al respecto. No desarrolles nada aún, solo crea los tickets, en el orden lógico de ejecución para que pueda crearse el flujo de uso. No te inventes nada, todo debe ajustarse al proyecto real. El orden de creación debe tener en cuenta las dependencias técnicas. Revisa que cubra los requerimientos de frontend, backend y basese de datos. No añadas nada que no sea necesario para un MVP, y ten en cuenta que si ves impresciniidible hacer odificaciones en el modelo de datos, habrá que revisar cuáles ya que habrá que actualizar varios archivos.
+Acuerdate de las @rules.mdc 
+```
+
 ## 7. Pull requests
 
 **Prompt 1:**
@@ -291,10 +315,11 @@ Tengo un problema con el repositorio, y es que he ido haciendo commit y push en 
 ## 8. Seguridad
 
 **Prompt 1:**
-```
-@readme.md 
+```@readme.md 
 Tengo que seguir documentando el proyecto. Revisa todos los archivos para poder aportar este punto: Enumera y describe las prácticas de seguridad principales que se han implementado en el proyecto, añadiendo ejemplos si procede, pero solo para lo que se ha desarrollado por ahora. De hecho se debe indicar que es lo que hay en este punto del proyecto, y más adelante se mejorará este punto. 
 Si hay algún punto claro de lo que se va a desarrollar en el futuro, se pueden añadir aquí tambien. de hecho hay puntos de seguridad fundamentales en este proyecto, así que profundiza lo que necesites, sin perder de vista que es un MVP, y yo soy una progaramdora junior, y no puedo mantener un proyecto muy complejo
 @rules.mdc 
 ```
+
+
 

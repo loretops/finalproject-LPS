@@ -15,6 +15,27 @@
 | #9        | Página Validar Invitación (FE) | ⏳ En Progreso | 5/7        | 0/0           | API real conectada, falta test manual |
 | #10       | Formulario Registro (FE)       | ⏳ En Progreso | 6/8        | 0/0           | API real conectada, falta test manual |
 | #11       | Página Confirmación (FE)       | ✅ Completado | 5/5        | 0/0           | Página creada, sin lógica verificación |
+| #12       | Actualizar Documentación HU    | ✅ Completado | 1/1        | N/A           | Actualización de dependencias entre HU2 y HU10 |
+| #13       | Tabla Priorizada de HU         | ✅ Completado | 1/1        | N/A           | Creación de tabla según orden lógico de desarrollo |
+
+*Leyenda Estado: ⚪ Pendiente | ⏳ En Progreso | ✅ Completado | ❌ Bloqueado*
+*Resumen AC: Criterios de Aceptación cumplidos / totales*
+*Resumen Tests: Tests pasados / totales (N/A si no aplica)*
+
+---
+
+## Historia de Usuario 10: Publicación de oportunidades de inversión
+
+| Ticket ID | Título Corto                     | Estado        | Resumen AC | Resumen Tests | Notas                                     |
+| :-------- | :------------------------------- | :------------ | :--------- | :------------ | :---------------------------------------- |
+| #12       | Verificación de roles           | ⚪ Pendiente   | 0/5        | 0/0           | Depende de sistema de autenticación existente |
+| #13       | Modelo para proyectos (DB)      | ⚪ Pendiente   | 0/5        | N/A           | Verificar si existen modelos relacionados  |
+| #14       | Servicio almacenamiento docs    | ⚪ Pendiente   | 0/6        | 0/0           | Definir estrategia de almacenamiento       |
+| #15       | API Endpoints gestión proyectos | ⚪ Pendiente   | 0/7        | 0/0           | Depende de #12, #13 y #14                  |
+| #16       | UI Listado proyectos (admin)    | ⚪ Pendiente   | 0/6        | 0/0           | Depende de #15                             |
+| #17       | Formulario creación/edición     | ⚪ Pendiente   | 0/6        | 0/0           | Depende de #15                             |
+| #18       | Componente gestión documentos   | ⚪ Pendiente   | 0/6        | 0/0           | Depende de #14 y #15                       |
+| #19       | UI Publicación y vista previa   | ⚪ Pendiente   | 0/6        | 0/0           | Depende de #17                             |
 
 *Leyenda Estado: ⚪ Pendiente | ⏳ En Progreso | ✅ Completado | ❌ Bloqueado*
 *Resumen AC: Criterios de Aceptación cumplidos / totales*
@@ -72,5 +93,23 @@
 - [ ] Test: Creación exitosa de invitación
 - [ ] Test: Marcado como USADO exitoso
 - [ ] Test: Marcado como EXPIRADO exitoso
+
+### Ticket #12: Verificación de roles y permisos (⚪ Pendiente)
+
+**Criterios de Aceptación:**
+- [ ] El middleware verifica correctamente si el usuario tiene rol 'manager'
+- [ ] Bloquea acceso a usuarios con roles insuficientes (403 Forbidden)
+- [ ] Se integra con el sistema de autenticación existente
+- [ ] Puede usarse de forma selectiva en rutas específicas
+- [ ] Proporciona mensajes de error claros
+
+### Ticket #13: Modelo de datos para gestión de proyectos (⚪ Pendiente)
+
+**Criterios de Aceptación:**
+- [ ] El modelo Project contiene todos los campos requeridos (id, title, description, etc.)
+- [ ] El modelo ProjectDocument soporta diferentes tipos de archivos y niveles de acceso
+- [ ] Se establecen las relaciones correctas entre tablas
+- [ ] Se generan migraciones de Prisma funcionales
+- [ ] Se implementan índices para consultas eficientes
 
 --- 
