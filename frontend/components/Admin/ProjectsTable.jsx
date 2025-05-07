@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
   PencilIcon, 
@@ -27,6 +27,7 @@ import { formatCurrency, formatDate } from '../../utils/formatters';
  * @param {string} props.sortField - Campo por el que se ordena actualmente
  * @param {string} props.sortDirection - Dirección de ordenamiento (asc/desc)
  * @param {Function} props.onSortChange - Función a llamar al cambiar el ordenamiento
+ * @param {string} props.lastPublishedId - ID del último proyecto publicado para animación
  */
 const ProjectsTable = ({ 
   projects = [], 
@@ -38,10 +39,26 @@ const ProjectsTable = ({
   onStatusFilterChange,
   sortField,
   sortDirection,
-  onSortChange 
+  onSortChange,
+  lastPublishedId
 }) => {
   // Estados locales
   const [selectedRows, setSelectedRows] = useState([]);
+  const [highlightedRow, setHighlightedRow] = useState(null);
+  
+  // Efecto para animar el último proyecto publicado
+  useEffect(() => {
+    if (lastPublishedId) {
+      setHighlightedRow(lastPublishedId);
+      
+      // Remover el highlight después de 3 segundos
+      const timer = setTimeout(() => {
+        setHighlightedRow(null);
+      }, 3000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [lastPublishedId]);
   
   // Función para manejar selección de filas
   const toggleRowSelection = (id) => {
@@ -107,6 +124,18 @@ const ProjectsTable = ({
     return sortDirection === 'asc' 
       ? <ChevronUpIcon className="h-4 w-4 ml-1" /> 
       : <ChevronDownIcon className="h-4 w-4 ml-1" />;
+  };
+
+  // Obtener clase de fila según si está resaltada
+  const getRowClass = (projectId) => {
+    let baseClass = "hover:bg-gray-50 transition-colors duration-200";
+    
+    if (highlightedRow === projectId) {
+      // Animación de destaque para proyecto recién publicado
+      baseClass += " bg-green-50 animate-pulse";
+    }
+    
+    return baseClass;
   };
 
   return (
@@ -273,7 +302,7 @@ const ProjectsTable = ({
               </tr>
             ) : (
               projects.map((project) => (
-                <tr key={project.id} className="hover:bg-gray-50">
+                <tr key={project.id} className={getRowClass(project.id)}>
                   <td className="px-3 py-4 whitespace-nowrap">
                     <input
                       type="checkbox"
@@ -306,10 +335,12 @@ const ProjectsTable = ({
                         <EyeIcon className="h-5 w-5" aria-hidden="true" />
                         <span className="sr-only">Ver</span>
                       </Link>
-                      <Link href={`/admin/projects/${project.id}/edit`} className="text-gray-600 hover:text-gray-900">
-                        <PencilIcon className="h-5 w-5" aria-hidden="true" />
-                        <span className="sr-only">Editar</span>
-                      </Link>
+                      {project.status === 'draft' && (
+                        <Link href={`/admin/projects/${project.id}/edit`} className="text-gray-600 hover:text-gray-900">
+                          <PencilIcon className="h-5 w-5" aria-hidden="true" />
+                          <span className="sr-only">Editar</span>
+                        </Link>
+                      )}
                       {project.status === 'draft' && (
                         <button 
                           onClick={() => onPublish(project.id)} 

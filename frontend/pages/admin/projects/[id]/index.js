@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Layout from '../../../../components/layout/Layout';
+import PublishProjectModal from '../../../../components/Admin/PublishProjectModal';
 import { useAuth } from '../../../../context/AuthContext';
 import projectService from '../../../../services/projectService';
 import { formatCurrency, formatDate } from '../../../../utils/formatters';
 import { PencilIcon, ArrowPathIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { toast } from 'react-hot-toast';
 
 // Mapa de tipos de propiedad
 const PROPERTY_TYPES = {
@@ -43,6 +45,9 @@ const ProjectDetailPage = () => {
   const [error, setError] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
+  
+  // Estado para controlar el modal de publicación
+  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
   
   // Redireccionar si el usuario no tiene permisos
   useEffect(() => {
@@ -84,11 +89,8 @@ const ProjectDetailPage = () => {
     try {
       await projectService.deleteProject(id);
       
-      // Mostrar mensaje de éxito temporal antes de redirigir
-      const successMessage = document.createElement('div');
-      successMessage.className = 'fixed bottom-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded z-50';
-      successMessage.innerHTML = '<strong>¡Éxito!</strong> Proyecto eliminado correctamente.';
-      document.body.appendChild(successMessage);
+      // Mostrar mensaje de éxito con toast
+      toast.success('Proyecto eliminado correctamente');
       
       // Redirigir después de un breve retraso para que el usuario vea el mensaje
       setTimeout(() => {
@@ -100,10 +102,7 @@ const ProjectDetailPage = () => {
       // Si el error es 404, el proyecto ya no existe, así que podemos redirigir
       if (err.response?.status === 404) {
         // Mostrar mensaje informativo
-        const infoMessage = document.createElement('div');
-        infoMessage.className = 'fixed bottom-4 right-4 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded z-50';
-        infoMessage.innerHTML = '<strong>Información:</strong> El proyecto ya ha sido eliminado o no existe.';
-        document.body.appendChild(infoMessage);
+        toast.info('El proyecto ya ha sido eliminado o no existe');
         
         // Redirigir después de un breve retraso
         setTimeout(() => {
@@ -114,38 +113,35 @@ const ProjectDetailPage = () => {
         const errorMessage = err.message || 'No se pudo eliminar el proyecto. Por favor, inténtelo de nuevo.';
         setError(errorMessage);
         setIsDeleting(false);
-        
-        // Mostrar también un toast con el error
-        const alertMessage = document.createElement('div');
-        alertMessage.className = 'fixed bottom-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded z-50';
-        alertMessage.innerHTML = `<strong>Error:</strong> ${errorMessage}`;
-        document.body.appendChild(alertMessage);
-        
-        // Eliminar el mensaje después de unos segundos
-        setTimeout(() => {
-          if (document.body.contains(alertMessage)) {
-            document.body.removeChild(alertMessage);
-          }
-        }, 5000);
+        toast.error(errorMessage);
       }
     }
   };
   
+  // Abrir el modal de publicación
+  const handleOpenPublishModal = () => {
+    setIsPublishModalOpen(true);
+  };
+  
+  // Cerrar el modal de publicación
+  const handleClosePublishModal = () => {
+    setIsPublishModalOpen(false);
+  };
+  
   // Manejar publicación del proyecto
   const handlePublish = async () => {
-    if (!confirm('¿Estás seguro de que deseas publicar este proyecto? Una vez publicado, será visible para todos los socios.')) {
-      return;
-    }
-    
     setIsPublishing(true);
     
     try {
       const updatedProject = await projectService.publishProject(id);
       setProject(updatedProject);
-      setIsPublishing(false);
+      setIsPublishModalOpen(false);
+      toast.success('Proyecto publicado con éxito');
     } catch (err) {
       console.error('Error al publicar proyecto:', err);
+      toast.error('No se pudo publicar el proyecto');
       setError('No se pudo publicar el proyecto. Por favor, inténtelo de nuevo.');
+    } finally {
       setIsPublishing(false);
     }
   };
@@ -184,34 +180,24 @@ const ProjectDetailPage = () => {
               Volver al Listado
             </Link>
             
-            <Link
-              href={`/admin/projects/${id}/edit`}
-              className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-            >
-              <PencilIcon className="h-5 w-5 mr-2 text-gray-500" aria-hidden="true" />
-              Editar
-            </Link>
+            {project && project.status === 'draft' && (
+              <Link
+                href={`/admin/projects/${id}/edit`}
+                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              >
+                <PencilIcon className="h-5 w-5 mr-2 text-gray-500" aria-hidden="true" />
+                Editar
+              </Link>
+            )}
             
             {project && project.status === 'draft' && (
               <button
-                onClick={handlePublish}
+                onClick={handleOpenPublishModal}
                 disabled={isPublishing}
                 className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
               >
-                {isPublishing ? (
-                  <span className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Publicando...
-                  </span>
-                ) : (
-                  <>
-                    <ArrowPathIcon className="h-5 w-5 mr-2" aria-hidden="true" />
-                    Publicar
-                  </>
-                )}
+                <ArrowPathIcon className="h-5 w-5 mr-2" aria-hidden="true" />
+                Publicar
               </button>
             )}
             
@@ -334,6 +320,15 @@ const ProjectDetailPage = () => {
             No se encontró el proyecto solicitado.
           </div>
         )}
+        
+        {/* Modal de publicación */}
+        <PublishProjectModal
+          project={project}
+          isOpen={isPublishModalOpen}
+          onClose={handleClosePublishModal}
+          onPublish={handlePublish}
+          isPublishing={isPublishing}
+        />
       </div>
     </Layout>
   );

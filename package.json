@@ -30,7 +30,8 @@
     "nodemailer": "^6.10.1",
     "prisma": "^5.5.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.5.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.5",

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../../components/layout/Layout';
 import ProjectsTable from '../../components/Admin/ProjectsTable';
+import PublishProjectModal from '../../components/Admin/PublishProjectModal';
 import { useAuth } from '../../context/AuthContext';
 import projectService from '../../services/projectService';
+import { toast } from 'react-hot-toast';
 
 /**
  * Página de administración para gestionar proyectos de inversión
@@ -27,6 +29,14 @@ const ProjectsAdminPage = () => {
   const [statusFilter, setStatusFilter] = useState(null);
   const [sortField, setSortField] = useState('created_at');
   const [sortDirection, setSortDirection] = useState('desc');
+  
+  // Estados para el modal de publicación
+  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [isPublishing, setIsPublishing] = useState(false);
+  
+  // Estado para mantener registro del último proyecto publicado (para animación)
+  const [lastPublishedId, setLastPublishedId] = useState(null);
   
   // Cargar proyectos
   const loadProjects = async () => {
@@ -96,9 +106,13 @@ const ProjectsAdminPage = () => {
         ...prev,
         totalItems: prev.totalItems + 1
       }));
+
+      // Mostrar mensaje de éxito
+      toast.success('Proyecto de prueba creado con éxito');
     } catch (err) {
       console.error('Error al crear proyecto de prueba:', err);
       setError('Error al crear el proyecto de prueba. Por favor, inténtalo de nuevo.');
+      toast.error('Error al crear el proyecto de prueba');
     } finally {
       setIsCreatingTestProject(false);
     }
@@ -117,6 +131,17 @@ const ProjectsAdminPage = () => {
       router.replace('/login');
     }
   }, [user, isLoading]);
+  
+  // Limpiar el lastPublishedId después de 5 segundos
+  useEffect(() => {
+    if (lastPublishedId) {
+      const timer = setTimeout(() => {
+        setLastPublishedId(null);
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [lastPublishedId]);
   
   // Funciones para manejar las acciones en la tabla
   const handlePageChange = (page) => {
@@ -140,29 +165,70 @@ const ProjectsAdminPage = () => {
     
     try {
       await Promise.all(projectIds.map(id => projectService.deleteProject(id)));
+      
+      // Actualizar la lista de proyectos sin necesidad de recargar todo
       setProjects(projects.filter(project => !projectIds.includes(project.id)));
+      
+      // Mostrar mensaje de éxito
+      toast.success(projectIds.length > 1 
+        ? 'Proyectos eliminados con éxito' 
+        : 'Proyecto eliminado con éxito');
+        
       setError(null);
     } catch (err) {
       console.error('Error al eliminar proyectos:', err);
-      setError('Hubo un error al eliminar los proyectos. Por favor, inténtalo de nuevo.');
+      toast.error('Error al eliminar los proyectos');
+      
+      // Si el error es 404 (no encontrado), actualizar la UI igualmente
+      if (err.response?.status === 404) {
+        setProjects(projects.filter(project => !projectIds.includes(project.id)));
+        toast.info('El proyecto ya había sido eliminado');
+      } else {
+        setError('Hubo un error al eliminar los proyectos. Por favor, inténtalo de nuevo.');
+      }
     }
   };
   
-  const handlePublish = async (projectId) => {
-    if (!confirm('¿Estás seguro de que deseas publicar este proyecto? Una vez publicado, será visible para todos los socios.')) {
-      return;
-    }
-    
+  const handlePublishClick = async (projectId) => {
     try {
-      const updatedProject = await projectService.publishProject(projectId);
+      // Cargar los detalles completos del proyecto
+      const projectDetails = await projectService.getProjectById(projectId);
+      setSelectedProject(projectDetails);
+      setIsPublishModalOpen(true);
+    } catch (err) {
+      console.error('Error al cargar detalles del proyecto:', err);
+      toast.error('No se pudieron cargar los detalles del proyecto');
+    }
+  };
+  
+  const handlePublishConfirm = async () => {
+    if (!selectedProject) return;
+    
+    setIsPublishing(true);
+    try {
+      const updatedProject = await projectService.publishProject(selectedProject.id);
+      
       // Actualizar el proyecto en la lista sin necesidad de recargar todo
       setProjects(projects.map(project => 
-        project.id === projectId ? updatedProject : project
+        project.id === selectedProject.id ? updatedProject : project
       ));
+      
+      // Establecer el ID del proyecto publicado para la animación
+      setLastPublishedId(selectedProject.id);
+      
+      // Cerrar el modal y limpiar estados
+      setIsPublishModalOpen(false);
+      setSelectedProject(null);
+      
+      // Mostrar mensaje de éxito
+      toast.success('Proyecto publicado con éxito');
       setError(null);
     } catch (err) {
       console.error('Error al publicar proyecto:', err);
+      toast.error('Error al publicar el proyecto');
       setError('Hubo un error al publicar el proyecto. Por favor, inténtalo de nuevo.');
+    } finally {
+      setIsPublishing(false);
     }
   };
   
@@ -280,7 +346,7 @@ const ProjectsAdminPage = () => {
           <ProjectsTable 
             projects={projects}
             onDelete={handleDelete}
-            onPublish={handlePublish}
+            onPublish={handlePublishClick}
             pagination={pagination}
             onPageChange={handlePageChange}
             statusFilter={statusFilter}
@@ -288,8 +354,21 @@ const ProjectsAdminPage = () => {
             sortField={sortField}
             sortDirection={sortDirection}
             onSortChange={handleSortChange}
+            lastPublishedId={lastPublishedId}
           />
         )}
+        
+        {/* Modal de publicación de proyecto */}
+        <PublishProjectModal
+          project={selectedProject}
+          isOpen={isPublishModalOpen}
+          onClose={() => {
+            setIsPublishModalOpen(false);
+            setSelectedProject(null);
+          }}
+          onPublish={handlePublishConfirm}
+          isPublishing={isPublishing}
+        />
       </div>
     </Layout>
   );

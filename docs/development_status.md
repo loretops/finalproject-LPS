@@ -5,7 +5,7 @@
 | Historia de Usuario | Total Tickets | Completados | En Progreso | Pendientes | Bloqueados |
 |---------------------|---------------|-------------|-------------|------------|------------|
 | HU #1: Registro mediante invitación | 13 | 10 | 3 | 0 | 0 |
-| HU #10: Publicación de oportunidades | 8 | 4 | 1 | 3 | 0 |
+| HU #10: Publicación de oportunidades | 8 | 6 | 0 | 2 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -24,12 +24,13 @@ gantt
     Verificación de roles             :done, hu10-t12, 2025-05-02, 2d
     Modelo para proyectos             :done, hu10-t13, 2025-05-03, 1d
     UI Listado proyectos (admin)      :done, hu10-t16, 2025-05-07, 4d
-    Formulario creación/edición       :active, hu10-t17, 2025-05-12, 4d
+    Formulario creación/edición       :done, hu10-t17, 2025-05-12, 4d
+    UI Publicación y vista previa     :done, hu10-t19, 2025-05-16, 4d
 ```
 
 ## 🚦 Tickets Activos
 
-### ⏳ En progreso (4)
+### ⏳ En progreso (3)
 
 - **#9:** Página Validar Invitación (FE) - HU #1
   - **Avance:** 5/7 AC completados
@@ -46,21 +47,11 @@ gantt
   - **Responsable:** [Equipo Backend]
   - **ETA:** 2025-05-12 (solo para tests)
 
-- **#17:** Formulario creación/edición de proyectos - HU #10
-  - **Avance:** 5/6 AC completados
-  - **Responsable:** [Equipo Frontend]
-  - **ETA:** 2025-05-15
-  - **Última actualización:** Implementado formulario completo con validaciones y capacidad para crear y editar proyectos.
-
-### ⚪ Próximos a iniciar (2)
+### ⚪ Próximos a iniciar (1)
 
 - **#14:** Servicio almacenamiento documentos - HU #10
   - **Prioridad:** Media
   - **Notas:** Definir estrategia de almacenamiento
-
-- **#18:** Componente gestión documentos - HU #10
-  - **Dependencias:** #14 ⚪
-  - **Prioridad:** Media
 
 ## 📝 Detalles por Historia de Usuario
 
@@ -95,9 +86,9 @@ gantt
 | #14 | Servicio almacenamiento docs | ⚪ | 0/6 | 0/0 | - |
 | #15 | API Endpoints gestión proyectos | ✅ | 7/7 | 0/0 | - |
 | #16 | UI Listado proyectos (admin) | ✅ | 6/6 | 0/0 | Implementación completa con gestión de errores, conversión de formatos y UX mejorada |
-| #17 | Formulario creación/edición | ⏳ | 5/6 | 0/0 | Implementado formulario completo con validaciones y comunicación con la API |
+| #17 | Formulario creación/edición | ✅ | 6/6 | 0/0 | Implementación completa con validaciones, gestión de errores y manejo de estados |
 | #18 | Componente gestión documentos | ⚪ | 0/6 | 0/0 | Depende de #14 |
-| #19 | UI Publicación y vista previa | ⚪ | 0/6 | 0/0 | Depende de #17 |
+| #19 | UI Publicación y vista previa | ✅ | 6/6 | 0/0 | Implementado modal con validaciones, confirmación explícita, retroalimentación visual y notificaciones |
 
 ## 🧪 Resultados de Pruebas Recientes (2025-05-15)
 
@@ -123,37 +114,46 @@ gantt
 
 ## 📋 Logros Recientes
 
-- **Ticket #16 completado:** Se ha implementado con éxito la interfaz de listado de proyectos para administradores.
-  - Se solucionó el problema crítico en `authService.js` al implementar la función `getAuthToken()`
-  - Se mejoró el manejo de errores y la retroalimentación al usuario
-  - Se optimizó la actualización de la lista de proyectos sin necesidad de recargar todos los datos
+- **Ticket #17 completado:** Se ha implementado con éxito el formulario de creación/edición de proyectos.
+  - Implementación de validaciones exhaustivas para todos los campos del formulario
+  - Normalización de datos para manejar caracteres especiales y formatos de texto
+  - Verificación previa del estado del proyecto antes de permitir edición
+  - Creación de un enfoque de actualización por etapas para enviar solo campos modificados
+  - Integración de pruebas completas con diagnósticos detallados de errores
 
-- **Mejoras de UI/UX:** Se han implementado mejoras significativas en la interfaz de usuario:
-  - Eliminación de elementos duplicados en la página de administración de proyectos
-  - Integración de acceso a administración en la barra de navegación para usuarios con roles adecuados
-  - Reorganización de controles para una experiencia más intuitiva
-  - Mostrado condicional de botones según el contexto (ej: botón de actualizar sólo aparece cuando hay proyectos)
+- **Corrección de Error 500 en actualizaciones de proyectos:**
+  - Diagnóstico inicial reveló problemas con el envío de datos a la API del backend
+  - Implementada normalización de datos para manejar caracteres especiales y formatos de texto
+  - Añadida verificación del estado del proyecto antes de intentos de edición
+  - Creado enfoque de actualización por etapas para enviar solo campos modificados
+  - Implementadas pruebas exhaustivas con diagnósticos detallados de errores
 
-- **Avance en Ticket #17:** Implementación del flujo completo para gestión de proyectos:
-  - Creado componente reutilizable para el formulario con validaciones
-  - Desarrolladas páginas para crear, editar y ver detalle de proyectos
-  - Implementada lógica de publicación y eliminación de proyectos
-  - Mejorada la experiencia de usuario con indicadores de estado y retroalimentación
+- **Corrección de Error 404 en eliminación de proyectos:**
+  - Mejorado el manejo de errores para gestionar casos donde los proyectos ya fueron eliminados
+  - Implementadas notificaciones toast amigables para estados de éxito, información y error
+  - Añadidas actualizaciones automáticas de UI para mantener consistencia sin requerir recarga de datos
+
+- **Ticket #19 completado:** Implementación completa del flujo de publicación de proyectos:
+  - Creado componente PublishProjectModal con vista previa detallada del proyecto
+  - Implementada validación exhaustiva antes de permitir la publicación
+  - Añadidas advertencias claras sobre las implicaciones de publicar (no se pueden editar proyectos publicados)
+  - Añadido checkbox de confirmación explícita para prevenir publicaciones accidentales
+  - Implementada retroalimentación visual con animación en la tabla para destacar el cambio de estado
+  - Integrado sistema de notificaciones toast para mejorar la experiencia de usuario
+  - Implementado manejo de estados durante la publicación para prevenir acciones duplicadas
 
 ## 🛣️ Próximos Pasos
 
-1. Finalizar el ticket #17: Formulario de creación/edición de proyectos
-   - Completar pruebas exhaustivas de creación y edición
-   - Verificar el correcto manejo de errores
-
-2. Definir estrategia para almacenamiento de documentos (#14)
+1. Definir estrategia para almacenamiento de documentos (#14)
    - Evaluar opciones: S3, almacenamiento local, etc.
    - Implementar APIs necesarias
 
-3. Desarrollar componente de gestión de documentos (#18)
+2. Desarrollar componente de gestión de documentos (#18)
    - Depende de la implementación del servicio de almacenamiento
 
-4. Completar los tests pendientes del servicio de invitaciones (#4)
+3. Completar los tests pendientes del servicio de invitaciones (#4)
+
+4. Finalizar los tickets pendientes de registro mediante invitación (#9, #10)
 
 ## Seguimiento de Desarrollo
 
@@ -165,6 +165,7 @@ gantt
 |----|---------------------|-------------|--------|-------|
 | 16 | Como administrador, quiero poder ver un listado de todos los proyectos de inversión para gestionarlos | UI para listar proyectos | ✅ Completado | Incluye filtrado, ordenación y enlaces a las páginas de detalle/edición |
 | 17 | Como administrador, quiero poder crear y editar proyectos de inversión | Formulario para crear/editar proyectos | ✅ Completado | Funcionalidad completa con validación y manejo de errores mejorado |
+| 19 | Como administrador, quiero poder publicar proyectos para hacerlos visibles a los socios | UI de publicación y vista previa | ✅ Completado | Implementado modal con vista previa completa, validaciones, confirmación explícita y retroalimentación visual |
 
 #### Errores Corregidos:
 
@@ -172,12 +173,18 @@ gantt
 |-------|----------|-------|
 | Error 500 al guardar modificaciones de proyectos publicados | Implementada verificación previa del estado del proyecto para mostrar advertencias claras al usuario cuando intenta editar un proyecto publicado. Se agregó validación tanto en la interfaz de usuario como en los servicios, con mensajes explicativos. | 08/05/2025 |
 | Error 500 al guardar modificaciones de proyectos | Implementada verificación de campos obligatorios y recuperación automática de datos faltantes del proyecto existente. Mejorado el manejo de errores con mensajes más descriptivos. | 08/05/2025 |
+| Error 404 al eliminar proyectos | Mejorado el manejo de errores para gestionar casos donde los proyectos ya fueron eliminados. Implementadas notificaciones toast amigables y actualizaciones automáticas de UI. | 10/05/2025 |
 
 #### Mejoras de Interfaz:
 
 - **Lista de proyectos mejorada**: Ahora muestra claramente qué proyectos son editables (borradores) y cuáles no (publicados)
 - **Advertencias visuales**: Se muestran advertencias claras cuando un usuario intenta editar un proyecto publicado
 - **Indicadores de estado**: El estado de cada proyecto es ahora más visible con indicadores de color y texto explicativo
+- **Notificaciones toast**: Implementadas notificaciones amigables para estados de éxito, información y error
+- **Flujo de publicación**: Implementado modal de vista previa para publicación con validaciones completas
+- **Sistema de retroalimentación**: Añadidos indicadores de carga durante acciones críticas y mensajes de resultado
+- **Confirmación de seguridad**: Implementado checkbox de confirmación explícita para prevenir publicaciones accidentales
+- **Animación visual**: Añadida animación para destacar cambios de estado en la tabla de proyectos
 
 #### Pruebas y Diagnóstico:
 
@@ -187,6 +194,7 @@ gantt
 - Validación de formularios de proyectos
 - Manejo de errores en API
 - Diagnóstico específico para el error 500 en edición de proyectos
+- Diagnóstico específico para el error 404 en eliminación de proyectos
 
 Las mejoras aplicadas incluyen:
 1. Verificación previa del estado del proyecto antes de permitir edición
@@ -195,6 +203,9 @@ Las mejoras aplicadas incluyen:
 4. Mejor manejo de excepciones con mensajes más descriptivos
 5. Validación mejorada antes de enviar datos al backend
 6. Indicadores visuales claros del estado de los proyectos
+7. Actualización automática de la UI después de operaciones críticas
+8. Sistema integrado de notificaciones toast para mejor experiencia de usuario
+9. Confirmación explícita para acciones críticas como la publicación de proyectos
 
 #### Estado de Pruebas:
 
@@ -204,12 +215,15 @@ Las mejoras aplicadas incluyen:
 | Componentes | Pruebas del comportamiento del formulario de proyectos | ✅ Implementado |
 | API | Pruebas de diagnóstico para endpoints de proyectos | ✅ Implementado |
 | UI | Validación de permisos de edición según estado | ✅ Implementado |
+| Notificaciones | Integración de sistema de toasts para mensajes al usuario | ✅ Implementado |
+| Animaciones | Retroalimentación visual para cambios de estado | ✅ Implementado |
 
 ### Próximos Pasos:
 
-1. Comenzar implementación de la gestión de documentos (Ticket #18)
-2. Desarrollar la interfaz de usuario para la carga y visualización de documentos de proyectos
-3. Implementar sistema de notificaciones para cambios en proyectos
+1. Comenzar implementación de la gestión de documentos (Ticket #14)
+2. Desarrollar la interfaz de usuario para la carga y visualización de documentos de proyectos (Ticket #18)
+3. Completar los tickets pendientes de la HU #1 (Registro mediante invitación)
+4. Implementar sistema de notificaciones para cambios en proyectos
 
 ### Documentación Técnica:
 
@@ -219,8 +233,4 @@ Las mejoras aplicadas incluyen:
   - Autenticación
   - Axios (peticiones HTTP)
   - Next Router
-
-### Entorno de Desarrollo:
-
-- Se recomienda ejecutar `npm test` para las pruebas unitarias
-- Para pruebas específicas de diagnóstico, usar: `npx jest frontend/tests/api-diagnostics.test.js`
+- Se ha implementado react-hot-toast para el sistema de notificaciones
