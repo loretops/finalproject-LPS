@@ -7,15 +7,16 @@ const express = require('express');
 const router = express.Router();
 const ProjectDocumentController = require('../controllers/ProjectDocumentController');
 const { uploadDocument, uploadImage, uploadVideo, handleUploadErrors } = require('../../middleware/uploadMiddleware');
-const { verifyToken, checkRole } = require('../../middleware/authMiddleware');
+const jwtAuthMiddleware = require('../../middleware/jwtAuthMiddleware');
+const roleAuthMiddleware = require('../../middleware/roleAuthMiddleware');
 
 // Todas las rutas requieren autenticación
-router.use(verifyToken);
+router.use(jwtAuthMiddleware);
 
 // Ruta para subir un documento a un proyecto (usando middleware adecuado según tipo)
 router.post(
   '/projects/:projectId/documents', 
-  checkRole(['manager', 'admin']),
+  roleAuthMiddleware(['manager', 'admin']),
   uploadDocument,
   handleUploadErrors,
   ProjectDocumentController.uploadProjectDocument.bind(ProjectDocumentController)
@@ -24,7 +25,7 @@ router.post(
 // Ruta para subir una imagen a un proyecto
 router.post(
   '/projects/:projectId/images', 
-  checkRole(['manager', 'admin']),
+  roleAuthMiddleware(['manager', 'admin']),
   uploadImage,
   handleUploadErrors,
   ProjectDocumentController.uploadProjectDocument.bind(ProjectDocumentController)
@@ -33,7 +34,7 @@ router.post(
 // Ruta para subir un video a un proyecto
 router.post(
   '/projects/:projectId/videos', 
-  checkRole(['manager', 'admin']),
+  roleAuthMiddleware(['manager', 'admin']),
   uploadVideo,
   handleUploadErrors,
   ProjectDocumentController.uploadProjectDocument.bind(ProjectDocumentController)
@@ -54,7 +55,7 @@ router.get(
 // Eliminar un documento
 router.delete(
   '/documents/:documentId',
-  checkRole(['manager', 'admin']),
+  roleAuthMiddleware(['manager', 'admin']),
   ProjectDocumentController.deleteDocument.bind(ProjectDocumentController)
 );
 

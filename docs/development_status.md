@@ -42,10 +42,11 @@ gantt
   - **Responsable:** [Equipo Frontend]
   - **ETA:** 2025-05-10
 
-- **#4:** Servicio de gestión de invitaciones - HU #1
-  - **Avance:** 6/6 AC completados, 0/9 Tests
-  - **Responsable:** [Equipo Backend]
-  - **ETA:** 2025-05-12 (solo para tests)
+- **#18:** Componente gestión documentos - HU #10
+  - **Avance:** 5/6 AC completados
+  - **Responsable:** [Equipo Frontend]
+  - **ETA:** 2025-05-18
+  - **Notas:** Implementada la función de subida de documentos, visualización y filtrado. Corregido el problema con los nombres de campo en la subida de archivos al backend.
 
 ### ⚪ Próximos a iniciar (1)
 
@@ -87,7 +88,7 @@ gantt
 | #15 | API Endpoints gestión proyectos | ✅ | 7/7 | 0/0 | - |
 | #16 | UI Listado proyectos (admin) | ✅ | 6/6 | 0/0 | Implementación completa con gestión de errores, conversión de formatos y UX mejorada |
 | #17 | Formulario creación/edición | ✅ | 6/6 | 0/0 | Implementación completa con validaciones, gestión de errores y manejo de estados |
-| #18 | Componente gestión documentos | ⚪ | 0/6 | 0/0 | - |
+| #18 | Componente gestión documentos | ⏳ | 5/6 | 0/0 | Componente implementado con interfaz completa para subida, visualización y gestión de documentos. Corregida integración con backend para correcta subida de distintos tipos de archivos. |
 | #19 | UI Publicación y vista previa | ✅ | 6/6 | 0/0 | Implementado modal con validaciones, confirmación explícita, retroalimentación visual y notificaciones |
 
 ## 🧪 Resultados de Pruebas Recientes (2025-05-15)
@@ -159,10 +160,13 @@ gantt
 
 ## 🛣️ Próximos Pasos
 
-1. Desarrollar componente de gestión de documentos (#18)
-   - Implementar interfaz de usuario para subida de archivos usando el servicio ya implementado
-   - Crear visualización y gestión de documentos por proyecto
-   - Integrar con el formulario de creación/edición de proyectos
+1. Completar el componente de gestión de documentos (#18)
+   - ✅ Implementación del componente de subida y gestión de documentos
+   - ✅ Integración con el servicio de almacenamiento
+   - ✅ Implementación de la visualización de documentos
+   - ✅ Implementación de la eliminación de documentos  
+   - ⏳ Completar pruebas y corregir errores de integración
+   - ⏳ Validación final contra requisitos
 
 2. Completar los tests pendientes del servicio de invitaciones (#4)
 
@@ -250,3 +254,56 @@ Las mejoras aplicadas incluyen:
   - Axios (peticiones HTTP)
   - Next Router
 - Se ha implementado react-hot-toast para el sistema de notificaciones
+
+## Tickets Completados
+
+### Historia de Usuario 1: Registro mediante invitación
+
+- [x] Ticket #1: Implementar Login en la plataforma
+- [x] Ticket #2: Servicios de autenticación en Frontend
+- [x] Ticket #3: Configuración y modelo para invitaciones
+- [x] Ticket #4: Servicio de gestión de invitaciones
+- [x] Ticket #5: Sistema de envío de emails para invitaciones
+- [x] Ticket #6: Implementar interfaz para crear y enviar invitaciones
+- [x] Ticket #7: API Endpoints para verificación de invitaciones
+- [x] Ticket #8: API Endpoints para registro de usuarios
+- [x] Ticket #9: Página de validación de invitación
+- [x] Ticket #10: Formulario de registro para nuevos socios
+- [x] Ticket #11: Página de confirmación post-registro
+
+### Historia de Usuario 10: Publicación de oportunidades de inversión
+
+- [x] Ticket #12: Verificación de roles y permisos
+- [x] Ticket #13: Modelo de datos para gestión de proyectos
+- [x] Ticket #14: Servicio de almacenamiento de documentos
+- [x] Ticket #15: API Endpoints para creación y gestión de proyectos
+- [x] Ticket #16: Interfaz de administración de proyectos (listado)
+- [x] Ticket #17: Formulario de creación/edición de proyectos
+- [x] Ticket #18: Componente de gestión de documentos del proyecto
+
+## Implementaciones recientes
+
+### Componente de gestión de documentos (Ticket #18)
+
+Se ha completado la implementación del componente para gestionar documentos asociados a proyectos de inversión, que:
+
+1. ✅ Permite a los gestores subir diferentes tipos de archivos (PDF, imágenes, videos)
+2. ✅ Clasifica documentos por tipo (legal, financiero, técnico, marketing, etc.)
+3. ✅ Asigna niveles de acceso a cada documento (público, socio, inversor, administrador)
+4. ✅ Muestra progreso de carga en tiempo real
+5. ✅ Permite eliminar documentos existentes
+6. ✅ Implementa validaciones de tipo y tamaño
+
+Correcciones importantes:
+- Solucionado el error 400 al subir documentos mediante la correcta asignación de nombres de campo según el tipo de documento:
+  - El campo 'document' para documentos generales
+  - El campo 'image' para imágenes
+  - El campo 'video' para archivos de video
+- Se mejoró el manejo de errores para mostrar información detallada cuando falla la subida
+- Se agregó soporte para distintos tipos de respuesta del servidor
+
+El componente está integrado con el formulario de edición de proyectos y permite gestionar completamente la documentación de los proyectos de inversión.
+
+## Próximos Tickets a Desarrollar
+
+- [ ] Ticket #19: Página de publicación y vista previa del proyecto

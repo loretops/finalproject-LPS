@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAuthToken } from './authService';
+import { apiClient, getAuthToken } from './authService';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001/api';
 
@@ -122,49 +122,13 @@ const projectService = {
       if (options.sortDirection) queryParams.append('sortDirection', options.sortDirection);
       
       const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
-      const apiUrl = `${API_URL}/projects${queryString}`;
       
-      console.log('🔍 Consultando API en:', apiUrl);
+      console.log('🔍 Consultando API en:', `${API_URL}/projects${queryString}`);
       console.log('🔑 Token de autenticación disponible:', !!token);
       console.log('🔓 Primeros 20 caracteres del token:', token.substring(0, 20) + '...');
       
-      // Intentar primero con fetch para depuración
-      try {
-        const fetchResponse = await fetch(apiUrl, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        
-        console.log('📊 Estado de respuesta fetch:', fetchResponse.status);
-        
-        if (!fetchResponse.ok) {
-          console.error(`⚠️ Error en fetch: ${fetchResponse.status} ${fetchResponse.statusText}`);
-        } else {
-          console.log('✅ fetch exitoso');
-          
-          // Solo para depuración, clonar la respuesta
-          const clonedResponse = fetchResponse.clone();
-          const textData = await clonedResponse.text();
-          
-          try {
-            // Intentar parsear para ver si es JSON válido
-            const jsonData = JSON.parse(textData);
-            console.log('🔍 Datos JSON válidos:', jsonData);
-          } catch (parseError) {
-            console.error('❌ No es JSON válido:', textData);
-          }
-        }
-      } catch (fetchError) {
-        console.error('❌ Error al usar fetch:', fetchError);
-      }
-      
-      // Continuar con axios como estaba
-      const response = await axios.get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      // Usar apiClient que ya tiene configurado el interceptor para el token
+      const response = await apiClient.get(`/projects${queryString}`);
       
       console.log('📊 Respuesta completa de la API:', response);
       console.log('📋 Datos recibidos:', response.data);
@@ -260,17 +224,8 @@ const projectService = {
    */
   async getProjectById(id) {
     try {
-      const token = getAuthToken();
-      
-      if (!token) {
-        throw new Error('No autenticado');
-      }
-      
-      const response = await axios.get(`${API_URL}/projects/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      // Usar apiClient que ya tiene configurado el interceptor para el token
+      const response = await apiClient.get(`/projects/${id}`);
       
       // Normalizar el proyecto antes de devolverlo
       return normalizeProject(camelToSnake(response.data));
@@ -287,12 +242,6 @@ const projectService = {
    */
   async createProject(projectData) {
     try {
-      const token = getAuthToken();
-      
-      if (!token) {
-        throw new Error('No autenticado');
-      }
-      
       // Asegurar que los datos estén en camelCase para el backend
       const camelCaseData = snakeToCamel(projectData);
       
@@ -301,10 +250,10 @@ const projectService = {
         camelCaseData.targetAmount = camelCaseData.minimumInvestment * 6;
       }
       
-      const response = await axios.post(`${API_URL}/projects`, camelCaseData, {
+      // Usar apiClient que ya tiene configurado el interceptor para el token
+      const response = await apiClient.post(`/projects`, camelCaseData, {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          'Content-Type': 'application/json'
         }
       });
       
@@ -324,12 +273,6 @@ const projectService = {
    */
   async updateProject(id, projectData) {
     try {
-      const token = getAuthToken();
-      
-      if (!token) {
-        throw new Error('No autenticado');
-      }
-      
       // Verificar primero si el proyecto está publicado
       try {
         const existingProject = await this.getProjectById(id);
@@ -390,10 +333,10 @@ const projectService = {
         console.log('Campos modificados a enviar:', changedFields);
         
         // 2. Realizar la actualización solo con los campos esenciales y modificados
-        const response = await axios.put(`${API_URL}/projects/${id}`, changedFields, {
+        // Usar apiClient que ya tiene configurado el interceptor para el token
+        const response = await apiClient.put(`/projects/${id}`, changedFields, {
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            'Content-Type': 'application/json'
           }
         });
         
@@ -474,10 +417,10 @@ const projectService = {
         console.log(`Enviando solo campos principales para actualizar proyecto ${id}:`, minimalUpdate);
         
         try {
-          const response = await axios.put(`${API_URL}/projects/${id}`, minimalUpdate, {
+          // Usar apiClient que ya tiene configurado el interceptor para el token
+          const response = await apiClient.put(`/projects/${id}`, minimalUpdate, {
             headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`
+              'Content-Type': 'application/json'
             }
           });
           
@@ -506,10 +449,10 @@ const projectService = {
               
               console.log('Intento #1: Actualizando solo campos de texto:', step1Data);
               
-              await axios.put(`${API_URL}/projects/${id}`, step1Data, {
+              // Usar apiClient que ya tiene configurado el interceptor para el token
+              await apiClient.put(`/projects/${id}`, step1Data, {
                 headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`
+                  'Content-Type': 'application/json'
                 }
               });
               
@@ -524,10 +467,10 @@ const projectService = {
               
               console.log('Intento #2: Actualizando campos numéricos:', step2Data);
               
-              const finalResponse = await axios.put(`${API_URL}/projects/${id}`, step2Data, {
+              // Usar apiClient que ya tiene configurado el interceptor para el token
+              const finalResponse = await apiClient.put(`/projects/${id}`, step2Data, {
                 headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`
+                  'Content-Type': 'application/json'
                 }
               });
               
@@ -594,17 +537,8 @@ const projectService = {
    */
   async publishProject(id) {
     try {
-      const token = getAuthToken();
-      
-      if (!token) {
-        throw new Error('No autenticado');
-      }
-      
-      const response = await axios.post(`${API_URL}/projects/${id}/publish`, {}, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      // Usar apiClient que ya tiene configurado el interceptor para el token
+      const response = await apiClient.post(`/projects/${id}/publish`, {});
       
       // Normalizar el proyecto antes de devolverlo
       return normalizeProject(camelToSnake(response.data));
@@ -621,12 +555,6 @@ const projectService = {
    */
   async deleteProject(id) {
     try {
-      const token = getAuthToken();
-      
-      if (!token) {
-        throw new Error('No autenticado');
-      }
-      
       try {
         // Verificar primero si el proyecto existe para proporcionar un mejor mensaje de error
         await this.getProjectById(id);
@@ -641,11 +569,8 @@ const projectService = {
       }
       
       try {
-        await axios.delete(`${API_URL}/projects/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
+        // Usar apiClient que ya tiene configurado el interceptor para el token
+        await apiClient.delete(`/projects/${id}`);
         console.log(`Proyecto con ID ${id} eliminado con éxito`);
       } catch (deleteError) {
         // Si es un 404, no es realmente un error crítico, el proyecto ya no existe
