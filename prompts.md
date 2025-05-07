@@ -330,5 +330,10 @@ Si hay algún punto claro de lo que se va a desarrollar en el futuro, se pueden 
 Todo bien. Ahora quiero que como experto desarrollador full-stack, preparado para trabajar con el equipo de frontend, revises la estructura, arquitectura y finalidad del proyecto @readme.md , @architecture , y las dependencias que ya hay, y me propongas libreraias y/o documentacion adecuada para que cada pantalla del forntend que vaya desarrollando tenga un estilo profesional, limpio, intuitivo, estetico y moderno. ¿Qué propones?
 ```
 
+**Prompt 2:**
+```
+Empieza por el punto Configura Tailwind CSS como base, y Añade componentes básicos (shadcn/ui o HeadlessUI) para navegación y layouts. Además, añade a Cursor la documentación que me propones en el punto 7. Recursos y documentación recomendada
+```
+
 
 

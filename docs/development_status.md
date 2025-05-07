@@ -32,7 +32,7 @@
 | #13       | Modelo para proyectos (DB)      | ✅ Completado | 5/5        | N/A           | Modelos existentes y repo implementado     |
 | #14       | Servicio almacenamiento docs    | ⚪ Pendiente   | 0/6        | 0/0           | Definir estrategia de almacenamiento       |
 | #15       | API Endpoints gestión proyectos | ✅ Completado | 7/7        | 0/0           | Implementados y probados                    |
-| #16       | UI Listado proyectos (admin)    | ⚪ Pendiente   | 0/6        | 0/0           | Depende de #15                             |
+| #16       | UI Listado proyectos (admin)    | ⏳ En Progreso| 4/6        | 0/0           | Interfaz de listado implementada, falta integración completa |
 | #17       | Formulario creación/edición     | ⚪ Pendiente   | 0/6        | 0/0           | Depende de #15                             |
 | #18       | Componente gestión documentos   | ⚪ Pendiente   | 0/6        | 0/0           | Depende de #14 y #15                       |
 | #19       | UI Publicación y vista previa   | ⚪ Pendiente   | 0/6        | 0/0           | Depende de #17                             |
@@ -130,6 +130,29 @@
 - Implementación del repositorio con Prisma en `backend/infrastructure/repositories/PrismaProjectRepository.js`
 
 **Nota:** No fue necesario crear nuevos modelos ni migraciones, ya que el esquema de la base de datos ya incluía todos los modelos necesarios para la gestión de proyectos.
+
+### Ticket #16: UI Listado proyectos (admin) (⏳ En Progreso)
+
+**Criterios de Aceptación:**
+- [X] Muestra listado de todos los proyectos con información clave
+- [X] Permite filtrar por estado (borrador, publicado, cerrado)
+- [X] Incluye opciones para crear nuevo proyecto, editar o eliminar existentes
+- [X] Solo es accesible para usuarios con rol de gestor
+- [ ] Implementa paginación para manejar muchos proyectos
+- [ ] Tiene un diseño responsivo y usable
+
+**Implementación:**
+- Se ha creado el componente ProjectsTable que muestra los proyectos con información clave
+- Se ha implementado la página de administración de proyectos que utiliza el componente
+- Se ha añadido la funcionalidad para filtrar por estado
+- Se ha agregado la función checkRole al contexto de autenticación para verificar permisos
+- Se ha implementado el diseño utilizando TailwindCSS v4 y HeadlessUI
+- Se ha creado un servicio para comunicarse con la API de proyectos
+
+**Próximos Pasos:**
+- Completar la integración con la API real
+- Probar el funcionamiento de paginación y filtros con datos reales
+- Realizar pruebas de usabilidad del componente
 
 ---
 
