@@ -2,10 +2,12 @@ require('dotenv').config({ path: '../.env' });
 
 // Importaciones
 const express = require('express');
+const path = require('path'); // Agregar path para manejar rutas de archivos
 const { PrismaClient } = require('@prisma/client');
 const authRoutes = require('./interfaces/http/routes/auth.routes'); // Importar rutas de autenticación
 const invitationRoutes = require('./interfaces/http/routes/invitation.routes'); // Importar rutas de invitaciones
 const projectRoutes = require('./interfaces/http/routes/project.routes'); // Importar rutas de proyectos
+const projectDocumentRoutes = require('./application/routes/projectDocumentRoutes'); // Importar rutas de documentos
 
 // <<< AÑADIR ESTE LOG AL INICIO >>>
 console.log('DEBUG STARTUP - Reading FRONTEND_URL env var:', process.env.FRONTEND_URL);
@@ -18,6 +20,9 @@ const port = process.env.BACKEND_PORT || 8001;
 
 // Middleware
 app.use(express.json());
+
+// Servir archivos estáticos desde el directorio 'public'
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Habilitar CORS
 app.use((req, res, next) => {
@@ -35,6 +40,7 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes); // Usar rutas de autenticación
 app.use('/api/invitations', invitationRoutes); // Usar rutas de invitaciones
 app.use('/api/projects', projectRoutes); // Usar rutas de proyectos
+app.use('/api', projectDocumentRoutes); // Usar rutas de documentos de proyectos
 
 // Ruta básica de health check
 app.use('/api/health', (req, res) => {
@@ -52,11 +58,14 @@ app.get('/api/roles', async (req, res) => {
   }
 });
 
-// Middleware para manejo de errores (Opcional, pero recomendado)
-// app.use((err, req, res, next) => {
-//   console.error(err.stack);
-//   res.status(500).send('Something broke!');
-// });
+// Middleware para manejo de errores
+app.use((err, req, res, next) => {
+  console.error('Error en la aplicación:', err.stack);
+  res.status(500).json({ 
+    error: 'Error interno del servidor',
+    message: process.env.NODE_ENV === 'development' ? err.message : 'Ocurrió un error inesperado'
+  });
+});
 
 // <<< Exportar la app ANTES de iniciar el servidor >>>
 module.exports = app;
@@ -65,6 +74,7 @@ module.exports = app;
 if (require.main === module) {
   const server = app.listen(port, () => {
     console.log(`Servidor backend ejecutándose en http://localhost:${port}`);
+    console.log(`Archivos estáticos disponibles en http://localhost:${port}/uploads`);
   });
 
   // Manejar cierre correctamente

@@ -5,7 +5,7 @@
 | Historia de Usuario | Total Tickets | Completados | En Progreso | Pendientes | Bloqueados |
 |---------------------|---------------|-------------|-------------|------------|------------|
 | HU #1: Registro mediante invitación | 13 | 10 | 3 | 0 | 0 |
-| HU #10: Publicación de oportunidades | 8 | 6 | 0 | 2 | 0 |
+| HU #10: Publicación de oportunidades | 8 | 7 | 0 | 1 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -83,11 +83,11 @@ gantt
 |----|--------|--------|----|----|-------|
 | #12 | Verificación de roles | ✅ | 5/5 | 5/5 | Documentado en `/docs/technical/role-middleware-guide.md` |
 | #13 | Modelo para proyectos (DB) | ✅ | 5/5 | N/A | - |
-| #14 | Servicio almacenamiento docs | ⚪ | 0/6 | 0/0 | - |
+| #14 | Servicio almacenamiento docs | ✅ | 6/6 | 4/4 | Implementado servicio completo con optimización de imágenes, documentado en `/docs/technical/document-storage-service.md`. Tests unitarios e integración completados. |
 | #15 | API Endpoints gestión proyectos | ✅ | 7/7 | 0/0 | - |
 | #16 | UI Listado proyectos (admin) | ✅ | 6/6 | 0/0 | Implementación completa con gestión de errores, conversión de formatos y UX mejorada |
 | #17 | Formulario creación/edición | ✅ | 6/6 | 0/0 | Implementación completa con validaciones, gestión de errores y manejo de estados |
-| #18 | Componente gestión documentos | ⚪ | 0/6 | 0/0 | Depende de #14 |
+| #18 | Componente gestión documentos | ⚪ | 0/6 | 0/0 | - |
 | #19 | UI Publicación y vista previa | ✅ | 6/6 | 0/0 | Implementado modal con validaciones, confirmación explícita, retroalimentación visual y notificaciones |
 
 ## 🧪 Resultados de Pruebas Recientes (2025-05-15)
@@ -113,6 +113,21 @@ gantt
   - ✅ Vista detallada de proyectos con opciones de publicación y eliminación
 
 ## 📋 Logros Recientes
+
+- **Ticket #14 completado:** Se ha implementado con éxito el servicio de almacenamiento de documentos.
+  - Creación de interfaz y servicio para gestión de archivos
+  - Implementación de optimización automática de imágenes
+  - Validación de tipos de archivos permitidos por MIME type
+  - Generación de nombres de archivo seguros con UUID
+  - Integración con el modelo ProjectDocument existente 
+  - Desarrollo de endpoints para subida, listado y eliminación de documentos
+  - Documentación completa del servicio y API en `/docs/technical/document-storage-service.md`
+  - Implementación de tests unitarios e integración para garantizar la calidad del código:
+    - Tests unitarios para LocalStorageService (generación de nombres, almacenamiento, etc.)
+    - Tests para validación de tipos de archivos y configuración
+    - Tests para middleware de subida de archivos (Multer)
+    - Tests de integración para el servicio de documentos
+    - Tests para el controlador de la API
 
 - **Ticket #17 completado:** Se ha implementado con éxito el formulario de creación/edición de proyectos.
   - Implementación de validaciones exhaustivas para todos los campos del formulario
@@ -144,16 +159,16 @@ gantt
 
 ## 🛣️ Próximos Pasos
 
-1. Definir estrategia para almacenamiento de documentos (#14)
-   - Evaluar opciones: S3, almacenamiento local, etc.
-   - Implementar APIs necesarias
+1. Desarrollar componente de gestión de documentos (#18)
+   - Implementar interfaz de usuario para subida de archivos usando el servicio ya implementado
+   - Crear visualización y gestión de documentos por proyecto
+   - Integrar con el formulario de creación/edición de proyectos
 
-2. Desarrollar componente de gestión de documentos (#18)
-   - Depende de la implementación del servicio de almacenamiento
+2. Completar los tests pendientes del servicio de invitaciones (#4)
 
-3. Completar los tests pendientes del servicio de invitaciones (#4)
+3. Finalizar los tickets pendientes de registro mediante invitación (#9, #10)
 
-4. Finalizar los tickets pendientes de registro mediante invitación (#9, #10)
+4. Implementar tests para el servicio de almacenamiento de documentos
 
 ## Seguimiento de Desarrollo
 
@@ -217,6 +232,7 @@ Las mejoras aplicadas incluyen:
 | UI | Validación de permisos de edición según estado | ✅ Implementado |
 | Notificaciones | Integración de sistema de toasts para mensajes al usuario | ✅ Implementado |
 | Animaciones | Retroalimentación visual para cambios de estado | ✅ Implementado |
+| Almacenamiento | Pruebas unitarias e integración para servicio de archivos | ✅ Implementado |
 
 ### Próximos Pasos:
 
