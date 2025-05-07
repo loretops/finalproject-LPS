@@ -1,7 +1,7 @@
 import React from 'react';
 import { AuthProvider } from '../context/AuthContext';
-// Import global styles if you have them, e.g.:
-// import '../styles/globals.css';
+// Import global styles with Tailwind CSS
+import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
   return (

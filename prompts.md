@@ -11,6 +11,8 @@ Puedes añadir adicionalmente la conversación completa como link o archivo adju
 5. [Historias de usuario](#5-historias-de-usuario)
 6. [Tickets de trabajo](#6-tickets-de-trabajo)
 7. [Pull requests](#7-pull-requests)
+8. [Seguridad](#8-seguridad)
+9. [Configuración del proyecto](#9-configuración-del-proyecto)
 
 ---
 
@@ -319,6 +321,13 @@ Tengo un problema con el repositorio, y es que he ido haciendo commit y push en 
 Tengo que seguir documentando el proyecto. Revisa todos los archivos para poder aportar este punto: Enumera y describe las prácticas de seguridad principales que se han implementado en el proyecto, añadiendo ejemplos si procede, pero solo para lo que se ha desarrollado por ahora. De hecho se debe indicar que es lo que hay en este punto del proyecto, y más adelante se mejorará este punto. 
 Si hay algún punto claro de lo que se va a desarrollar en el futuro, se pueden añadir aquí tambien. de hecho hay puntos de seguridad fundamentales en este proyecto, así que profundiza lo que necesites, sin perder de vista que es un MVP, y yo soy una progaramdora junior, y no puedo mantener un proyecto muy complejo
 @rules.mdc 
+```
+
+## 9. Configuración del proyecto
+
+**Prompt 1:**
+```
+Todo bien. Ahora quiero que como experto desarrollador full-stack, preparado para trabajar con el equipo de frontend, revises la estructura, arquitectura y finalidad del proyecto @readme.md , @architecture , y las dependencias que ya hay, y me propongas libreraias y/o documentacion adecuada para que cada pantalla del forntend que vaya desarrollando tenga un estilo profesional, limpio, intuitivo, estetico y moderno. ¿Qué propones?
 ```
 
 

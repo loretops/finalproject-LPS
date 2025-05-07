@@ -17,6 +17,8 @@
     "seed": "node backend/prisma/seed.js"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.2",
+    "@heroicons/react": "^2.2.0",
     "@prisma/client": "^5.5.2",
     "axios": "^1.9.0",
     "bcrypt": "^5.1.1",
@@ -31,9 +33,11 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.5",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "autoprefixer": "^10.4.21",
     "concurrently": "^8.2.2",
     "cross-port-killer": "^1.4.0",
     "eslint": "^8.53.0",
@@ -42,7 +46,9 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-mock-extended": "^4.0.0-beta1",
     "nodemon": "^3.0.1",
-    "supertest": "^7.1.0"
+    "postcss": "^8.5.3",
+    "supertest": "^7.1.0",
+    "tailwindcss": "^4.1.5"
   },
   "engines": {
     "node": ">=18.0.0"
