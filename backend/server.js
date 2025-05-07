@@ -5,6 +5,7 @@ const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const authRoutes = require('./interfaces/http/routes/auth.routes'); // Importar rutas de autenticación
 const invitationRoutes = require('./interfaces/http/routes/invitation.routes'); // Importar rutas de invitaciones
+const projectRoutes = require('./interfaces/http/routes/project.routes'); // Importar rutas de proyectos
 
 // <<< AÑADIR ESTE LOG AL INICIO >>>
 console.log('DEBUG STARTUP - Reading FRONTEND_URL env var:', process.env.FRONTEND_URL);
@@ -33,9 +34,10 @@ app.use((req, res, next) => {
 // --- Rutas de la API ---
 app.use('/api/auth', authRoutes); // Usar rutas de autenticación
 app.use('/api/invitations', invitationRoutes); // Usar rutas de invitaciones
+app.use('/api/projects', projectRoutes); // Usar rutas de proyectos
 
 // Ruta básica de health check
-app.get('/api/health', (req, res) => {
+app.use('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'API funcionando correctamente' });
 });
 
