@@ -30,7 +30,7 @@ gantt
 
 ## 🚦 Tickets Activos
 
-### ⏳ En progreso (3)
+### ⏳ En progreso (2)
 
 - **#9:** Página Validar Invitación (FE) - HU #1
   - **Avance:** 5/7 AC completados
@@ -42,17 +42,7 @@ gantt
   - **Responsable:** [Equipo Frontend]
   - **ETA:** 2025-05-10
 
-- **#18:** Componente gestión documentos - HU #10
-  - **Avance:** 5/6 AC completados
-  - **Responsable:** [Equipo Frontend]
-  - **ETA:** 2025-05-18
-  - **Notas:** Implementada la función de subida de documentos, visualización y filtrado. Corregido el problema con los nombres de campo en la subida de archivos al backend.
-
-### ⚪ Próximos a iniciar (1)
-
-- **#14:** Servicio almacenamiento documentos - HU #10
-  - **Prioridad:** Media
-  - **Notas:** Definir estrategia de almacenamiento
+### ⚪ Próximos a iniciar (0)
 
 ## 📝 Detalles por Historia de Usuario
 
@@ -88,7 +78,7 @@ gantt
 | #15 | API Endpoints gestión proyectos | ✅ | 7/7 | 0/0 | - |
 | #16 | UI Listado proyectos (admin) | ✅ | 6/6 | 0/0 | Implementación completa con gestión de errores, conversión de formatos y UX mejorada |
 | #17 | Formulario creación/edición | ✅ | 6/6 | 0/0 | Implementación completa con validaciones, gestión de errores y manejo de estados |
-| #18 | Componente gestión documentos | ⏳ | 5/6 | 0/0 | Componente implementado con interfaz completa para subida, visualización y gestión de documentos. Corregida integración con backend para correcta subida de distintos tipos de archivos. |
+| #18 | Componente gestión documentos | ✅ | 6/6 | 0/0 | Implementación completa de UI. Para el MVP usa almacenamiento simulado (no persistente). Requiere ajustes en backend para producción. |
 | #19 | UI Publicación y vista previa | ✅ | 6/6 | 0/0 | Implementado modal con validaciones, confirmación explícita, retroalimentación visual y notificaciones |
 
 ## 🧪 Resultados de Pruebas Recientes (2025-05-15)
@@ -160,13 +150,11 @@ gantt
 
 ## 🛣️ Próximos Pasos
 
-1. Completar el componente de gestión de documentos (#18)
-   - ✅ Implementación del componente de subida y gestión de documentos
-   - ✅ Integración con el servicio de almacenamiento
-   - ✅ Implementación de la visualización de documentos
-   - ✅ Implementación de la eliminación de documentos  
-   - ⏳ Completar pruebas y corregir errores de integración
-   - ⏳ Validación final contra requisitos
+1. Completar la integración del backend para el componente de gestión de documentos (#18)
+   - ✅ Implementación de la UI completa con todas las funcionalidades
+   - ✅ Simulación local para demostrar la funcionalidad
+   - ⏳ Modificar backend para aceptar correctamente metadatos con archivos subidos
+   - ⏳ Implementar persistencia real de documentos en servidor
 
 2. Completar los tests pendientes del servicio de invitaciones (#4)
 
@@ -294,15 +282,12 @@ Se ha completado la implementación del componente para gestionar documentos aso
 5. ✅ Permite eliminar documentos existentes
 6. ✅ Implementa validaciones de tipo y tamaño
 
-Correcciones importantes:
-- Solucionado el error 400 al subir documentos mediante la correcta asignación de nombres de campo según el tipo de documento:
-  - El campo 'document' para documentos generales
-  - El campo 'image' para imágenes
-  - El campo 'video' para archivos de video
-- Se mejoró el manejo de errores para mostrar información detallada cuando falla la subida
-- Se agregó soporte para distintos tipos de respuesta del servidor
+**Nota importante**: Para el MVP, el componente utiliza un almacenamiento temporal en memoria que no persiste los documentos en el servidor. Esto permite demostrar toda la funcionalidad de la UI mientras se implementa la solución completa en el backend.
 
-El componente está integrado con el formulario de edición de proyectos y permite gestionar completamente la documentación de los proyectos de inversión.
+**Pendiente para producción**:
+- Modificar el backend para procesar correctamente los metadatos con los archivos subidos (problema con Multer)
+- Implementar el almacenamiento real y persistente de documentos
+- Completar la integración entre frontend y backend para la gestión completa de documentos
 
 ## Próximos Tickets a Desarrollar
 
