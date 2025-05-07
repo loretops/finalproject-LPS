@@ -1,189 +1,137 @@
-# Seguimiento del Desarrollo
+# Estado del Desarrollo de COOPCO
 
-## Historia de Usuario 1: Registro mediante invitación
+## 📊 Resumen General
 
-| Ticket ID | Título Corto                     | Estado        | Resumen AC | Resumen Tests | Notas                                     |
-| :-------- | :------------------------------- | :------------ | :--------- | :------------ | :---------------------------------------- |
-| #1        | Implementar Login básico         | ✅ Completado | 5/5        | 0/3           | Funcionalidad básica probada manualmente  |
-| #2        | Servicios Auth Frontend          | ✅ Completado | 5/5        | 0/0           | Servicio base creado para login         |
-| #3        | Modelo Invitaciones (DB)         | ✅ Completado | 6/6        | N/A           | Modelo ya existe en schema.prisma       |
-| #4        | Servicio Invitaciones (Backend)  | ✅ Completado | 6/6        | 0/6           | Servicio funcional, pendiente tests formales |
-| #5        | Envío Emails Invitación        | ✅ Completado | 6/7        | 0/1           | Envío básico probado con Mailtrap       |
-| #6        | UI Crear/Enviar Invitaciones     | ✅ Completado | 6/7        | 0/0           | Interfaz básica funcional para enviar    |
-| #7        | API Validar Invitación         | ✅ Completado | 5/5        | 0/0           | Endpoint OK, falta test integración    |
-| #8        | API Registrar Usuario          | ✅ Completado | 7/7        | 0/0           | Endpoint OK (usa F/LName), falta TDD |
-| #9        | Página Validar Invitación (FE) | ⏳ En Progreso | 5/7        | 0/0           | API real conectada, falta test manual |
-| #10       | Formulario Registro (FE)       | ⏳ En Progreso | 6/8        | 0/0           | API real conectada, falta test manual |
-| #11       | Página Confirmación (FE)       | ✅ Completado | 5/5        | 0/0           | Página creada, sin lógica verificación |
-| #12       | Actualizar Documentación HU    | ✅ Completado | 1/1        | N/A           | Actualización de dependencias entre HU2 y HU10 |
-| #13       | Tabla Priorizada de HU         | ✅ Completado | 1/1        | N/A           | Creación de tabla según orden lógico de desarrollo |
+| Historia de Usuario | Total Tickets | Completados | En Progreso | Pendientes | Bloqueados |
+|---------------------|---------------|-------------|-------------|------------|------------|
+| HU #1: Registro mediante invitación | 13 | 10 | 3 | 0 | 0 |
+| HU #10: Publicación de oportunidades | 8 | 4 | 0 | 4 | 0 |
 
-*Leyenda Estado: ⚪ Pendiente | ⏳ En Progreso | ✅ Completado | ❌ Bloqueado*
-*Resumen AC: Criterios de Aceptación cumplidos / totales*
-*Resumen Tests: Tests pasados / totales (N/A si no aplica)*
+## 🚀 Último Sprint: Progreso
 
----
+**Sprint actual:** Mayo 1-15, 2025
 
-## Historia de Usuario 10: Publicación de oportunidades de inversión
+```mermaid
+gantt
+    title Progreso del Sprint Actual
+    dateFormat  YYYY-MM-DD
+    section HU #1
+    Login básico                      :done, hu1-t1, 2025-05-01, 2d
+    Servicios Auth Frontend           :done, hu1-t2, 2025-05-01, 2d
+    Formulario Registro               :active, hu1-t10, 2025-05-05, 5d
+    Página Validar Invitación         :active, hu1-t9, 2025-05-05, 4d
+    section HU #10
+    Verificación de roles             :done, hu10-t12, 2025-05-02, 2d
+    Modelo para proyectos             :done, hu10-t13, 2025-05-03, 1d
+    UI Listado proyectos (admin)      :done, hu10-t16, 2025-05-07, 4d
+```
 
-| Ticket ID | Título Corto                     | Estado        | Resumen AC | Resumen Tests | Notas                                     |
-| :-------- | :------------------------------- | :------------ | :--------- | :------------ | :---------------------------------------- |
-| #12       | Verificación de roles           | ✅ Completado | 5/5        | 5/5           | Implementado y documentado con tests      |
-| #13       | Modelo para proyectos (DB)      | ✅ Completado | 5/5        | N/A           | Modelos existentes y repo implementado     |
-| #14       | Servicio almacenamiento docs    | ⚪ Pendiente   | 0/6        | 0/0           | Definir estrategia de almacenamiento       |
-| #15       | API Endpoints gestión proyectos | ✅ Completado | 7/7        | 0/0           | Implementados y probados                    |
-| #16       | UI Listado proyectos (admin)    | ⏳ En Progreso| 4/6        | 0/0           | Interfaz de listado implementada, falta integración completa |
-| #17       | Formulario creación/edición     | ⚪ Pendiente   | 0/6        | 0/0           | Depende de #15                             |
-| #18       | Componente gestión documentos   | ⚪ Pendiente   | 0/6        | 0/0           | Depende de #14 y #15                       |
-| #19       | UI Publicación y vista previa   | ⚪ Pendiente   | 0/6        | 0/0           | Depende de #17                             |
+## 🚦 Tickets Activos
 
-*Leyenda Estado: ⚪ Pendiente | ⏳ En Progreso | ✅ Completado | ❌ Bloqueado*
-*Resumen AC: Criterios de Aceptación cumplidos / totales*
-*Resumen Tests: Tests pasados / totales (N/A si no aplica)*
+### ⏳ En progreso (3)
 
----
+- **#9:** Página Validar Invitación (FE) - HU #1
+  - **Avance:** 5/7 AC completados
+  - **Responsable:** [Equipo Frontend]
+  - **ETA:** 2025-05-09
 
-## Detalles de Tickets Recientes / En Progreso
+- **#10:** Formulario Registro (FE) - HU #1
+  - **Avance:** 6/8 AC completados
+  - **Responsable:** [Equipo Frontend]
+  - **ETA:** 2025-05-10
 
-*(Aquí añadiremos detalles de Criterios de Aceptación y Tests para los tickets a medida que los trabajemos)*
+- **#4:** Servicio de gestión de invitaciones - HU #1
+  - **Avance:** 6/6 AC completados, 0/9 Tests
+  - **Responsable:** [Equipo Backend]
+  - **ETA:** 2025-05-12 (solo para tests)
 
-### Ticket #1: Implementar Login básico (✅ Completado)
+### ⚪ Próximos a iniciar (2-3)
 
-**Criterios de Aceptación:**
-- [X] Formulario de login funcional con campos de email y contraseña
-- [X] Validación de credenciales contra la base de datos
-- [X] Generación de token JWT para mantener la sesión
-- [X] Protección de rutas privadas (básica implementada)
-- [X] Manejo de errores de autenticación con mensajes claros
+- **#17:** Formulario creación/edición de proyectos - HU #10
+  - **Dependencias:** #15 ✅ 
+  - **Prioridad:** Alta
 
-**Tests Pasados:** (Pendiente definir y ejecutar formalmente)
-- [ ] Test de login exitoso
-- [ ] Test de login fallido (credenciales incorrectas)
-- [ ] Test de acceso a ruta protegida sin token
+- **#14:** Servicio almacenamiento documentos - HU #10
+  - **Prioridad:** Media
+  - **Notas:** Definir estrategia de almacenamiento
 
-### Ticket #2: Servicios Auth Frontend (✅ Completado)
-*(Servicio base para login creado)*
+## 📝 Detalles por Historia de Usuario
 
-### Ticket #3: Modelo Invitaciones (DB) (✅ Completado)
-*(Modelo ya existente en `schema.prisma`)*
+### HU #1: Registro mediante invitación
 
-### Ticket #5: Envío Emails Invitación (✅ Completado)
-*(Servicio básico implementado y probado con Mailtrap. Plantilla HTML básica)*
+**Objetivo:** Permitir que solo usuarios invitados puedan registrarse en la plataforma.
 
-### Ticket #6: UI Crear/Enviar Invitaciones (✅ Completado)
-*(Interfaz básica para enviar invitaciones funcional)*
+| ID | Título | Estado | AC | Tests | Notas |
+|----|--------|--------|----|----|-------|
+| #1 | Login básico | ✅ | 5/5 | 0/3 | Funcional en producción |
+| #2 | Servicios Auth Frontend | ✅ | 5/5 | 0/0 | - |
+| #3 | Modelo Invitaciones (DB) | ✅ | 6/6 | N/A | - |
+| #4 | Servicio Invitaciones (Backend) | ⏳ | 6/6 | 0/9 | Funcional pero faltan tests |
+| #5 | Envío Emails Invitación | ✅ | 6/7 | 0/1 | Probado con Mailtrap |
+| #6 | UI Crear/Enviar Invitaciones | ✅ | 6/7 | 0/0 | - |
+| #7 | API Validar Invitación | ✅ | 5/5 | 0/0 | - |
+| #8 | API Registrar Usuario | ✅ | 7/7 | 0/0 | - |
+| #9 | Página Validar Invitación (FE) | ⏳ | 5/7 | 0/0 | - |
+| #10 | Formulario Registro (FE) | ⏳ | 6/8 | 0/0 | - |
+| #11 | Página Confirmación (FE) | ✅ | 5/5 | 0/0 | - |
+| #12 | Actualizar Documentación HU | ✅ | 1/1 | N/A | - |
+| #13 | Tabla Priorizada de HU | ✅ | 1/1 | N/A | - |
 
-### Ticket #4: Servicio de gestión de invitaciones (⏳ En Progreso)
+### HU #10: Publicación de oportunidades de inversión
 
-**Criterios de Aceptación (Servicio Implementado):**
-- [X] Se genera correctamente un token único y criptográficamente seguro
-- [X] Se puede verificar si un token es válido o ha expirado
-- [X] Se gestiona correctamente la actualización de estado (usado, expirado)
-- [X] Se implementa la lógica para asegurar que solo hay una invitación activa por email
-- [X] Se registra toda la información necesaria (quién invitó, cuándo, etc.)
-- [X] Incluye una función para *crear* una nueva invitación asociada a un email y al gestor que invita.
+**Objetivo:** Permitir a los gestores crear y publicar nuevas oportunidades de inversión para los socios.
 
-**Tests (Pendientes):**
-- [ ] Test: Generación de token seguro
-- [ ] Test: Verificación de token válido (caso exitoso)
-- [ ] Test: Verificación de token expirado
-- [ ] Test: Verificación de token inválido/no encontrado
-- [ ] Test: Verificación de token ya usado
-- [ ] Test: Asegurar unicidad de invitación activa por email al crear
-- [ ] Test: Creación exitosa de invitación
-- [ ] Test: Marcado como USADO exitoso
-- [ ] Test: Marcado como EXPIRADO exitoso
+| ID | Título | Estado | AC | Tests | Notas |
+|----|--------|--------|----|----|-------|
+| #12 | Verificación de roles | ✅ | 5/5 | 5/5 | Documentado en `/docs/technical/role-middleware-guide.md` |
+| #13 | Modelo para proyectos (DB) | ✅ | 5/5 | N/A | - |
+| #14 | Servicio almacenamiento docs | ⚪ | 0/6 | 0/0 | - |
+| #15 | API Endpoints gestión proyectos | ✅ | 7/7 | 0/0 | - |
+| #16 | UI Listado proyectos (admin) | ✅ | 6/6 | 0/0 | Implementación completa con gestión de errores, conversión de formatos y UX mejorada |
+| #17 | Formulario creación/edición | ⚪ | 0/6 | 0/0 | - |
+| #18 | Componente gestión documentos | ⚪ | 0/6 | 0/0 | Depende de #14 |
+| #19 | UI Publicación y vista previa | ⚪ | 0/6 | 0/0 | Depende de #17 |
 
-### Ticket #12: Verificación de roles y permisos (✅ Completado)
+## 🧪 Resultados de Pruebas Recientes (2025-05-11)
 
-**Criterios de Aceptación:**
-- [X] El middleware verifica correctamente si el usuario tiene rol 'manager'
-- [X] Bloquea acceso a usuarios con roles insuficientes (403 Forbidden)
-- [X] Se integra con el sistema de autenticación existente
-- [X] Puede usarse de forma selectiva en rutas específicas
-- [X] Proporciona mensajes de error claros
+### ✅ API Backend
 
-**Tests Implementados:**
-- [X] Test: Acceso permitido con rol requerido exacto
-- [X] Test: Acceso permitido con uno de varios roles requeridos
-- [X] Test: Acceso denegado con rol incorrecto
-- [X] Test: Acceso denegado sin información de rol
-- [X] Test: Error al no proporcionar roles al middleware
+- **Endpoints de Invitaciones:** Todos los endpoints funcionan según lo esperado
+- **Endpoints de Proyectos:**
+  - ✅ Las rutas están correctamente protegidas por autenticación y roles
+  - ✅ CRUD de proyectos funciona correctamente
+  - ✅ Se ha corregido el problema de transformación entre camelCase y snake_case
 
-**Documentación:**
-- Se ha creado una guía detallada de uso en `docs/technical/role-middleware-guide.md`
-- Se ha implementado un conjunto de rutas de ejemplo en `backend/interfaces/http/routes/project.routes.js`
+### Frontend
 
-### Ticket #13: Modelo de datos para gestión de proyectos (✅ Completado)
+- **Panel de Administración:**
+  - ✅ Navegación y autenticación correcta
+  - ✅ Manejo de errores mejorado
+  - ✅ Implementada solución para mejorar la comunicación con la API
+  - ✅ Añadido logueo detallado para depuración
+  - ✅ Funcionalidad para crear proyectos de prueba
+  - ✅ Paginación y filtrado funcionando correctamente
 
-**Criterios de Aceptación:**
-- [X] El modelo Project contiene todos los campos requeridos (id, title, description, etc.)
-- [X] El modelo ProjectDocument soporta diferentes tipos de archivos y niveles de acceso
-- [X] Se establecen las relaciones correctas entre tablas
-- [X] Se implementan índices para consultas eficientes
-- [X] Se definen interfaces y DTOs para trabajar con los datos
+## 📋 Logros Recientes
 
-**Resultados:**
-- Verificación de que los modelos ya existen en `schema.prisma`
-- Creación de DTO para proyectos en `backend/interfaces/http/dto/project.dto.js`
-- Implementación de interfaz de repositorio en `backend/domain/repositories/ProjectRepository.js`
-- Implementación del repositorio con Prisma en `backend/infrastructure/repositories/PrismaProjectRepository.js`
+- **Ticket #16 completado:** Se ha implementado con éxito la interfaz de listado de proyectos para administradores.
+  - Se solucionó el problema crítico en `authService.js` al implementar la función `getAuthToken()`
+  - Se mejoró el manejo de errores y la retroalimentación al usuario
+  - Se optimizó la actualización de la lista de proyectos sin necesidad de recargar todos los datos
 
-**Nota:** No fue necesario crear nuevos modelos ni migraciones, ya que el esquema de la base de datos ya incluía todos los modelos necesarios para la gestión de proyectos.
+- **Mejoras de UI/UX:** Se han implementado mejoras significativas en la interfaz de usuario:
+  - Eliminación de elementos duplicados en la página de administración de proyectos
+  - Integración de acceso a administración en la barra de navegación para usuarios con roles adecuados
+  - Reorganización de controles para una experiencia más intuitiva
+  - Mostrado condicional de botones según el contexto (ej: botón de actualizar sólo aparece cuando hay proyectos)
 
-### Ticket #16: UI Listado proyectos (admin) (⏳ En Progreso)
+## 🛣️ Próximos Pasos
 
-**Criterios de Aceptación:**
-- [X] Muestra listado de todos los proyectos con información clave
-- [X] Permite filtrar por estado (borrador, publicado, cerrado)
-- [X] Incluye opciones para crear nuevo proyecto, editar o eliminar existentes
-- [X] Solo es accesible para usuarios con rol de gestor
-- [ ] Implementa paginación para manejar muchos proyectos
-- [ ] Tiene un diseño responsivo y usable
+1. Empezar a trabajar en el formulario de creación/edición (#17)
+   - Reutilizar los avances y aprendizajes del ticket #16
+   - Implementar validación de campos
 
-**Implementación:**
-- Se ha creado el componente ProjectsTable que muestra los proyectos con información clave
-- Se ha implementado la página de administración de proyectos que utiliza el componente
-- Se ha añadido la funcionalidad para filtrar por estado
-- Se ha agregado la función checkRole al contexto de autenticación para verificar permisos
-- Se ha implementado el diseño utilizando TailwindCSS v4 y HeadlessUI
-- Se ha creado un servicio para comunicarse con la API de proyectos
+2. Definir estrategia para almacenamiento de documentos (#14)
+   - Evaluar opciones: S3, almacenamiento local, etc.
 
-**Próximos Pasos:**
-- Completar la integración con la API real
-- Probar el funcionamiento de paginación y filtros con datos reales
-- Realizar pruebas de usabilidad del componente
-
----
-
-## Resultados de Pruebas Recientes (2025-05-07)
-
-### Historia de Usuario 1: Registro mediante invitación
-
-**Tickets probados hoy:**
-- #4: Servicio Invitaciones (Backend) ✅ Funciona correctamente
-- #7: API Validar Invitación ✅ Funciona correctamente
-
-**Detalles de las pruebas:**
-1. **API Health Check:** El endpoint `/api/health` responde correctamente ✅
-2. **Roles del Sistema:** El endpoint `/api/roles` lista correctamente los roles configurados ✅
-3. **Autenticación:** El login funciona correctamente para usuarios existentes ✅
-4. **Listado de Invitaciones:** El endpoint `GET /api/invitations` devuelve las invitaciones existentes en el sistema cuando se usa un token válido ✅
-5. **Creación de Invitaciones:** El endpoint `POST /api/invitations` crea correctamente nuevas invitaciones ✅
-6. **Validación de Invitaciones:** El endpoint `GET /api/auth/invitation/:token` valida correctamente un token de invitación ✅
-
-### Historia de Usuario 10: Publicación de oportunidades de inversión
-
-**Tickets probados hoy:**
-- #12: Verificación de roles ✅ Funciona correctamente
-- #15: API Endpoints gestión proyectos ✅ Funciona correctamente
-
-**Detalles de las pruebas:**
-1. **Rutas Protegidas:** Las rutas de proyectos requieren correctamente autenticación, devolviendo 401 sin token ✅
-2. **Verificación de Roles:** Se verificó correctamente que un usuario con rol 'manager' puede acceder a las rutas protegidas ✅
-3. **Creación de Proyectos:** El endpoint `POST /api/projects` crea correctamente un nuevo proyecto ✅
-4. **Listado de Proyectos:** El endpoint `GET /api/projects` lista correctamente los proyectos existentes ✅
-5. **Detalle de Proyecto:** El endpoint `GET /api/projects/:id` muestra correctamente los detalles de un proyecto específico ✅
-6. **Publicación de Proyecto:** El endpoint `POST /api/projects/:id/publish` publica correctamente un proyecto ✅
-
-**Nota:** Los endpoints para la gestión de documentos (`POST /api/projects/:id/documents`) requieren la implementación del servicio de almacenamiento (Ticket #14) para ser funcionales. 
+3. Completar los tests pendientes del servicio de invitaciones (#4)

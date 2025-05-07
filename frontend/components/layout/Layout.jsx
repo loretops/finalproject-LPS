@@ -11,10 +11,10 @@ import Footer from './Footer';
  */
 const Layout = ({ children, hideNav = false, hideFooter = false }) => {
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50">
+    <div className="flex flex-col min-h-screen">
       {!hideNav && <Navbar />}
       
-      <main className="flex-grow">
+      <main className="flex-grow pt-20">
         {children}
       </main>
       

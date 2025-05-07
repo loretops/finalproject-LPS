@@ -126,11 +126,20 @@ export const logout = () => {
 };
 
 /**
+ * Retrieve the authentication token from localStorage
+ * @returns {string|null} The stored authentication token or null if not available
+ */
+export const getAuthToken = () => {
+  if (typeof window === 'undefined') return null; // Check for server-side rendering
+  return localStorage.getItem('authToken');
+};
+
+/**
  * Get the current authenticated user
  * @returns {Object|null} The decoded user from the token, or null if not authenticated
  */
 export const getCurrentUser = () => {
-  const token = localStorage.getItem('authToken');
+  const token = getAuthToken(); // Use the new function
   if (!token) return null;
   
   try {

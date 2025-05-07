@@ -5,20 +5,34 @@ import { useAuth } from '../../context/AuthContext';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 
-const navigation = [
-  { name: 'Inicio', href: '/', public: true },
-  { name: 'Dashboard', href: '/dashboard', public: false },
-  { name: 'Proyectos', href: '/proyectos', public: false },
-  { name: 'Sobre Nosotros', href: '/sobre-nosotros', public: true },
-];
+// Función para filtrar elementos de navegación según rol
+const getNavigationItems = (user) => {
+  // Navegación básica
+  const items = [
+    { name: 'Inicio', href: '/', public: true },
+    { name: 'Dashboard', href: '/dashboard', public: false },
+    { name: 'Proyectos', href: '/proyectos', public: false },
+    { name: 'Sobre Nosotros', href: '/sobre-nosotros', public: true },
+  ];
+  
+  // Agregar ítems administrativos si el usuario tiene rol manager o admin
+  if (user && user.role && (user.role === 'manager' || user.role === 'admin')) {
+    items.push({ name: 'Admin Proyectos', href: '/admin/projects', public: false });
+  }
+  
+  return items;
+};
 
 /**
  * Barra de navegación principal con soporte para modo móvil y menú de usuario
  */
 const Navbar = () => {
   const router = useRouter();
-  const { user, logout } = useAuth();
+  const { user, logout, checkRole } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
+  
+  // Obtener elementos de navegación según el usuario
+  const navigation = getNavigationItems(user);
 
   // Cambiar estilo de navbar al hacer scroll
   useEffect(() => {
