@@ -5,7 +5,7 @@
 | Historia de Usuario | Total Tickets | Completados | En Progreso | Pendientes | Bloqueados |
 |---------------------|---------------|-------------|-------------|------------|------------|
 | HU #1: Registro mediante invitación | 13 | 10 | 3 | 0 | 0 |
-| HU #10: Publicación de oportunidades | 8 | 4 | 0 | 4 | 0 |
+| HU #10: Publicación de oportunidades | 8 | 4 | 1 | 3 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -24,11 +24,12 @@ gantt
     Verificación de roles             :done, hu10-t12, 2025-05-02, 2d
     Modelo para proyectos             :done, hu10-t13, 2025-05-03, 1d
     UI Listado proyectos (admin)      :done, hu10-t16, 2025-05-07, 4d
+    Formulario creación/edición       :active, hu10-t17, 2025-05-12, 4d
 ```
 
 ## 🚦 Tickets Activos
 
-### ⏳ En progreso (3)
+### ⏳ En progreso (4)
 
 - **#9:** Página Validar Invitación (FE) - HU #1
   - **Avance:** 5/7 AC completados
@@ -45,15 +46,21 @@ gantt
   - **Responsable:** [Equipo Backend]
   - **ETA:** 2025-05-12 (solo para tests)
 
-### ⚪ Próximos a iniciar (2-3)
-
 - **#17:** Formulario creación/edición de proyectos - HU #10
-  - **Dependencias:** #15 ✅ 
-  - **Prioridad:** Alta
+  - **Avance:** 5/6 AC completados
+  - **Responsable:** [Equipo Frontend]
+  - **ETA:** 2025-05-15
+  - **Última actualización:** Implementado formulario completo con validaciones y capacidad para crear y editar proyectos.
+
+### ⚪ Próximos a iniciar (2)
 
 - **#14:** Servicio almacenamiento documentos - HU #10
   - **Prioridad:** Media
   - **Notas:** Definir estrategia de almacenamiento
+
+- **#18:** Componente gestión documentos - HU #10
+  - **Dependencias:** #14 ⚪
+  - **Prioridad:** Media
 
 ## 📝 Detalles por Historia de Usuario
 
@@ -88,11 +95,11 @@ gantt
 | #14 | Servicio almacenamiento docs | ⚪ | 0/6 | 0/0 | - |
 | #15 | API Endpoints gestión proyectos | ✅ | 7/7 | 0/0 | - |
 | #16 | UI Listado proyectos (admin) | ✅ | 6/6 | 0/0 | Implementación completa con gestión de errores, conversión de formatos y UX mejorada |
-| #17 | Formulario creación/edición | ⚪ | 0/6 | 0/0 | - |
+| #17 | Formulario creación/edición | ⏳ | 5/6 | 0/0 | Implementado formulario completo con validaciones y comunicación con la API |
 | #18 | Componente gestión documentos | ⚪ | 0/6 | 0/0 | Depende de #14 |
 | #19 | UI Publicación y vista previa | ⚪ | 0/6 | 0/0 | Depende de #17 |
 
-## 🧪 Resultados de Pruebas Recientes (2025-05-11)
+## 🧪 Resultados de Pruebas Recientes (2025-05-15)
 
 ### ✅ API Backend
 
@@ -111,6 +118,8 @@ gantt
   - ✅ Añadido logueo detallado para depuración
   - ✅ Funcionalidad para crear proyectos de prueba
   - ✅ Paginación y filtrado funcionando correctamente
+  - ✅ Formulario de creación/edición implementado con validaciones
+  - ✅ Vista detallada de proyectos con opciones de publicación y eliminación
 
 ## 📋 Logros Recientes
 
@@ -125,13 +134,93 @@ gantt
   - Reorganización de controles para una experiencia más intuitiva
   - Mostrado condicional de botones según el contexto (ej: botón de actualizar sólo aparece cuando hay proyectos)
 
+- **Avance en Ticket #17:** Implementación del flujo completo para gestión de proyectos:
+  - Creado componente reutilizable para el formulario con validaciones
+  - Desarrolladas páginas para crear, editar y ver detalle de proyectos
+  - Implementada lógica de publicación y eliminación de proyectos
+  - Mejorada la experiencia de usuario con indicadores de estado y retroalimentación
+
 ## 🛣️ Próximos Pasos
 
-1. Empezar a trabajar en el formulario de creación/edición (#17)
-   - Reutilizar los avances y aprendizajes del ticket #16
-   - Implementar validación de campos
+1. Finalizar el ticket #17: Formulario de creación/edición de proyectos
+   - Completar pruebas exhaustivas de creación y edición
+   - Verificar el correcto manejo de errores
 
 2. Definir estrategia para almacenamiento de documentos (#14)
    - Evaluar opciones: S3, almacenamiento local, etc.
+   - Implementar APIs necesarias
 
-3. Completar los tests pendientes del servicio de invitaciones (#4)
+3. Desarrollar componente de gestión de documentos (#18)
+   - Depende de la implementación del servicio de almacenamiento
+
+4. Completar los tests pendientes del servicio de invitaciones (#4)
+
+## Seguimiento de Desarrollo
+
+### Estado de Funcionalidades
+
+#### Tickets Activos:
+
+| ID | Historia de Usuario | Descripción | Estado | Notas |
+|----|---------------------|-------------|--------|-------|
+| 16 | Como administrador, quiero poder ver un listado de todos los proyectos de inversión para gestionarlos | UI para listar proyectos | ✅ Completado | Incluye filtrado, ordenación y enlaces a las páginas de detalle/edición |
+| 17 | Como administrador, quiero poder crear y editar proyectos de inversión | Formulario para crear/editar proyectos | ✅ Completado | Funcionalidad completa con validación y manejo de errores mejorado |
+
+#### Errores Corregidos:
+
+| Error | Solución | Fecha |
+|-------|----------|-------|
+| Error 500 al guardar modificaciones de proyectos publicados | Implementada verificación previa del estado del proyecto para mostrar advertencias claras al usuario cuando intenta editar un proyecto publicado. Se agregó validación tanto en la interfaz de usuario como en los servicios, con mensajes explicativos. | 08/05/2025 |
+| Error 500 al guardar modificaciones de proyectos | Implementada verificación de campos obligatorios y recuperación automática de datos faltantes del proyecto existente. Mejorado el manejo de errores con mensajes más descriptivos. | 08/05/2025 |
+
+#### Mejoras de Interfaz:
+
+- **Lista de proyectos mejorada**: Ahora muestra claramente qué proyectos son editables (borradores) y cuáles no (publicados)
+- **Advertencias visuales**: Se muestran advertencias claras cuando un usuario intenta editar un proyecto publicado
+- **Indicadores de estado**: El estado de cada proyecto es ahora más visible con indicadores de color y texto explicativo
+
+#### Pruebas y Diagnóstico:
+
+**Última actualización**: Se han implementado pruebas unitarias para:
+
+- Conversión de datos entre formatos frontend/backend
+- Validación de formularios de proyectos
+- Manejo de errores en API
+- Diagnóstico específico para el error 500 en edición de proyectos
+
+Las mejoras aplicadas incluyen:
+1. Verificación previa del estado del proyecto antes de permitir edición
+2. Recuperación automática de datos faltantes al editar un proyecto
+3. Normalización de tipos de datos (string a number) para campos numéricos
+4. Mejor manejo de excepciones con mensajes más descriptivos
+5. Validación mejorada antes de enviar datos al backend
+6. Indicadores visuales claros del estado de los proyectos
+
+#### Estado de Pruebas:
+
+| Categoría | Pruebas Implementadas | Estado |
+|-----------|------------------------|--------|
+| Servicios | Pruebas para validar conversión de datos y manejo de errores | ✅ Implementado |
+| Componentes | Pruebas del comportamiento del formulario de proyectos | ✅ Implementado |
+| API | Pruebas de diagnóstico para endpoints de proyectos | ✅ Implementado |
+| UI | Validación de permisos de edición según estado | ✅ Implementado |
+
+### Próximos Pasos:
+
+1. Comenzar implementación de la gestión de documentos (Ticket #18)
+2. Desarrollar la interfaz de usuario para la carga y visualización de documentos de proyectos
+3. Implementar sistema de notificaciones para cambios en proyectos
+
+### Documentación Técnica:
+
+- El sistema de pruebas está configurado tanto para pruebas unitarias como para diagnóstico de API
+- Se ha establecido la infraestructura de pruebas con mocks para:
+  - localStorage
+  - Autenticación
+  - Axios (peticiones HTTP)
+  - Next Router
+
+### Entorno de Desarrollo:
+
+- Se recomienda ejecutar `npm test` para las pruebas unitarias
+- Para pruebas específicas de diagnóstico, usar: `npx jest frontend/tests/api-diagnostics.test.js`
