@@ -373,7 +373,7 @@
 2. Implementar interfaz según diseño aprobado
 3. Agregar funcionalidad para reenvío de email (conectar a API correspondiente)
 4. Asegurar que sea responsive para todos los dispositivos
-5. Implementar animaciones sutiles para mejorar UX
+5. Implementar animaciones sutiles para mejor UX
 
 **Enlaces:**
 - [Configuración del entorno](../technical/setup.md)
@@ -665,3 +665,451 @@
 **Enlaces:**
 - [Configuración del entorno](../technical/setup.md)
 - [Historias de usuario](../product/user-stories.md)
+
+# Tickets para Historia de Usuario 2 - Ver oportunidades de inversión
+
+## Ticket #20: API endpoints para listar y filtrar proyectos públicos
+
+**Título:** Implementar endpoints API para listar y filtrar proyectos publicados
+
+**Descripción:** Crear los endpoints de la API que permitirán a los socios ver un listado paginado de todos los proyectos de inversión publicados, con capacidad de filtrado y ordenación. Estos endpoints deben estar protegidos para ser accesibles solo por usuarios autenticados con rol de socio (partner) o superior.
+
+**Criterios de Aceptación:**
+- El endpoint GET `/api/projects/public` devuelve proyectos publicados para socios
+- Implementa filtrado por múltiples criterios (status, propertyType, minRoi, location)
+- Implementa paginación con parámetros page y limit
+- Implementa ordenación por diferentes campos con parámetros sortField y sortDirection
+- Solo usuarios autenticados con rol 'partner' o superior pueden acceder a estos endpoints
+- Devuelve metadatos de paginación (totalItems, totalPages, currentPage)
+- La respuesta incluye solo los datos básicos necesarios para el listado
+- Se implementan medidas de protección contra ataques (rate limiting, validación de parámetros)
+
+**Prioridad:** Alta
+
+**Estimación:** 5 puntos de historia
+
+**Asignado a:** Equipo de Backend
+
+**Etiquetas:** Backend, API, MVP
+
+**Tareas:**
+1. Modificar el repositorio de proyectos para filtrar solo proyectos publicados
+2. Implementar controlador de API para el listado público de proyectos
+3. Configurar rutas y middleware de autorización
+4. Validar parámetros de consulta (filtros, paginación, ordenación)
+5. Optimizar consultas a la base de datos para mejor rendimiento
+6. Implementar transformador de datos para adecuar el formato de respuesta
+7. Documentar el endpoint en la documentación de API
+8. Escribir tests para verificar comportamiento y seguridad
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-2--ver-oportunidades-de-inversión-must-have)
+- [Implementación de autenticación](../technical/auth.md)
+- [Modelo de datos existente](../technical/database.md)
+
+## Ticket #21: API endpoints para detalle de un proyecto
+
+**Título:** Implementar endpoint API para detalle completo de un proyecto
+
+**Descripción:** Crear el endpoint de la API que mostrará todos los detalles de un proyecto específico, incluyendo su información completa, documentos asociados y estadísticas relevantes. Este endpoint debe estar protegido y accesible solo para socios.
+
+**Criterios de Aceptación:**
+- El endpoint GET `/api/projects/public/:id` devuelve información detallada de un proyecto
+- El proyecto debe estar en estado 'published' para ser accesible
+- La respuesta incluye todos los datos relevantes del proyecto, incluyendo datos económicos y ubicación
+- La respuesta incluye listado de documentos asociados filtrados por nivel de acceso
+- Se verifica que el usuario tenga permisos suficientes para ver el proyecto
+- Se implementa un registro de vistas para análisis de interés
+- Se manejan adecuadamente los casos de error (proyecto no existente, no publicado, sin permisos)
+
+**Prioridad:** Alta
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo de Backend
+
+**Etiquetas:** Backend, API, MVP
+
+**Tareas:**
+1. Implementar el controlador para el endpoint de detalle de proyecto
+2. Configurar ruta y middleware de autorización
+3. Integrar con el servicio de proyectos existente
+4. Implementar filtrado de documentos según nivel de acceso del usuario
+5. Crear transformador de datos para formatear la respuesta
+6. Implementar registro de vistas de proyectos
+7. Manejar correctamente todos los casos de error
+8. Crear tests para verificar comportamiento y seguridad
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-2--ver-oportunidades-de-inversión-must-have)
+- [Modelo de datos de proyectos](../technical/database.md)
+- [Gestión de permisos](../technical/permissions.md)
+
+## Ticket #22: Servicio frontend para consumo de API de proyectos públicos
+
+**Título:** Implementar servicio frontend para gestión de proyectos públicos
+
+**Descripción:** Crear un servicio en el frontend que maneje toda la comunicación con la API para obtener y filtrar proyectos publicados, gestionar la paginación y el estado de la aplicación relacionado con estos datos.
+
+**Criterios de Aceptación:**
+- Se implementa un servicio que comunica con los endpoints de proyectos públicos
+- Provee métodos para listar proyectos con filtros y paginación
+- Provee método para obtener detalle completo de un proyecto
+- Implementa el manejo de errores HTTP
+- Incluye tipos TypeScript para mejor desarrollo
+- Proporciona funciones para transformar datos entre formatos de API y frontend
+- Utiliza interceptores para agregar headers de autenticación
+- Implementa caché básica para mejorar rendimiento
+
+**Prioridad:** Alta
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, Servicios, MVP
+
+**Tareas:**
+1. Crear archivo de servicio para proyectos públicos
+2. Implementar métodos para listar proyectos con filtros
+3. Implementar método para obtener detalle de un proyecto específico
+4. Crear interfaces TypeScript para los tipos de datos
+5. Implementar transformadores de datos para normalización
+6. Configurar interceptores HTTP para autenticación automática
+7. Implementar manejo centralizado de errores
+8. Configurar caché básica para respuestas frecuentes
+9. Escribir tests para el servicio
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-2--ver-oportunidades-de-inversión-must-have)
+- [Guía de servicios frontend](../technical/frontend-services.md)
+- [Configuración de axios](../technical/http-client.md)
+
+## Ticket #23: Página de listado de proyectos para socios
+
+**Título:** Implementar página de listado de proyectos para socios
+
+**Descripción:** Crear la página que mostrará a los socios todas las oportunidades de inversión disponibles, con opciones de filtrado, ordenación y paginación. Esta página debe ofrecer una experiencia de usuario óptima con una representación visual clara de cada proyecto.
+
+**Criterios de Aceptación:**
+- Se implementa la página en `/projects` accesible solo para socios autenticados
+- Muestra un listado paginado de proyectos con diseño en cuadrícula (grid)
+- Cada proyecto se muestra como una tarjeta con información clave
+- Implementa filtros por tipo de propiedad, ubicación, ROI mínimo
+- Permite ordenar por diferentes criterios (fecha, ROI, monto)
+- Muestra indicadores visuales del estado de financiación de cada proyecto
+- Ofrece paginación intuitiva
+- Implementa estados de carga, vacío y error
+- Diseño completamente responsive para todas las pantallas
+
+**Prioridad:** Alta
+
+**Estimación:** 5 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, UI/UX, MVP
+
+**Tareas:**
+1. Crear componente de página para el listado
+2. Implementar componente de tarjeta para cada proyecto
+3. Desarrollar componentes de filtros y ordenación
+4. Integrar con el servicio de proyectos (Ticket #22)
+5. Implementar gestión de estado con React hooks
+6. Crear componente de paginación
+7. Manejar todos los estados de la UI (carga, vacío, error)
+8. Implementar persistencia de filtros en URL o localStorage
+9. Optimizar rendimiento de renderizado
+10. Garantizar accesibilidad (WCAG 2.1 nivel AA)
+11. Realizar tests de componentes y pruebas de integración
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-2--ver-oportunidades-de-inversión-must-have)
+- [Guía de estilos](../technical/style-guide.md)
+- [Componentes UI existentes](../technical/ui-components.md)
+
+## Ticket #24: Componente de tarjeta de proyecto
+
+**Título:** Implementar componente reutilizable de tarjeta de proyecto
+
+**Descripción:** Crear un componente de tarjeta reutilizable para mostrar información resumida de un proyecto de inversión, que se utilizará tanto en el listado general como en otras partes de la aplicación que necesiten mostrar proyectos.
+
+**Criterios de Aceptación:**
+- El componente muestra la información clave del proyecto (título, ROI, ubicación, monto)
+- Incluye una imagen principal del proyecto con fallback predeterminado
+- Muestra indicador visual del estado de financiación (porcentaje financiado)
+- Implementa diferentes variantes (tamaño completo, compacto)
+- Incluye acciones contextuales (ver detalle, marcar interés)
+- Es completamente responsive y adaptable a diferentes contenedores
+- Sigue el diseño visual establecido para la aplicación
+- Mantiene coherencia con los componentes UI existentes
+- Implementa optimizaciones para carga de imágenes
+
+**Prioridad:** Alta
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, Componentes, UI/UX, MVP
+
+**Tareas:**
+1. Crear componente ProjectCard con todas las propiedades necesarias
+2. Implementar las diferentes variantes del componente
+3. Desarrollar la lógica de presentación de información clave
+4. Crear indicador de progreso de financiación
+5. Integrar con componentes UI existentes (Button, Card)
+6. Implementar optimización de imágenes (lazy loading, placeholders)
+7. Garantizar accesibilidad del componente
+8. Documentar el componente y sus variantes
+9. Crear tests para verificar el comportamiento del componente
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-2--ver-oportunidades-de-inversión-must-have)
+- [Guía de componentes](../technical/component-guide.md)
+- [Biblioteca de componentes UI](../technical/ui-components.md)
+
+## Ticket #25: Componentes de filtrado y ordenación
+
+**Título:** Implementar componentes para filtrado y ordenación de proyectos
+
+**Descripción:** Crear componentes reutilizables para permitir a los usuarios filtrar y ordenar los proyectos según diferentes criterios, mejorando así la experiencia de búsqueda y exploración de oportunidades de inversión.
+
+**Criterios de Aceptación:**
+- Se implementa un componente de filtros con múltiples criterios (tipo, ubicación, ROI)
+- Se implementa un componente de ordenación con diferentes campos
+- Los componentes son responsive y se adaptan a móvil/desktop
+- Los filtros aplicados se muestran claramente al usuario
+- Permite borrar filtros individualmente o todos a la vez
+- Persiste los filtros seleccionados en la URL para permitir compartir/guardar búsquedas
+- Implementa validación para rangos de valores (mínimo, máximo)
+- Proporciona retroalimentación visual al aplicar filtros/ordenación
+
+**Prioridad:** Alta
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, Componentes, UI/UX, MVP
+
+**Tareas:**
+1. Crear componente ProjectFilters con todos los filtros necesarios
+2. Implementar componente ProjectSorting para ordenación
+3. Desarrollar lógica para aplicar/eliminar filtros
+4. Integrar con componentes UI existentes (Input, Button, Select)
+5. Implementar persistencia de filtros en URL
+6. Crear componente de "chips" para mostrar filtros activos
+7. Implementar diseño responsive con adaptación a diferentes dispositivos
+8. Garantizar accesibilidad de los componentes
+9. Crear tests para los componentes
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-2--ver-oportunidades-de-inversión-must-have)
+- [Guía de UX para filtros](../technical/ux-patterns.md)
+- [Implementación de query params](../technical/routing.md)
+
+## Ticket #26: Página de detalle de proyecto para socios
+
+**Título:** Implementar página de detalle de proyecto para socios
+
+**Descripción:** Crear la página que mostrará a los socios todos los detalles de una oportunidad de inversión específica, incluyendo información completa, documentos, imágenes y estadísticas, además de proveer funcionalidades para indicar interés o invertir.
+
+**Criterios de Aceptación:**
+- Implementa la página en `/projects/:id` accesible solo para socios autenticados
+- Muestra información completa del proyecto (descripción, datos económicos, ubicación)
+- Incluye galería de imágenes del proyecto con visor optimizado
+- Muestra documentos disponibles según nivel de acceso del usuario
+- Implementa visualización de datos financieros con gráficos donde sea relevante
+- Incluye sección de progreso de financiación con datos actualizados
+- Proporciona acciones claras para "Me interesa" e "Invierto"
+- Implementa breadcrumbs para navegación
+- Diseño completamente responsive para todas las pantallas
+- Optimiza carga progresiva de contenido
+
+**Prioridad:** Alta
+
+**Estimación:** 8 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, UI/UX, MVP
+
+**Tareas:**
+1. Crear componente de página para el detalle del proyecto
+2. Implementar secciones principales (información general, financiera, documentos)
+3. Desarrollar componente de galería de imágenes
+4. Crear visualización de documentos según tipo
+5. Implementar gráficos para datos financieros (opcional para MVP)
+6. Desarrollar componente de progreso de financiación
+7. Integrar con el servicio de proyectos (Ticket #22)
+8. Implementar acciones "Me interesa" e "Invierto" (placeholder para futuras HU)
+9. Optimizar carga de recursos (imágenes, documentos)
+10. Garantizar accesibilidad (WCAG 2.1 nivel AA)
+11. Crear tests de componentes y pruebas de integración
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-2--ver-oportunidades-de-inversión-must-have)
+- [Guía de estilos](../technical/style-guide.md)
+- [Implementación de galerías](../technical/media-components.md)
+
+## Ticket #27: Componente visor de galería de imágenes
+
+**Título:** Implementar componente visor de galería de imágenes
+
+**Descripción:** Crear un componente de galería de imágenes optimizado para mostrar fotografías de los proyectos, con capacidad de visualización en pantalla completa, zoom y navegación intuitiva.
+
+**Criterios de Aceptación:**
+- El componente muestra múltiples imágenes en formato galería
+- Permite expandir imágenes a tamaño completo en un modal
+- Implementa navegación entre imágenes (anterior/siguiente)
+- Ofrece funcionalidad de zoom para examinar detalles
+- Optimiza la carga de imágenes (lazy loading, placeholders)
+- Es completamente responsive y funciona en móvil/tablet/desktop
+- Incluye gestos táctiles para dispositivos móviles
+- Implementa teclas de acceso rápido para navegación por teclado
+- Mantiene coherencia con el diseño visual de la aplicación
+
+**Prioridad:** Media
+
+**Estimación:** 5 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, Componentes, UI/UX, MVP
+
+**Tareas:**
+1. Investigar y seleccionar una biblioteca de galerías compatible con React
+2. Implementar componente ImageGallery envolviendo la biblioteca seleccionada
+3. Desarrollar modo de visualización en miniatura y modo pantalla completa
+4. Implementar controles de navegación y zoom
+5. Configurar optimización de imágenes y lazy loading
+6. Añadir soporte para gestos táctiles
+7. Implementar navegación por teclado
+8. Estilizar el componente según la guía de diseño
+9. Garantizar accesibilidad del componente
+10. Crear tests para el componente
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-2--ver-oportunidades-de-inversión-must-have)
+- [Guía de componentes](../technical/component-guide.md)
+- [Optimización de imágenes](../technical/asset-optimization.md)
+
+## Ticket #28: Componente visor de documentos
+
+**Título:** Implementar componente visor de documentos del proyecto
+
+**Descripción:** Crear un componente que permita a los socios visualizar los diferentes tipos de documentos asociados a un proyecto (PDF, documentos legales, presentaciones) de forma segura y optimizada, según su nivel de acceso.
+
+**Criterios de Aceptación:**
+- El componente muestra un listado de documentos disponibles agrupados por categoría
+- Permite visualizar PDFs directamente en el navegador sin necesidad de descargarlos
+- Incluye previsualización de documentos cuando sea posible
+- Respeta niveles de acceso (muestra solo documentos accesibles para el usuario actual)
+- Implementa controles para zoom, navegación por páginas, etc.
+- Es completamente responsive y funciona en diferentes dispositivos
+- Optimiza la carga progresiva de documentos grandes
+- Muestra claramente mensajes cuando no hay acceso a ciertos documentos
+
+**Prioridad:** Media
+
+**Estimación:** 5 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, Componentes, UI/UX, MVP
+
+**Tareas:**
+1. Investigar y seleccionar biblioteca para visualización de PDFs en React
+2. Implementar componente DocumentViewer con soporte para diferentes tipos de archivos
+3. Desarrollar listado de documentos con filtrado por categoría
+4. Implementar lógica de control de acceso basada en rol del usuario
+5. Crear previsualización para documentos cuando sea posible
+6. Implementar controles de navegación y zoom para PDFs
+7. Optimizar carga de documentos grandes
+8. Añadir mensajes explicativos para documentos no accesibles
+9. Estilizar el componente según la guía de diseño
+10. Garantizar accesibilidad del componente
+11. Crear tests para el componente
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-2--ver-oportunidades-de-inversión-must-have)
+- [Servicio de almacenamiento de documentos](../technical/document-storage-service.md)
+- [Control de acceso a documentos](../technical/document-access-policy.md)
+
+## Ticket #29: Middleware de verificación de autenticación para socios
+
+**Título:** Implementar middleware de verificación de rol de socio
+
+**Descripción:** Crear un middleware que verifique que el usuario tiene rol de socio (partner) o superior antes de permitir acceso a las funcionalidades de visualización de proyectos públicos.
+
+**Criterios de Aceptación:**
+- El middleware verifica correctamente si el usuario tiene rol 'partner' o superior
+- Bloquea acceso a usuarios no autenticados con redirección a login
+- Bloquea acceso a usuarios con roles insuficientes (403 Forbidden)
+- Se integra con el sistema de autenticación existente
+- Puede usarse de forma selectiva en rutas específicas
+- Proporciona mensajes de error claros
+- Es reutilizable en diferentes partes de la aplicación
+
+**Prioridad:** Alta
+
+**Estimación:** 2 puntos de historia
+
+**Asignado a:** Equipo de Backend
+
+**Etiquetas:** Backend, Seguridad, Autenticación, MVP
+
+**Tareas:**
+1. Crear middleware de verificación de rol de socio
+2. Integrar con el flujo de autenticación existente
+3. Implementar función de verificación de permisos
+4. Configurar respuestas de error apropiadas
+5. Crear sistema de redirección para usuarios no autenticados
+6. Crear tests unitarios para verificar funcionamiento
+7. Documentar uso del middleware
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-2--ver-oportunidades-de-inversión-must-have)
+- [Implementación de autenticación](../technical/auth.md)
+- [Gestión de roles](../technical/role-middleware-guide.md)
+
+## Ticket #30: Tests e2e para flujo de visualización de proyectos
+
+**Título:** Implementar tests end-to-end para flujo de visualización de proyectos
+
+**Descripción:** Crear tests end-to-end que validen el flujo completo de visualización de proyectos por parte de los socios, desde el login hasta la exploración de proyectos y visualización de detalles.
+
+**Criterios de Aceptación:**
+- Se implementan tests e2e con Cypress o similar para el flujo completo
+- Los tests cubren autenticación, navegación, filtrado y visualización de proyectos
+- Se prueban diferentes roles de usuario (socio, inversor, etc.)
+- Se verifica correcta visualización de contenido según permisos
+- Los tests son robustos frente a condiciones variables (proyectos diferentes)
+- Se incluyen assertions para validar elementos críticos de la UI
+- Los tests son mantenibles y bien documentados
+
+**Prioridad:** Media
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo QA/Full-Stack
+
+**Etiquetas:** Testing, E2E, Calidad, MVP
+
+**Tareas:**
+1. Configurar entorno de testing e2e (Cypress o similar)
+2. Crear datos de prueba consistentes (usuarios, proyectos)
+3. Implementar test de flujo de login como socio
+4. Crear test para navegación a listado de proyectos
+5. Implementar test de filtrado y ordenación
+6. Crear test para visualización de detalle de proyecto
+7. Implementar test de visualización de documentos
+8. Verificar comportamiento con diferentes roles
+9. Crear documentación de los tests
+10. Integrar con CI/CD para ejecución automática
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-2--ver-oportunidades-de-inversión-must-have)
+- [Configuración de testing](../technical/testing-guide.md)
+- [Datos de prueba](../technical/test-fixtures.md)

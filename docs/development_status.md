@@ -6,6 +6,7 @@
 |---------------------|---------------|-------------|-------------|------------|------------|
 | HU #1: Registro mediante invitación | 13 | 10 | 3 | 0 | 0 |
 | HU #10: Publicación de oportunidades | 8 | 7 | 0 | 1 | 0 |
+| HU #2: Ver oportunidades de inversión | 11 | 0 | 0 | 11 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -80,6 +81,89 @@ gantt
 | #17 | Formulario creación/edición | ✅ | 6/6 | 0/0 | Implementación completa con validaciones, gestión de errores y manejo de estados |
 | #18 | Componente gestión documentos | ✅ | 6/6 | 0/0 | Implementación completa de UI. Para el MVP usa almacenamiento simulado (no persistente). Requiere ajustes en backend para producción. |
 | #19 | UI Publicación y vista previa | ✅ | 6/6 | 0/0 | Implementado modal con validaciones, confirmación explícita, retroalimentación visual y notificaciones |
+
+### HU #2: Ver oportunidades de inversión
+
+**Objetivo:** Permitir a los socios ver y explorar las oportunidades de inversión disponibles en la plataforma.
+
+| ID | Título | Estado | AC | Tests | Notas |
+|----|--------|--------|----|----|-------|
+| #20 | API endpoints para listar y filtrar proyectos públicos | ⏳ | 0/8 | 0/0 | Requiere implementación del repositorio de proyectos |
+| #21 | API endpoints para detalle de un proyecto | ⏳ | 0/7 | 0/0 | Dependencia con #20 |
+| #29 | Middleware de verificación de autenticación para socios | ⏳ | 0/7 | 0/0 | Necesario para proteger endpoints de acceso |
+| #22 | Servicio frontend para consumo de API de proyectos públicos | ⚪ | 0/8 | 0/0 | Dependencia con #20 y #21 |
+| #24 | Componente de tarjeta de proyecto | ⚪ | 0/9 | 0/0 | Componente base para mostrar proyectos |
+| #25 | Componentes de filtrado y ordenación | ⚪ | 0/8 | 0/0 | Mejora experiencia de búsqueda de proyectos |
+| #23 | Página de listado de proyectos para socios | ⚪ | 0/9 | 0/0 | Dependencia con #22, #24, #25 |
+| #27 | Componente visor de galería de imágenes | ⚪ | 0/9 | 0/0 | Componente para la vista detallada |
+| #28 | Componente visor de documentos | ⚪ | 0/8 | 0/0 | Componente para la vista detallada |
+| #26 | Página de detalle de proyecto para socios | ⚪ | 0/10 | 0/0 | Dependencia con #22, #27, #28 |
+| #30 | Tests e2e para flujo de visualización de proyectos | ⚪ | 0/7 | 0/0 | Pruebas del flujo completo |
+
+## 🚀 Plan de Desarrollo para HU #2
+
+```mermaid
+gantt
+    title Plan de Desarrollo HU #2 - Ver oportunidades de inversión
+    dateFormat  YYYY-MM-DD
+    section Backend
+    API endpoints listado (#20)            :hu2-t20, 2025-05-20, 3d
+    API endpoints detalle (#21)            :hu2-t21, after hu2-t20, 2d
+    Middleware verificación (#29)          :hu2-t29, 2025-05-20, 2d
+    section Frontend - Servicios
+    Servicio API proyectos (#22)           :hu2-t22, after hu2-t21, 2d
+    section Frontend - Componentes
+    Componente tarjeta proyecto (#24)      :hu2-t24, after hu2-t22, 2d
+    Componentes filtrado (#25)             :hu2-t25, after hu2-t22, 2d
+    Componente galería (#27)               :hu2-t27, after hu2-t24, 3d
+    Componente visor documentos (#28)      :hu2-t28, after hu2-t24, 3d
+    section Frontend - Páginas
+    Página listado proyectos (#23)         :hu2-t23, after hu2-t25, 3d
+    Página detalle proyecto (#26)          :hu2-t26, after hu2-t28, 4d
+    section Testing
+    Tests e2e (#30)                        :hu2-t30, after hu2-t26, 2d
+```
+
+## 🧭 Dependencias y Orden de Desarrollo
+
+Para la Historia de Usuario 2, el orden recomendado de desarrollo es:
+
+1. **Fase 1 - Backend (Requisitos previos)**
+   - **#20: API endpoints para listar y filtrar proyectos públicos** - Implementar la API base para acceder a proyectos
+   - **#29: Middleware de verificación para socios** - Proteger los endpoints para que solo los socios puedan acceder
+   - **#21: API endpoints para detalle de un proyecto** - Implementar API para ver detalles de un proyecto específico
+
+2. **Fase 2 - Servicios Frontend**
+   - **#22: Servicio frontend para consumo de API** - Crear la capa de servicio que conectará los componentes con la API
+
+3. **Fase 3 - Componentes Base**
+   - **#24: Componente de tarjeta de proyecto** - Componente reutilizable para mostrar un proyecto
+   - **#25: Componentes de filtrado y ordenación** - Componentes para mejorar la búsqueda de proyectos
+
+4. **Fase 4 - Componentes Avanzados**
+   - **#27: Componente visor de galería** - Para visualizar imágenes del proyecto
+   - **#28: Componente visor de documentos** - Para visualizar documentos según permisos
+
+5. **Fase 5 - Páginas Completas**
+   - **#23: Página de listado de proyectos** - Página principal para ver todos los proyectos disponibles
+   - **#26: Página de detalle de proyecto** - Página para ver toda la información de un proyecto específico
+
+6. **Fase 6 - Testing**
+   - **#30: Tests e2e para flujo de visualización** - Validar el funcionamiento completo del flujo
+
+## 🚦 Próximos Tickets a Iniciar
+
+Para comenzar con la HU #2, se recomienda iniciar por:
+
+1. **#20: API endpoints para listar y filtrar proyectos públicos**
+   - Enfoque: Adaptar el repositorio de proyectos existente para incluir filtrado de proyectos publicados
+   - Prerrequisitos: La estructura de datos de Project ya existe (HU #10)
+   - Prioridad: Alta - Es la base para el resto de tickets de esta historia
+
+2. **#29: Middleware de verificación de autenticación para socios**
+   - Enfoque: Reutilizar parte de la lógica de autenticación existente, adaptándola para el rol de socio
+   - Prerrequisitos: Sistema de autenticación básica (HU #1)
+   - Prioridad: Alta - Necesario para proteger todas las rutas de la HU #2
 
 ## 🧪 Resultados de Pruebas Recientes (2025-05-15)
 
@@ -161,6 +245,12 @@ gantt
 3. Finalizar los tickets pendientes de registro mediante invitación (#9, #10)
 
 4. Implementar tests para el servicio de almacenamiento de documentos
+
+5. Comenzar el desarrollo de la Historia de Usuario 2: Ver oportunidades de inversión
+   - Implementar endpoints de API para proyectos públicos (Ticket #20)
+   - Desarrollar middleware de verificación de rol de socio (Ticket #29)
+   - Crear servicio frontend para consumo de API (Ticket #22)
+   - Implementar componentes UI para visualización de proyectos
 
 ## Seguimiento de Desarrollo
 
