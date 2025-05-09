@@ -3,6 +3,11 @@ import { apiClient } from './authService';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001/api';
 
+// Control de frecuencia para evitar llamadas excesivas
+let lastRequestTime = 0;
+const REQUEST_THROTTLE_MS = 2000; // Mínimo 2 segundos entre solicitudes
+const MAX_RETRIES = 2; // Máximo número de reintentos
+
 /**
  * Convertir claves en camelCase a snake_case para mostrar en la UI
  * @param {Object} data - Datos en formato camelCase
@@ -52,6 +57,26 @@ const normalizeProject = (project) => {
 };
 
 /**
+ * Control de frecuencia para peticiones
+ * @returns {Promise<boolean>} Promesa que se resuelve cuando se puede hacer la petición
+ */
+const throttleRequest = () => {
+  const now = Date.now();
+  const timeSinceLastRequest = now - lastRequestTime;
+  
+  if (timeSinceLastRequest < REQUEST_THROTTLE_MS) {
+    const waitTime = REQUEST_THROTTLE_MS - timeSinceLastRequest;
+    return new Promise(resolve => setTimeout(() => {
+      lastRequestTime = Date.now();
+      resolve(true);
+    }, waitTime));
+  }
+  
+  lastRequestTime = now;
+  return Promise.resolve(true);
+};
+
+/**
  * Servicio para gestionar proyectos públicos de inversión (para socios)
  */
 const publicProjectService = {
@@ -67,7 +92,10 @@ const publicProjectService = {
    * @param {string} options.sort_direction Dirección de ordenación (asc, desc)
    * @returns {Promise<Object>} Proyectos publicados y metadata de paginación
    */
-  async getPublishedProjects(options = {}) {
+  async getPublishedProjects(options = {}, retryCount = 0) {
+    // Aplicar control de frecuencia
+    await throttleRequest();
+    
     try {
       // Construir query params
       const queryParams = new URLSearchParams();
@@ -85,8 +113,13 @@ const publicProjectService = {
       
       console.log('🔍 Consultando API pública en:', `${API_URL}/projects/public${queryString}`);
       
+      // Configuración con timeout para evitar solicitudes colgadas
+      const config = {
+        timeout: 10000 // 10 segundos de timeout
+      };
+      
       // Usar apiClient que ya tiene configurado el interceptor para el token
-      const response = await apiClient.get(`/projects/public${queryString}`);
+      const response = await apiClient.get(`/projects/public${queryString}`, config);
       
       // Normalizar datos para el frontend
       const responseData = {
@@ -103,6 +136,17 @@ const publicProjectService = {
       return responseData;
     } catch (error) {
       console.error('❌ Error al obtener proyectos publicados:', error);
+      
+      // Reintentar si no hemos excedido el máximo de intentos y es un error de red
+      if (retryCount < MAX_RETRIES && (error.code === 'ERR_NETWORK' || error.code === 'ECONNABORTED')) {
+        console.log(`🔄 Reintentando petición... (${retryCount + 1}/${MAX_RETRIES})`);
+        // Exponential backoff: 2s, 4s, 8s...
+        const backoffTime = 2000 * Math.pow(2, retryCount);
+        
+        await new Promise(resolve => setTimeout(resolve, backoffTime));
+        return this.getPublishedProjects(options, retryCount + 1);
+      }
+      
       if (error.response) {
         console.error('Detalles de la respuesta:', error.response.data);
         console.error('Estado HTTP:', error.response.status);
@@ -126,9 +170,14 @@ const publicProjectService = {
    * @returns {Promise<Object>} Datos del proyecto con sus documentos asociados
    */
   async getPublishedProjectById(id) {
+    // Aplicar control de frecuencia
+    await throttleRequest();
+    
     try {
       // Usar apiClient que ya tiene configurado el interceptor para el token
-      const response = await apiClient.get(`/projects/public/${id}`);
+      const response = await apiClient.get(`/projects/public/${id}`, {
+        timeout: 10000 // 10 segundos de timeout
+      });
       
       // Normalizar el proyecto antes de devolverlo
       return normalizeProject(camelToSnake(response.data));
@@ -163,12 +212,17 @@ const publicProjectService = {
    * @returns {Promise<Object>} Confirmación del registro de interés
    */
   async registerInterest(projectId) {
+    // Aplicar control de frecuencia
+    await throttleRequest();
+    
     try {
       // Esta función es un placeholder para la implementación futura
       // cuando se desarrolle el ticket correspondiente
       
       // Usar apiClient que ya tiene configurado el interceptor para el token
-      const response = await apiClient.post(`/projects/public/${projectId}/interest`);
+      const response = await apiClient.post(`/projects/public/${projectId}/interest`, null, {
+        timeout: 10000 // 10 segundos de timeout
+      });
       
       return response.data;
     } catch (error) {
