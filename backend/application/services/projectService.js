@@ -36,12 +36,51 @@ class ProjectService {
   /**
    * Obtiene un proyecto por su ID.
    * @param {string} id - ID del proyecto
+   * @param {Object} options - Opciones adicionales
+   * @param {string} [options.userRole] - Rol del usuario que solicita el proyecto
    * @returns {Promise<Object|null>} Proyecto encontrado o null
    */
-  async getProjectById(id) {
+  async getProjectById(id, options = {}) {
     try {
-      const project = await projectRepository.findById(id);
-      return project ? toProjectResponse(project) : null;
+      const project = await projectRepository.findById(id, { includeDocuments: true });
+      
+      if (!project) {
+        return null;
+      }
+      
+      // Crear una copia del proyecto para la respuesta
+      const projectResponse = toProjectResponse(project);
+      
+      // Si el proyecto tiene documentos, filtrarlos según el nivel de acceso del usuario
+      if (project.documents && project.documents.length > 0) {
+        const { userRole = 'partner' } = options;
+        
+        // Mapa de acceso según rol de usuario
+        const accessLevelMap = {
+          visitor: ['public'],
+          partner: ['public', 'partner'],
+          investor: ['public', 'partner', 'investor'],
+          manager: ['public', 'partner', 'investor', 'manager']
+        };
+        
+        // Determinar los niveles de acceso permitidos para el usuario
+        const allowedAccessLevels = accessLevelMap[userRole] || ['public'];
+        
+        // Filtrar documentos que el usuario puede ver según su rol
+        projectResponse.documents = project.documents
+          .filter(doc => allowedAccessLevels.includes(doc.accessLevel))
+          .map(doc => ({
+            id: doc.id,
+            name: doc.name,
+            documentType: doc.documentType,
+            accessLevel: doc.accessLevel,
+            securityLevel: doc.securityLevel,
+            url: doc.url,
+            createdAt: doc.createdAt.toISOString()
+          }));
+      }
+      
+      return projectResponse;
     } catch (error) {
       console.error('Error en ProjectService.getProjectById:', error);
       throw error;

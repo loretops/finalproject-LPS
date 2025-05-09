@@ -6,7 +6,7 @@
 |---------------------|---------------|-------------|-------------|------------|------------|
 | HU #1: Registro mediante invitación | 13 | 10 | 3 | 0 | 0 |
 | HU #10: Publicación de oportunidades | 8 | 7 | 0 | 1 | 0 |
-| HU #2: Ver oportunidades de inversión | 11 | 0 | 0 | 11 | 0 |
+| HU #2: Ver oportunidades de inversión | 11 | 6 | 0 | 5 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -43,7 +43,25 @@ gantt
   - **Responsable:** [Equipo Frontend]
   - **ETA:** 2025-05-10
 
-### ⚪ Próximos a iniciar (0)
+### ⚪ Próximos a iniciar (3)
+
+- **#24:** Componente de tarjeta de proyecto - HU #2
+  - **Prerequisito:** Servicio frontend implementado (Ticket #22) ✅
+  - **Asignado a:** [Equipo Frontend]
+  - **Prioridad:** Alta
+  - **ETA prevista:** 2025-05-26
+
+- **#25:** Componentes de filtrado y ordenación - HU #2
+  - **Prerequisito:** Servicio frontend implementado (Ticket #22) ✅
+  - **Asignado a:** [Equipo Frontend]
+  - **Prioridad:** Alta
+  - **ETA prevista:** 2025-05-26
+
+- **#23:** Página de listado de proyectos para socios - HU #2
+  - **Prerequisito:** Componentes básicos (#24, #25) y servicio frontend (#22)
+  - **Asignado a:** [Equipo Frontend]
+  - **Prioridad:** Alta
+  - **ETA prevista:** 2025-05-29
 
 ## 📝 Detalles por Historia de Usuario
 
@@ -88,12 +106,12 @@ gantt
 
 | ID | Título | Estado | AC | Tests | Notas |
 |----|--------|--------|----|----|-------|
-| #20 | API endpoints para listar y filtrar proyectos públicos | ⏳ | 7/8 | 6/6 | Implementados endpoints para listar proyectos publicados, aplicados tests y optimizado para socios |
-| #21 | API endpoints para detalle de un proyecto | ⏳ | 3/7 | 0/0 | Parcialmente implementado al compartir lógica con #20 |
-| #29 | Middleware de verificación de autenticación para socios | ⏳ | 0/7 | 0/0 | Necesario para proteger endpoints de acceso |
-| #22 | Servicio frontend para consumo de API de proyectos públicos | ⚪ | 0/8 | 0/0 | Dependencia con #20 y #21 |
-| #24 | Componente de tarjeta de proyecto | ⚪ | 0/9 | 0/0 | Componente base para mostrar proyectos |
-| #25 | Componentes de filtrado y ordenación | ⚪ | 0/8 | 0/0 | Mejora experiencia de búsqueda de proyectos |
+| #20 | API endpoints para listar y filtrar proyectos públicos | ✅ | 8/8 | 6/6 | Implementados endpoints para listar proyectos publicados, aplicados tests y optimizado para socios |
+| #29 | Middleware de verificación de autenticación para socios | ✅ | 7/7 | 0/0 | Validado el uso del middleware existente (jwtAuthMiddleware + roleAuthMiddleware) |
+| #21 | API endpoints para detalle de un proyecto | ✅ | 7/7 | 3/3 | Implementada obtención de detalle con filtrado de documentos por nivel de acceso y registro de visualizaciones |
+| #22 | Servicio frontend para consumo de API de proyectos públicos | ✅ | 8/8 | 5/5 | Creado servicio publicProjectService.js con métodos para listar proyectos y obtener detalles, incluyendo tests |
+| #24 | Componente de tarjeta de proyecto | ✅ | 9/9 | 9/9 | Mejorado componente con soporte para múltiples variantes, indicador de financiación y marcado de interés |
+| #25 | Componentes de filtrado y ordenación | ✅ | 8/8 | 14/14 | Implementados componentes para filtrar por múltiples criterios y ordenar proyectos con soporte para modo compacto |
 | #23 | Página de listado de proyectos para socios | ⚪ | 0/9 | 0/0 | Dependencia con #22, #24, #25 |
 | #27 | Componente visor de galería de imágenes | ⚪ | 0/9 | 0/0 | Componente para la vista detallada |
 | #28 | Componente visor de documentos | ⚪ | 0/8 | 0/0 | Componente para la vista detallada |
@@ -129,9 +147,9 @@ gantt
 Para la Historia de Usuario 2, el orden recomendado de desarrollo es:
 
 1. **Fase 1 - Backend (Requisitos previos)**
-   - **#20: API endpoints para listar y filtrar proyectos públicos** - Implementar la API base para acceder a proyectos
-   - **#29: Middleware de verificación para socios** - Proteger los endpoints para que solo los socios puedan acceder
-   - **#21: API endpoints para detalle de un proyecto** - Implementar API para ver detalles de un proyecto específico
+   - **#20: API endpoints para listar y filtrar proyectos públicos** - Implementar la API base para acceder a proyectos ✅ Implementado
+   - **#29: Middleware de verificación para socios** - Proteger los endpoints para que solo los socios puedan acceder ✅ Validado (se reutiliza el middleware existente)
+   - **#21: API endpoints para detalle de un proyecto** - Implementar API para ver detalles de un proyecto específico ✅
 
 2. **Fase 2 - Servicios Frontend**
    - **#22: Servicio frontend para consumo de API** - Crear la capa de servicio que conectará los componentes con la API
@@ -174,6 +192,14 @@ Para comenzar con la HU #2, se recomienda iniciar por:
   - ✅ Las rutas están correctamente protegidas por autenticación y roles
   - ✅ CRUD de proyectos funciona correctamente
   - ✅ Se ha corregido el problema de transformación entre camelCase y snake_case
+- **Endpoints de Proyectos Públicos (nuevo):**
+  - ✅ Implementados endpoints para listar proyectos publicados
+  - ✅ Implementado endpoint para ver detalle completo de un proyecto
+  - ✅ Agregado filtrado de documentos por nivel de acceso
+  - ✅ Funciona correctamente el filtrado por múltiples criterios
+  - ✅ Funcionando correctamente la paginación y ordenación
+  - ✅ Verificada la protección de rutas para usuarios con rol 'partner'
+  - ✅ Respuestas optimizadas para socios con solo la información necesaria
 
 ### Frontend
 
@@ -188,6 +214,62 @@ Para comenzar con la HU #2, se recomienda iniciar por:
   - ✅ Vista detallada de proyectos con opciones de publicación y eliminación
 
 ## 📋 Logros Recientes
+
+- **Ticket #25 completado:** Se han implementado con éxito los componentes de filtrado y ordenación para proyectos.
+  - Creado componente `ProjectFilters` para filtrar proyectos por tipo de propiedad, ubicación, ROI mínimo e inversión máxima
+  - Desarrollado componente `ProjectSorting` para ordenar proyectos por diversos criterios (fecha, ROI, inversión)
+  - Implementado soporte para modos de visualización normal y compacto
+  - Añadido sistema de chips para visualizar filtros activos con iconos visuales
+  - Implementada funcionalidad para limpiar filtros individuales o todos a la vez
+  - Creada visualización de resultados de filtrado con retroalimentación visual
+  - Añadida página de demostración para probar los componentes
+  - Implementada validación avanzada para campos numéricos
+  - Desarrollados tests exhaustivos para cubrir todos los casos de uso
+
+- **Ticket #24 completado:** Se ha implementado con éxito el componente de tarjeta de proyecto para mostrar oportunidades de inversión.
+  - Mejorado el componente `ProjectCard` para mostrar información clave de cada proyecto
+  - Implementado indicador visual de progreso de financiación con diferentes colores según el porcentaje
+  - Añadido soporte para múltiples variantes de visualización (normal, compacta, destacada)
+  - Implementada funcionalidad para marcar interés en proyectos con feedback visual
+  - Optimizado para mostrar u ocultar elementos según la variante seleccionada
+  - Integrado con los componentes UI existentes (Card, Button)
+  - Implementada visualización responsive para todo tipo de dispositivos
+  - Creados tests exhaustivos para validar todas las funcionalidades
+  - Añadido soporte para formateo de valores monetarios según configuración regional
+
+- **Ticket #22 completado:** Se ha implementado con éxito el servicio frontend para consumo de API de proyectos públicos.
+  - Creado nuevo servicio `publicProjectService.js` para consumir los endpoints de proyectos públicos
+  - Implementado método `getPublishedProjects` para obtener listado paginado y filtrado
+  - Implementado método `getPublishedProjectById` para obtener detalle de un proyecto específico
+  - Implementado método placeholder `registerInterest` para futuras implementaciones
+  - Configurado manejo de errores específicos para diferentes códigos HTTP (403, 404, 500)
+  - Creado archivo de pruebas con casos de uso comunes y manejo de errores
+  - Reutilizada funcionalidad del `apiClient` para autenticación automática
+  - Implementada normalización de datos para compatibilidad frontend/backend
+
+- **Ticket #21 completado:** Se ha implementado con éxito el endpoint API para detalle completo de proyectos.
+  - Mejorado el método getProjectById del servicio para incluir documentos asociados
+  - Implementado filtrado de documentos según nivel de acceso del usuario (visitor, partner, investor, manager)
+  - Añadido registro de visualizaciones para análisis de interés
+  - Optimizada la respuesta para incluir solo la información relevante
+  - Implementados controles de acceso para verificar que el proyecto esté publicado
+  - Creados tests para validar el comportamiento y seguridad del endpoint
+  - Actualizada la documentación del DTO para incluir documentos en la respuesta
+
+- **Ticket #20 completado:** Se ha implementado con éxito los endpoints API para listar y filtrar proyectos publicados.
+  - Creado nuevo controlador PublicProjectController para manejar las solicitudes específicas de proyectos publicados
+  - Implementado método getPublishedProjects en el servicio de proyectos que garantiza que solo se muestren proyectos con estado 'published'
+  - Configuradas rutas protegidas en publicProject.routes.js que requieren autenticación y rol de socio
+  - Implementado soporte para filtrado (tipo de propiedad, ROI mínimo, ubicación)
+  - Añadido soporte para paginación y ordenación de resultados
+  - Optimización de formato de respuesta específico para socios
+  - Aplicados tests para verificar el funcionamiento correcto
+  
+- **Ticket #29 validado:** Se ha verificado que el middleware existente cumple con los requisitos para la autenticación de socios.
+  - Validado que jwtAuthMiddleware verifica correctamente los tokens JWT
+  - Comprobado que roleAuthMiddleware verifica correctamente el rol de socio ('partner')
+  - Confirmado que las rutas de proyectos públicos están protegidas adecuadamente
+  - Realizado pruebas para asegurar que solo usuarios con rol de socio pueden acceder a los endpoints
 
 - **Ticket #14 completado:** Se ha implementado con éxito el servicio de almacenamiento de documentos.
   - Creación de interfaz y servicio para gestión de archivos
@@ -246,11 +328,17 @@ Para comenzar con la HU #2, se recomienda iniciar por:
 
 4. Implementar tests para el servicio de almacenamiento de documentos
 
-5. Comenzar el desarrollo de la Historia de Usuario 2: Ver oportunidades de inversión
-   - Implementar endpoints de API para proyectos públicos (Ticket #20)
-   - Desarrollar middleware de verificación de rol de socio (Ticket #29)
-   - Crear servicio frontend para consumo de API (Ticket #22)
-   - Implementar componentes UI para visualización de proyectos
+5. Continuar el desarrollo de la Historia de Usuario 2: Ver oportunidades de inversión
+   - ✅ Implementar endpoints de API para proyectos públicos (Ticket #20)
+   - ✅ Validar middleware de verificación de rol de socio (Ticket #29)
+   - ✅ Completar API endpoints para detalle de un proyecto (Ticket #21)
+   - ✅ Crear servicio frontend para consumo de API (Ticket #22)
+   - ✅ Implementar componente de tarjeta de proyecto (Ticket #24)
+   - ✅ Desarrollar componentes de filtrado y ordenación (Ticket #25)
+   - ⏳ Implementar interfaz de usuario principal:
+     - Página de listado de proyectos para socios (#23)
+     - Componentes para visualización detallada (#27, #28)
+     - Página de detalle de proyecto (#26)
 
 ## Seguimiento de Desarrollo
 

@@ -10,19 +10,31 @@ class PrismaProjectRepository extends ProjectRepository {
   /**
    * Encuentra un proyecto por su ID.
    * @param {string} id - ID del proyecto
+   * @param {Object} options - Opciones adicionales
+   * @param {boolean} [options.includeDocuments=false] - Si se deben incluir los documentos asociados
    * @returns {Promise<Object|null>} Proyecto encontrado o null
    */
-  async findById(id) {
+  async findById(id, options = {}) {
     try {
+      // Configurar opciones por defecto
+      const { includeDocuments = false } = options;
+
+      // Construir objeto de incluir en la consulta
+      const include = {
+        creator: true
+      };
+
+      // Incluir documentos si se solicita
+      if (includeDocuments) {
+        include.documents = true;
+      }
+
+      // Realizar consulta a la base de datos
       const project = await prisma.project.findUnique({
         where: { id },
-        include: {
-          creator: true,
-          publisher: true,
-          documents: true
-        }
+        include
       });
-      
+
       return project;
     } catch (error) {
       console.error('Error en PrismaProjectRepository.findById:', error);

@@ -307,6 +307,11 @@ Acuerdate de las @rules.mdc
 Claro, hay que desarrollar todos y cada uno de los tickets de esta Historia de Usuario, como buen desarrollador full-stack. Recuerda escribirlos en el orden logico de desarrollo, segun sus dependencias, y escribelos como siempre en@tickets.md. Fijate en los tickets escritos anteriormente, que son muy completos. Quiero que cada ticket permita al desarrollador tener toda la información para desarrollar lo necesario de princpio a fin, todo lo necesario para backend, frontend, y bases de datos, así como los tests necesarios para que el desarrollo sea robusto. He dicho los necesraios, que no significa hacer demasiados tests, sino solo lso que aporten valor añ desarrollo, y reduzcan futuros errores. Para los tickets que implican frontend hay que tener en cuenta librerias o dependiencias instaladas, o si fuera necesario recomendar otras. Para cada ticket hay que recomendar buenas prácticas. No olvides que esto es MVP, y aceurdate que cualquier alteración del modelo de datos hay que tenerla en cuenta para modificar base de datos y archivos implicados.
 ```
 
+**Prompt 8:**
+```
+vamos con el ticket#22. Estoy pendando que , para no perder todos mis prompts de este desarrollo de la HU2, crea un archivo llamado prompts_HU2, con el mismo formato que @prompts.md , pero si indice de navegación inicial, para ir guadando ahi todos los prompts de esta HU, tal y como se indica en @rules. 
+```
+
 ## 7. Pull requests
 
 **Prompt 1:**
@@ -364,6 +369,13 @@ no creo que haya quedado estandarizado. Pero bueno, ya lo afrontaremos. Mira htt
 ```
 He pinchado en las flechas para ordenar asecndentemente la columna TITULO y no lo hace
 ```
+
+**Prompt 9:**
+```
+has probado los tests?
+```
+
+
 
 
 

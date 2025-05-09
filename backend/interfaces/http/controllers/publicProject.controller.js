@@ -61,7 +61,12 @@ class PublicProjectController {
   async getById(req, res) {
     try {
       const { id } = req.params;
-      const project = await projectService.getProjectById(id);
+      // Pasar el rol del usuario como opción
+      const options = {
+        userRole: req.user.role
+      };
+      
+      const project = await projectService.getProjectById(id, options);
 
       if (!project) {
         return res.status(404).json({
@@ -77,7 +82,16 @@ class PublicProjectController {
       }
 
       // Registrar visualización (opcional para análisis y seguimiento)
-      // TODO: Implementar registro de visualización
+      // Implementación simple para MVP
+      console.log(`[${new Date().toISOString()}] Usuario ${req.user.id} (${req.user.role}) ha visto el proyecto ${id}`);
+      
+      // Para una implementación completa se podría usar un servicio específico
+      // await projectViewService.registerView({
+      //   projectId: id,
+      //   userId: req.user.id,
+      //   userRole: req.user.role,
+      //   timestamp: new Date()
+      // });
       
       res.status(200).json(project);
     } catch (error) {

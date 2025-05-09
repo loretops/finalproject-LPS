@@ -34,6 +34,7 @@
  * @property {Object} creator - Información básica del creador
  * @property {string} creator.id - ID del creador
  * @property {string} creator.name - Nombre del creador
+ * @property {Array<DocumentDto>} [documents] - Documentos asociados al proyecto (filtrados por acceso)
  */
 
 /**
@@ -94,6 +95,18 @@
  */
 
 /**
+ * DTO para documento de proyecto (salida)
+ * @typedef {Object} DocumentDto
+ * @property {string} id - Identificador único
+ * @property {string} name - Nombre del documento
+ * @property {string} documentType - Tipo de documento (legal, economic, technical, image, video)
+ * @property {string} accessLevel - Nivel de acceso (public, partner, investor)
+ * @property {string} securityLevel - Nivel de seguridad (downloadable, view_only, watermarked)
+ * @property {string} url - URL del documento
+ * @property {string} createdAt - Fecha de creación (ISO string)
+ */
+
+/**
  * Función para convertir un modelo Project de Prisma a ProjectResponseDto
  * @param {Object} projectModel - Modelo Project de Prisma
  * @returns {ProjectResponseDto} Objeto DTO para respuesta
@@ -116,7 +129,8 @@ function toProjectResponse(projectModel) {
     creator: projectModel.creator ? {
       id: projectModel.creator.id,
       name: `${projectModel.creator.firstName} ${projectModel.creator.lastName}`
-    } : null
+    } : null,
+    documents: []
   };
 }
 
