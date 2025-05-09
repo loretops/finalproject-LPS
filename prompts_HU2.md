@@ -148,3 +148,10 @@ Y por que no lo haces? Te estás olvidando de las @rules? asi como de actualizar
 ```
 Lo primero quiero saber si has probado el nuevo desarrollo, y actualizado @development_status.md . Y despues habrá que seguir con el siguiente paso para ocmpletar la HU2
 ```
+
+## Implementación Ticket #28: Componente visor de documentos
+
+**Prompt 20:**
+```
+si, contonua con el tcket 28. Cuando podré ver el listado de proyectos como socio?
+```

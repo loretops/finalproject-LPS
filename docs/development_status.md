@@ -114,7 +114,7 @@ gantt
 | #25 | Componentes de filtrado y ordenación | ✅ | 8/8 | 14/14 | Implementados componentes para filtrar por múltiples criterios y ordenar proyectos con soporte para modo compacto |
 | #23 | Página de listado de proyectos para socios | ✅ | 9/9 | 9/9 | Implementada página completa con integración de filtros, ordenación, paginación y gestión de estados |
 | #27 | Componente visor de galería de imágenes | ✅ | 9/9 | 12/12 | Implementado visor interactivo con soporte para navegación, modo pantalla completa y miniaturas |
-| #28 | Componente visor de documentos | ⚪ | 0/8 | 0/0 | Componente para la vista detallada |
+| #28 | Componente visor de documentos | ✅ | 8/8 | 15/15 | Implementado visor que soporta múltiples formatos (PDF, imágenes, video) con controles según nivel de seguridad |
 | #26 | Página de detalle de proyecto para socios | ⚪ | 0/10 | 0/0 | Dependencia con #22, #27, #28 |
 | #30 | Tests e2e para flujo de visualización de proyectos | ⚪ | 0/7 | 0/0 | Pruebas del flujo completo |
 
@@ -214,6 +214,18 @@ Para comenzar con la HU #2, se recomienda iniciar por:
   - ✅ Vista detallada de proyectos con opciones de publicación y eliminación
 
 ## 📋 Logros Recientes
+
+- **Ticket #28 completado:** Se ha implementado con éxito el componente visor de documentos.
+  - Creado componente `DocumentViewer` con soporte para múltiples tipos de documentos (PDF, imágenes, videos, Office)
+  - Implementado manejo de niveles de seguridad (solo visualización, descarga, impresión)
+  - Añadido modo de pantalla completa con controles completos
+  - Implementada detección automática de tipo de documento
+  - Añadido soporte para visualización de metadatos del documento
+  - Implementado manejo de errores y estados de carga
+  - Desarrollada página de demostración en `/examples/document-viewer`
+  - Creados tests exhaustivos para validar funcionalidades principales
+  - Optimizado para diferentes dispositivos y tamaños de pantalla
+  - Implementados controles de accesibilidad
 
 - **Ticket #27 completado:** Se ha implementado con éxito el componente visor de galería de imágenes.
   - Creado componente `ImageGalleryViewer` con interfaz intuitiva y responsive
