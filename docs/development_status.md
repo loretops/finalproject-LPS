@@ -112,8 +112,8 @@ gantt
 | #22 | Servicio frontend para consumo de API de proyectos públicos | ✅ | 8/8 | 5/5 | Creado servicio publicProjectService.js con métodos para listar proyectos y obtener detalles, incluyendo tests |
 | #24 | Componente de tarjeta de proyecto | ✅ | 9/9 | 9/9 | Mejorado componente con soporte para múltiples variantes, indicador de financiación y marcado de interés |
 | #25 | Componentes de filtrado y ordenación | ✅ | 8/8 | 14/14 | Implementados componentes para filtrar por múltiples criterios y ordenar proyectos con soporte para modo compacto |
-| #23 | Página de listado de proyectos para socios | ⚪ | 0/9 | 0/0 | Dependencia con #22, #24, #25 |
-| #27 | Componente visor de galería de imágenes | ⚪ | 0/9 | 0/0 | Componente para la vista detallada |
+| #23 | Página de listado de proyectos para socios | ✅ | 9/9 | 9/9 | Implementada página completa con integración de filtros, ordenación, paginación y gestión de estados |
+| #27 | Componente visor de galería de imágenes | ✅ | 9/9 | 12/12 | Implementado visor interactivo con soporte para navegación, modo pantalla completa y miniaturas |
 | #28 | Componente visor de documentos | ⚪ | 0/8 | 0/0 | Componente para la vista detallada |
 | #26 | Página de detalle de proyecto para socios | ⚪ | 0/10 | 0/0 | Dependencia con #22, #27, #28 |
 | #30 | Tests e2e para flujo de visualización de proyectos | ⚪ | 0/7 | 0/0 | Pruebas del flujo completo |
@@ -215,16 +215,28 @@ Para comenzar con la HU #2, se recomienda iniciar por:
 
 ## 📋 Logros Recientes
 
-- **Ticket #25 completado:** Se han implementado con éxito los componentes de filtrado y ordenación para proyectos.
-  - Creado componente `ProjectFilters` para filtrar proyectos por tipo de propiedad, ubicación, ROI mínimo e inversión máxima
-  - Desarrollado componente `ProjectSorting` para ordenar proyectos por diversos criterios (fecha, ROI, inversión)
-  - Implementado soporte para modos de visualización normal y compacto
-  - Añadido sistema de chips para visualizar filtros activos con iconos visuales
-  - Implementada funcionalidad para limpiar filtros individuales o todos a la vez
-  - Creada visualización de resultados de filtrado con retroalimentación visual
-  - Añadida página de demostración para probar los componentes
-  - Implementada validación avanzada para campos numéricos
-  - Desarrollados tests exhaustivos para cubrir todos los casos de uso
+- **Ticket #27 completado:** Se ha implementado con éxito el componente visor de galería de imágenes.
+  - Creado componente `ImageGalleryViewer` con interfaz intuitiva y responsive
+  - Implementada navegación entre imágenes con controles visuales y soporte para teclado
+  - Añadido modo de pantalla completa para visualización óptima
+  - Implementada visualización de miniaturas con selección activa
+  - Añadido soporte para mostrar título y descripción de cada imagen
+  - Implementado manejo de estados de carga y errores con retroalimentación visual
+  - Desarrollada página de demostración en `/examples/image-gallery`
+  - Creados tests exhaustivos para validar funcionalidades principales
+  - Optimizado para diferentes dispositivos y tamaños de pantalla
+  - Implementada accesibilidad con etiquetas ARIA y navegación por teclado
+
+- **Ticket #23 completado:** Se ha implementado con éxito la página de listado de proyectos para socios.
+  - Implementada página principal `/projects/index.jsx` con listado completo de proyectos
+  - Integrados los componentes de filtrado y ordenación (ProjectFilters y ProjectSorting)
+  - Implementada paginación con navegación intuitiva y sincronización con filtros
+  - Añadido soporte para mantener filtros en la URL para compartir enlaces
+  - Creada página placeholder para detalle de proyecto (/projects/[id])
+  - Implementado manejo de estados de carga y error con retroalimentación visual
+  - Optimizada para dispositivos móviles y escritorio
+  - Protegida con control de acceso basado en roles mediante withAuth
+  - Implementada funcionalidad para marcar interés en proyectos
 
 - **Ticket #24 completado:** Se ha implementado con éxito el componente de tarjeta de proyecto para mostrar oportunidades de inversión.
   - Mejorado el componente `ProjectCard` para mostrar información clave de cada proyecto

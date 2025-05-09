@@ -119,3 +119,32 @@ components/projects/filters/ProjectFilters.jsx (208:14) @ renderFilterForm
   210 |               <form method="dialog">
   211 |                 <Button variant="outline" className="mr-2">Cancelar</Button>
 ```
+
+**Prompt 15:**
+```
+si, adelante. Pero antes haz un commit bien ejecutado con todos los cambios, y bien documentado
+```
+
+## Implementación Ticket #23: Página de listado de proyectos para socios
+
+**Prompt 16:**
+```
+si, procede ahora con la implementación del Ticket #23: Página de listado de proyectos para socios
+```
+
+**Prompt 17:**
+```
+Lo primero quiero saber si has probado el nuevo desarrollo, y actualizado @development_status.md . Y despues habrá que seguir con el siguiente paso para ocmpletar la HU2
+```
+
+**Prompt 18:**
+```
+Y por que no lo haces? Te estás olvidando de las @rules? asi como de actualizar @prompts_HU2.md ?
+```
+
+## Implementación Ticket #27: Componente visor de galería de imágenes
+
+**Prompt 19:**
+```
+Lo primero quiero saber si has probado el nuevo desarrollo, y actualizado @development_status.md . Y despues habrá que seguir con el siguiente paso para ocmpletar la HU2
+```
