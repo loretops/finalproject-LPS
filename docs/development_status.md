@@ -88,8 +88,8 @@ gantt
 
 | ID | Título | Estado | AC | Tests | Notas |
 |----|--------|--------|----|----|-------|
-| #20 | API endpoints para listar y filtrar proyectos públicos | ⏳ | 0/8 | 0/0 | Requiere implementación del repositorio de proyectos |
-| #21 | API endpoints para detalle de un proyecto | ⏳ | 0/7 | 0/0 | Dependencia con #20 |
+| #20 | API endpoints para listar y filtrar proyectos públicos | ⏳ | 7/8 | 6/6 | Implementados endpoints para listar proyectos publicados, aplicados tests y optimizado para socios |
+| #21 | API endpoints para detalle de un proyecto | ⏳ | 3/7 | 0/0 | Parcialmente implementado al compartir lógica con #20 |
 | #29 | Middleware de verificación de autenticación para socios | ⏳ | 0/7 | 0/0 | Necesario para proteger endpoints de acceso |
 | #22 | Servicio frontend para consumo de API de proyectos públicos | ⚪ | 0/8 | 0/0 | Dependencia con #20 y #21 |
 | #24 | Componente de tarjeta de proyecto | ⚪ | 0/9 | 0/0 | Componente base para mostrar proyectos |

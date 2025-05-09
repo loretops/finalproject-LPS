@@ -71,6 +71,39 @@ class ProjectService {
   }
 
   /**
+   * Obtiene una lista de proyectos publicados para socios con filtros y paginación.
+   * Este método garantiza que solo se muestren proyectos en estado 'published'.
+   * @param {Object} options - Opciones de filtrado y paginación
+   * @returns {Promise<Object>} Listado de proyectos publicados y metadatos de paginación
+   */
+  async getPublishedProjects(options = {}) {
+    try {
+      // Forzar que solo se muestren proyectos publicados
+      const publicOptions = {
+        ...options,
+        status: 'published',
+      };
+
+      const result = await projectRepository.findAll(publicOptions);
+      
+      // Transformar proyectos a formato DTO para socios (puede tener menos información)
+      const projects = result.data.map(project => {
+        const transformed = toProjectListItem(project);
+        // Aquí podemos personalizar qué información específica queremos mostrar a los socios
+        return transformed;
+      });
+      
+      return {
+        data: projects,
+        pagination: result.pagination
+      };
+    } catch (error) {
+      console.error('Error en ProjectService.getPublishedProjects:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Actualiza un proyecto existente.
    * @param {string} id - ID del proyecto
    * @param {Object} projectData - Datos a actualizar
