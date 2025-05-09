@@ -705,45 +705,50 @@ Implementar un sistema que permita a los gestores crear, editar y publicar nuevo
 - **Usabilidad**: Interfaz de administración intuitiva
 - **Redundancia**: Copias de seguridad de todos los documentos
 
-## 📋 Tabla Priorizada de Historias de Usuario (MoSCoW)
+## 📋 Tabla Priorizada de Historias de Usuario según el Orden Lógico de Desarrollo
 
-| ID | Historia breve | MoSCoW | Valor | Complejidad | Dependencias | Estimación (SP) |
-|----|---------------|---------|-------|-------------|--------------|----------------|
-| US01 | Registro mediante invitación | Must Have | 🔥 Alto | ⚙️ Media | — | 8 |
-| US02 | Confirmación de correo electrónico | Must Have | 🔥 Alto | ⚙️ Media | US01 | 5 |
-| US03 | Iniciar sesión como socio | Must Have | 🔥 Alto | ⚙️ Baja | US01, US02 | 3 |
-| US04 | Visualizar oportunidades de inversión | Must Have | 🔥 Alto | ⚙️ Media | US03 | 8 |
-| US05 | Marcar "Invierto" y monto | Must Have | 🔥 Alto | ⚙️ Alta | US04 | 13 |
-| US06 | Ver progreso de inversión en tiempo real | Should Have | ⭐ Medio | ⚙️ Media | US05 | 5 |
-| US07 | Marcar "Me Interesa" y abrir canal de contacto | Must Have | 🔥 Alto | ⚙️ Media | US04 | 5 |
-| US08 | Comunicación gestor ↔ socio interesado | Should Have | ⭐ Medio | ⚙️ Alta | US07 | 13 |
-| US09 | Ver documentos legales sin descarga | Must Have | 🔥 Alto | ⚙️ Alta | US05 | 13 |
-| US10 | Ver informes y vídeo semanal del proyecto | Should Have | ⭐ Medio | ⚙️ Alta | US05 | 13 |
-| US11 | Publicación de nuevas oportunidades (gestor) | Must Have | 🔥 Alto | ⚙️ Media | — | 8 |
-| US12 | Subida de informes semanales (gestor) | Should Have | ⭐ Medio | ⚙️ Media | US11 | 8 |
-| US13 | Notificaciones internas | Should Have | ⭐ Medio | ⚙️ Media | US05, US10 | 5 |
-| US14 | Alertar gestor por inactividad de socios | Could Have | ⚪ Bajo | ⚙️ Alta | US07, US05 | 8 |
+| # | ID | Historia breve | MoSCoW | Dependencias | Justificación |
+|---|----|--------------------|---------|--------------|--------------|
+| 1 | US01 | **Registro mediante invitación** | Must Have | — | Punto de entrada al sistema para nuevos socios |
+| 2 | US07 | **Confirmación de correo electrónico** | Must Have | US01 | Garantiza emails válidos y mejora seguridad |
+| 3 | US08 | **Iniciar sesión como socio** | Must Have | US01, US07 | Necesario para acceder a funcionalidades privadas |
+| 4 | US10 | **Publicación de oportunidades (gestor)** | Must Have | US08 | Los gestores deben poder crear proyectos antes de que se puedan visualizar |
+| 5 | US02 | **Ver oportunidades de inversión** | Must Have | US08, US10 | Requiere autenticación y que existan proyectos para ver |
+| 6 | US09 | **Marcar "Me Interesa"** | Must Have | US02 | El socio debe ver los proyectos para poder marcar interés |
+| 7 | US03 | **Marcar "Invierto" y monto** | Must Have | US02 | El socio debe ver los proyectos para poder invertir |
+| 8 | US04 | **Ver documentos legales sin descarga** | Should Have | US03 | Principalmente útil para inversores |
+| 9 | US05 | **Comunicación gestor ↔ socio** | Should Have | US09 | Se activa tras expresar interés en un proyecto |
+| 10 | US06 | **Ver informes y vídeo semanal** | Could Have | US03 | Seguimiento para inversores existentes |
+| 11 | US12 | **Subida de informes semanales** | Should Have | US10 | Permite a gestores mantener informados a inversores |
+| 12 | US13 | **Notificaciones internas** | Should Have | US03, US06 | Mejora comunicación sobre actualizaciones |
+| 13 | US14 | **Alertar sobre socios inactivos** | Could Have | US09, US03 | Gestión avanzada del club, no esencial |
+
+### Notas sobre el orden de desarrollo
+
+- **Grupo 1 (Acceso)**: Las historias US01, US07 y US08 forman el bloque de autenticación y debe implementarse primero.
+- **Grupo 2 (Creación de contenido)**: US10 es un prerrequisito lógico para US02, ya que no se pueden visualizar proyectos si no existen.
+- **Grupo 3 (Interacción básica)**: US02, US09 y US03 permiten a los socios ver e interactuar con las oportunidades.
+- **Grupo 4 (Funcionalidades avanzadas)**: Las demás historias agregan valor pero no son esenciales para el flujo básico.
 
 ## 🧱 MVP Backlog – Plataforma de Inversión Inmobiliaria
 
 ### 🎯 Must Have
 
 - [ ] **US01**: Como usuario invitado, quiero registrarme mediante una invitación exclusiva para acceder al área privada
-- [ ] **US02**: Como nuevo socio, quiero confirmar mi correo electrónico tras el registro para verificar mi identidad
-- [ ] **US03**: Como socio, quiero poder iniciar sesión para acceder a la zona privada
-- [ ] **US04**: Como socio, quiero ver las oportunidades de inversión disponibles para evaluar si deseo invertir
-- [ ] **US05**: Como socio, quiero poder confirmar que deseo invertir e indicar el monto para comprometerme con el proyecto
-- [ ] **US07**: Como socio, quiero indicar que una inversión me interesa para abrir contacto con el gestor
-- [ ] **US09**: Como inversor, quiero consultar documentos legales sin poder descargarlos para proteger la confidencialidad
-- [ ] **US11**: Como gestor, quiero publicar nuevas oportunidades de inversión para ponerlas a disposición de los socios
+- [ ] **US07**: Como nuevo socio, quiero confirmar mi correo electrónico tras el registro para verificar mi identidad
+- [ ] **US08**: Como socio, quiero poder iniciar sesión para acceder a la zona privada
+- [ ] **US10**: Como gestor, quiero publicar nuevas oportunidades de inversión para ponerlas a disposición de los socios
+- [ ] **US02**: Como socio, quiero ver las oportunidades de inversión disponibles para evaluar si deseo invertir
+- [ ] **US09**: Como socio, quiero indicar que una inversión me interesa para abrir contacto con el gestor
+- [ ] **US03**: Como socio, quiero poder confirmar que deseo invertir e indicar el monto para comprometerme con el proyecto
+- [ ] **US04**: Como inversor, quiero consultar documentos legales sin poder descargarlos para proteger la confidencialidad
 
 ### 🟡 Should Have
 
-- [ ] **US06**: Como socio, quiero ver el porcentaje de inversión comprometida en cada proyecto para decidir cuándo invertir
-- [ ] **US08**: Como gestor o socio, quiero poder comunicarme dentro de la plataforma para resolver dudas
-- [ ] **US10**: Como inversor, quiero ver informes semanales y vídeos del proyecto para hacer seguimiento
+- [ ] **US05**: Como gestor o socio, quiero poder comunicarme dentro de la plataforma para resolver dudas
 - [ ] **US12**: Como gestor, quiero subir informes semanales para mantener informados a los inversores
 - [ ] **US13**: Como socio, quiero recibir notificaciones para estar al día de las novedades
+- [ ] **US06**: Como socio, quiero ver el porcentaje de inversión comprometida en cada proyecto para decidir cuándo invertir
 
 ### ⚪ Could Have
 

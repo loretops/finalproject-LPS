@@ -90,6 +90,23 @@ export const AuthProvider = ({ children }) => {
     router.push('/login');
   };
 
+  /**
+   * Verifica si un usuario tiene uno de los roles especificados
+   * @param {Object} user - Usuario a verificar
+   * @param {Array|string} roles - Rol o array de roles permitidos
+   * @returns {boolean} true si el usuario tiene al menos uno de los roles especificados
+   */
+  const checkRole = (user, roles) => {
+    // Si no hay usuario o no tiene un rol, no tiene acceso
+    if (!user || !user.role) return false;
+    
+    // Si roles es un string, convertirlo a array
+    const allowedRoles = Array.isArray(roles) ? roles : [roles];
+    
+    // Verificar si el rol del usuario está en los roles permitidos
+    return allowedRoles.includes(user.role);
+  };
+
   const value = {
     user,
     token,
@@ -98,6 +115,7 @@ export const AuthProvider = ({ children }) => {
     error,
     login,
     logout,
+    checkRole, // Añadir la función checkRole al contexto
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

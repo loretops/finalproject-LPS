@@ -378,3 +378,290 @@
 **Enlaces:**
 - [Configuración del entorno](../technical/setup.md)
 - [Historias de usuario](../product/user-stories.md)
+
+# Tickets para Historia de Usuario 10 - Publicación de oportunidades de inversión
+
+## Ticket #12: Verificación de roles y permisos
+
+**Título:** Implementar sistema de verificación de roles para gestores
+
+**Descripción:** Crear un middleware que verifique que el usuario tiene rol de gestor antes de permitir acceso a las funcionalidades de gestión de proyectos de inversión.
+
+**Criterios de Aceptación:**
+- El middleware verifica correctamente si el usuario tiene rol 'manager'
+- Bloquea acceso a usuarios con roles insuficientes (403 Forbidden)
+- Se integra con el sistema de autenticación existente
+- Puede usarse de forma selectiva en rutas específicas
+- Proporciona mensajes de error claros
+
+**Prioridad:** Alta
+
+**Estimación:** 2 puntos de historia
+
+**Asignado a:** Equipo de Backend
+
+**Etiquetas:** Backend, Seguridad, MVP
+
+**Tareas:**
+1. Crear middleware de verificación de roles
+2. Integrar con el flujo de autenticación existente
+3. Implementar función de verificación de acceso
+4. Configurar respuestas de error apropiadas
+5. Crear tests unitarios para verificar funcionamiento
+6. Documentar uso del middleware
+
+**Enlaces:**
+- [Configuración del entorno](../technical/setup.md)
+- [Historias de usuario](../product/user-stories.md)
+
+## Ticket #13: Modelo de datos para gestión de proyectos
+
+**Título:** Implementar modelo de datos para proyectos de inversión
+
+**Descripción:** Extender los modelos existentes y crear nuevos modelos en Prisma para soportar la creación y gestión de proyectos de inversión inmobiliaria.
+
+**Criterios de Aceptación:**
+- El modelo Project contiene todos los campos requeridos (id, title, description, status, minimum_investment, target_amount, current_amount, expected_roi, location, property_type, draft, published_at, created_by, published_by, created_at)
+- El modelo ProjectDocument soporta diferentes tipos de archivos y niveles de acceso
+- Se establecen las relaciones correctas entre tablas
+- Se generan migraciones de Prisma funcionales
+- Se implementan índices para consultas eficientes
+
+**Prioridad:** Alta
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo de Backend
+
+**Etiquetas:** Backend, Base de datos, Prisma, MVP
+
+**Tareas:**
+1. Actualizar/confirmar el esquema Prisma con los modelos Project y ProjectDocument
+2. Definir relaciones entre modelos (User → Project, Project → ProjectDocument)
+3. Crear enumeraciones para estados del proyecto y tipos de documentos
+4. Generar migraciones
+5. Implementar índices para búsquedas eficientes
+6. Ejecutar migraciones en entorno de desarrollo
+7. Verificar integridad referencial
+
+**Enlaces:**
+- [Configuración del entorno](../technical/setup.md)
+- [Historias de usuario](../product/user-stories.md)
+
+## Ticket #14: Servicio de almacenamiento de documentos
+
+**Título:** Implementar servicio de almacenamiento de documentos para proyectos
+
+**Descripción:** Crear un servicio que gestione el almacenamiento seguro de documentos (archivos PDF, imágenes, videos) asociados a las oportunidades de inversión.
+
+**Criterios de Aceptación:**
+- Se pueden subir archivos de diferentes tipos (PDF, imágenes, videos)
+- Los archivos se almacenan de forma segura (ya sea local o en servicio cloud)
+- Se genera un URL accesible para cada archivo
+- Se valida el tipo y tamaño de archivos
+- Se optimizan las imágenes automáticamente
+- Se limita el tamaño de archivos según configuración
+
+**Prioridad:** Alta
+
+**Estimación:** 5 puntos de historia
+
+**Asignado a:** Equipo de Backend
+
+**Etiquetas:** Backend, Almacenamiento, Seguridad, MVP
+
+**Tareas:**
+1. Configurar servicio de almacenamiento (local para desarrollo, cloud para producción)
+2. Implementar validación de tipos y tamaños de archivos
+3. Crear función para procesar y optimizar imágenes
+4. Desarrollar sistema de nomenclatura segura para archivos
+5. Implementar generación de URLs seguros
+6. Crear sistema de gestión de permisos de acceso
+7. Integrar con modelo ProjectDocument
+
+**Enlaces:**
+- [Configuración del entorno](../technical/setup.md)
+- [Historias de usuario](../product/user-stories.md)
+
+## Ticket #15: API Endpoints para creación y gestión de proyectos
+
+**Título:** Implementar endpoints API para gestión de proyectos
+
+**Descripción:** Crear los endpoints de la API que permitirán a los gestores crear, modificar, publicar y gestionar oportunidades de inversión.
+
+**Criterios de Aceptación:**
+- El endpoint POST `/api/projects` permite crear proyectos
+- El endpoint PUT `/api/projects/:id` permite actualizar proyectos
+- El endpoint POST `/api/projects/:id/publish` permite publicar un proyecto
+- El endpoint POST `/api/projects/:id/documents` permite subir documentos
+- Solo usuarios con rol 'manager' pueden acceder a estos endpoints
+- Se validan todos los datos de entrada
+- Se implementan respuestas adecuadas para todos los escenarios
+
+**Prioridad:** Alta
+
+**Estimación:** 8 puntos de historia
+
+**Asignado a:** Equipo de Backend
+
+**Etiquetas:** Backend, API, MVP
+
+**Tareas:**
+1. Crear controlador para gestión de proyectos
+2. Implementar endpoint de creación de proyectos
+3. Implementar endpoint de actualización de proyectos
+4. Implementar endpoint de publicación de proyectos
+5. Implementar endpoint para subida de documentos
+6. Integrar con servicio de almacenamiento (Ticket #14)
+7. Implementar validación de datos de entrada
+8. Aplicar middleware de verificación de roles (Ticket #12)
+9. Documentar endpoints
+10. Crear tests para verificar funcionamiento
+
+**Enlaces:**
+- [Configuración del entorno](../technical/setup.md)
+- [Historias de usuario](../product/user-stories.md)
+
+## Ticket #16: Interfaz de administración de proyectos (listado)
+
+**Título:** Implementar listado de proyectos para gestores
+
+**Descripción:** Crear la interfaz que permitirá a los gestores ver, filtrar y acceder a todos los proyectos en el sistema, tanto en borrador como publicados.
+
+**Criterios de Aceptación:**
+- Muestra listado de todos los proyectos con información clave
+- Permite filtrar por estado (borrador, publicado, cerrado)
+- Incluye opciones para crear nuevo proyecto, editar o eliminar existentes
+- Solo es accesible para usuarios con rol de gestor
+- Implementa paginación para manejar muchos proyectos
+- Tiene un diseño responsivo y usable
+
+**Prioridad:** Alta
+
+**Estimación:** 5 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, UI/UX, MVP
+
+**Tareas:**
+1. Crear página para listado de proyectos en área de administración
+2. Implementar componente de tabla con filtros y paginación
+3. Integrar con API para obtener listado de proyectos
+4. Implementar controles para acciones (crear, editar, eliminar)
+5. Diseñar indicadores visuales de estado
+6. Asegurar protección de la ruta para solo gestores
+7. Implementar búsqueda y ordenación
+8. Realizar pruebas de usabilidad
+
+**Enlaces:**
+- [Configuración del entorno](../technical/setup.md)
+- [Historias de usuario](../product/user-stories.md)
+
+## Ticket #17: Formulario de creación/edición de proyectos
+
+**Título:** Implementar formulario para creación y edición de proyectos
+
+**Descripción:** Crear la interfaz que permitirá a los gestores introducir toda la información necesaria para un nuevo proyecto de inversión o editar uno existente.
+
+**Criterios de Aceptación:**
+- El formulario incluye todos los campos necesarios (título, descripción, inversión mínima, objetivo, rentabilidad esperada, ubicación, tipo)
+- Valida todos los campos antes de enviar
+- Permite guardar como borrador
+- Muestra feedback visual durante el proceso de guardado
+- Funciona tanto para creación como para edición
+- Implementa auto-guardado para evitar pérdida de información
+
+**Prioridad:** Alta
+
+**Estimación:** 8 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, UI/UX, MVP
+
+**Tareas:**
+1. Diseñar layout del formulario
+2. Implementar validación de todos los campos
+3. Crear componentes reutilizables para cada sección
+4. Integrar con API para enviar datos
+5. Implementar lógica de guardado automático
+6. Desarrollar sistema de feedback visual (éxito, error)
+7. Implementar vista previa de proyecto
+8. Asegurar accesibilidad (WCAG 2.1 nivel AA)
+9. Realizar pruebas de usabilidad
+
+**Enlaces:**
+- [Configuración del entorno](../technical/setup.md)
+- [Historias de usuario](../product/user-stories.md)
+
+## Ticket #18: Componente de gestión de documentos del proyecto
+
+**Título:** Implementar componente para gestión de documentos del proyecto
+
+**Descripción:** Crear un componente que permita a los gestores subir, categorizar y gestionar documentos asociados a un proyecto de inversión.
+
+**Criterios de Aceptación:**
+- Permite subir múltiples tipos de documentos (PDF, imágenes, videos)
+- Clasifica documentos por tipo (legal, económico, técnico, imagen, video)
+- Asigna nivel de acceso a cada documento (público, socio, inversor)
+- Muestra progreso de carga de archivos
+- Permite eliminar o reemplazar documentos existentes
+- Valida tamaño y formato de archivos según configuración
+
+**Prioridad:** Alta
+
+**Estimación:** 5 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, UI/UX, MVP
+
+**Tareas:**
+1. Diseñar interfaz para subida y gestión de documentos
+2. Implementar componente de drag & drop para archivos
+3. Crear selector de tipo de documento y nivel de acceso
+4. Integrar con API para subida de documentos
+5. Implementar barra de progreso de carga
+6. Desarrollar funcionalidad de previsualización de documentos
+7. Implementar validación de archivos (tipo, tamaño)
+8. Realizar pruebas de usabilidad
+
+**Enlaces:**
+- [Configuración del entorno](../technical/setup.md)
+- [Historias de usuario](../product/user-stories.md)
+
+## Ticket #19: Página de publicación y vista previa del proyecto
+
+**Título:** Implementar funcionalidad de publicación con vista previa
+
+**Descripción:** Crear la interfaz que permitirá al gestor revisar toda la información del proyecto antes de publicarlo, y completar el proceso de publicación.
+
+**Criterios de Aceptación:**
+- Muestra vista previa de cómo verán el proyecto los socios
+- Verifica que todos los campos obligatorios están completos
+- Indica claramente cualquier información faltante
+- Permite publicar el proyecto si cumple todos los requisitos
+- Muestra confirmación clara del estado de publicación
+- Registra quién publicó el proyecto y cuándo
+
+**Prioridad:** Alta
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, UI/UX, MVP
+
+**Tareas:**
+1. Diseñar interfaz de vista previa del proyecto
+2. Implementar validación de campos obligatorios
+3. Crear componente de checklist de requisitos
+4. Integrar con API para publicación
+5. Desarrollar modal de confirmación
+6. Implementar notificaciones de éxito/error
+7. Crear sistema de redirección post-publicación
+
+**Enlaces:**
+- [Configuración del entorno](../technical/setup.md)
+- [Historias de usuario](../product/user-stories.md)
