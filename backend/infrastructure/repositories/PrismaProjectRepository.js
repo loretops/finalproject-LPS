@@ -43,7 +43,9 @@ class PrismaProjectRepository extends ProjectRepository {
         minRoi,
         location,
         page = 1,
-        limit = 10
+        limit = 10,
+        sortField = 'createdAt',
+        sortDirection = 'desc'
       } = options;
 
       // Construir filtros
@@ -76,6 +78,23 @@ class PrismaProjectRepository extends ProjectRepository {
       // Contar total de proyectos
       const total = await prisma.project.count({ where });
       
+      // Mapa de campos para ordenación (convertir nombres de campos del frontend a nombres en la BD)
+      const fieldMapping = {
+        'title': 'title',
+        'minimum_investment': 'minimumInvestment',
+        'target_amount': 'targetAmount',
+        'expected_roi': 'expectedRoi',
+        'status': 'status',
+        'created_at': 'createdAt'
+      };
+      
+      // Preparar la ordenación
+      const orderBy = {};
+      const mappedField = fieldMapping[sortField] || 'createdAt';
+      orderBy[mappedField] = sortDirection?.toLowerCase() || 'desc';
+      
+      console.log('Ordenando por:', orderBy);
+      
       // Obtener proyectos paginados
       const projects = await prisma.project.findMany({
         where,
@@ -90,9 +109,7 @@ class PrismaProjectRepository extends ProjectRepository {
         },
         skip,
         take: limit,
-        orderBy: {
-          createdAt: 'desc'
-        }
+        orderBy
       });
       
       // Calcular total de páginas

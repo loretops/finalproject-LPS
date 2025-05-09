@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Layout from '../../../components/layout/Layout';
+import AdminLayout from '../../../components/Admin/AdminLayout';
 import { useAuth } from '../../../context/AuthContext';
 import projectService from '../../../services/projectService';
 import { formatCurrency, formatDate } from '../../../utils/formatters';
+import Button from '../../../components/ui/Button';
+import Card from '../../../components/ui/Card';
+import { ArrowUpIcon, ArrowDownIcon } from '@heroicons/react/24/solid';
 
 const ProjectsPage = () => {
   const router = useRouter();
@@ -22,6 +25,10 @@ const ProjectsPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [itemsPerPage] = useState(10);
+  
+  // Estados para ordenación
+  const [sortField, setSortField] = useState('created_at');
+  const [sortDirection, setSortDirection] = useState('desc');
   
   // Renderizar estado con información adicional
   const renderStatusWithInfo = (status) => {
@@ -71,7 +78,9 @@ const ProjectsPage = () => {
         const data = await projectService.getProjects({
           status: filterStatus,
           page: currentPage,
-          limit: itemsPerPage
+          limit: itemsPerPage,
+          sortField,
+          sortDirection
         });
         
         setProjects(data.data);
@@ -86,7 +95,7 @@ const ProjectsPage = () => {
     };
     
     loadProjects();
-  }, [isLoading, user, filter, currentPage, itemsPerPage]);
+  }, [isLoading, user, filter, currentPage, itemsPerPage, sortField, sortDirection]);
   
   // Manejar cambio de filtro
   const handleFilterChange = (newFilter) => {
@@ -97,6 +106,40 @@ const ProjectsPage = () => {
   // Manejar cambio de página
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
+  };
+
+  // Manejar ordenación
+  const handleSort = (field) => {
+    if (field === sortField) {
+      // Si es el mismo campo, cambiar dirección
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Si es campo diferente, establecer el nuevo campo y dirección por defecto asc
+      setSortField(field);
+      setSortDirection('asc');
+    }
+    setCurrentPage(1); // Volver a la primera página al cambiar la ordenación
+  };
+
+  // Renderizar el icono de ordenación
+  const renderSortIcon = (field) => {
+    if (field !== sortField) {
+      return (
+        <span className="ml-1 text-gray-400">
+          <ArrowUpIcon className="h-4 w-4 inline" />
+        </span>
+      );
+    }
+    
+    return (
+      <span className="ml-1 text-primary-600">
+        {sortDirection === 'asc' ? (
+          <ArrowUpIcon className="h-4 w-4 inline" />
+        ) : (
+          <ArrowDownIcon className="h-4 w-4 inline" />
+        )}
+      </span>
+    );
   };
   
   // Manejar eliminación de proyecto
@@ -171,85 +214,67 @@ const ProjectsPage = () => {
   // Si está cargando la autenticación, mostrar indicador
   if (isLoading) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-700 mx-auto"></div>
-            <p className="mt-3 text-gray-600">Cargando...</p>
-          </div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-700 mx-auto"></div>
+          <p className="mt-3 text-gray-600">Cargando...</p>
         </div>
-      </Layout>
+      </div>
     );
   }
   
   return (
-    <Layout>
-      <div className="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="flex flex-wrap justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Proyectos de Inversión</h1>
-            <p className="mt-1 text-sm text-gray-600">
-              Administre los proyectos de inversión disponibles para los socios.
-            </p>
-          </div>
-          
-          <div className="mt-4 sm:mt-0">
-            <Link
-              href="/admin/projects/new"
-              className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-            >
-              Nuevo Proyecto
-            </Link>
-          </div>
+    <AdminLayout>
+      <div className="space-y-8">
+        <div className="border-b border-gray-200 pb-5 mb-5">
+          <h1 className="text-2xl font-bold text-gray-900">Administración de Proyectos</h1>
+          <p className="mt-2 text-sm text-gray-600">
+            Administre los proyectos de inversión disponibles para los socios.
+          </p>
+        </div>
+        
+        <div className="flex justify-end">
+          <Button
+            variant="primary"
+            onClick={() => router.push('/admin/projects/new')}
+          >
+            Nuevo Proyecto
+          </Button>
         </div>
         
         {/* Filtros */}
-        <div className="bg-white shadow rounded-lg mb-6">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="flex flex-wrap gap-2">
-              <button
-                onClick={() => handleFilterChange('all')}
-                className={`px-3 py-2 rounded-md text-sm font-medium ${
-                  filter === 'all' 
-                    ? 'bg-primary-100 text-primary-800' 
-                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                }`}
-              >
-                Todos
-              </button>
-              <button
-                onClick={() => handleFilterChange('draft')}
-                className={`px-3 py-2 rounded-md text-sm font-medium ${
-                  filter === 'draft' 
-                    ? 'bg-primary-100 text-primary-800' 
-                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                }`}
-              >
-                Borradores
-              </button>
-              <button
-                onClick={() => handleFilterChange('published')}
-                className={`px-3 py-2 rounded-md text-sm font-medium ${
-                  filter === 'published' 
-                    ? 'bg-primary-100 text-primary-800' 
-                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                }`}
-              >
-                Publicados
-              </button>
-              <button
-                onClick={() => handleFilterChange('closed')}
-                className={`px-3 py-2 rounded-md text-sm font-medium ${
-                  filter === 'closed' 
-                    ? 'bg-primary-100 text-primary-800' 
-                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                }`}
-              >
-                Cerrados
-              </button>
-            </div>
+        <Card>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant={filter === 'all' ? 'primary' : 'outline'}
+              onClick={() => handleFilterChange('all')}
+              size="sm"
+            >
+              Todos
+            </Button>
+            <Button
+              variant={filter === 'draft' ? 'primary' : 'outline'}
+              onClick={() => handleFilterChange('draft')}
+              size="sm"
+            >
+              Borradores
+            </Button>
+            <Button
+              variant={filter === 'published' ? 'primary' : 'outline'}
+              onClick={() => handleFilterChange('published')}
+              size="sm"
+            >
+              Publicados
+            </Button>
+            <Button
+              variant={filter === 'closed' ? 'primary' : 'outline'}
+              onClick={() => handleFilterChange('closed')}
+              size="sm"
+            >
+              Cerrados
+            </Button>
           </div>
-        </div>
+        </Card>
         
         {/* Mensaje de error */}
         {error && (
@@ -259,7 +284,7 @@ const ProjectsPage = () => {
         )}
         
         {/* Tabla de proyectos */}
-        <div className="bg-white shadow rounded-lg overflow-hidden">
+        <Card>
           {isLoadingProjects ? (
             <div className="px-4 py-5 sm:p-6 text-center">
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-700 mx-auto"></div>
@@ -270,23 +295,53 @@ const ProjectsPage = () => {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th 
+                      scope="col" 
+                      className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleSort('title')}
+                    >
                       Título
+                      {renderSortIcon('title')}
                     </th>
-                    <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th 
+                      scope="col" 
+                      className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleSort('minimum_investment')}
+                    >
                       Inversión Mínima
+                      {renderSortIcon('minimum_investment')}
                     </th>
-                    <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th 
+                      scope="col" 
+                      className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleSort('target_amount')}
+                    >
                       Monto Objetivo
+                      {renderSortIcon('target_amount')}
                     </th>
-                    <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th 
+                      scope="col" 
+                      className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleSort('expected_roi')}
+                    >
                       ROI (%)
+                      {renderSortIcon('expected_roi')}
                     </th>
-                    <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th 
+                      scope="col" 
+                      className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleSort('status')}
+                    >
                       Estado
+                      {renderSortIcon('status')}
                     </th>
-                    <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th 
+                      scope="col" 
+                      className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleSort('created_at')}
+                    >
                       Creado
+                      {renderSortIcon('created_at')}
                     </th>
                     <th scope="col" className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Acciones
@@ -322,37 +377,31 @@ const ProjectsPage = () => {
                         </div>
                       </td>
                       <td className="px-3 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <Link
-                          href={`/admin/projects/${project.id}`}
-                          className="text-primary-600 hover:text-primary-900 mr-4"
-                        >
-                          Ver
-                        </Link>
-                        
-                        {project.status === 'draft' ? (
-                          <Link
-                            href={`/admin/projects/${project.id}/edit`}
-                            className="text-primary-600 hover:text-primary-900 mr-4"
-                          >
-                            Editar
+                        <div className="flex justify-end space-x-2">
+                          <Link href={`/admin/projects/${project.id}`}>
+                            <Button variant="outline" size="sm">Ver</Button>
                           </Link>
-                        ) : (
-                          <span className="text-gray-400 cursor-not-allowed mr-4" title="Los proyectos publicados no pueden ser editados">
-                            Editar
-                          </span>
-                        )}
-                        
-                        <button
-                          onClick={() => handleDelete(project.id)}
-                          disabled={isDeleting && deleteId === project.id}
-                          className={`${
-                            isDeleting && deleteId === project.id
-                              ? 'text-gray-400 cursor-wait'
-                              : 'text-red-600 hover:text-red-900 cursor-pointer'
-                          }`}
-                        >
-                          {isDeleting && deleteId === project.id ? 'Eliminando...' : 'Eliminar'}
-                        </button>
+                          
+                          {project.status === 'draft' ? (
+                            <Link href={`/admin/projects/${project.id}/edit`}>
+                              <Button variant="outline" size="sm">Editar</Button>
+                            </Link>
+                          ) : (
+                            <Button variant="outline" size="sm" disabled title="Los proyectos publicados no pueden ser editados">
+                              Editar
+                            </Button>
+                          )}
+                          
+                          <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={() => handleDelete(project.id)}
+                            isLoading={isDeleting && deleteId === project.id}
+                            disabled={isDeleting && deleteId === project.id}
+                          >
+                            Eliminar
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -362,12 +411,12 @@ const ProjectsPage = () => {
           ) : (
             <div className="px-4 py-5 sm:p-6 text-center">
               <p className="text-gray-500 mb-4">No hay proyectos que coincidan con los filtros seleccionados.</p>
-              <button
+              <Button 
+                variant="outline"
                 onClick={() => handleFilterChange('all')}
-                className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               >
                 Ver todos los proyectos
-              </button>
+              </Button>
             </div>
           )}
           
@@ -375,28 +424,20 @@ const ProjectsPage = () => {
           {totalPages > 1 && (
             <div className="px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
               <div className="flex-1 flex justify-between sm:hidden">
-                <button
+                <Button
+                  variant="outline"
                   onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
-                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${
-                    currentPage === 1
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
-                  }`}
                 >
                   Anterior
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="outline"
                   onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                   disabled={currentPage === totalPages}
-                  className={`ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${
-                    currentPage === totalPages
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'bg-white text-gray-700 hover:bg-gray-50'
-                  }`}
                 >
                   Siguiente
-                </button>
+                </Button>
               </div>
               <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                 <div>
@@ -410,57 +451,47 @@ const ProjectsPage = () => {
                 </div>
                 <div>
                   <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                    <button
+                    <Button
+                      variant="outline"
                       onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                       disabled={currentPage === 1}
-                      className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${
-                        currentPage === 1
-                          ? 'text-gray-300 cursor-not-allowed'
-                          : 'text-gray-500 hover:bg-gray-50'
-                      }`}
+                      className="rounded-l-md"
                     >
                       <span className="sr-only">Anterior</span>
                       <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
-                    </button>
+                    </Button>
                     
                     {[...Array(totalPages).keys()].map((page) => (
-                      <button
+                      <Button
                         key={page + 1}
+                        variant={currentPage === page + 1 ? "primary" : "outline"}
                         onClick={() => handlePageChange(page + 1)}
-                        className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                          currentPage === page + 1
-                            ? 'z-10 bg-primary-50 border-primary-500 text-primary-600'
-                            : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
-                        }`}
                       >
                         {page + 1}
-                      </button>
+                      </Button>
                     ))}
                     
-                    <button
+                    <Button
+                      variant="outline"
                       onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                       disabled={currentPage === totalPages}
-                      className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${
-                        currentPage === totalPages
-                          ? 'text-gray-300 cursor-not-allowed'
-                          : 'text-gray-500 hover:bg-gray-50'
-                      }`}
+                      className="rounded-r-md"
                     >
                       <span className="sr-only">Siguiente</span>
                       <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                       </svg>
-                    </button>
+                    </Button>
                   </nav>
                 </div>
               </div>
             </div>
           )}
-        </div>
+        </Card>
       </div>
-    </Layout>
+    </AdminLayout>
   );
 };
 

@@ -13,6 +13,7 @@ Puedes añadir adicionalmente la conversación completa como link o archivo adju
 7. [Pull requests](#7-pull-requests)
 8. [Seguridad](#8-seguridad)
 9. [Configuración del proyecto](#9-configuración-del-proyecto)
+10. [Estandarización de la interfaz](#10-estandarización-de-la-interfaz)
 
 ---
 
@@ -333,6 +334,30 @@ Todo bien. Ahora quiero que como experto desarrollador full-stack, preparado par
 **Prompt 2:**
 ```
 Empieza por el punto Configura Tailwind CSS como base, y Añade componentes básicos (shadcn/ui o HeadlessUI) para navegación y layouts. Además, añade a Cursor la documentación que me propones en el punto 7. Recursos y documentación recomendada
+```
+
+## 10. Estandarización de la interfaz
+
+**Prompt 1:**
+```
+Los últimos desarrollos los hemos hecho con una interfaz adecuada, mucho mejor que al princpio. me gustaría igualar todo lo que llevamos desarrollado por ahora del frontend para que todo tenga una imagen coherente. Guiame paso a paso. recuerda que hemos instalado alguans deopendencias y librerias para mejorar el interfaz
+```
+
+**Prompt 2:**
+```
+Revisa la primera pantalla de adminstracion de proyectos 
+Ahora revisa las egunda pantalla de gestion de invitados 
+Ahora unifica un mismo estilo: el que cumpla mejor las buenas practicas, y sea más estetico y funcional
+```
+
+**Prompt 3:**
+```
+no creo que haya quedado estandarizado. Pero bueno, ya lo afrontaremos. Mira http://localhost:3001/admin/projects, y revisa el encabezado de la tabla de proyectos, que aparentemente permiten ordenar cada columna de forma ascendente y descendente, epro en la realidad no lo hace
+```
+
+**Prompt 4:**
+```
+He pinchado en las flechas para ordenar asecndentemente la columna TITULO y no lo hace
 ```
 
 
