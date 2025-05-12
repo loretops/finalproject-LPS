@@ -221,6 +221,7 @@ const ProjectCard = ({
           <Link
             href={`/projects/${id}`}
             className={`inline-flex items-center text-primary-600 hover:text-primary-700 font-medium ${variant === 'compact' ? 'text-xs' : 'text-sm'}`}
+            data-testid="view-details-link"
           >
             Ver detalles
             <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

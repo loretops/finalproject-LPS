@@ -155,3 +155,22 @@ Lo primero quiero saber si has probado el nuevo desarrollo, y actualizado @devel
 ```
 si, contonua con el tcket 28. Cuando podré ver el listado de proyectos como socio?
 ```
+
+## Implementación Ticket #26: Página de detalle de proyecto para socios
+
+**Prompt 21:**
+```
+Revisando el estado de los tickets, veo que el #26 (Página de detalle de proyecto para socios) aparece como pendiente, pero al examinar el código, parece que ya está completamente implementado en frontend/pages/projects/[id].jsx. ¿Puedes actualizar el estado del desarrollo para reflejar que este ticket está completo?
+```
+
+## Implementación Ticket #30: Tests e2e para flujo de visualización de proyectos
+
+**Prompt 22:**
+```
+adelante con los siguientes pasos
+```
+
+**Prompt 23:**
+```
+Ahora que hemos implementado todos los componentes y páginas para la visualización de proyectos, el siguiente paso es implementar los tests end-to-end para verificar que todo el flujo funciona correctamente. Vamos a utilizar Cypress para estos tests.
+```

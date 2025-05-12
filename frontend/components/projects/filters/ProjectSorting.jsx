@@ -65,10 +65,11 @@ const ProjectSorting = ({
             value={sortField}
             onChange={handleSortFieldChange}
             className="mr-2 rounded-md border border-gray-300 py-1 px-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+            data-testid="sort-dropdown"
           >
             <option value="">Por defecto</option>
             {sortOptions.map((option) => (
-              <option key={option.id} value={option.id}>
+              <option key={option.id} value={option.id} data-testid={`sort-option-${option.id.toLowerCase()}-${sortDirection}`}>
                 {option.label}
               </option>
             ))}
@@ -79,6 +80,7 @@ const ProjectSorting = ({
               onClick={handleDirectionChange}
               className="p-1 rounded hover:bg-gray-100 text-gray-500"
               aria-label={sortDirection === 'asc' ? 'Ordenar descendente' : 'Ordenar ascendente'}
+              data-testid="sort-direction-toggle"
             >
               {sortDirection === 'asc' ? (
                 <ArrowUpIcon className="h-5 w-5" />

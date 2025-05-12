@@ -88,7 +88,7 @@ const ImageGalleryViewer = ({
   // Renderizar el visor en pantalla completa
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col">
+      <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col" data-testid="fullscreen-gallery">
         {/* Barra superior */}
         <div className="flex justify-between items-center p-4 text-white z-10">
           <div className="flex-1">
@@ -107,6 +107,7 @@ const ImageGalleryViewer = ({
               onClose();
             }}
             className="p-2 rounded-full hover:bg-gray-700 text-white"
+            data-testid="close-fullscreen-button"
           >
             <XMarkIcon className="h-6 w-6" />
           </button>
@@ -120,6 +121,7 @@ const ImageGalleryViewer = ({
               onClick={goToPrevious}
               className="absolute left-4 p-2 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 text-white z-10"
               aria-label="Imagen anterior"
+              data-testid="prev-image-button"
             >
               <ArrowLeftIcon className="h-6 w-6" />
             </button>
@@ -158,6 +160,7 @@ const ImageGalleryViewer = ({
               onClick={goToNext}
               className="absolute right-4 p-2 rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 text-white z-10"
               aria-label="Imagen siguiente"
+              data-testid="next-image-button"
             >
               <ArrowRightIcon className="h-6 w-6" />
             </button>
@@ -227,6 +230,7 @@ const ImageGalleryViewer = ({
           onClick={() => setFullScreen(true)}
           className="absolute top-2 right-2 p-1.5 rounded-full bg-white bg-opacity-70 hover:bg-opacity-100 text-gray-700 shadow"
           aria-label="Ver a pantalla completa"
+          data-testid="fullscreen-button"
         >
           <ArrowsPointingOutIcon className="h-5 w-5" />
         </button>
@@ -238,6 +242,7 @@ const ImageGalleryViewer = ({
               onClick={goToPrevious}
               className="absolute left-2 top-1/2 transform -translate-y-1/2 p-1 rounded-full bg-white bg-opacity-70 hover:bg-opacity-100 text-gray-700 shadow"
               aria-label="Imagen anterior"
+              data-testid="prev-image-button"
             >
               <ArrowLeftIcon className="h-5 w-5" />
             </button>
@@ -246,6 +251,7 @@ const ImageGalleryViewer = ({
               onClick={goToNext}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 rounded-full bg-white bg-opacity-70 hover:bg-opacity-100 text-gray-700 shadow"
               aria-label="Imagen siguiente"
+              data-testid="next-image-button"
             >
               <ArrowRightIcon className="h-5 w-5" />
             </button>

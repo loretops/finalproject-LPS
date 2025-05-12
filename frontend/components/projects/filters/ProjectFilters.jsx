@@ -193,10 +193,11 @@ const ProjectFilters = ({
           value={localFilters.propertyType}
           onChange={handleFilterChange}
           className="w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+          data-testid="filter-property-type"
         >
           <option value="">Todos los tipos</option>
           {propertyTypes.map((type) => (
-            <option key={type} value={type}>
+            <option key={type} value={type} data-testid={`property-type-option-${type.toLowerCase()}`}>
               {type}
             </option>
           ))}
@@ -336,7 +337,9 @@ const ProjectFilters = ({
             <div className="text-sm font-medium text-gray-700 mb-2">
               Filtros activos:
             </div>
-            {renderActiveFilters()}
+            <div data-testid="active-filters">
+              {renderActiveFilters()}
+            </div>
           </div>
         )}
       </div>

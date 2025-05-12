@@ -259,6 +259,7 @@ const ProjectsListPage = () => {
                 propertyTypes={propertyTypes}
                 locations={locations}
                 compact={false}
+                data-testid="project-filters"
               />
             </div>
             
@@ -274,6 +275,7 @@ const ProjectsListPage = () => {
                     sortDirection={sortDirection}
                     onSortChange={handleSortChange}
                     compact={true}
+                    data-testid="project-sorting"
                   />
                 </div>
                 
@@ -316,13 +318,14 @@ const ProjectsListPage = () => {
                     </p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-testid="projects-grid">
                     {projects.map(project => (
                       <ProjectCard 
                         key={project.id} 
                         project={project}
                         onInterestClick={handleInterestClick}
                         isInterested={interests.includes(project.id)}
+                        data-testid="project-card"
                       />
                     ))}
                   </div>

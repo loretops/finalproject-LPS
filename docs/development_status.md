@@ -115,8 +115,8 @@ gantt
 | #23 | Página de listado de proyectos para socios | ✅ | 9/9 | 9/9 | Implementada página completa con integración de filtros, ordenación, paginación y gestión de estados |
 | #27 | Componente visor de galería de imágenes | ✅ | 9/9 | 12/12 | Implementado visor interactivo con soporte para navegación, modo pantalla completa y miniaturas |
 | #28 | Componente visor de documentos | ✅ | 8/8 | 15/15 | Implementado visor que soporta múltiples formatos (PDF, imágenes, video) con controles según nivel de seguridad |
-| #26 | Página de detalle de proyecto para socios | ⚪ | 0/10 | 0/0 | Dependencia con #22, #27, #28 |
-| #30 | Tests e2e para flujo de visualización de proyectos | ⚪ | 0/7 | 0/0 | Pruebas del flujo completo |
+| #26 | Página de detalle de proyecto para socios | ✅ | 10/10 | 0/0 | Implementada página completa con tabs para descripción, galería y documentos. Integrada con componentes de visualización de imágenes y documentos. |
+| #30 | Tests e2e para flujo de visualización de proyectos | ✅ | 7/7 | 7/7 | Implementados tests end-to-end utilizando Cypress con pruebas simuladas que verifican el flujo completo desde el listado hasta el detalle, incluyendo filtrado, navegación, y visualización de imágenes y documentos. |
 
 ## 🚀 Plan de Desarrollo para HU #2
 
@@ -152,36 +152,22 @@ Para la Historia de Usuario 2, el orden recomendado de desarrollo es:
    - **#21: API endpoints para detalle de un proyecto** - Implementar API para ver detalles de un proyecto específico ✅
 
 2. **Fase 2 - Servicios Frontend**
-   - **#22: Servicio frontend para consumo de API** - Crear la capa de servicio que conectará los componentes con la API
+   - **#22: Servicio frontend para consumo de API** - Crear la capa de servicio que conectará los componentes con la API ✅ Implementado
 
 3. **Fase 3 - Componentes Base**
-   - **#24: Componente de tarjeta de proyecto** - Componente reutilizable para mostrar un proyecto
-   - **#25: Componentes de filtrado y ordenación** - Componentes para mejorar la búsqueda de proyectos
+   - **#24: Componente de tarjeta de proyecto** - Componente reutilizable para mostrar un proyecto ✅ Implementado
+   - **#25: Componentes de filtrado y ordenación** - Componentes para mejorar la búsqueda de proyectos ✅ Implementado
 
 4. **Fase 4 - Componentes Avanzados**
-   - **#27: Componente visor de galería** - Para visualizar imágenes del proyecto
-   - **#28: Componente visor de documentos** - Para visualizar documentos según permisos
+   - **#27: Componente visor de galería** - Para visualizar imágenes del proyecto ✅ Implementado
+   - **#28: Componente visor de documentos** - Para visualizar documentos según permisos ✅ Implementado
 
 5. **Fase 5 - Páginas Completas**
-   - **#23: Página de listado de proyectos** - Página principal para ver todos los proyectos disponibles
-   - **#26: Página de detalle de proyecto** - Página para ver toda la información de un proyecto específico
+   - **#23: Página de listado de proyectos** - Página principal para ver todos los proyectos disponibles ✅ Implementado
+   - **#26: Página de detalle de proyecto** - Página para ver toda la información de un proyecto específico ✅ Implementado
 
 6. **Fase 6 - Testing**
-   - **#30: Tests e2e para flujo de visualización** - Validar el funcionamiento completo del flujo
-
-## 🚦 Próximos Tickets a Iniciar
-
-Para comenzar con la HU #2, se recomienda iniciar por:
-
-1. **#20: API endpoints para listar y filtrar proyectos públicos**
-   - Enfoque: Adaptar el repositorio de proyectos existente para incluir filtrado de proyectos publicados
-   - Prerrequisitos: La estructura de datos de Project ya existe (HU #10)
-   - Prioridad: Alta - Es la base para el resto de tickets de esta historia
-
-2. **#29: Middleware de verificación de autenticación para socios**
-   - Enfoque: Reutilizar parte de la lógica de autenticación existente, adaptándola para el rol de socio
-   - Prerrequisitos: Sistema de autenticación básica (HU #1)
-   - Prioridad: Alta - Necesario para proteger todas las rutas de la HU #2
+   - **#30: Tests e2e para flujo de visualización** - Validar el funcionamiento completo del flujo ✅ Implementado
 
 ## 🧪 Resultados de Pruebas Recientes (2025-05-15)
 
@@ -214,6 +200,27 @@ Para comenzar con la HU #2, se recomienda iniciar por:
   - ✅ Vista detallada de proyectos con opciones de publicación y eliminación
 
 ## 📋 Logros Recientes
+
+- **Ticket #30 completado:** Se han implementado con éxito los tests end-to-end para el flujo de visualización de proyectos.
+  - Configurado Cypress como framework de testing e2e
+  - Implementados 7 tests que comprueban todo el flujo desde el listado hasta el detalle de proyecto
+  - Añadidos tests para verificar el filtrado y ordenación de proyectos
+  - Implementados tests para la navegación entre páginas y el uso de pestañas
+  - Añadidos tests para el visor de imágenes y documentos
+  - Implementados tests para funcionalidades como marcar interés en proyectos
+  - Preparados tests para diferentes estados de la aplicación (con/sin datos)
+
+- **Ticket #26 completado:** Se ha implementado con éxito la página de detalle de proyecto para socios.
+  - Creada página dinámica en `/projects/[id].jsx` que muestra información detallada del proyecto
+  - Implementada interfaz con pestañas para visualizar: descripción, galería de imágenes y documentos
+  - Integrada con los componentes ImageGalleryViewer y DocumentViewer
+  - Añadida visualización de información financiera y progreso de financiación
+  - Implementada funcionalidad para marcar interés y compartir proyectos
+  - Añadido manejo de estados de carga, error y contenido vacío
+  - Implementada visualización responsiva para diferentes dispositivos
+  - Aplicada protección de ruta con withAuth para asegurar que solo socios accedan
+  - Implementada visualización de documentos según nivel de acceso
+  - Añadido modo de pantalla completa para documentos
 
 - **Ticket #28 completado:** Se ha implementado con éxito el componente visor de documentos.
   - Creado componente `DocumentViewer` con soporte para múltiples tipos de documentos (PDF, imágenes, videos, Office)
@@ -352,17 +359,18 @@ Para comenzar con la HU #2, se recomienda iniciar por:
 
 4. Implementar tests para el servicio de almacenamiento de documentos
 
-5. Continuar el desarrollo de la Historia de Usuario 2: Ver oportunidades de inversión
+5. Continuar el desarrollo de la Historia de Usuario 2: Ver oportunidades de inversión ✅ COMPLETADO
    - ✅ Implementar endpoints de API para proyectos públicos (Ticket #20)
    - ✅ Validar middleware de verificación de rol de socio (Ticket #29)
    - ✅ Completar API endpoints para detalle de un proyecto (Ticket #21)
    - ✅ Crear servicio frontend para consumo de API (Ticket #22)
    - ✅ Implementar componente de tarjeta de proyecto (Ticket #24)
    - ✅ Desarrollar componentes de filtrado y ordenación (Ticket #25)
-   - ⏳ Implementar interfaz de usuario principal:
-     - Página de listado de proyectos para socios (#23)
-     - Componentes para visualización detallada (#27, #28)
-     - Página de detalle de proyecto (#26)
+   - ✅ Implementar interfaz de usuario principal:
+     - ✅ Página de listado de proyectos para socios (#23)
+     - ✅ Componentes para visualización detallada (#27, #28)
+     - ✅ Página de detalle de proyecto (#26)
+   - ✅ Desarrollar tests e2e para flujo de visualización (#30)
 
 ## Seguimiento de Desarrollo
 
