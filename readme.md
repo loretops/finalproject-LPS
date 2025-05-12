@@ -1998,8 +1998,6 @@ Crear el modelo de datos para gestionar invitaciones de usuarios al club. Implem
 
 ## 7. Pull Requests
 
-> Documenta 3 de las Pull Requests realizadas durante la ejecución del proyecto
-
 **Pull Request 1: Configuración Inicial del Proyecto, HU1 y Documentación Base**
 *   **Número y Título:** #1 - initial project setup AND HU1
 *   **Enlace:** [https://github.com/loretops/finalproject-LPS/pull/1](https://github.com/loretops/finalproject-LPS/pull/1)
@@ -2007,12 +2005,12 @@ Crear el modelo de datos para gestionar invitaciones de usuarios al club. Implem
 *   **Autor(a):** loretops
 *   **Propósito:** Esta Pull Request integra los primeros 11 commits del proyecto, que incluyen la configuración inicial del backend y frontend, la estructura de directorios, la implementación de la Historia de Usuario 1 (Registro mediante invitación), y la documentación base (README, tickets, prompts). También incluye correcciones como la de ignorar el directorio `.next` de frontend. Representa el primer gran avance funcional y estructural del proyecto.
 
-**Pull Request 2**
-*   **Número y Título:**
-*   **Enlace:**
-*   **Fecha de Fusión:**
-*   **Autor(es):**
-*   **Propósito:**
+**Pull Request 2: Estandarización de la Interfaz de Usuario**
+*   **Número y Título:** #2 - UI Standardization
+*   **Enlace:** [https://github.com/loretops/finalproject-LPS/pull/2](https://github.com/loretops/finalproject-LPS/pull/2)
+*   **Fecha de Creación:** Mayo 2024 (Estado: Abierta)
+*   **Autor(a):** loretops
+*   **Propósito:** Esta Pull Request implementa la estandarización completa de la interfaz de usuario en toda la aplicación. Incluye la creación de componentes UI reutilizables (Button, Input, Card), actualización de páginas existentes para usar estos componentes, mejora de la estructura de las páginas de administración para evitar duplicación de elementos, y documentación de los cambios. El objetivo principal es proporcionar una experiencia de usuario coherente y profesional en toda la plataforma.
 
 **Pull Request 3**
 *   **Número y Título:**

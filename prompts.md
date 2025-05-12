@@ -370,6 +370,11 @@ no creo que haya quedado estandarizado. Pero bueno, ya lo afrontaremos. Mira htt
 He pinchado en las flechas para ordenar asecndentemente la columna TITULO y no lo hace
 ```
 
+**Prompt 5:**
+```
+Ya está terminada esta Historia de Usuario, así que vamos a hacer una nueva PR, pero asegurate que sea a mi repositorio, no al original. Actualiza @prompts.md con esto, en la sección Pull Requests, y documenta el @readme.md en la misma sección. Vamos paso a paso
+```
+
 **Prompt 9:**
 ```
 has probado los tests?
