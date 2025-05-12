@@ -6,6 +6,7 @@
 |---------------------|---------------|-------------|-------------|------------|------------|
 | HU #1: Registro mediante invitación | 13 | 10 | 3 | 0 | 0 |
 | HU #10: Publicación de oportunidades | 8 | 7 | 0 | 1 | 0 |
+| HU #2: Ver oportunidades de inversión | 11 | 6 | 0 | 5 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -42,7 +43,25 @@ gantt
   - **Responsable:** [Equipo Frontend]
   - **ETA:** 2025-05-10
 
-### ⚪ Próximos a iniciar (0)
+### ⚪ Próximos a iniciar (3)
+
+- **#24:** Componente de tarjeta de proyecto - HU #2
+  - **Prerequisito:** Servicio frontend implementado (Ticket #22) ✅
+  - **Asignado a:** [Equipo Frontend]
+  - **Prioridad:** Alta
+  - **ETA prevista:** 2025-05-26
+
+- **#25:** Componentes de filtrado y ordenación - HU #2
+  - **Prerequisito:** Servicio frontend implementado (Ticket #22) ✅
+  - **Asignado a:** [Equipo Frontend]
+  - **Prioridad:** Alta
+  - **ETA prevista:** 2025-05-26
+
+- **#23:** Página de listado de proyectos para socios - HU #2
+  - **Prerequisito:** Componentes básicos (#24, #25) y servicio frontend (#22)
+  - **Asignado a:** [Equipo Frontend]
+  - **Prioridad:** Alta
+  - **ETA prevista:** 2025-05-29
 
 ## 📝 Detalles por Historia de Usuario
 
@@ -81,6 +100,75 @@ gantt
 | #18 | Componente gestión documentos | ✅ | 6/6 | 0/0 | Implementación completa de UI. Para el MVP usa almacenamiento simulado (no persistente). Requiere ajustes en backend para producción. |
 | #19 | UI Publicación y vista previa | ✅ | 6/6 | 0/0 | Implementado modal con validaciones, confirmación explícita, retroalimentación visual y notificaciones |
 
+### HU #2: Ver oportunidades de inversión
+
+**Objetivo:** Permitir a los socios ver y explorar las oportunidades de inversión disponibles en la plataforma.
+
+| ID | Título | Estado | AC | Tests | Notas |
+|----|--------|--------|----|----|-------|
+| #20 | API endpoints para listar y filtrar proyectos públicos | ✅ | 8/8 | 6/6 | Implementados endpoints para listar proyectos publicados, aplicados tests y optimizado para socios |
+| #29 | Middleware de verificación de autenticación para socios | ✅ | 7/7 | 0/0 | Validado el uso del middleware existente (jwtAuthMiddleware + roleAuthMiddleware) |
+| #21 | API endpoints para detalle de un proyecto | ✅ | 7/7 | 3/3 | Implementada obtención de detalle con filtrado de documentos por nivel de acceso y registro de visualizaciones |
+| #22 | Servicio frontend para consumo de API de proyectos públicos | ✅ | 8/8 | 5/5 | Creado servicio publicProjectService.js con métodos para listar proyectos y obtener detalles, incluyendo tests |
+| #24 | Componente de tarjeta de proyecto | ✅ | 9/9 | 9/9 | Mejorado componente con soporte para múltiples variantes, indicador de financiación y marcado de interés |
+| #25 | Componentes de filtrado y ordenación | ✅ | 8/8 | 14/14 | Implementados componentes para filtrar por múltiples criterios y ordenar proyectos con soporte para modo compacto |
+| #23 | Página de listado de proyectos para socios | ✅ | 9/9 | 9/9 | Implementada página completa con integración de filtros, ordenación, paginación y gestión de estados |
+| #27 | Componente visor de galería de imágenes | ✅ | 9/9 | 12/12 | Implementado visor interactivo con soporte para navegación, modo pantalla completa y miniaturas |
+| #28 | Componente visor de documentos | ✅ | 8/8 | 15/15 | Implementado visor que soporta múltiples formatos (PDF, imágenes, video) con controles según nivel de seguridad |
+| #26 | Página de detalle de proyecto para socios | ✅ | 10/10 | 0/0 | Implementada página completa con tabs para descripción, galería y documentos. Integrada con componentes de visualización de imágenes y documentos. |
+| #30 | Tests e2e para flujo de visualización de proyectos | ✅ | 7/7 | 7/7 | Implementados tests end-to-end utilizando Cypress con pruebas simuladas que verifican el flujo completo desde el listado hasta el detalle, incluyendo filtrado, navegación, y visualización de imágenes y documentos. |
+
+## 🚀 Plan de Desarrollo para HU #2
+
+```mermaid
+gantt
+    title Plan de Desarrollo HU #2 - Ver oportunidades de inversión
+    dateFormat  YYYY-MM-DD
+    section Backend
+    API endpoints listado (#20)            :hu2-t20, 2025-05-20, 3d
+    API endpoints detalle (#21)            :hu2-t21, after hu2-t20, 2d
+    Middleware verificación (#29)          :hu2-t29, 2025-05-20, 2d
+    section Frontend - Servicios
+    Servicio API proyectos (#22)           :hu2-t22, after hu2-t21, 2d
+    section Frontend - Componentes
+    Componente tarjeta proyecto (#24)      :hu2-t24, after hu2-t22, 2d
+    Componentes filtrado (#25)             :hu2-t25, after hu2-t22, 2d
+    Componente galería (#27)               :hu2-t27, after hu2-t24, 3d
+    Componente visor documentos (#28)      :hu2-t28, after hu2-t24, 3d
+    section Frontend - Páginas
+    Página listado proyectos (#23)         :hu2-t23, after hu2-t25, 3d
+    Página detalle proyecto (#26)          :hu2-t26, after hu2-t28, 4d
+    section Testing
+    Tests e2e (#30)                        :hu2-t30, after hu2-t26, 2d
+```
+
+## 🧭 Dependencias y Orden de Desarrollo
+
+Para la Historia de Usuario 2, el orden recomendado de desarrollo es:
+
+1. **Fase 1 - Backend (Requisitos previos)**
+   - **#20: API endpoints para listar y filtrar proyectos públicos** - Implementar la API base para acceder a proyectos ✅ Implementado
+   - **#29: Middleware de verificación para socios** - Proteger los endpoints para que solo los socios puedan acceder ✅ Validado (se reutiliza el middleware existente)
+   - **#21: API endpoints para detalle de un proyecto** - Implementar API para ver detalles de un proyecto específico ✅
+
+2. **Fase 2 - Servicios Frontend**
+   - **#22: Servicio frontend para consumo de API** - Crear la capa de servicio que conectará los componentes con la API ✅ Implementado
+
+3. **Fase 3 - Componentes Base**
+   - **#24: Componente de tarjeta de proyecto** - Componente reutilizable para mostrar un proyecto ✅ Implementado
+   - **#25: Componentes de filtrado y ordenación** - Componentes para mejorar la búsqueda de proyectos ✅ Implementado
+
+4. **Fase 4 - Componentes Avanzados**
+   - **#27: Componente visor de galería** - Para visualizar imágenes del proyecto ✅ Implementado
+   - **#28: Componente visor de documentos** - Para visualizar documentos según permisos ✅ Implementado
+
+5. **Fase 5 - Páginas Completas**
+   - **#23: Página de listado de proyectos** - Página principal para ver todos los proyectos disponibles ✅ Implementado
+   - **#26: Página de detalle de proyecto** - Página para ver toda la información de un proyecto específico ✅ Implementado
+
+6. **Fase 6 - Testing**
+   - **#30: Tests e2e para flujo de visualización** - Validar el funcionamiento completo del flujo ✅ Implementado
+
 ## 🧪 Resultados de Pruebas Recientes (2025-05-15)
 
 ### ✅ API Backend
@@ -90,6 +178,14 @@ gantt
   - ✅ Las rutas están correctamente protegidas por autenticación y roles
   - ✅ CRUD de proyectos funciona correctamente
   - ✅ Se ha corregido el problema de transformación entre camelCase y snake_case
+- **Endpoints de Proyectos Públicos (nuevo):**
+  - ✅ Implementados endpoints para listar proyectos publicados
+  - ✅ Implementado endpoint para ver detalle completo de un proyecto
+  - ✅ Agregado filtrado de documentos por nivel de acceso
+  - ✅ Funciona correctamente el filtrado por múltiples criterios
+  - ✅ Funcionando correctamente la paginación y ordenación
+  - ✅ Verificada la protección de rutas para usuarios con rol 'partner'
+  - ✅ Respuestas optimizadas para socios con solo la información necesaria
 
 ### Frontend
 
@@ -104,6 +200,107 @@ gantt
   - ✅ Vista detallada de proyectos con opciones de publicación y eliminación
 
 ## 📋 Logros Recientes
+
+- **Ticket #30 completado:** Se han implementado con éxito los tests end-to-end para el flujo de visualización de proyectos.
+  - Configurado Cypress como framework de testing e2e
+  - Implementados 7 tests que comprueban todo el flujo desde el listado hasta el detalle de proyecto
+  - Añadidos tests para verificar el filtrado y ordenación de proyectos
+  - Implementados tests para la navegación entre páginas y el uso de pestañas
+  - Añadidos tests para el visor de imágenes y documentos
+  - Implementados tests para funcionalidades como marcar interés en proyectos
+  - Preparados tests para diferentes estados de la aplicación (con/sin datos)
+
+- **Ticket #26 completado:** Se ha implementado con éxito la página de detalle de proyecto para socios.
+  - Creada página dinámica en `/projects/[id].jsx` que muestra información detallada del proyecto
+  - Implementada interfaz con pestañas para visualizar: descripción, galería de imágenes y documentos
+  - Integrada con los componentes ImageGalleryViewer y DocumentViewer
+  - Añadida visualización de información financiera y progreso de financiación
+  - Implementada funcionalidad para marcar interés y compartir proyectos
+  - Añadido manejo de estados de carga, error y contenido vacío
+  - Implementada visualización responsiva para diferentes dispositivos
+  - Aplicada protección de ruta con withAuth para asegurar que solo socios accedan
+  - Implementada visualización de documentos según nivel de acceso
+  - Añadido modo de pantalla completa para documentos
+
+- **Ticket #28 completado:** Se ha implementado con éxito el componente visor de documentos.
+  - Creado componente `DocumentViewer` con soporte para múltiples tipos de documentos (PDF, imágenes, videos, Office)
+  - Implementado manejo de niveles de seguridad (solo visualización, descarga, impresión)
+  - Añadido modo de pantalla completa con controles completos
+  - Implementada detección automática de tipo de documento
+  - Añadido soporte para visualización de metadatos del documento
+  - Implementado manejo de errores y estados de carga
+  - Desarrollada página de demostración en `/examples/document-viewer`
+  - Creados tests exhaustivos para validar funcionalidades principales
+  - Optimizado para diferentes dispositivos y tamaños de pantalla
+  - Implementados controles de accesibilidad
+
+- **Ticket #27 completado:** Se ha implementado con éxito el componente visor de galería de imágenes.
+  - Creado componente `ImageGalleryViewer` con interfaz intuitiva y responsive
+  - Implementada navegación entre imágenes con controles visuales y soporte para teclado
+  - Añadido modo de pantalla completa para visualización óptima
+  - Implementada visualización de miniaturas con selección activa
+  - Añadido soporte para mostrar título y descripción de cada imagen
+  - Implementado manejo de estados de carga y errores con retroalimentación visual
+  - Desarrollada página de demostración en `/examples/image-gallery`
+  - Creados tests exhaustivos para validar funcionalidades principales
+  - Optimizado para diferentes dispositivos y tamaños de pantalla
+  - Implementada accesibilidad con etiquetas ARIA y navegación por teclado
+
+- **Ticket #23 completado:** Se ha implementado con éxito la página de listado de proyectos para socios.
+  - Implementada página principal `/projects/index.jsx` con listado completo de proyectos
+  - Integrados los componentes de filtrado y ordenación (ProjectFilters y ProjectSorting)
+  - Implementada paginación con navegación intuitiva y sincronización con filtros
+  - Añadido soporte para mantener filtros en la URL para compartir enlaces
+  - Creada página placeholder para detalle de proyecto (/projects/[id])
+  - Implementado manejo de estados de carga y error con retroalimentación visual
+  - Optimizada para dispositivos móviles y escritorio
+  - Protegida con control de acceso basado en roles mediante withAuth
+  - Implementada funcionalidad para marcar interés en proyectos
+
+- **Ticket #24 completado:** Se ha implementado con éxito el componente de tarjeta de proyecto para mostrar oportunidades de inversión.
+  - Mejorado el componente `ProjectCard` para mostrar información clave de cada proyecto
+  - Implementado indicador visual de progreso de financiación con diferentes colores según el porcentaje
+  - Añadido soporte para múltiples variantes de visualización (normal, compacta, destacada)
+  - Implementada funcionalidad para marcar interés en proyectos con feedback visual
+  - Optimizado para mostrar u ocultar elementos según la variante seleccionada
+  - Integrado con los componentes UI existentes (Card, Button)
+  - Implementada visualización responsive para todo tipo de dispositivos
+  - Creados tests exhaustivos para validar todas las funcionalidades
+  - Añadido soporte para formateo de valores monetarios según configuración regional
+
+- **Ticket #22 completado:** Se ha implementado con éxito el servicio frontend para consumo de API de proyectos públicos.
+  - Creado nuevo servicio `publicProjectService.js` para consumir los endpoints de proyectos públicos
+  - Implementado método `getPublishedProjects` para obtener listado paginado y filtrado
+  - Implementado método `getPublishedProjectById` para obtener detalle de un proyecto específico
+  - Implementado método placeholder `registerInterest` para futuras implementaciones
+  - Configurado manejo de errores específicos para diferentes códigos HTTP (403, 404, 500)
+  - Creado archivo de pruebas con casos de uso comunes y manejo de errores
+  - Reutilizada funcionalidad del `apiClient` para autenticación automática
+  - Implementada normalización de datos para compatibilidad frontend/backend
+
+- **Ticket #21 completado:** Se ha implementado con éxito el endpoint API para detalle completo de proyectos.
+  - Mejorado el método getProjectById del servicio para incluir documentos asociados
+  - Implementado filtrado de documentos según nivel de acceso del usuario (visitor, partner, investor, manager)
+  - Añadido registro de visualizaciones para análisis de interés
+  - Optimizada la respuesta para incluir solo la información relevante
+  - Implementados controles de acceso para verificar que el proyecto esté publicado
+  - Creados tests para validar el comportamiento y seguridad del endpoint
+  - Actualizada la documentación del DTO para incluir documentos en la respuesta
+
+- **Ticket #20 completado:** Se ha implementado con éxito los endpoints API para listar y filtrar proyectos publicados.
+  - Creado nuevo controlador PublicProjectController para manejar las solicitudes específicas de proyectos publicados
+  - Implementado método getPublishedProjects en el servicio de proyectos que garantiza que solo se muestren proyectos con estado 'published'
+  - Configuradas rutas protegidas en publicProject.routes.js que requieren autenticación y rol de socio
+  - Implementado soporte para filtrado (tipo de propiedad, ROI mínimo, ubicación)
+  - Añadido soporte para paginación y ordenación de resultados
+  - Optimización de formato de respuesta específico para socios
+  - Aplicados tests para verificar el funcionamiento correcto
+  
+- **Ticket #29 validado:** Se ha verificado que el middleware existente cumple con los requisitos para la autenticación de socios.
+  - Validado que jwtAuthMiddleware verifica correctamente los tokens JWT
+  - Comprobado que roleAuthMiddleware verifica correctamente el rol de socio ('partner')
+  - Confirmado que las rutas de proyectos públicos están protegidas adecuadamente
+  - Realizado pruebas para asegurar que solo usuarios con rol de socio pueden acceder a los endpoints
 
 - **Ticket #14 completado:** Se ha implementado con éxito el servicio de almacenamiento de documentos.
   - Creación de interfaz y servicio para gestión de archivos
@@ -161,6 +358,19 @@ gantt
 3. Finalizar los tickets pendientes de registro mediante invitación (#9, #10)
 
 4. Implementar tests para el servicio de almacenamiento de documentos
+
+5. Continuar el desarrollo de la Historia de Usuario 2: Ver oportunidades de inversión ✅ COMPLETADO
+   - ✅ Implementar endpoints de API para proyectos públicos (Ticket #20)
+   - ✅ Validar middleware de verificación de rol de socio (Ticket #29)
+   - ✅ Completar API endpoints para detalle de un proyecto (Ticket #21)
+   - ✅ Crear servicio frontend para consumo de API (Ticket #22)
+   - ✅ Implementar componente de tarjeta de proyecto (Ticket #24)
+   - ✅ Desarrollar componentes de filtrado y ordenación (Ticket #25)
+   - ✅ Implementar interfaz de usuario principal:
+     - ✅ Página de listado de proyectos para socios (#23)
+     - ✅ Componentes para visualización detallada (#27, #28)
+     - ✅ Página de detalle de proyecto (#26)
+   - ✅ Desarrollar tests e2e para flujo de visualización (#30)
 
 ## Seguimiento de Desarrollo
 
@@ -292,3 +502,41 @@ Se ha completado la implementación del componente para gestionar documentos aso
 ## Próximos Tickets a Desarrollar
 
 - [ ] Ticket #19: Página de publicación y vista previa del proyecto
+
+## ✨ Mejoras Recientes
+
+### Estandarización de Interfaz de Usuario
+
+Se ha completado un trabajo significativo de estandarización de la interfaz de usuario para que todo el frontend presente una apariencia coherente:
+
+1. **Componentes UI Reutilizables Creados:**
+   - Button: Componente de botón flexible con diversas variantes (primary, secondary, outline, danger), tamaños y estados de carga
+   - Input: Componente de entrada de texto con soporte para etiquetas, iconos, validación y mensajes de error
+   - Card: Componente de tarjeta para mostrar información con opciones de título, contenido y pie
+   
+2. **Páginas Actualizadas:**
+   - Página de inicio: Actualizada para usar Tailwind CSS y los componentes de Layout
+   - Página de login: Mejorada con los nuevos componentes UI y un diseño más coherente
+   - Página de registro: Actualizada para usar los componentes UI estandarizados
+   - **Componentes de invitaciones**: Se actualizaron los formularios y listados de invitaciones para usar los componentes estandarizados
+   - **Página de administración de invitaciones**: Integrada con AdminLayout para asegurar coherencia con el resto del panel administrativo
+
+3. **Mejoras de Navegación y Estructura:**
+   - Uso consistente de AdminLayout para todas las páginas de administración
+   - Navegación común para todas las páginas con encabezado unificado
+   - Estilo coherente para las pantallas de carga y mensajes de error
+   - Implementación de estructura jerárquica visual en todas las páginas
+
+4. **Mejoras Generales:**
+   - Uso consistente de Tailwind CSS en todo el frontend
+   - Estilo coherente con la paleta de colores definida
+   - Optimización para todas las resoluciones de pantalla
+   - Mejora en la experiencia de usuario con estados visuales para interacciones
+   - **Visualización mejorada de estados**: Se añadieron indicadores visuales para los diferentes estados de las invitaciones (pendiente, usada, expirada)
+
+Esta estandarización proporciona varias ventajas:
+- Mayor coherencia visual en toda la aplicación
+- Desarrollo más rápido al reutilizar componentes
+- Mejor experiencia de usuario con interfaces familiares
+- Base sólida para el desarrollo futuro
+- Navegación intuitiva y consistente entre secciones

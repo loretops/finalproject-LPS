@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getInvitations } from '../../services/invitationService';
+import Card from '../ui/Card';
+import Button from '../ui/Button';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 const InvitationList = () => {
   const [invitations, setInvitations] = useState([]);
@@ -14,6 +17,20 @@ const InvitationList = () => {
       case 'USED': return 'Utilizada';
       case 'EXPIRED': return 'Expirada';
       default: return status;
+    }
+  };
+
+  // Función para obtener clases para el estado
+  const getStatusClasses = (status) => {
+    switch (status) {
+      case 'PENDING':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'USED':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'EXPIRED':
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
@@ -53,121 +70,87 @@ const InvitationList = () => {
   };
 
   if (loading) {
-    return <div>Cargando invitaciones...</div>;
-  }
-
-  if (error) {
     return (
-      <div style={styles.errorContainer}>
-        <p style={styles.errorText}>{error}</p>
-        <button onClick={handleRefresh} style={styles.refreshButton}>
-          Reintentar
-        </button>
+      <div className="flex justify-center items-center py-12">
+        <div className="flex flex-col items-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-700"></div>
+          <p className="mt-3 text-gray-600">Cargando invitaciones...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        <h2>Invitaciones enviadas</h2>
-        <button onClick={handleRefresh} style={styles.refreshButton}>
+    <Card className="mt-6">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-xl font-semibold text-gray-800">Invitaciones enviadas</h2>
+        <Button 
+          variant="secondary" 
+          onClick={handleRefresh}
+          className="flex items-center"
+        >
+          <ArrowPathIcon className="h-5 w-5 mr-2" />
           Actualizar
-        </button>
+        </Button>
       </div>
       
-      {invitations.length === 0 ? (
-        <p>No hay invitaciones para mostrar.</p>
+      {error && (
+        <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-md">
+          <p className="mb-3">{error}</p>
+          <Button variant="outline" onClick={handleRefresh} size="sm">
+            Reintentar
+          </Button>
+        </div>
+      )}
+      
+      {!error && invitations.length === 0 ? (
+        <div className="text-center py-8 text-gray-500">
+          No hay invitaciones para mostrar.
+        </div>
       ) : (
-        <div style={styles.tableContainer}>
-          <table style={styles.table}>
-            <thead>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
               <tr>
-                <th style={styles.th}>Email</th>
-                <th style={styles.th}>Estado</th>
-                <th style={styles.th}>Fecha de creación</th>
-                <th style={styles.th}>Expira</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Email
+                </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Estado
+                </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Fecha de creación
+                </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Expira
+                </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white divide-y divide-gray-200">
               {invitations.map((invitation) => (
-                <tr key={invitation.id} style={
-                  invitation.status === 'EXPIRED' ? styles.expiredRow :
-                  invitation.status === 'USED' ? styles.usedRow :
-                  styles.pendingRow
-                }>
-                  <td style={styles.td}>{invitation.email}</td>
-                  <td style={styles.td}>{getStatusText(invitation.status)}</td>
-                  <td style={styles.td}>{formatDate(invitation.createdAt)}</td>
-                  <td style={styles.td}>{formatDate(invitation.expiresAt)}</td>
+                <tr key={invitation.id} className={invitation.status === 'EXPIRED' ? 'bg-gray-50' : ''}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {invitation.email}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusClasses(invitation.status)}`}>
+                      {getStatusText(invitation.status)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {formatDate(invitation.createdAt)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {formatDate(invitation.expiresAt)}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       )}
-    </div>
+    </Card>
   );
-};
-
-// Estilos inline
-const styles = {
-  container: {
-    marginTop: '20px',
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '15px',
-  },
-  refreshButton: {
-    padding: '8px 12px',
-    backgroundColor: '#6c757d',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
-  tableContainer: {
-    overflowX: 'auto',
-  },
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse',
-    marginTop: '10px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
-  },
-  th: {
-    backgroundColor: '#f8f9fa',
-    border: '1px solid #dee2e6',
-    padding: '10px',
-    textAlign: 'left',
-  },
-  td: {
-    padding: '10px',
-    border: '1px solid #dee2e6',
-  },
-  pendingRow: {
-    backgroundColor: '#ffffff',
-  },
-  usedRow: {
-    backgroundColor: '#e6f7e6', // Light green for used invitations
-  },
-  expiredRow: {
-    backgroundColor: '#ffeeee', // Light red for expired invitations
-    color: '#999999',
-  },
-  errorContainer: {
-    marginTop: '20px',
-    padding: '15px',
-    backgroundColor: '#ffebee',
-    borderRadius: '4px',
-  },
-  errorText: {
-    color: '#d32f2f',
-    marginBottom: '10px',
-  }
 };
 
 export default InvitationList; 

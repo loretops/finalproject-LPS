@@ -11,7 +11,9 @@
     "start": "node backend/server.js",
     "test": "jest",
     "lint": "eslint .",
-    "test:unit": "echo \"Error: no test specified\" && exit 1"
+    "test:unit": "echo \"Error: no test specified\" && exit 1",
+    "test:e2e": "cypress run",
+    "cypress:open": "cypress open"
   },
   "prisma": {
     "seed": "node backend/prisma/seed.js"
@@ -49,6 +51,7 @@
     "chai": "^5.2.0",
     "concurrently": "^8.2.2",
     "cross-port-killer": "^1.4.0",
+    "cypress": "^14.3.3",
     "eslint": "^8.53.0",
     "eslint-plugin-react": "^7.33.2",
     "identity-obj-proxy": "^3.0.0",

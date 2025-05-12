@@ -7,6 +7,7 @@ const { PrismaClient } = require('@prisma/client');
 const authRoutes = require('./interfaces/http/routes/auth.routes'); // Importar rutas de autenticación
 const invitationRoutes = require('./interfaces/http/routes/invitation.routes'); // Importar rutas de invitaciones
 const projectRoutes = require('./interfaces/http/routes/project.routes'); // Importar rutas de proyectos
+const publicProjectRoutes = require('./interfaces/http/routes/publicProject.routes'); // Importar rutas de proyectos públicos
 const projectDocumentRoutes = require('./application/routes/projectDocumentRoutes'); // Importar rutas de documentos
 
 // <<< AÑADIR ESTE LOG AL INICIO >>>
@@ -39,6 +40,7 @@ app.use((req, res, next) => {
 // --- Rutas de la API ---
 app.use('/api/auth', authRoutes); // Usar rutas de autenticación
 app.use('/api/invitations', invitationRoutes); // Usar rutas de invitaciones
+app.use('/api/projects/public', publicProjectRoutes); // Usar rutas de proyectos públicos
 app.use('/api/projects', projectRoutes); // Usar rutas de proyectos
 app.use('/api', projectDocumentRoutes); // Usar rutas de documentos de proyectos
 

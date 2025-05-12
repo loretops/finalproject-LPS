@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Link from 'next/link';
+import Input from '../ui/Input';
+import Button from '../ui/Button';
+import Card from '../ui/Card';
+import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -17,7 +21,7 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg px-8 py-10 max-w-md w-full mx-auto">
+    <Card className="max-w-md w-full mx-auto">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Iniciar Sesión</h2>
       
       {/* Mensaje de error */}
@@ -28,21 +32,18 @@ const LoginForm = () => {
       )}
       
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            disabled={loading}
-            className="input w-full"
-            placeholder="tu@email.com"
-          />
-        </div>
+        <Input
+          type="email"
+          id="email"
+          name="email"
+          label="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          disabled={loading}
+          placeholder="tu@email.com"
+          icon={<EnvelopeIcon className="h-5 w-5" />}
+        />
         
         <div>
           <div className="flex items-center justify-between mb-1">
@@ -53,37 +54,28 @@ const LoginForm = () => {
               ¿Olvidaste tu contraseña?
             </Link>
           </div>
-          <input
+          <Input
             type="password"
             id="password"
+            name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             disabled={loading}
-            className="input w-full"
             placeholder="••••••••"
+            icon={<LockClosedIcon className="h-5 w-5" />}
           />
         </div>
         
-        <div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn btn-primary w-full"
-          >
-            {loading ? (
-              <span className="flex items-center justify-center">
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span>Accediendo...</span>
-              </span>
-            ) : (
-              'Iniciar Sesión'
-            )}
-          </button>
-        </div>
+        <Button
+          type="submit"
+          variant="primary"
+          fullWidth
+          isLoading={loading}
+          disabled={loading}
+        >
+          Iniciar Sesión
+        </Button>
       </form>
       
       {/* Nota informativa */}
@@ -99,7 +91,7 @@ const LoginForm = () => {
           <p className="text-xs text-gray-600">Contraseña: <span className="font-mono">password123</span></p>
         </div>
       )}
-    </div>
+    </Card>
   );
 };
 

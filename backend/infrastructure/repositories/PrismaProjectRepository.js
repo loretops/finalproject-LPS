@@ -10,19 +10,31 @@ class PrismaProjectRepository extends ProjectRepository {
   /**
    * Encuentra un proyecto por su ID.
    * @param {string} id - ID del proyecto
+   * @param {Object} options - Opciones adicionales
+   * @param {boolean} [options.includeDocuments=false] - Si se deben incluir los documentos asociados
    * @returns {Promise<Object|null>} Proyecto encontrado o null
    */
-  async findById(id) {
+  async findById(id, options = {}) {
     try {
+      // Configurar opciones por defecto
+      const { includeDocuments = false } = options;
+
+      // Construir objeto de incluir en la consulta
+      const include = {
+        creator: true
+      };
+
+      // Incluir documentos si se solicita
+      if (includeDocuments) {
+        include.documents = true;
+      }
+
+      // Realizar consulta a la base de datos
       const project = await prisma.project.findUnique({
         where: { id },
-        include: {
-          creator: true,
-          publisher: true,
-          documents: true
-        }
+        include
       });
-      
+
       return project;
     } catch (error) {
       console.error('Error en PrismaProjectRepository.findById:', error);
@@ -43,7 +55,9 @@ class PrismaProjectRepository extends ProjectRepository {
         minRoi,
         location,
         page = 1,
-        limit = 10
+        limit = 10,
+        sortField = 'createdAt',
+        sortDirection = 'desc'
       } = options;
 
       // Construir filtros
@@ -76,6 +90,23 @@ class PrismaProjectRepository extends ProjectRepository {
       // Contar total de proyectos
       const total = await prisma.project.count({ where });
       
+      // Mapa de campos para ordenación (convertir nombres de campos del frontend a nombres en la BD)
+      const fieldMapping = {
+        'title': 'title',
+        'minimum_investment': 'minimumInvestment',
+        'target_amount': 'targetAmount',
+        'expected_roi': 'expectedRoi',
+        'status': 'status',
+        'created_at': 'createdAt'
+      };
+      
+      // Preparar la ordenación
+      const orderBy = {};
+      const mappedField = fieldMapping[sortField] || 'createdAt';
+      orderBy[mappedField] = sortDirection?.toLowerCase() || 'desc';
+      
+      console.log('Ordenando por:', orderBy);
+      
       // Obtener proyectos paginados
       const projects = await prisma.project.findMany({
         where,
@@ -90,9 +121,7 @@ class PrismaProjectRepository extends ProjectRepository {
         },
         skip,
         take: limit,
-        orderBy: {
-          createdAt: 'desc'
-        }
+        orderBy
       });
       
       // Calcular total de páginas

@@ -43,7 +43,9 @@ class ProjectController {
         minRoi,
         location,
         page = 1,
-        limit = 10
+        limit = 10,
+        sortField,
+        sortDirection
       } = req.query;
 
       // Convertir page y limit a números
@@ -53,8 +55,12 @@ class ProjectController {
         minRoi,
         location,
         page: parseInt(page, 10),
-        limit: parseInt(limit, 10)
+        limit: parseInt(limit, 10),
+        sortField,
+        sortDirection
       };
+
+      console.log('Opciones de búsqueda:', options);
 
       const result = await projectService.getProjects(options);
       res.status(200).json(result);

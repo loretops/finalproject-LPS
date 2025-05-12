@@ -13,6 +13,7 @@ Puedes añadir adicionalmente la conversación completa como link o archivo adju
 7. [Pull requests](#7-pull-requests)
 8. [Seguridad](#8-seguridad)
 9. [Configuración del proyecto](#9-configuración-del-proyecto)
+10. [Estandarización de la interfaz](#10-estandarización-de-la-interfaz)
 
 ---
 
@@ -301,6 +302,16 @@ Quiero hacer lo mismo para la siguiente historia de usuario, que es la 10, así 
 Acuerdate de las @rules.mdc 
 ```
 
+**Prompt 7:**
+```
+Claro, hay que desarrollar todos y cada uno de los tickets de esta Historia de Usuario, como buen desarrollador full-stack. Recuerda escribirlos en el orden logico de desarrollo, segun sus dependencias, y escribelos como siempre en@tickets.md. Fijate en los tickets escritos anteriormente, que son muy completos. Quiero que cada ticket permita al desarrollador tener toda la información para desarrollar lo necesario de princpio a fin, todo lo necesario para backend, frontend, y bases de datos, así como los tests necesarios para que el desarrollo sea robusto. He dicho los necesraios, que no significa hacer demasiados tests, sino solo lso que aporten valor añ desarrollo, y reduzcan futuros errores. Para los tickets que implican frontend hay que tener en cuenta librerias o dependiencias instaladas, o si fuera necesario recomendar otras. Para cada ticket hay que recomendar buenas prácticas. No olvides que esto es MVP, y aceurdate que cualquier alteración del modelo de datos hay que tenerla en cuenta para modificar base de datos y archivos implicados.
+```
+
+**Prompt 8:**
+```
+vamos con el ticket#22. Estoy pendando que , para no perder todos mis prompts de este desarrollo de la HU2, crea un archivo llamado prompts_HU2, con el mismo formato que @prompts.md , pero si indice de navegación inicial, para ir guadando ahi todos los prompts de esta HU, tal y como se indica en @rules. 
+```
+
 ## 7. Pull requests
 
 **Prompt 1:**
@@ -334,6 +345,42 @@ Todo bien. Ahora quiero que como experto desarrollador full-stack, preparado par
 ```
 Empieza por el punto Configura Tailwind CSS como base, y Añade componentes básicos (shadcn/ui o HeadlessUI) para navegación y layouts. Además, añade a Cursor la documentación que me propones en el punto 7. Recursos y documentación recomendada
 ```
+
+## 10. Estandarización de la interfaz
+
+**Prompt 1:**
+```
+Los últimos desarrollos los hemos hecho con una interfaz adecuada, mucho mejor que al princpio. me gustaría igualar todo lo que llevamos desarrollado por ahora del frontend para que todo tenga una imagen coherente. Guiame paso a paso. recuerda que hemos instalado alguans deopendencias y librerias para mejorar el interfaz
+```
+
+**Prompt 2:**
+```
+Revisa la primera pantalla de adminstracion de proyectos 
+Ahora revisa las egunda pantalla de gestion de invitados 
+Ahora unifica un mismo estilo: el que cumpla mejor las buenas practicas, y sea más estetico y funcional
+```
+
+**Prompt 3:**
+```
+no creo que haya quedado estandarizado. Pero bueno, ya lo afrontaremos. Mira http://localhost:3001/admin/projects, y revisa el encabezado de la tabla de proyectos, que aparentemente permiten ordenar cada columna de forma ascendente y descendente, epro en la realidad no lo hace
+```
+
+**Prompt 4:**
+```
+He pinchado en las flechas para ordenar asecndentemente la columna TITULO y no lo hace
+```
+
+**Prompt 5:**
+```
+Ya está terminada esta Historia de Usuario, así que vamos a hacer una nueva PR, pero asegurate que sea a mi repositorio, no al original. Actualiza @prompts.md con esto, en la sección Pull Requests, y documenta el @readme.md en la misma sección. Vamos paso a paso
+```
+
+**Prompt 9:**
+```
+has probado los tests?
+```
+
+
 
 
 

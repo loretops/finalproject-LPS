@@ -1,24 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-// Importar el servicio de registro (ajustar ruta si es necesario)
+import Layout from '../components/layout/Layout';
+import Card from '../components/ui/Card';
+import Input from '../components/ui/Input';
+import Button from '../components/ui/Button';
+// Importar el servicio de registro
 import { register } from '../services/authService';
-// Opcional: Importar contexto de autenticación si se usa para actualizar estado global
-// import { useAuth } from '../context/AuthContext';
+import { 
+  UserIcon, 
+  EnvelopeIcon, 
+  LockClosedIcon,
+  IdentificationIcon 
+} from '@heroicons/react/24/outline';
 
 const RegisterPage = () => {
   const router = useRouter();
-  // const { login: contextLogin } = useAuth(); // Obtener función para actualizar contexto
 
   // Estado para los campos del formulario
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    email: '',       // Se llenará desde la URL
+    email: '',
     password: '',
     confirmPassword: '',
   });
-  const [token, setToken] = useState(''); // Se llenará desde la URL
+  const [token, setToken] = useState('');
 
   // Estado para UI
   const [loading, setLoading] = useState(false);
@@ -34,8 +41,6 @@ const RegisterPage = () => {
         setFormData(prev => ({ ...prev, email: urlEmail }));
       } else {
         setError('Información de invitación inválida o faltante. No se puede registrar.');
-        // O redirigir a otra página si no hay token/email
-        // router.push('/'); 
       }
     }
   }, [router.isReady, router.query]);
@@ -53,11 +58,11 @@ const RegisterPage = () => {
 
   // Manejador de envío del formulario
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevenir recarga de página
-    setError(''); // Limpiar errores previos
+    e.preventDefault();
+    setError('');
     setPasswordError('');
 
-    // --- Validaciones Frontend --- 
+    // Validaciones Frontend
     if (!formData.firstName || !formData.lastName || !formData.password || !formData.confirmPassword) {
       setError('Todos los campos (excepto email) son requeridos.');
       return;
@@ -66,23 +71,10 @@ const RegisterPage = () => {
       setPasswordError('Las contraseñas no coinciden.');
       return;
     }
-    // Añadir validación de fortaleza de contraseña si se desea
-    // const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
-    // if (!passwordRegex.test(formData.password)) {
-    //   setPasswordError('La contraseña debe tener al menos 8 caracteres, una letra y un número.');
-    //   return;
-    // }
 
     setLoading(true);
-    console.log('Enviando datos de registro:', {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      password: formData.password,
-      token: token
-    });
-
-    // --- Preparar datos para la API --- 
+    
+    // Preparar datos para la API
     const registrationData = {
       firstName: formData.firstName,
       lastName: formData.lastName,
@@ -90,180 +82,132 @@ const RegisterPage = () => {
       password: formData.password,
       token: token
     };
-    console.log('Enviando datos de registro a la API:', registrationData);
 
-    // --- Llamada a API Real --- 
     try {
-      // Llamada al servicio real
+      // Llamada al servicio de registro
       const response = await register(registrationData);
       console.log('API Response:', response);
-
-      // Éxito: El servicio ya guarda el token en localStorage.
-      // Opcional: Actualizar estado global de autenticación si se usa contexto
-      // if (contextLogin) { contextLogin(response.token); } // Actualiza el contexto 
-
-      // Redirigir a la página de éxito o al dashboard
-      // Idealmente, la página de confirmación del Ticket #11
-      router.push('/registration-success'); 
-      // O si el login es inmediato y se prefiere ir al dashboard:
-      // router.push('/dashboard');
-
+      
+      // Redirigir a la página de éxito
+      router.push('/registration-success');
     } catch (apiError) {
-      // El servicio register ya lanza un Error con el mensaje del backend o uno genérico
       console.error('Error en el registro:', apiError);
       setError(apiError.message || 'Ocurrió un error durante el registro.');
     } finally {
       setLoading(false);
     }
-    // --- Fin Llamada a API --- 
   };
 
   return (
-    <div style={styles.container}>
-      <h1>Registro de Nuevo Socio</h1>
-      <p>Bienvenido/a. Por favor, completa tus datos para finalizar el registro.</p>
-
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <div style={styles.inputGroup}>
-          <label htmlFor="email" style={styles.label}>Email (invitación)</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email} // Valor desde la URL
-            readOnly // No editable
-            style={{ ...styles.input, backgroundColor: '#e9ecef' }} // Estilo para indicar no editable
-          />
+    <Layout hideNav={true}>
+      <div className="flex flex-col items-center justify-center min-h-[80vh] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-primary-600 mb-2">COOPCO</h1>
+            <p className="text-gray-600 mb-6">
+              Plataforma exclusiva para club privado de inversores inmobiliarios
+            </p>
+          </div>
+          
+          <Card>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Registro de Nuevo Socio</h2>
+            <p className="text-gray-600 mb-6 text-center">
+              Bienvenido/a. Por favor, completa tus datos para finalizar el registro.
+            </p>
+            
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md text-sm">
+                {error}
+              </div>
+            )}
+            
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <Input
+                type="email"
+                id="email"
+                name="email"
+                label="Email (invitación)"
+                value={formData.email}
+                readOnly
+                disabled
+                icon={<EnvelopeIcon className="h-5 w-5" />}
+                helperText="Email asociado a tu invitación"
+              />
+              
+              <Input
+                type="text"
+                id="firstName"
+                name="firstName"
+                label="Nombre"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+                icon={<UserIcon className="h-5 w-5" />}
+                placeholder="Tu nombre"
+              />
+              
+              <Input
+                type="text"
+                id="lastName"
+                name="lastName"
+                label="Apellidos"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+                icon={<IdentificationIcon className="h-5 w-5" />}
+                placeholder="Tus apellidos"
+              />
+              
+              <Input
+                type="password"
+                id="password"
+                name="password"
+                label="Contraseña"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                icon={<LockClosedIcon className="h-5 w-5" />}
+                placeholder="••••••••"
+                helperText="Mínimo 8 caracteres recomendado"
+              />
+              
+              <Input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                label="Confirmar Contraseña"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+                icon={<LockClosedIcon className="h-5 w-5" />}
+                placeholder="••••••••"
+                error={passwordError}
+              />
+              
+              <Button
+                type="submit"
+                variant="primary"
+                fullWidth
+                isLoading={loading}
+                disabled={loading || !token}
+              >
+                Completar Registro
+              </Button>
+            </form>
+            
+            {!token && error && (
+              <p className="mt-4 text-center text-sm text-gray-600">
+                Si tienes problemas, contacta con el administrador o{' '}
+                <Link href="/" className="text-primary-600 hover:text-primary-700 font-medium">
+                  vuelve al inicio
+                </Link>.
+              </p>
+            )}
+          </Card>
         </div>
-
-        <div style={styles.inputGroup}>
-          <label htmlFor="firstName" style={styles.label}>Nombre</label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-            style={styles.input}
-          />
-        </div>
-
-        <div style={styles.inputGroup}>
-          <label htmlFor="lastName" style={styles.label}>Apellidos</label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-            style={styles.input}
-          />
-        </div>
-
-        <div style={styles.inputGroup}>
-          <label htmlFor="password" style={styles.label}>Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            style={styles.input}
-          />
-        </div>
-
-        <div style={styles.inputGroup}>
-          <label htmlFor="confirmPassword" style={styles.label}>Confirmar Contraseña</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-            style={passwordError ? { ...styles.input, ...styles.inputError } : styles.input}
-          />
-          {passwordError && <p style={styles.errorTextSmall}>{passwordError}</p>}
-        </div>
-
-        {error && <p style={styles.errorTextGeneral}>{error}</p>}
-
-        <button type="submit" disabled={loading || !token} style={styles.button}>
-          {loading ? 'Registrando...' : 'Completar Registro'}
-        </button>
-      </form>
-
-      {!token && error && (
-         <p style={{marginTop: '1rem'}}>Si tienes problemas, contacta con el administrador o <Link href="/"><span style={{color:'blue', textDecoration: 'underline'}}>vuelve al inicio</span></Link>.</p>
-      )}
-    </div>
+      </div>
+    </Layout>
   );
 };
-
-// Estilos básicos (puedes moverlos a un archivo CSS o usar CSS-in-JS)
-const styles = {
-  container: {
-    maxWidth: '500px',
-    margin: '40px auto',
-    padding: '30px',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    fontFamily: 'Arial, sans-serif',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
-  },
-  inputGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  label: {
-    marginBottom: '5px',
-    fontWeight: 'bold',
-    fontSize: '0.9em',
-  },
-  input: {
-    padding: '10px',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    fontSize: '1em',
-  },
-  inputError: {
-    borderColor: 'red',
-  },
-  button: {
-    padding: '12px 15px',
-    backgroundColor: '#0070f3',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontSize: '1em',
-    marginTop: '10px',
-    transition: 'background-color 0.2s ease',
-  },
-  buttonDisabled: {
-    backgroundColor: '#ccc',
-    cursor: 'not-allowed',
-  },
-  errorTextGeneral: {
-    color: 'red',
-    textAlign: 'center',
-    marginTop: '10px',
-    fontSize: '0.9em',
-  },
-   errorTextSmall: {
-    color: 'red',
-    marginTop: '5px',
-    fontSize: '0.8em',
-  }
-};
-
 
 export default RegisterPage; 
