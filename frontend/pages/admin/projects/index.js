@@ -214,12 +214,12 @@ const ProjectsPage = () => {
   // Si está cargando la autenticación, mostrar indicador
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-700 mx-auto"></div>
-          <p className="mt-3 text-gray-600">Cargando...</p>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-700 mx-auto"></div>
+            <p className="mt-3 text-gray-600">Cargando...</p>
+          </div>
         </div>
-      </div>
     );
   }
   
@@ -229,49 +229,49 @@ const ProjectsPage = () => {
         <div className="border-b border-gray-200 pb-5 mb-5">
           <h1 className="text-2xl font-bold text-gray-900">Administración de Proyectos</h1>
           <p className="mt-2 text-sm text-gray-600">
-            Administre los proyectos de inversión disponibles para los socios.
-          </p>
-        </div>
-        
+              Administre los proyectos de inversión disponibles para los socios.
+            </p>
+          </div>
+          
         <div className="flex justify-end">
           <Button
             variant="primary"
             onClick={() => router.push('/admin/projects/new')}
-          >
-            Nuevo Proyecto
+            >
+              Nuevo Proyecto
           </Button>
         </div>
         
         {/* Filtros */}
         <Card>
-          <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2">
             <Button
               variant={filter === 'all' ? 'primary' : 'outline'}
-              onClick={() => handleFilterChange('all')}
+                onClick={() => handleFilterChange('all')}
               size="sm"
-            >
-              Todos
+              >
+                Todos
             </Button>
             <Button
               variant={filter === 'draft' ? 'primary' : 'outline'}
-              onClick={() => handleFilterChange('draft')}
+                onClick={() => handleFilterChange('draft')}
               size="sm"
-            >
-              Borradores
+              >
+                Borradores
             </Button>
             <Button
               variant={filter === 'published' ? 'primary' : 'outline'}
-              onClick={() => handleFilterChange('published')}
+                onClick={() => handleFilterChange('published')}
               size="sm"
-            >
-              Publicados
+              >
+                Publicados
             </Button>
             <Button
               variant={filter === 'closed' ? 'primary' : 'outline'}
-              onClick={() => handleFilterChange('closed')}
+                onClick={() => handleFilterChange('closed')}
               size="sm"
-            >
-              Cerrados
+              >
+                Cerrados
             </Button>
           </div>
         </Card>
@@ -380,25 +380,25 @@ const ProjectsPage = () => {
                         <div className="flex justify-end space-x-2">
                           <Link href={`/admin/projects/${project.id}`}>
                             <Button variant="outline" size="sm">Ver</Button>
-                          </Link>
-                          
-                          {project.status === 'draft' ? (
+                        </Link>
+                        
+                        {project.status === 'draft' ? (
                             <Link href={`/admin/projects/${project.id}/edit`}>
                               <Button variant="outline" size="sm">Editar</Button>
-                            </Link>
-                          ) : (
+                          </Link>
+                        ) : (
                             <Button variant="outline" size="sm" disabled title="Los proyectos publicados no pueden ser editados">
-                              Editar
+                            Editar
                             </Button>
-                          )}
-                          
+                        )}
+                        
                           <Button
                             variant="danger"
                             size="sm"
-                            onClick={() => handleDelete(project.id)}
+                          onClick={() => handleDelete(project.id)}
                             isLoading={isDeleting && deleteId === project.id}
-                            disabled={isDeleting && deleteId === project.id}
-                          >
+                          disabled={isDeleting && deleteId === project.id}
+                        >
                             Eliminar
                           </Button>
                         </div>

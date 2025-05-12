@@ -15,16 +15,16 @@ export default function Home() {
                 <span className="block text-primary-600 mt-2">Inversiones Inmobiliarias</span>
               </h1>
               <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-500">
-                Plataforma exclusiva para club privado de inversores inmobiliarios
-              </p>
+          Plataforma exclusiva para club privado de inversores inmobiliarios
+        </p>
               <div className="mt-10 flex justify-center">
                 <Link href="/login" className="btn btn-primary">
                   Acceder a la plataforma
                 </Link>
                 <Link href="#about" className="ml-4 btn btn-outline">
                   Conocer más
-                </Link>
-              </div>
+          </Link>
+        </div>
             </div>
           </div>
         </section>
@@ -38,10 +38,10 @@ export default function Home() {
                 Inversión inmobiliaria inteligente
               </p>
               <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-                Nuestra plataforma conecta a un club privado de inversores con oportunidades 
-                inmobiliarias de alta calidad, facilitando una gestión transparente, segura 
-                y eficiente del proceso de inversión.
-              </p>
+            Nuestra plataforma conecta a un club privado de inversores con oportunidades 
+            inmobiliarias de alta calidad, facilitando una gestión transparente, segura 
+            y eficiente del proceso de inversión.
+          </p>
             </div>
 
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -55,8 +55,8 @@ export default function Home() {
                 <p className="text-gray-600">
                   Acceso por invitación a un club cerrado de inversores seleccionados.
                 </p>
-              </div>
-              
+          </div>
+          
               <div className="card hover:shadow-md transition-shadow">
                 <div className="h-12 w-12 rounded-md bg-primary-500 text-white flex items-center justify-center mb-5">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -67,8 +67,8 @@ export default function Home() {
                 <p className="text-gray-600">
                   Inversiones respaldadas por análisis económicos, de mercado y visuales.
                 </p>
-              </div>
-              
+          </div>
+          
               <div className="card hover:shadow-md transition-shadow">
                 <div className="h-12 w-12 rounded-md bg-primary-500 text-white flex items-center justify-center mb-5">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -84,7 +84,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-      </div>
+    </div>
     </Layout>
   );
 } 

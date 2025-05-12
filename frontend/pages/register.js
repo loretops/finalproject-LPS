@@ -73,7 +73,7 @@ const RegisterPage = () => {
     }
 
     setLoading(true);
-    
+
     // Preparar datos para la API
     const registrationData = {
       firstName: formData.firstName,
@@ -87,9 +87,9 @@ const RegisterPage = () => {
       // Llamada al servicio de registro
       const response = await register(registrationData);
       console.log('API Response:', response);
-      
+
       // Redirigir a la página de éxito
-      router.push('/registration-success');
+      router.push('/registration-success'); 
     } catch (apiError) {
       console.error('Error en el registro:', apiError);
       setError(apiError.message || 'Ocurrió un error durante el registro.');
@@ -123,9 +123,9 @@ const RegisterPage = () => {
             
             <form onSubmit={handleSubmit} className="space-y-6">
               <Input
-                type="email"
-                id="email"
-                name="email"
+            type="email"
+            id="email"
+            name="email"
                 label="Email (invitación)"
                 value={formData.email}
                 readOnly
@@ -135,50 +135,50 @@ const RegisterPage = () => {
               />
               
               <Input
-                type="text"
-                id="firstName"
-                name="firstName"
+            type="text"
+            id="firstName"
+            name="firstName"
                 label="Nombre"
-                value={formData.firstName}
-                onChange={handleChange}
-                required
+            value={formData.firstName}
+            onChange={handleChange}
+            required
                 icon={<UserIcon className="h-5 w-5" />}
                 placeholder="Tu nombre"
-              />
-              
+          />
+
               <Input
-                type="text"
-                id="lastName"
-                name="lastName"
+            type="text"
+            id="lastName"
+            name="lastName"
                 label="Apellidos"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
+            value={formData.lastName}
+            onChange={handleChange}
+            required
                 icon={<IdentificationIcon className="h-5 w-5" />}
                 placeholder="Tus apellidos"
-              />
-              
+          />
+
               <Input
-                type="password"
-                id="password"
-                name="password"
+            type="password"
+            id="password"
+            name="password"
                 label="Contraseña"
-                value={formData.password}
-                onChange={handleChange}
-                required
+            value={formData.password}
+            onChange={handleChange}
+            required
                 icon={<LockClosedIcon className="h-5 w-5" />}
                 placeholder="••••••••"
                 helperText="Mínimo 8 caracteres recomendado"
-              />
-              
+          />
+
               <Input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
                 label="Confirmar Contraseña"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
                 icon={<LockClosedIcon className="h-5 w-5" />}
                 placeholder="••••••••"
                 error={passwordError}
@@ -193,19 +193,19 @@ const RegisterPage = () => {
               >
                 Completar Registro
               </Button>
-            </form>
-            
-            {!token && error && (
+      </form>
+
+      {!token && error && (
               <p className="mt-4 text-center text-sm text-gray-600">
                 Si tienes problemas, contacta con el administrador o{' '}
                 <Link href="/" className="text-primary-600 hover:text-primary-700 font-medium">
                   vuelve al inicio
                 </Link>.
               </p>
-            )}
+      )}
           </Card>
         </div>
-      </div>
+    </div>
     </Layout>
   );
 };

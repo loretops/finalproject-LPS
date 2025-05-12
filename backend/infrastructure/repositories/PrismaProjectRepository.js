@@ -34,7 +34,7 @@ class PrismaProjectRepository extends ProjectRepository {
         where: { id },
         include
       });
-
+      
       return project;
     } catch (error) {
       console.error('Error en PrismaProjectRepository.findById:', error);

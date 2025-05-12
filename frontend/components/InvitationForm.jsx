@@ -66,16 +66,16 @@ const InvitationForm = () => {
           icon={<EnvelopeIcon className="h-5 w-5" />}
           helperText="An invitation will be sent to this email address"
         />
-        
+
         <Button
-          type="submit"
+        type="submit"
           variant="primary"
           isLoading={loading}
-          disabled={loading}
-        >
+        disabled={loading}
+      >
           Send Invitation
         </Button>
-      </form>
+    </form>
     </Card>
   );
 };

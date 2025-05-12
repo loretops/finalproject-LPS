@@ -33,17 +33,17 @@ const LoginForm = () => {
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <Input
-          type="email"
-          id="email"
+            type="email"
+            id="email"
           name="email"
           label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          disabled={loading}
-          placeholder="tu@email.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            disabled={loading}
+            placeholder="tu@email.com"
           icon={<EnvelopeIcon className="h-5 w-5" />}
-        />
+          />
         
         <div>
           <div className="flex items-center justify-between mb-1">
@@ -68,11 +68,11 @@ const LoginForm = () => {
         </div>
         
         <Button
-          type="submit"
+            type="submit"
           variant="primary"
           fullWidth
           isLoading={loading}
-          disabled={loading}
+            disabled={loading}
         >
           Iniciar Sesión
         </Button>

@@ -46,19 +46,19 @@ const AdminInvitationsPage = () => {
             Desde aquí puedes enviar nuevas invitaciones y ver su estado.
           </p>
         </div>
-        
-        {/* Sección de enviar invitaciones */}
+      
+      {/* Sección de enviar invitaciones */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Enviar nueva invitación</h2>
-          <InvitationForm />
-        </div>
-        
-        {/* Sección de lista de invitaciones */}
-        <div>
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Invitaciones existentes</h2>
-          <InvitationList />
-        </div>
+        <InvitationForm />
       </div>
+      
+      {/* Sección de lista de invitaciones */}
+      <div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Invitaciones existentes</h2>
+        <InvitationList />
+      </div>
+    </div>
     </AdminLayout>
   );
 };

@@ -65,24 +65,24 @@ const InvitationForm = () => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <Input
-          type="email"
-          id="email"
+            type="email"
+            id="email"
           name="email"
           label="Email del futuro socio"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="ejemplo@dominio.com"
-          disabled={isLoading}
-          required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="ejemplo@dominio.com"
+            disabled={isLoading}
+            required
           icon={<EnvelopeIcon className="h-5 w-5" />}
           helperText="Se enviará un correo de invitación a esta dirección"
-        />
-        
+          />
+
         <Button
-          type="submit"
+          type="submit" 
           variant="primary"
           isLoading={isLoading}
-          disabled={isLoading}
+          disabled={isLoading} 
         >
           Enviar Invitación
         </Button>

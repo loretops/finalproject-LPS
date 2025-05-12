@@ -173,16 +173,16 @@ const ProjectCard = ({
         </div>
         
         {variant !== 'compact' && (
-          <div className="mt-2 flex items-center text-sm text-gray-500">
-            <HomeIcon className="mr-1.5 h-4 w-4 flex-shrink-0 text-gray-400" />
-            <span>{property_type}</span>
-          </div>
+        <div className="mt-2 flex items-center text-sm text-gray-500">
+          <HomeIcon className="mr-1.5 h-4 w-4 flex-shrink-0 text-gray-400" />
+          <span>{property_type}</span>
+        </div>
         )}
         
         {variant !== 'compact' && (
           <p className={`mt-2 text-sm text-gray-500 ${variant === 'featured' ? 'line-clamp-4' : 'line-clamp-2'}`}>
-            {description}
-          </p>
+          {description}
+        </p>
         )}
         
         {/* Barra de progreso de financiación */}
@@ -218,7 +218,7 @@ const ProjectCard = ({
         </div>
         
         <div className="mt-4 flex justify-between items-center">
-          <Link
+          <Link 
             href={`/projects/${id}`}
             className={`inline-flex items-center text-primary-600 hover:text-primary-700 font-medium ${variant === 'compact' ? 'text-xs' : 'text-sm'}`}
             data-testid="view-details-link"
