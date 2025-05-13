@@ -34,4 +34,6 @@ vamosa implementar el siguiente ticket #32
 ```
 Vamos adesarrollar el primer ticket. No olivdes las @rules, y recuerda que quiero guardar todos los propts de esta rama en el archivo @prompts_HU9.md 
 Revisa que se cumplan todos los criterios de acpetación, y si afecta l modelo de datos habrá que actualizar la propia base de datos, los archivos @readme.md , y en otros que esté definido el modelo de datos. 
+
+Has probado los tests. Creo que estaría bien probar los tests cuando se hayan desarrollado
 ``` 

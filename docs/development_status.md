@@ -126,7 +126,7 @@ gantt
 | ID | Título | Estado | AC | Tests | Notas |
 |----|--------|--------|----|----|-------|
 | #31 | Modelo de datos para intereses en proyectos | ✅ | 6/6 | 0/0 | Modelo ya existente en la base de datos que cumple con todos los criterios |
-| #32 | Servicio backend para gestión de intereses | ✅ | 7/7 | 0/0 | Validado el uso del middleware existente (jwtAuthMiddleware + roleAuthMiddleware) |
+| #32 | Servicio backend para gestión de intereses | ✅ | 7/7 | 0/0 | Implementado servicio completo con soporte para registro, listado y eliminación de intereses |
 | #33 | API Endpoints para gestión de intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 | #34 | Servicio frontend para gestión de intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 | #35 | Componente UI botón "Me Interesa" | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
