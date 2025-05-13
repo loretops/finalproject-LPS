@@ -123,7 +123,7 @@ const ProjectCard = ({
 
   // Renderizar el footer con botones y datos financieros
   const renderFooter = () => (
-    <div className="mt-4 pt-3 border-t flex items-center justify-between">
+    <div className="mt-4 pt-3 border-t flex items-center justify-between relative z-10">
       {/* Información financiera */}
       <div>
         {/* Datos de interés financiero según variante */}
@@ -148,14 +148,16 @@ const ProjectCard = ({
         )}
       </div>
       
-      {/* Botón de interés */}
-      <InterestButton
-        projectId={id}
-        variant="outline"
-        size="sm"
-        showText={variant !== 'compact'}
-        onInterestChange={onInterestChange}
-      />
+      {/* Botón de interés - elevamos el botón por encima del link con z-index y position relative */}
+      <div className="relative z-20">
+        <InterestButton
+          projectId={id}
+          variant="outline"
+          size="sm"
+          showText={variant !== 'compact'}
+          onInterestChange={onInterestChange}
+        />
+      </div>
     </div>
   );
 
@@ -231,8 +233,12 @@ const ProjectCard = ({
         {renderFooter()}
       </div>
       
-      {/* Link general para toda la tarjeta */}
-      <Link href={`/projects/${id}`} aria-label={`Ver detalles de ${title}`} className="absolute inset-0">
+      {/* Link general para toda la tarjeta, pero con pointer-events-none en el botón de interés */}
+      <Link 
+        href={`/projects/${id}`} 
+        aria-label={`Ver detalles de ${title}`} 
+        className="absolute inset-0 z-0"
+      >
         <span className="sr-only">Ver detalles de {title}</span>
       </Link>
     </Card>

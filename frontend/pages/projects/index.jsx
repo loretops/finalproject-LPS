@@ -8,6 +8,7 @@ import publicProjectService from '../../services/publicProjectService';
 import interestService from '../../services/interestService';
 import { useAuth } from '../../context/AuthContext';
 import withAuth from '../../components/Auth/withAuth';
+import Layout from '../../components/layout/Layout';
 
 // Número de proyectos por página
 const ITEMS_PER_PAGE = 9;
@@ -251,160 +252,162 @@ const ProjectsListPage = () => {
   };
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>Proyectos de Inversión | COOPCO</title>
-        <meta name="description" content="Explora todas las oportunidades de inversión inmobiliaria disponibles para los socios" />
+        <meta 
+          name="description" 
+          content="Descubre oportunidades de inversión inmobiliaria para socios de COOPCO" 
+        />
       </Head>
-
-      <div className="bg-gray-50 py-8">
-        <div className="container mx-auto px-4">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Oportunidades de Inversión</h1>
-            <p className="text-lg text-gray-600">
-              Explora las oportunidades de inversión inmobiliaria disponibles exclusivamente para socios.
-            </p>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Título y descripción */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Proyectos de Inversión</h1>
+          <p className="mt-2 text-lg text-gray-600">
+            Explora las oportunidades de inversión disponibles para socios
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Sidebar con filtros */}
+          <div className="lg:col-span-1">
+            <ProjectFilters 
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              propertyTypes={propertyTypes}
+              locations={locations}
+              compact={false}
+              data-testid="project-filters"
+            />
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            {/* Sidebar con filtros */}
-            <div className="lg:col-span-1">
-              <ProjectFilters 
-                filters={filters}
-                onFilterChange={handleFilterChange}
-                propertyTypes={propertyTypes}
-                locations={locations}
-                compact={false}
-                data-testid="project-filters"
-              />
-            </div>
-            
-            {/* Contenido principal */}
-            <div className="lg:col-span-3">
-              <div className="bg-white rounded-lg shadow p-6 mb-6">
-                <div className="flex justify-between items-center mb-4">
-                  <div className="text-sm text-gray-500">
-                    Mostrando {Math.min(ITEMS_PER_PAGE * (currentPage - 1) + 1, totalProjects)} - {Math.min(ITEMS_PER_PAGE * currentPage, totalProjects)} de {totalProjects} proyectos
-                  </div>
-                  <ProjectSorting 
-                    sortField={sortField}
-                    sortDirection={sortDirection}
-                    onSortChange={handleSortChange}
-                    compact={true}
-                    data-testid="project-sorting"
-                  />
+          
+          {/* Contenido principal */}
+          <div className="lg:col-span-3">
+            <div className="bg-white rounded-lg shadow p-6 mb-6">
+              <div className="flex justify-between items-center mb-4">
+                <div className="text-sm text-gray-500">
+                  Mostrando {Math.min(ITEMS_PER_PAGE * (currentPage - 1) + 1, totalProjects)} - {Math.min(ITEMS_PER_PAGE * currentPage, totalProjects)} de {totalProjects} proyectos
                 </div>
-                
-                {/* Listado de proyectos */}
-                {loading || isLoadingInterests ? (
-                  <div className="py-12 text-center">
-                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-600"></div>
-                    <p className="mt-2 text-gray-500">Cargando proyectos...</p>
+                <ProjectSorting 
+                  sortField={sortField}
+                  sortDirection={sortDirection}
+                  onSortChange={handleSortChange}
+                  compact={true}
+                  data-testid="project-sorting"
+                />
+              </div>
+              
+              {/* Listado de proyectos */}
+              {loading || isLoadingInterests ? (
+                <div className="py-12 text-center">
+                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-600"></div>
+                  <p className="mt-2 text-gray-500">Cargando proyectos...</p>
+                </div>
+              ) : error ? (
+                <div className="py-8 text-center">
+                  <div className="inline-flex items-center justify-center rounded-full bg-red-100 p-2">
+                    <span className="text-red-600">
+                      <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                    </span>
                   </div>
-                ) : error ? (
-                  <div className="py-8 text-center">
-                    <div className="inline-flex items-center justify-center rounded-full bg-red-100 p-2">
-                      <span className="text-red-600">
-                        <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                      </span>
-                    </div>
-                    <h3 className="mt-2 text-lg font-medium text-gray-900">Error al cargar los proyectos</h3>
-                    <p className="mt-1 text-gray-500">{error}</p>
-                    <button 
-                      onClick={() => window.location.reload()}
-                      className="mt-4 rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
+                  <h3 className="mt-2 text-lg font-medium text-gray-900">Error al cargar los proyectos</h3>
+                  <p className="mt-1 text-gray-500">{error}</p>
+                  <button 
+                    onClick={() => window.location.reload()}
+                    className="mt-4 rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
+                  >
+                    Intentar de nuevo
+                  </button>
+                </div>
+              ) : projects.length === 0 ? (
+                <div className="py-8 text-center">
+                  <div className="inline-flex items-center justify-center rounded-full bg-gray-100 p-2">
+                    <span className="text-gray-600">
+                      <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </span>
+                  </div>
+                  <h3 className="mt-2 text-lg font-medium text-gray-900">No se encontraron proyectos</h3>
+                  <p className="mt-1 text-gray-500">
+                    No hay proyectos que coincidan con los criterios seleccionados. Intenta cambiar los filtros.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-testid="projects-grid">
+                  {projects.map(project => (
+                    <ProjectCard 
+                      key={project.id} 
+                      project={project}
+                      onInterestChange={(newState) => handleInterestChange(project.id, newState)}
+                      data-testid="project-card"
+                    />
+                  ))}
+                </div>
+              )}
+              
+              {/* Paginación */}
+              {!loading && !error && projects.length > 0 && totalPages > 1 && (
+                <div className="mt-8 flex justify-center">
+                  <div className="flex space-x-1">
+                    <button
+                      onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                      disabled={currentPage === 1}
+                      className={`px-3 py-1 rounded-md ${
+                        currentPage === 1
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : 'bg-white text-gray-700 hover:bg-gray-50'
+                      }`}
+                      aria-label="Página anterior"
                     >
-                      Intentar de nuevo
+                      <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                    
+                    {getPageNumbers().map((page, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => typeof page === 'number' && handlePageChange(page)}
+                        disabled={page === '...'}
+                        className={`px-3 py-1 rounded-md ${
+                          page === currentPage
+                            ? 'bg-primary-600 text-white'
+                            : page === '...'
+                            ? 'bg-white text-gray-700 cursor-default'
+                            : 'bg-white text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                    
+                    <button
+                      onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                      disabled={currentPage === totalPages}
+                      className={`px-3 py-1 rounded-md ${
+                        currentPage === totalPages
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : 'bg-white text-gray-700 hover:bg-gray-50'
+                      }`}
+                      aria-label="Página siguiente"
+                    >
+                      <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
                     </button>
                   </div>
-                ) : projects.length === 0 ? (
-                  <div className="py-8 text-center">
-                    <div className="inline-flex items-center justify-center rounded-full bg-gray-100 p-2">
-                      <span className="text-gray-600">
-                        <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                      </span>
-                    </div>
-                    <h3 className="mt-2 text-lg font-medium text-gray-900">No se encontraron proyectos</h3>
-                    <p className="mt-1 text-gray-500">
-                      No hay proyectos que coincidan con los criterios seleccionados. Intenta cambiar los filtros.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-testid="projects-grid">
-                    {projects.map(project => (
-                      <ProjectCard 
-                        key={project.id} 
-                        project={project}
-                        onInterestChange={(newState) => handleInterestChange(project.id, newState)}
-                        data-testid="project-card"
-                      />
-                    ))}
-                  </div>
-                )}
-                
-                {/* Paginación */}
-                {!loading && !error && projects.length > 0 && totalPages > 1 && (
-                  <div className="mt-8 flex justify-center">
-                    <div className="flex space-x-1">
-                      <button
-                        onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                        disabled={currentPage === 1}
-                        className={`px-3 py-1 rounded-md ${
-                          currentPage === 1
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : 'bg-white text-gray-700 hover:bg-gray-50'
-                        }`}
-                        aria-label="Página anterior"
-                      >
-                        <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
-                      </button>
-                      
-                      {getPageNumbers().map((page, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => typeof page === 'number' && handlePageChange(page)}
-                          disabled={page === '...'}
-                          className={`px-3 py-1 rounded-md ${
-                            page === currentPage
-                              ? 'bg-primary-600 text-white'
-                              : page === '...'
-                              ? 'bg-white text-gray-700 cursor-default'
-                              : 'bg-white text-gray-700 hover:bg-gray-50'
-                          }`}
-                        >
-                          {page}
-                        </button>
-                      ))}
-                      
-                      <button
-                        onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                        disabled={currentPage === totalPages}
-                        className={`px-3 py-1 rounded-md ${
-                          currentPage === totalPages
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : 'bg-white text-gray-700 hover:bg-gray-50'
-                        }`}
-                        aria-label="Página siguiente"
-                      >
-                        <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
-    </>
+    </Layout>
   );
 };
 
