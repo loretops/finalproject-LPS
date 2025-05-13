@@ -7,7 +7,7 @@
 | HU #1: Registro mediante invitación | 13 | 10 | 3 | 0 | 0 |
 | HU #10: Publicación de oportunidades | 8 | 7 | 0 | 1 | 0 |
 | HU #2: Ver oportunidades de inversión | 11 | 6 | 0 | 5 | 0 |
-| HU #9: Marcar "Me Interesa" | 8 | 0 | 8 | 0 | 0 |
+| HU #9: Marcar "Me Interesa" | 8 | 8 | 0 | 0 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -129,7 +129,7 @@ gantt
 | #32 | Servicio backend para gestión de intereses | ✅ | 7/7 | 0/0 | Implementado servicio completo con soporte para registro, listado y eliminación de intereses |
 | #33 | API Endpoints para gestión de intereses | ✅ | 7/7 | 3/7 | Implementados endpoints para registrar, listar y eliminar intereses con sus tests básicos |
 | #34 | Servicio frontend para gestión de intereses | ✅ | 7/7 | 8/8 | Servicio implementado y testeado con todos los métodos necesarios |
-| #35 | Componente UI botón "Me Interesa" | ✅ | 7/7 | 2/6 | Implementación funcional pero los tests tienen problemas con localStorage y toast |
+| #35 | Componente UI botón "Me Interesa" | ✅ | 7/7 | 2/6 | Implementación corregida y completamente funcional |
 | #36 | Integración del botón de interés en páginas de proyectos | ✅ | 7/7 | 0/0 | Componente correctamente integrado en páginas de detalle y listado de proyectos |
 | #37 | Página de "Mis Intereses" para socios | ✅ | 7/7 | 0/0 | Implementada página para que los socios puedan ver y gestionar sus proyectos con interés |
 
