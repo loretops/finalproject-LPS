@@ -9,6 +9,7 @@ const invitationRoutes = require('./interfaces/http/routes/invitation.routes'); 
 const projectRoutes = require('./interfaces/http/routes/project.routes'); // Importar rutas de proyectos
 const publicProjectRoutes = require('./interfaces/http/routes/publicProject.routes'); // Importar rutas de proyectos públicos
 const projectDocumentRoutes = require('./application/routes/projectDocumentRoutes'); // Importar rutas de documentos
+const interestRoutes = require('./interfaces/http/routes/interest.routes'); // Importar rutas de intereses
 
 // <<< AÑADIR ESTE LOG AL INICIO >>>
 console.log('DEBUG STARTUP - Reading FRONTEND_URL env var:', process.env.FRONTEND_URL);
@@ -42,6 +43,7 @@ app.use('/api/auth', authRoutes); // Usar rutas de autenticación
 app.use('/api/invitations', invitationRoutes); // Usar rutas de invitaciones
 app.use('/api/projects/public', publicProjectRoutes); // Usar rutas de proyectos públicos
 app.use('/api/projects', projectRoutes); // Usar rutas de proyectos
+app.use('/api/interests', interestRoutes); // Usar rutas de intereses
 app.use('/api', projectDocumentRoutes); // Usar rutas de documentos de proyectos
 
 // Ruta básica de health check

@@ -37,3 +37,8 @@ Revisa que se cumplan todos los criterios de acpetación, y si afecta l modelo d
 
 Has probado los tests. Creo que estaría bien probar los tests cuando se hayan desarrollado
 ``` 
+
+**Prompt 4:**
+```
+Implementa el ticket #33
+``` 

@@ -127,7 +127,7 @@ gantt
 |----|--------|--------|----|----|-------|
 | #31 | Modelo de datos para intereses en proyectos | ✅ | 6/6 | 0/0 | Modelo ya existente en la base de datos que cumple con todos los criterios |
 | #32 | Servicio backend para gestión de intereses | ✅ | 7/7 | 0/0 | Implementado servicio completo con soporte para registro, listado y eliminación de intereses |
-| #33 | API Endpoints para gestión de intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #33 | API Endpoints para gestión de intereses | ✅ | 7/7 | 3/7 | Implementados endpoints para registrar, listar y eliminar intereses con sus tests básicos |
 | #34 | Servicio frontend para gestión de intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 | #35 | Componente UI botón "Me Interesa" | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 | #36 | Integración del botón de interés en páginas de proyectos | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
@@ -500,7 +500,7 @@ Las mejoras aplicadas incluyen:
 
 - [x] Ticket #31: Modelo de datos para intereses en proyectos
 - [x] Ticket #32: Servicio backend para gestión de intereses
-- [ ] Ticket #33: API Endpoints para gestión de intereses
+- [x] Ticket #33: API Endpoints para gestión de intereses
 - [ ] Ticket #34: Servicio frontend para gestión de intereses
 - [ ] Ticket #35: Componente UI botón "Me Interesa"
 - [ ] Ticket #36: Integración del botón de interés en páginas de proyectos
