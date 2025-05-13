@@ -8,7 +8,7 @@
 | HU #10: Publicación de oportunidades | 8 | 7 | 0 | 1 | 0 |
 | HU #2: Ver oportunidades de inversión | 11 | 6 | 0 | 5 | 0 |
 | HU #9: Marcar "Me Interesa" | 8 | 8 | 0 | 0 | 0 |
-| HU #3: Marcar "Invierto" | 12 | 0 | 0 | 12 | 0 |
+| HU #3: Marcar "Invierto" | 12 | 7 | 0 | 5 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -141,13 +141,13 @@ gantt
 
 | ID | Descripción | Estado | Criterios cumplidos | Tests pasados | Observaciones |
 |---|---|---|---|---|---|
-| #40 | Modelo de datos para inversiones | ⏳ | 0/6 | 0/0 | Pendiente de implementación |
-| #41 | Actualización del modelo de proyecto para inversiones | ⏳ | 0/6 | 0/0 | Pendiente de implementación |
-| #42 | Servicio backend para gestión de inversiones | ⏳ | 0/8 | 0/0 | Pendiente de implementación |
-| #43 | API Endpoints para gestión de inversiones | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
-| #44 | Servicio frontend para gestión de inversiones | ⏳ | 0/5 | 0/0 | Pendiente de implementación |
-| #45 | Componente formulario de inversión | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
-| #46 | Integración del formulario en página de detalle | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #40 | Modelo de datos para inversiones | ✅ | 6/6 | 0/0 | Implementada entidad Investment con métodos de dominio |
+| #41 | Actualización del modelo de proyecto para inversiones | ✅ | 6/6 | 0/0 | Actualizada entidad Project con métodos para gestionar inversiones |
+| #42 | Servicio backend para gestión de inversiones | ✅ | 8/8 | 0/0 | Implementado servicio completo con transacciones y notificaciones |
+| #43 | API Endpoints para gestión de inversiones | ✅ | 7/7 | 0/0 | Implementados endpoints para crear, listar y gestionar inversiones |
+| #44 | Servicio frontend para gestión de inversiones | ✅ | 5/5 | 0/0 | Implementado servicio con manejo de errores y todos los métodos |
+| #45 | Componente formulario de inversión | ✅ | 7/7 | 0/0 | Implementado formulario con validaciones y sugerencias |
+| #46 | Integración del formulario en página de detalle | ✅ | 7/7 | 0/0 | Integrado como columna lateral con renovación de estado |
 | #47 | Página de "Mis Inversiones" para socios | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 | #48 | Componente de resumen de inversiones en proyecto | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 | #49 | Sistema de notificaciones para inversiones | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
