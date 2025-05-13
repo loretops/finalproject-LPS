@@ -126,7 +126,7 @@ gantt
 | ID | Título | Estado | AC | Tests | Notas |
 |----|--------|--------|----|----|-------|
 | #31 | Modelo de datos para intereses en proyectos | ✅ | 6/6 | 0/0 | Modelo ya existente en la base de datos que cumple con todos los criterios |
-| #32 | Servicio backend para gestión de intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #32 | Servicio backend para gestión de intereses | ✅ | 7/7 | 0/0 | Validado el uso del middleware existente (jwtAuthMiddleware + roleAuthMiddleware) |
 | #33 | API Endpoints para gestión de intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 | #34 | Servicio frontend para gestión de intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 | #35 | Componente UI botón "Me Interesa" | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
@@ -499,7 +499,7 @@ Las mejoras aplicadas incluyen:
 ### Historia de Usuario 9: Marcar "Me Interesa"
 
 - [x] Ticket #31: Modelo de datos para intereses en proyectos
-- [ ] Ticket #32: Servicio backend para gestión de intereses
+- [x] Ticket #32: Servicio backend para gestión de intereses
 - [ ] Ticket #33: API Endpoints para gestión de intereses
 - [ ] Ticket #34: Servicio frontend para gestión de intereses
 - [ ] Ticket #35: Componente UI botón "Me Interesa"

@@ -24,6 +24,8 @@ No desarrolles nada aún
 **Prompt 2:**
 ```
 Como voy a ir haciendo un archivo de prompts, para almacenar el total de prompts por cada Pull Request, creo que estaría bien hacer una carpeta prompts, que englobe estos archivos. Asiu que debes crear la carpeta, mover los archivos de prompts y crear un nuevo que se llame prompts_HU9, y que incluya este prompt y el anterior, en el mismo formato markdown, y mismos titulos y estructura que el @prompts_HU2.md 
+
+vamosa implementar el siguiente ticket #32
 ```
 
 ## Desarrollo del Ticket #31: Modelo de datos para intereses en proyectos
