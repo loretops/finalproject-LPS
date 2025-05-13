@@ -96,8 +96,13 @@ const ProjectsListPage = () => {
           ...filters
         };
         
+        console.log('ProjectsListPage - Fetching projects with options:', options);
+        
         // Llamar a la API
         const result = await publicProjectService.getPublishedProjects(options);
+        
+        console.log('ProjectsListPage - Received projects data:', result);
+        console.log('ProjectsListPage - Projects IDs:', result.data.map(p => ({ id: p.id, title: p.title })));
         
         if (result && result.data) {
           setProjects(result.data);
@@ -251,6 +256,21 @@ const ProjectsListPage = () => {
     return pageNumbers;
   };
 
+  // Calcular valores para la información de paginación
+  const getDisplayRange = () => {
+    if (loading || projects.length === 0) {
+      return { start: 0, end: 0 };
+    }
+    
+    const start = (currentPage - 1) * ITEMS_PER_PAGE + 1;
+    const end = Math.min(start + projects.length - 1, totalProjects);
+    
+    return { start, end };
+  };
+  
+  const { start, end } = getDisplayRange();
+  const hasProjects = !loading && !error && projects.length > 0;
+
   return (
     <Layout>
       <Head>
@@ -288,7 +308,13 @@ const ProjectsListPage = () => {
             <div className="bg-white rounded-lg shadow p-6 mb-6">
               <div className="flex justify-between items-center mb-4">
                 <div className="text-sm text-gray-500">
-                  Mostrando {Math.min(ITEMS_PER_PAGE * (currentPage - 1) + 1, totalProjects)} - {Math.min(ITEMS_PER_PAGE * currentPage, totalProjects)} de {totalProjects} proyectos
+                  {loading ? (
+                    <span>Cargando proyectos...</span>
+                  ) : hasProjects ? (
+                    <span>Mostrando {projects.length} proyecto{projects.length !== 1 ? 's' : ''}</span>
+                  ) : (
+                    <span>No se encontraron proyectos</span>
+                  )}
                 </div>
                 <ProjectSorting 
                   sortField={sortField}

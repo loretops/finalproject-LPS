@@ -26,6 +26,12 @@ const InterestButton = ({
   const { user, isAuthenticated } = useAuth();
   const router = useRouter();
   
+  // Asegurar que el ID sea un string y esté limpio
+  const sanitizedProjectId = projectId ? String(projectId).trim() : '';
+  
+  // Mostrar información de debugging
+  console.log(`InterestButton - ProjectID tipo: ${typeof projectId}, valor: ${projectId}, sanitizado: ${sanitizedProjectId}`);
+  
   // Estados
   const [isInterested, setIsInterested] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,9 +40,9 @@ const InterestButton = ({
   // Verificar si el usuario tiene interés en este proyecto
   useEffect(() => {
     const checkInterest = async () => {
-      if (isAuthenticated && projectId) {
+      if (isAuthenticated && sanitizedProjectId) {
         try {
-          const hasInterest = await interestService.checkUserInterest(projectId);
+          const hasInterest = await interestService.checkUserInterest(sanitizedProjectId);
           setIsInterested(hasInterest);
         } catch (error) {
           console.error('Error al verificar interés:', error);
@@ -49,10 +55,26 @@ const InterestButton = ({
     };
     
     checkInterest();
-  }, [projectId, isAuthenticated]);
+  }, [sanitizedProjectId, isAuthenticated]);
+  
+  // Handler para detener la propagación
+  const stopPropagation = (e) => {
+    // Detener la propagación para evitar que el clic llegue a la tarjeta/enlace
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      // Usar también stopImmediatePropagation para mayor seguridad
+      if (e.nativeEvent) {
+        e.nativeEvent.stopImmediatePropagation();
+      }
+    }
+  };
   
   // Manejar clic en el botón
-  const handleInterestClick = async () => {
+  const handleInterestClick = async (e) => {
+    // Detener la propagación
+    stopPropagation(e);
+    
     // Si no está autenticado, redirigir al login
     if (!isAuthenticated) {
       // Guardar la URL actual para redirigir después del login
@@ -67,13 +89,19 @@ const InterestButton = ({
       return;
     }
     
+    if (!sanitizedProjectId) {
+      console.error('No se puede registrar interés: ID de proyecto no válido');
+      toast.error('No se pudo procesar la acción. ID de proyecto no válido.');
+      return;
+    }
+    
     setIsLoading(true);
     
     try {
       if (isInterested) {
         // Obtenemos primero el ID del interés
         const interests = await interestService.getUserInterests({ status: 'active' });
-        const interest = interests.find(i => i.project?.id === projectId);
+        const interest = interests.find(i => i.project?.id === sanitizedProjectId);
         
         if (interest) {
           await interestService.removeInterest(interest.id);
@@ -86,7 +114,7 @@ const InterestButton = ({
           }
         }
       } else {
-        await interestService.registerInterest(projectId);
+        await interestService.registerInterest(sanitizedProjectId);
         setIsInterested(true);
         
         toast.success('Has mostrado interés en este proyecto', {
@@ -113,39 +141,46 @@ const InterestButton = ({
   const buttonVariant = isInterested ? 'secondary' : variant;
   
   return (
-    <Button
-      variant={buttonVariant}
-      size={size}
-      isLoading={isLoading || isInitializing}
-      onClick={handleInterestClick}
-      className={`group transition-all duration-300 ${isInterested ? 'bg-green-100 text-green-800 hover:bg-green-200 border border-green-300' : ''} ${className}`}
-      disabled={isLoading || isInitializing}
-      aria-label={isInterested ? 'Quitar interés' : 'Mostrar interés'}
-      title={isInterested ? 'Ya has mostrado interés en este proyecto' : 'Mostrar interés en este proyecto'}
+    <div 
+      onClick={stopPropagation}
+      onMouseDown={stopPropagation}
+      onTouchStart={stopPropagation}
+      className="relative z-50"
     >
-      {/* Icono de corazón con animación */}
-      <svg 
-        xmlns="http://www.w3.org/2000/svg" 
-        viewBox="0 0 24 24" 
-        fill={isInterested ? "currentColor" : "none"} 
-        stroke="currentColor" 
-        className={`w-5 h-5 ${showText ? 'mr-2' : ''} transition-transform duration-300 group-hover:scale-110 ${isInterested ? 'text-green-600' : ''}`}
-        strokeWidth={isInterested ? "0" : "2"}
+      <Button
+        variant={buttonVariant}
+        size={size}
+        isLoading={isLoading || isInitializing}
+        onClick={handleInterestClick}
+        className={`group transition-all duration-300 ${isInterested ? 'bg-green-100 text-green-800 hover:bg-green-200 border border-green-300' : ''} ${className}`}
+        disabled={isLoading || isInitializing}
+        aria-label={isInterested ? 'Quitar interés' : 'Mostrar interés'}
+        title={isInterested ? 'Ya has mostrado interés en este proyecto' : 'Mostrar interés en este proyecto'}
       >
-        <path 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
-          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" 
-        />
-      </svg>
-      
-      {/* Texto del botón (opcional) */}
-      {showText && (
-        <span>
-          {isInterested ? 'Interesado' : 'Me interesa'}
-        </span>
-      )}
-    </Button>
+        {/* Icono de corazón con animación */}
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          viewBox="0 0 24 24" 
+          fill={isInterested ? "currentColor" : "none"} 
+          stroke="currentColor" 
+          className={`w-5 h-5 ${showText ? 'mr-2' : ''} transition-transform duration-300 group-hover:scale-110 ${isInterested ? 'text-green-600' : ''}`}
+          strokeWidth={isInterested ? "0" : "2"}
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" 
+          />
+        </svg>
+        
+        {/* Texto del botón (opcional) */}
+        {showText && (
+          <span>
+            {isInterested ? 'Interesado' : 'Me interesa'}
+          </span>
+        )}
+      </Button>
+    </div>
   );
 };
 

@@ -41,8 +41,11 @@ const camelToSnake = (data) => {
 const normalizeProject = (project) => {
   if (!project) return {};
   
+  // Asegurarnos de que el ID sea un string
+  const projectId = project.id ? String(project.id).trim() : '';
+  
   return {
-    id: project.id || '',
+    id: projectId,
     title: project.title || '',
     description: project.description || '',
     minimum_investment: project.minimum_investment || 0,
@@ -122,10 +125,16 @@ const publicProjectService = {
       // Usar apiClient que ya tiene configurado el interceptor para el token
       const response = await apiClient.get(`/projects/public${queryString}`, config);
       
-      // Normalizar datos para el frontend
+      // Normalizar datos para el frontend, asegurando que los IDs sean strings
       const responseData = {
         data: Array.isArray(response.data.data) 
-          ? response.data.data.map(project => normalizeProject(camelToSnake(project)))
+          ? response.data.data.map(project => {
+              // Asegurar que el ID sea un string
+              if (project && project.id) {
+                project.id = String(project.id);
+              }
+              return normalizeProject(camelToSnake(project));
+            })
           : [],
         pagination: response.data.pagination || {
           page: 1,
@@ -174,16 +183,34 @@ const publicProjectService = {
     // Aplicar control de frecuencia
     await throttleRequest();
     
+    // Validar y normalizar el ID
+    if (!id) throw new Error('Se requiere un ID de proyecto válido');
+    
+    // Asegurar que el ID es una cadena de texto y eliminar espacios
+    const sanitizedId = String(id).trim();
+    
+    console.log('publicProjectService - Fetching project with ID:', sanitizedId);
+    
     try {
+      // Codificar el ID para la URL
+      const encodedId = encodeURIComponent(sanitizedId);
+      
       // Usar apiClient que ya tiene configurado el interceptor para el token
-      const response = await apiClient.get(`/projects/public/${id}`, {
+      const response = await apiClient.get(`/projects/public/${encodedId}`, {
         timeout: 10000 // 10 segundos de timeout
       });
       
+      // Asegurarnos de que el proyecto tenga un ID como string
+      if (response.data && response.data.id) {
+        response.data.id = String(response.data.id);
+      }
+      
       // Normalizar el proyecto antes de devolverlo
-      return normalizeProject(camelToSnake(response.data));
+      const normalizedProject = normalizeProject(camelToSnake(response.data));
+      console.log('publicProjectService - Normalized project:', normalizedProject);
+      return normalizedProject;
     } catch (error) {
-      console.error(`Error al obtener proyecto público con ID ${id}:`, error);
+      console.error(`Error al obtener proyecto público con ID ${sanitizedId}:`, error);
       
       if (error.response) {
         // Si el error es 404, indicar que el proyecto no fue encontrado
@@ -215,8 +242,11 @@ const publicProjectService = {
    */
   async registerInterest(projectId, notes = null) {
     try {
+      // Asegurar que el ID sea una cadena
+      const sanitizedId = String(projectId).trim();
+      
       // Utilizamos el servicio especializado de intereses
-      return await interestService.registerInterest(projectId, notes);
+      return await interestService.registerInterest(sanitizedId, notes);
     } catch (error) {
       console.error(`Error al registrar interés en proyecto ${projectId}:`, error);
       throw error;

@@ -2013,9 +2013,9 @@ Crear el modelo de datos para gestionar invitaciones de usuarios al club. Implem
 *   **Propósito:** Esta Pull Request implementa la estandarización completa de la interfaz de usuario en toda la aplicación. Incluye la creación de componentes UI reutilizables (Button, Input, Card), actualización de páginas existentes para usar estos componentes, mejora de la estructura de las páginas de administración para evitar duplicación de elementos, y documentación de los cambios. El objetivo principal es proporcionar una experiencia de usuario coherente y profesional en toda la plataforma.
 
 **Pull Request 3**
-*   **Número y Título:**
-*   **Enlace:**
-*   **Fecha de Fusión:**
-*   **Autor(es):**
-*   **Propósito:**
+*   **Número y Título:** #3 - Fix "Me Interesa" button functionality (HU9)
+*   **Enlace:** https://github.com/loretops/finalproject-LPS/pull/3
+*   **Fecha de Creación:** Mayo 2024 (Estado: Abierta)
+*   **Autor(a):** loretops
+*   **Propósito:** Esta Pull Request resuelve los problemas de la Historia de Usuario 9 relacionados con la funcionalidad del botón "Me Interesa" en las tarjetas de proyectos. Corrige varios problemas de propagación de eventos que impedían que el botón fuera clickable debido a que el enlace de la tarjeta capturaba el evento. Incluye mejoras en los componentes ProjectCard e InterestButton para asegurar que los eventos de clic se capturen correctamente, se detengan y no se propaguen al contenedor padre. También mejora el mensaje de paginación en la lista de proyectos para evitar problemas con valores NaN. Esta corrección permite a los usuarios expresar adecuadamente su interés en los proyectos directamente desde la vista de lista.
 

@@ -333,6 +333,10 @@ Tengo un problema con el repositorio, y es que he ido haciendo commit y push en 
 @readme.md Tengo que documentar las Pull Request en @readme.md , como parte de la documentación de alto nivel que tengo que presentar, y como parte de la documenatción de un proyecto bien desarrollado, pero no sé muy bien qué debo poner. ¿Me puedes ayudar? Puedes revisar los cambios del repositorio
 ```
 
+**Prompt 3:**
+```
+Prepara una nueva PR, y documentala en @prompts.md y en @readme.md , porque ya hemos terminado la HU9
+```
 
 ## 8. Seguridad
 
