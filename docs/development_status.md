@@ -125,12 +125,12 @@ gantt
 
 | ID | Título | Estado | AC | Tests | Notas |
 |----|--------|--------|----|----|-------|
-| #31 | Modelo de datos para intereses en proyectos | ⏳ | 0/6 | 0/0 | Pendiente de implementación |
+| #31 | Modelo de datos para intereses en proyectos | ✅ | 6/6 | 0/0 | Modelo ya existente en la base de datos que cumple con todos los criterios |
 | #32 | Servicio backend para gestión de intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 | #33 | API Endpoints para gestión de intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 | #34 | Servicio frontend para gestión de intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 | #35 | Componente UI botón "Me Interesa" | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
-| #36 | Integración del botón de interés en páginas | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #36 | Integración del botón de interés en páginas de proyectos | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 | #37 | Página de "Mis Intereses" para socios | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 | #38 | Sistema de notificaciones para intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 | #39 | Tests e2e para flujo de interés en proyectos | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
@@ -498,12 +498,12 @@ Las mejoras aplicadas incluyen:
 
 ### Historia de Usuario 9: Marcar "Me Interesa"
 
-- [ ] Ticket #31: Modelo de datos para intereses en proyectos
+- [x] Ticket #31: Modelo de datos para intereses en proyectos
 - [ ] Ticket #32: Servicio backend para gestión de intereses
 - [ ] Ticket #33: API Endpoints para gestión de intereses
 - [ ] Ticket #34: Servicio frontend para gestión de intereses
 - [ ] Ticket #35: Componente UI botón "Me Interesa"
-- [ ] Ticket #36: Integración del botón de interés en páginas
+- [ ] Ticket #36: Integración del botón de interés en páginas de proyectos
 - [ ] Ticket #37: Página de "Mis Intereses" para socios
 - [ ] Ticket #38: Sistema de notificaciones para intereses
 - [ ] Ticket #39: Tests e2e para flujo de interés en proyectos
