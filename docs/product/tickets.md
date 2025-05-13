@@ -1113,3 +1113,346 @@
 - [Historia de usuario](../product/user-stories.md#-historia-2--ver-oportunidades-de-inversión-must-have)
 - [Configuración de testing](../technical/testing-guide.md)
 - [Datos de prueba](../technical/test-fixtures.md)
+
+# Tickets para Historia de Usuario 9 - Marcar "Me Interesa"
+
+## Ticket #31: Modelo de datos para intereses en proyectos
+
+**Título:** Implementar modelo de datos para gestión de intereses
+
+**Descripción:** Crear el modelo de datos necesario para gestionar la funcionalidad de "Me Interesa" que permite a los socios indicar interés en proyectos de inversión sin un compromiso financiero inmediato.
+
+**Criterios de Aceptación:**
+- El modelo Interest contiene todos los campos requeridos (id, user_id, project_id, created_at, status, notes)
+- Se implementa correctamente el enum para estados ('active', 'converted', 'declined')
+- Se establecen las relaciones adecuadas con los modelos User y Project
+- Se generan migraciones de Prisma funcionales
+- Se implementan índices para consultas eficientes (por usuario, por proyecto)
+- Se garantiza que solo existe un interés activo por usuario y proyecto
+
+**Prioridad:** Alta
+
+**Estimación:** 2 puntos de historia
+
+**Asignado a:** Equipo de Backend
+
+**Etiquetas:** Backend, Base de datos, Prisma, MVP
+
+**Tareas:**
+1. Actualizar el esquema Prisma con el modelo Interest
+2. Definir relaciones con los modelos User y Project
+3. Crear enumeración para estados (active, converted, declined)
+4. Generar migraciones
+5. Implementar índices para búsquedas eficientes
+6. Actualizar el modelo de Notification para soportar notificaciones de tipo 'new_interest'
+7. Ejecutar migraciones en entorno de desarrollo
+8. Verificar integridad referencial
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-9--marcar-me-interesa-must-have)
+- [Modelo de datos existente](../technical/database.md)
+
+## Ticket #32: Servicio backend para gestión de intereses
+
+**Título:** Implementar servicio de gestión de intereses en proyectos
+
+**Descripción:** Crear un servicio en el backend que maneje todas las operaciones relacionadas con la funcionalidad "Me Interesa", incluyendo registro de interés, listado de proyectos de interés y eliminación de interés.
+
+**Criterios de Aceptación:**
+- Se implementa un servicio que permite registrar interés en un proyecto
+- Se puede obtener todos los intereses de un usuario
+- Se puede eliminar un interés existente
+- Se evita la duplicación de intereses activos para un mismo usuario y proyecto
+- Se implementa la lógica para cambiar el estado de un interés (active → converted/declined)
+- Se registran notificaciones automáticas cuando se crea un nuevo interés
+- La operación debe ser transaccional (todo o nada)
+
+**Prioridad:** Alta
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo de Backend
+
+**Etiquetas:** Backend, Servicios, MVP
+
+**Tareas:**
+1. Crear servicio InterestService con métodos principales
+2. Implementar lógica para registrar nuevo interés
+3. Desarrollar función para listar intereses de un usuario
+4. Implementar función para eliminar/actualizar interés
+5. Integrar con servicio de notificaciones para crear alertas
+6. Implementar verificación para evitar duplicados
+7. Manejar todos los errores posibles con mensajes claros
+8. Añadir tests unitarios para verificar funcionamiento correcto
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-9--marcar-me-interesa-must-have)
+- [Servicios existentes](../technical/services.md)
+
+## Ticket #33: API Endpoints para gestión de intereses
+
+**Título:** Implementar endpoints API para gestión de intereses en proyectos
+
+**Descripción:** Crear los endpoints de la API que permitirán a los socios marcar interés en proyectos, ver sus proyectos de interés y eliminar intereses existentes.
+
+**Criterios de Aceptación:**
+- El endpoint POST `/api/projects/:id/interest` permite marcar interés en un proyecto
+- El endpoint GET `/api/users/me/interests` permite ver todos los proyectos de interés del usuario
+- El endpoint DELETE `/api/projects/:id/interest` permite eliminar un interés existente
+- Todos los endpoints están protegidos y solo son accesibles por usuarios autenticados con rol de socio
+- Se validan correctamente todos los parámetros de entrada
+- Se implementan respuestas adecuadas para todos los escenarios posibles
+- Se incluye documentación detallada de los endpoints
+
+**Prioridad:** Alta
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo de Backend
+
+**Etiquetas:** Backend, API, MVP
+
+**Tareas:**
+1. Crear controlador InterestController para manejar las peticiones
+2. Implementar endpoint para marcar interés (POST)
+3. Desarrollar endpoint para listar intereses (GET)
+4. Implementar endpoint para eliminar interés (DELETE)
+5. Aplicar middleware de autenticación y verificación de roles
+6. Implementar validación de parámetros y manejo de errores
+7. Documentar los endpoints en la documentación de API
+8. Crear tests para verificar comportamiento de endpoints
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-9--marcar-me-interesa-must-have)
+- [Implementación de autenticación](../technical/auth.md)
+- [Guía de endpoints API](../technical/api-guidelines.md)
+
+## Ticket #34: Servicio frontend para gestión de intereses
+
+**Título:** Implementar servicio frontend para gestión de intereses en proyectos
+
+**Descripción:** Crear un servicio en el frontend que gestione la comunicación con la API para marcar, listar y eliminar intereses en proyectos por parte de los socios.
+
+**Criterios de Aceptación:**
+- Se implementa un servicio que se comunica con todos los endpoints de intereses
+- Proporciona métodos para marcar interés en un proyecto
+- Ofrece métodos para listar todos los proyectos de interés del usuario
+- Permite eliminar un interés existente
+- Implementa manejo de errores y feedback claro
+- Incluye tipos TypeScript para mejor desarrollo
+- Se integra correctamente con el sistema de autenticación existente
+
+**Prioridad:** Alta
+
+**Estimación:** 2 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, Servicios, MVP
+
+**Tareas:**
+1. Crear archivo de servicio interestService.js
+2. Implementar método para marcar interés (markInterest)
+3. Desarrollar método para listar intereses (getUserInterests)
+4. Implementar método para eliminar interés (removeInterest)
+5. Añadir manejo de errores y mensajes para el usuario
+6. Crear interfaces TypeScript para los tipos de datos
+7. Integrar con sistema de autenticación para encabezados JWT
+8. Escribir tests para verificar funcionamiento del servicio
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-9--marcar-me-interesa-must-have)
+- [Guía de servicios frontend](../technical/frontend-services.md)
+- [Configuración de axios](../technical/http-client.md)
+
+## Ticket #35: Componente UI botón "Me Interesa"
+
+**Título:** Implementar componente botón de interés para proyectos
+
+**Descripción:** Crear un componente reutilizable para marcar interés en proyectos que pueda integrarse en diferentes partes de la aplicación como páginas de listado o de detalle de proyectos.
+
+**Criterios de Aceptación:**
+- Se implementa un componente InterestButton que muestra si un proyecto ya ha sido marcado como interesante
+- El componente permite marcar/desmarcar interés con un solo clic
+- Muestra estados visuales distintos (interesado/no interesado, cargando, error)
+- Se integra con el servicio de intereses para realizar operaciones
+- Muestra feedback inmediato al usuario tras la acción
+- Es responsive y accesible
+- Mantiene coherencia visual con los componentes UI existentes
+
+**Prioridad:** Alta
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, UI/UX, Componentes, MVP
+
+**Tareas:**
+1. Crear componente InterestButton reutilizable
+2. Implementar lógica para marcar/desmarcar interés
+3. Integrar con el servicio de intereses (Ticket #34)
+4. Desarrollar estados visuales (normal, hover, active, loading, success, error)
+5. Implementar animaciones sutiles para mejorar UX
+6. Garantizar accesibilidad (WCAG 2.1 nivel AA)
+7. Asegurar compatibilidad con tema visual de la aplicación
+8. Escribir tests del componente
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-9--marcar-me-interesa-must-have)
+- [Guía de componentes](../technical/component-guide.md)
+- [Biblioteca de componentes UI](../technical/ui-components.md)
+
+## Ticket #36: Integración del botón de interés en páginas de proyectos
+
+**Título:** Integrar botón "Me Interesa" en páginas de listado y detalle de proyectos
+
+**Descripción:** Incorporar el componente de botón de interés en las páginas de listado y detalle de proyectos para permitir a los socios marcar su interés desde cualquier punto donde vean un proyecto.
+
+**Criterios de Aceptación:**
+- El componente InterestButton se integra en la tarjeta de proyecto del listado
+- El componente se integra de manera destacada en la página de detalle de proyecto
+- El estado se sincroniza correctamente entre diferentes vistas
+- Al marcar interés se muestra notificación visual de éxito
+- Se añade contador de personas interesadas en el proyecto (opcional para MVP)
+- La interfaz es coherente y mantiene el diseño general
+- Se implementa feedback visual adecuado para todas las interacciones
+
+**Prioridad:** Alta
+
+**Estimación:** 2 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, UI/UX, Integración, MVP
+
+**Tareas:**
+1. Integrar componente InterestButton en ProjectCard
+2. Añadir componente en la página de detalle del proyecto
+3. Implementar sincronización de estado entre componentes
+4. Desarrollar notificaciones toast para confirmación de acciones
+5. Añadir contador de interesados si el backend proporciona estos datos
+6. Asegurar que la integración sea responsive en todas las vistas
+7. Verificar la usabilidad en diferentes dispositivos
+8. Realizar pruebas de integración
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-9--marcar-me-interesa-must-have)
+- [Página de proyectos existente](../technical/frontend-structure.md)
+- [Componente ProjectCard](../technical/ui-components.md)
+
+## Ticket #37: Página de "Mis Intereses" para socios
+
+**Título:** Implementar página de listado de proyectos de interés del usuario
+
+**Descripción:** Crear una página que muestre todos los proyectos en los que el usuario ha marcado interés, permitiendo acceder rápidamente a ellos y gestionar sus intereses desde un único lugar.
+
+**Criterios de Aceptación:**
+- Se implementa la página en `/account/interests` accesible solo para socios autenticados
+- Muestra un listado de todos los proyectos marcados como interesantes por el usuario
+- Permite filtrar y ordenar los proyectos según diferentes criterios
+- Incluye la opción de eliminar un interés directamente desde el listado
+- Muestra estados visuales apropiados (cargando, vacío, error)
+- Es responsive y accesible en todos los dispositivos
+- Ofrece enlaces directos a la página de detalle de cada proyecto
+
+**Prioridad:** Media
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo de Frontend
+
+**Etiquetas:** Frontend, UI/UX, MVP
+
+**Tareas:**
+1. Crear componente de página para el listado de intereses
+2. Implementar llamada al servicio para obtener intereses del usuario
+3. Desarrollar componentes de filtrado y ordenación específicos
+4. Implementar funcionalidad para eliminar interés desde el listado
+5. Crear estados visuales para diferentes situaciones (cargando, sin resultados)
+6. Integrar componente ProjectCard para mostrar cada proyecto
+7. Asegurar que la página sea completamente responsive
+8. Implementar tests de componente e integración
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-9--marcar-me-interesa-must-have)
+- [Estructura de cuenta de usuario](../technical/frontend-structure.md)
+- [Componentes UI existentes](../technical/ui-components.md)
+
+## Ticket #38: Sistema de notificaciones para intereses
+
+**Título:** Implementar sistema de notificaciones para nuevos intereses en proyectos
+
+**Descripción:** Crear un sistema que genere notificaciones automáticas cuando un socio marca interés en un proyecto, permitiendo a los gestores ver y gestionar estos intereses.
+
+**Criterios de Aceptación:**
+- Se registra una notificación automática cuando un socio marca interés en un proyecto
+- Las notificaciones se envían al gestor/creador del proyecto
+- El sistema soporta notificaciones en la plataforma (y opcionalmente por email)
+- Las notificaciones incluyen información relevante (proyecto, usuario, fecha)
+- Los gestores pueden ver un listado de todas las notificaciones recientes
+- Se marca el estado de leído/no leído en notificaciones
+- El sistema es escalable para soportar otros tipos de notificaciones en el futuro
+
+**Prioridad:** Media
+
+**Estimación:** 5 puntos de historia
+
+**Asignado a:** Equipo Full-Stack
+
+**Etiquetas:** Backend, Frontend, Notificaciones, MVP
+
+**Tareas:**
+1. Extender el modelo Notification para soportar intereses
+2. Crear servicio de notificaciones en backend
+3. Implementar generación automática de notificaciones al marcar interés
+4. Desarrollar endpoint API para obtener notificaciones del usuario
+5. Crear componente de indicador de notificaciones en la interfaz
+6. Implementar página o modal para ver todas las notificaciones
+7. Desarrollar sistema para marcar notificaciones como leídas
+8. Integrar con sistema de emails (opcional para MVP)
+9. Escribir tests para verificar funcionamiento
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-9--marcar-me-interesa-must-have)
+- [Sistema de notificaciones](../technical/notification-system.md)
+- [Configuración de email](../technical/email-service.md)
+
+## Ticket #39: Tests e2e para flujo de interés en proyectos
+
+**Título:** Implementar tests end-to-end para flujo de marcar interés en proyectos
+
+**Descripción:** Crear tests end-to-end que validen el flujo completo de marcar interés en proyectos por parte de los socios, incluyendo marcar interés, ver proyectos de interés y eliminar un interés.
+
+**Criterios de Aceptación:**
+- Se implementan tests e2e con Cypress o similar para el flujo completo
+- Los tests cubren la acción de marcar interés desde la página de listado y detalle
+- Se prueba la visualización de la página "Mis Intereses"
+- Se verifica la eliminación de un interés existente
+- Los tests incluyen verificación de interfaz (estados visuales, feedback)
+- El código de prueba es mantenible y está bien documentado
+- Se verifica la integración correcta con el resto de la aplicación
+
+**Prioridad:** Baja
+
+**Estimación:** 2 puntos de historia
+
+**Asignado a:** Equipo QA/Frontend
+
+**Etiquetas:** Testing, E2E, Calidad, MVP
+
+**Tareas:**
+1. Configurar entorno de testing e2e (o reutilizar el existente)
+2. Crear datos de prueba para usuarios y proyectos
+3. Implementar test de marcar interés desde la página de listado
+4. Crear test para marcar interés desde la página de detalle
+5. Implementar test de visualización de la página "Mis Intereses"
+6. Desarrollar test para eliminar un interés
+7. Verificar el manejo de errores y casos límite
+8. Documentar los tests y sus casos de uso
+9. Integrar con la pipeline de CI/CD existente
+
+**Enlaces:**
+- [Historia de usuario](../product/user-stories.md#-historia-9--marcar-me-interesa-must-have)
+- [Configuración de testing](../technical/testing-guide.md)
+- [Tests e2e existentes](../technical/e2e-tests.md)

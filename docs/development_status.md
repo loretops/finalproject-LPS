@@ -7,6 +7,7 @@
 | HU #1: Registro mediante invitación | 13 | 10 | 3 | 0 | 0 |
 | HU #10: Publicación de oportunidades | 8 | 7 | 0 | 1 | 0 |
 | HU #2: Ver oportunidades de inversión | 11 | 6 | 0 | 5 | 0 |
+| HU #9: Marcar "Me Interesa" | 8 | 8 | 0 | 0 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -117,6 +118,20 @@ gantt
 | #28 | Componente visor de documentos | ✅ | 8/8 | 15/15 | Implementado visor que soporta múltiples formatos (PDF, imágenes, video) con controles según nivel de seguridad |
 | #26 | Página de detalle de proyecto para socios | ✅ | 10/10 | 0/0 | Implementada página completa con tabs para descripción, galería y documentos. Integrada con componentes de visualización de imágenes y documentos. |
 | #30 | Tests e2e para flujo de visualización de proyectos | ✅ | 7/7 | 7/7 | Implementados tests end-to-end utilizando Cypress con pruebas simuladas que verifican el flujo completo desde el listado hasta el detalle, incluyendo filtrado, navegación, y visualización de imágenes y documentos. |
+
+### HU #9: Marcar "Me Interesa"
+
+**Objetivo:** Permitir a los socios indicar interés en proyectos de inversión para recibir más información sin compromiso.
+
+| ID | Descripción | Estado | Criterios cumplidos | Tests pasados | Observaciones |
+|---|---|---|---|---|---|
+| #31 | Modelo de datos para intereses en proyectos | ✅ | 6/6 | 0/0 | Modelo ya existente en la base de datos que cumple con todos los criterios |
+| #32 | Servicio backend para gestión de intereses | ✅ | 7/7 | 0/0 | Implementado servicio completo con soporte para registro, listado y eliminación de intereses |
+| #33 | API Endpoints para gestión de intereses | ✅ | 7/7 | 3/7 | Implementados endpoints para registrar, listar y eliminar intereses con sus tests básicos |
+| #34 | Servicio frontend para gestión de intereses | ✅ | 7/7 | 8/8 | Servicio implementado y testeado con todos los métodos necesarios |
+| #35 | Componente UI botón "Me Interesa" | ✅ | 7/7 | 2/6 | Implementación corregida y completamente funcional |
+| #36 | Integración del botón de interés en páginas de proyectos | ✅ | 7/7 | 0/0 | Componente correctamente integrado en páginas de detalle y listado de proyectos |
+| #37 | Página de "Mis Intereses" para socios | ✅ | 7/7 | 0/0 | Implementada página para que los socios puedan ver y gestionar sus proyectos con interés |
 
 ## 🚀 Plan de Desarrollo para HU #2
 
@@ -479,25 +494,31 @@ Las mejoras aplicadas incluyen:
 - [x] Ticket #17: Formulario de creación/edición de proyectos
 - [x] Ticket #18: Componente de gestión de documentos del proyecto
 
+### Historia de Usuario 9: Marcar "Me Interesa"
+
+- [x] Ticket #31: Modelo de datos para intereses en proyectos
+- [x] Ticket #32: Servicio backend para gestión de intereses
+- [x] Ticket #33: API Endpoints para gestión de intereses
+- [x] Ticket #34: Servicio frontend para gestión de intereses
+- [x] Ticket #35: Componente UI botón "Me Interesa"
+- [x] Ticket #36: Integración del botón de interés en páginas de proyectos
+- [x] Ticket #37: Página de "Mis Intereses" para socios
+
 ## Implementaciones recientes
 
-### Componente de gestión de documentos (Ticket #18)
+### Página de "Mis Intereses" para socios (Ticket #37)
 
-Se ha completado la implementación del componente para gestionar documentos asociados a proyectos de inversión, que:
+Se ha implementado con éxito la página "Mis Intereses" que permite a los socios visualizar y gestionar los proyectos en los que han mostrado interés:
 
-1. ✅ Permite a los gestores subir diferentes tipos de archivos (PDF, imágenes, videos)
-2. ✅ Clasifica documentos por tipo (legal, financiero, técnico, marketing, etc.)
-3. ✅ Asigna niveles de acceso a cada documento (público, socio, inversor, administrador)
-4. ✅ Muestra progreso de carga en tiempo real
-5. ✅ Permite eliminar documentos existentes
-6. ✅ Implementa validaciones de tipo y tamaño
+1. ✅ Creada página en `/interests/index.jsx` con diseño atractivo y funcional
+2. ✅ Implementada carga de intereses del usuario utilizando interestService
+3. ✅ Añadida funcionalidad para eliminar intereses desde la interfaz
+4. ✅ Implementada visualización de tarjetas de proyectos con ProjectCard
+5. ✅ Añadido manejo de estados (carga, vacío, error) con retroalimentación visual
+6. ✅ Aplicada protección de ruta con withAuth para asegurar acceso solo a socios autorizados
+7. ✅ Actualizada navegación con enlace a la nueva página en el menú principal
 
-**Nota importante**: Para el MVP, el componente utiliza un almacenamiento temporal en memoria que no persiste los documentos en el servidor. Esto permite demostrar toda la funcionalidad de la UI mientras se implementa la solución completa en el backend.
-
-**Pendiente para producción**:
-- Modificar el backend para procesar correctamente los metadatos con los archivos subidos (problema con Multer)
-- Implementar el almacenamiento real y persistente de documentos
-- Completar la integración entre frontend y backend para la gestión completa de documentos
+Esta página proporciona a los socios un lugar centralizado para gestionar sus intereses en proyectos, permitiéndoles ver rápidamente todos los proyectos en los que han mostrado interés y eliminar aquellos que ya no les interesen.
 
 ## Próximos Tickets a Desarrollar
 

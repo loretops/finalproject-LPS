@@ -168,6 +168,16 @@ server {
 - 🔄 Implementar limitación de tamaño de archivos en producción
 - 🔄 Configurar sistema de almacenamiento persistente
 
+### Sistema de Intereses
+- 🔄 **Nuevo módulo**: Configurar correctamente el almacenamiento de intereses de usuarios
+  - Asegurar la ejecución de migraciones para el modelo `Interest`
+  - Verificar índices para consultas eficientes
+  - Establecer política de retención de datos para intereses antiguos
+- 🔄 Configurar sistema de notificaciones para gestores
+  - Implementar sistema de notificaciones en tiempo real (opcional)
+  - Configurar envío de emails para notificaciones de nuevos intereses
+- 🔄 Considerar límites de ratio para prevenir abuso (máximo de intereses por usuario/día)
+
 ### Frontend General
 - ✅ Rutas protegidas implementadas
 - ✅ Componentes de UI desarrollados

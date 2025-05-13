@@ -8,6 +8,9 @@ import { formatCurrency, formatDate } from '../../../utils/formatters';
 import Button from '../../../components/ui/Button';
 import Card from '../../../components/ui/Card';
 import { ArrowUpIcon, ArrowDownIcon } from '@heroicons/react/24/solid';
+import ProjectsTable from '../../../components/Admin/ProjectsTable';
+import PublishProjectModal from '../../../components/Admin/PublishProjectModal';
+import { toast } from 'react-hot-toast';
 
 const ProjectsPage = () => {
   const router = useRouter();
@@ -29,6 +32,14 @@ const ProjectsPage = () => {
   // Estados para ordenación
   const [sortField, setSortField] = useState('created_at');
   const [sortDirection, setSortDirection] = useState('desc');
+  
+  // Estados para el modal de publicación
+  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [isPublishing, setIsPublishing] = useState(false);
+  
+  // Estado para mantener registro del último proyecto publicado (para animación)
+  const [lastPublishedId, setLastPublishedId] = useState(null);
   
   // Renderizar estado con información adicional
   const renderStatusWithInfo = (status) => {
@@ -211,6 +222,50 @@ const ProjectsPage = () => {
     }
   };
   
+  // Manejar publicación de proyecto
+  const handlePublishClick = async (projectId) => {
+    try {
+      // Cargar los detalles completos del proyecto
+      const projectDetails = await projectService.getProjectById(projectId);
+      setSelectedProject(projectDetails);
+      setIsPublishModalOpen(true);
+    } catch (err) {
+      console.error('Error al cargar detalles del proyecto:', err);
+      toast.error('No se pudieron cargar los detalles del proyecto');
+    }
+  };
+  
+  const handlePublishConfirm = async () => {
+    if (!selectedProject) return;
+    
+    setIsPublishing(true);
+    try {
+      const updatedProject = await projectService.publishProject(selectedProject.id);
+      
+      // Actualizar el proyecto en la lista sin necesidad de recargar todo
+      setProjects(projects.map(project => 
+        project.id === selectedProject.id ? updatedProject : project
+      ));
+      
+      // Establecer el ID del proyecto publicado para la animación
+      setLastPublishedId(selectedProject.id);
+      
+      // Cerrar el modal y limpiar estados
+      setIsPublishModalOpen(false);
+      setSelectedProject(null);
+      
+      // Mostrar mensaje de éxito
+      toast.success('Proyecto publicado con éxito');
+      setError(null);
+    } catch (err) {
+      console.error('Error al publicar proyecto:', err);
+      toast.error('Error al publicar el proyecto');
+      setError('Hubo un error al publicar el proyecto. Por favor, inténtalo de nuevo.');
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+  
   // Si está cargando la autenticación, mostrar indicador
   if (isLoading) {
     return (
@@ -291,123 +346,23 @@ const ProjectsPage = () => {
               <p className="mt-2 text-sm text-gray-600">Cargando proyectos...</p>
             </div>
           ) : projects.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th 
-                      scope="col" 
-                      className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                      onClick={() => handleSort('title')}
-                    >
-                      Título
-                      {renderSortIcon('title')}
-                    </th>
-                    <th 
-                      scope="col" 
-                      className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                      onClick={() => handleSort('minimum_investment')}
-                    >
-                      Inversión Mínima
-                      {renderSortIcon('minimum_investment')}
-                    </th>
-                    <th 
-                      scope="col" 
-                      className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                      onClick={() => handleSort('target_amount')}
-                    >
-                      Monto Objetivo
-                      {renderSortIcon('target_amount')}
-                    </th>
-                    <th 
-                      scope="col" 
-                      className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                      onClick={() => handleSort('expected_roi')}
-                    >
-                      ROI (%)
-                      {renderSortIcon('expected_roi')}
-                    </th>
-                    <th 
-                      scope="col" 
-                      className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                      onClick={() => handleSort('status')}
-                    >
-                      Estado
-                      {renderSortIcon('status')}
-                    </th>
-                    <th 
-                      scope="col" 
-                      className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                      onClick={() => handleSort('created_at')}
-                    >
-                      Creado
-                      {renderSortIcon('created_at')}
-                    </th>
-                    <th scope="col" className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Acciones
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {projects.map((project) => (
-                    <tr key={project.id} className="hover:bg-gray-50">
-                      <td className="px-3 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{project.title}</div>
-                        <div className="text-xs text-gray-500">{project.location}</div>
-                      </td>
-                      <td className="px-3 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {formatCurrency(project.minimum_investment)}
-                        </div>
-                      </td>
-                      <td className="px-3 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {formatCurrency(project.target_amount)}
-                        </div>
-                      </td>
-                      <td className="px-3 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{project.expected_roi}%</div>
-                      </td>
-                      <td className="px-3 py-4 whitespace-nowrap">
-                        {renderStatusWithInfo(project.status)}
-                      </td>
-                      <td className="px-3 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {formatDate(project.created_at)}
-                        </div>
-                      </td>
-                      <td className="px-3 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <div className="flex justify-end space-x-2">
-                          <Link href={`/admin/projects/${project.id}`}>
-                            <Button variant="outline" size="sm">Ver</Button>
-                        </Link>
-                        
-                        {project.status === 'draft' ? (
-                            <Link href={`/admin/projects/${project.id}/edit`}>
-                              <Button variant="outline" size="sm">Editar</Button>
-                          </Link>
-                        ) : (
-                            <Button variant="outline" size="sm" disabled title="Los proyectos publicados no pueden ser editados">
-                            Editar
-                            </Button>
-                        )}
-                        
-                          <Button
-                            variant="danger"
-                            size="sm"
-                          onClick={() => handleDelete(project.id)}
-                            isLoading={isDeleting && deleteId === project.id}
-                          disabled={isDeleting && deleteId === project.id}
-                        >
-                            Eliminar
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <ProjectsTable 
+              projects={projects}
+              onDelete={handleDelete}
+              onPublish={handlePublishClick}
+              pagination={{
+                page: currentPage,
+                totalPages: totalPages,
+                totalItems: totalItems
+              }}
+              onPageChange={handlePageChange}
+              statusFilter={filter}
+              onStatusFilterChange={handleFilterChange}
+              sortField={sortField}
+              sortDirection={sortDirection}
+              onSortChange={handleSort}
+              lastPublishedId={lastPublishedId}
+            />
           ) : (
             <div className="px-4 py-5 sm:p-6 text-center">
               <p className="text-gray-500 mb-4">No hay proyectos que coincidan con los filtros seleccionados.</p>
@@ -491,6 +446,18 @@ const ProjectsPage = () => {
           )}
         </Card>
       </div>
+      
+      {/* Modal de publicación de proyecto */}
+      <PublishProjectModal
+        project={selectedProject}
+        isOpen={isPublishModalOpen}
+        onClose={() => {
+          setIsPublishModalOpen(false);
+          setSelectedProject(null);
+        }}
+        onPublish={handlePublishConfirm}
+        isPublishing={isPublishing}
+      />
     </AdminLayout>
   );
 };
