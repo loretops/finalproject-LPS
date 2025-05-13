@@ -501,14 +501,28 @@ Las mejoras aplicadas incluyen:
 - [x] Ticket #31: Modelo de datos para intereses en proyectos
 - [x] Ticket #32: Servicio backend para gestión de intereses
 - [x] Ticket #33: API Endpoints para gestión de intereses
-- [ ] Ticket #34: Servicio frontend para gestión de intereses
-- [ ] Ticket #35: Componente UI botón "Me Interesa"
+- [x] Ticket #34: Servicio frontend para gestión de intereses
+- [x] Ticket #35: Componente UI botón "Me Interesa"
 - [ ] Ticket #36: Integración del botón de interés en páginas de proyectos
 - [ ] Ticket #37: Página de "Mis Intereses" para socios
 - [ ] Ticket #38: Sistema de notificaciones para intereses
 - [ ] Ticket #39: Tests e2e para flujo de interés en proyectos
 
 ## Implementaciones recientes
+
+### Componente UI botón "Me Interesa" (Ticket #35)
+
+Se ha implementado con éxito el componente UI de botón "Me Interesa" para permitir a los socios indicar su interés en proyectos de inversión:
+
+1. ✅ Creado componente `InterestButton` con soporte para diferentes variantes visuales
+2. ✅ Implementada integración con el servicio frontend de intereses
+3. ✅ Añadida gestión de estados (carga, interesado, no interesado) con feedback visual
+4. ✅ Implementada lógica para redirigir al login si el usuario no está autenticado
+5. ✅ Desarrollado manejo de errores con notificaciones toast
+6. ✅ Incorporadas animaciones y transformaciones para mejorar UX
+7. ✅ Creada página de ejemplo para demostrar las diferentes variantes del botón
+
+Este componente proporciona una interfaz visual interactiva para que los socios muestren su interés en proyectos. El botón cambia de apariencia dependiendo del estado del interés y ofrece retroalimentación visual clara para mejorar la experiencia de usuario.
 
 ### Componente de gestión de documentos (Ticket #18)
 
@@ -527,6 +541,15 @@ Se ha completado la implementación del componente para gestionar documentos aso
 - Modificar el backend para procesar correctamente los metadatos con los archivos subidos (problema con Multer)
 - Implementar el almacenamiento real y persistente de documentos
 - Completar la integración entre frontend y backend para la gestión completa de documentos
+
+### Corrección de Error de Páginas Duplicadas
+
+Se ha resuelto un error en la aplicación donde existían dos archivos que apuntaban a la misma ruta:
+
+- Error: `Duplicate page detected. pages/admin/projects.js and pages/admin/projects/index.js resolve to /admin/projects`
+- Solución: Se eliminó el archivo `pages/admin/projects.js` y se mantuvo la versión más completa y organizada en `pages/admin/projects/index.js`
+
+Esta corrección elimina las advertencias en la consola durante el desarrollo y previene comportamientos inesperados relacionados con el enrutamiento.
 
 ## Próximos Tickets a Desarrollar
 

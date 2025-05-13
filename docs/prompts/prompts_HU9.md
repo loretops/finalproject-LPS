@@ -42,3 +42,15 @@ Has probado los tests. Creo que estaría bien probar los tests cuando se hayan d
 ```
 Implementa el ticket #33
 ``` 
+
+**Prompt 5:**
+```
+si, vete implementando cada ticket siguiendo el orden previsto
+``` 
+
+**Prompt 6:**
+```
+Bien, siue con ese ticket, aunque creo que hay una gran parte que ya está desarrollada. Fijate además en el error que hay en la consola:
+Duplicate page detected. pages/admin/projects.js and pages/admin/projects/index.js resolve to /admin/projects
+[0]  ⚠ Duplicate page detected. pages/admin/projects.js and pages/admin/projects/index.js resolve to /admin/projects
+``` 
