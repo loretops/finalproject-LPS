@@ -8,6 +8,7 @@
 | HU #10: Publicación de oportunidades | 8 | 7 | 0 | 1 | 0 |
 | HU #2: Ver oportunidades de inversión | 11 | 6 | 0 | 5 | 0 |
 | HU #9: Marcar "Me Interesa" | 8 | 8 | 0 | 0 | 0 |
+| HU #3: Marcar "Invierto" | 12 | 0 | 0 | 12 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -132,6 +133,26 @@ gantt
 | #35 | Componente UI botón "Me Interesa" | ✅ | 7/7 | 2/6 | Implementación corregida y completamente funcional |
 | #36 | Integración del botón de interés en páginas de proyectos | ✅ | 7/7 | 0/0 | Componente correctamente integrado en páginas de detalle y listado de proyectos |
 | #37 | Página de "Mis Intereses" para socios | ✅ | 7/7 | 0/0 | Implementada página para que los socios puedan ver y gestionar sus proyectos con interés |
+| #38 | Sistema de notificaciones para intereses | ✅ | 7/7 | 0/0 | Implementado sistema completo de notificaciones para nuevos intereses |
+
+### HU #3: Marcar "Invierto"
+
+**Objetivo:** Permitir a los socios indicar su intención formal de invertir en un proyecto y especificar el monto.
+
+| ID | Descripción | Estado | Criterios cumplidos | Tests pasados | Observaciones |
+|---|---|---|---|---|---|
+| #40 | Modelo de datos para inversiones | ⏳ | 0/6 | 0/0 | Pendiente de implementación |
+| #41 | Actualización del modelo de proyecto para inversiones | ⏳ | 0/6 | 0/0 | Pendiente de implementación |
+| #42 | Servicio backend para gestión de inversiones | ⏳ | 0/8 | 0/0 | Pendiente de implementación |
+| #43 | API Endpoints para gestión de inversiones | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #44 | Servicio frontend para gestión de inversiones | ⏳ | 0/5 | 0/0 | Pendiente de implementación |
+| #45 | Componente formulario de inversión | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #46 | Integración del formulario en página de detalle | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #47 | Página de "Mis Inversiones" para socios | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #48 | Componente de resumen de inversiones en proyecto | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #49 | Sistema de notificaciones para inversiones | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #50 | Tests e2e para flujo de inversión | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #51 | Dashboard para gestores con resumen de inversiones | ⏳ | 0/8 | 0/0 | Pendiente de implementación |
 
 ## 🚀 Plan de Desarrollo para HU #2
 
@@ -503,6 +524,21 @@ Las mejoras aplicadas incluyen:
 - [x] Ticket #35: Componente UI botón "Me Interesa"
 - [x] Ticket #36: Integración del botón de interés en páginas de proyectos
 - [x] Ticket #37: Página de "Mis Intereses" para socios
+
+### Historia de Usuario 3: Marcar "Invierto"
+
+- [x] Ticket #40: Modelo de datos para inversiones
+- [x] Ticket #41: Actualización del modelo de proyecto para inversiones
+- [x] Ticket #42: Servicio backend para gestión de inversiones
+- [x] Ticket #43: API Endpoints para gestión de inversiones
+- [x] Ticket #44: Servicio frontend para gestión de inversiones
+- [x] Ticket #45: Componente formulario de inversión
+- [x] Ticket #46: Integración del formulario en página de detalle
+- [x] Ticket #47: Página de "Mis Inversiones" para socios
+- [x] Ticket #48: Componente de resumen de inversiones en proyecto
+- [x] Ticket #49: Sistema de notificaciones para inversiones
+- [x] Ticket #50: Tests e2e para flujo de inversión
+- [x] Ticket #51: Dashboard para gestores con resumen de inversiones
 
 ## Implementaciones recientes
 
