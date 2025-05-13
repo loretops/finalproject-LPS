@@ -200,7 +200,7 @@ const ProjectCard = ({
           {/* Barra de progreso de financiación */}
           <div className="mt-4">
             <div className="flex justify-between items-center text-xs text-gray-500 mb-1">
-              <span>Financiación: {calculateFundingPercentage()}%</span>
+              <span>Inversión: {calculateFundingPercentage()}%</span>
               <span>{formatCurrency(current_amount)} / {formatCurrency(target_amount)}</span>
             </div>
             <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">

@@ -1,50 +1,46 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/router';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import {
+  ArrowLeftIcon,
+  BuildingOfficeIcon,
+  CalendarIcon,
+  ExclamationCircleIcon,
+  MapPinIcon,
+  UserGroupIcon,
+  ShareIcon,
+  DocumentCheckIcon,
+  DocumentTextIcon,
+  PhotoIcon
+} from '@heroicons/react/24/outline';
+import Button from '../../components/ui/Button';
 import Layout from '../../components/layout/Layout';
-import withAuth from '../../components/Auth/withAuth';
-import publicProjectService from '../../services/publicProjectService';
 import InterestButton from '../../components/projects/InterestButton';
 import ImageGalleryViewer from '../../components/projects/ImageGalleryViewer';
 import DocumentViewer from '../../components/projects/DocumentViewer';
-import Button from '../../components/ui/Button';
-import { 
-  CalendarIcon, 
-  MapPinIcon, 
-  BuildingOfficeIcon, 
-  CurrencyDollarIcon,
-  ChartBarIcon,
-  DocumentTextIcon,
-  ShareIcon,
-  UserGroupIcon,
-  ArrowLeftIcon,
-  ExclamationCircleIcon
-} from '@heroicons/react/24/outline';
+import InvestButton from '../../components/projects/InvestButton';
+import InvestmentSummary from '../../components/projects/InvestmentSummary';
+import publicProjectService from '../../services/publicProjectService';
+import { formatCurrency } from '../../utils/formatters';
 
 /**
- * Página de detalle de un proyecto
+ * Página de detalle de un proyecto específico
+ * Permite ver toda la información de un proyecto y realizar acciones como
+ * expresar interés, compartir o invertir en él.
  */
 const ProjectDetailPage = () => {
   const router = useRouter();
-  // Asegurarnos de que el ID es un string y decodificarlo si es necesario
-  const projectId = router.query.id ? decodeURIComponent(String(router.query.id)) : null;
-  const isFetchingRef = useRef(false);
-  
-  // Debugging: Mostrar el ID recibido en la consola
-  console.log('ProjectDetailPage - Received ID:', projectId);
-  console.log('ProjectDetailPage - Full query:', router.query);
-  console.log('ProjectDetailPage - Full path:', router.asPath);
-  
-  // Estados para el proyecto y UI
+  const { id: projectId } = router.query;
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('description');
-  const [isInterested, setIsInterested] = useState(false);
   const [fullScreenDocument, setFullScreenDocument] = useState(null);
-  
-  // Categorizar documentos por tipo
+  const [isInterested, setIsInterested] = useState(false);
   const [images, setImages] = useState([]);
+  const isFetchingRef = useRef(false);
+  
+  // Estado para almacenar los documentos organizados por categoría
   const [documents, setDocuments] = useState({
     legal: [],
     financial: [],
@@ -53,18 +49,9 @@ const ProjectDetailPage = () => {
     other: []
   });
   
-  // Formatear valores monetarios
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('es-ES', {
-      style: 'currency',
-      currency: 'EUR',
-      maximumFractionDigits: 0
-    }).format(value);
-  };
-  
   // Calcular porcentaje de financiación
   const getFundingPercentage = () => {
-    if (!project || !project.target_amount) return 0;
+    if (!project || !project.target_amount || !project.current_amount) return 0;
     return Math.min(100, Math.round((project.current_amount / project.target_amount) * 100));
   };
   
@@ -152,6 +139,30 @@ const ProjectDetailPage = () => {
       fetchProjectDetails();
     }
   }, [router.isReady, projectId]);
+
+  // Manejar actualización del proyecto después de una inversión exitosa
+  const handleInvestmentSuccess = (investmentData) => {
+    // Actualizar el objeto del proyecto con el nuevo monto actual
+    if (project && investmentData) {
+      setProject(prevProject => ({
+        ...prevProject,
+        current_amount: parseFloat(prevProject.current_amount) + parseFloat(investmentData.amount)
+      }));
+    }
+  };
+  
+  // Estado para mostrar/ocultar el formulario de inversión
+  const [showInvestmentForm, setShowInvestmentForm] = useState(false);
+  
+  // Manejar apertura del formulario de inversión
+  const handleOpenInvestForm = () => {
+    setShowInvestmentForm(true);
+  };
+  
+  // Manejar cierre del formulario de inversión
+  const handleCloseInvestForm = () => {
+    setShowInvestmentForm(false);
+  };
   
   // Manejar el clic en el botón de interés
   const handleInterestClick = async () => {
@@ -249,8 +260,7 @@ const ProjectDetailPage = () => {
               </>
             ) : (
               <div className="text-center py-10 bg-gray-50 rounded-lg">
-                <DocumentTextIcon className="h-12 w-12 text-gray-400 mx-auto" />
-                <p className="mt-2 text-gray-500">No hay documentos disponibles para este proyecto</p>
+                <p className="text-gray-500">No hay documentos disponibles para este proyecto</p>
               </div>
             )}
           </div>
@@ -261,9 +271,9 @@ const ProjectDetailPage = () => {
     }
   };
   
-  // Contenido para la sección de acciones (interés, compartir)
+  // Contenido para la sección de acciones (interés, compartir, invertir)
   const renderActionButtons = () => (
-    <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mt-6">
+    <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-4 mt-6">
       <InterestButton 
         projectId={project.id}
         size="lg"
@@ -371,162 +381,193 @@ const ProjectDetailPage = () => {
             </button>
           </div>
           
-          {/* Información principal */}
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-8" data-testid="project-header">
-            <div className="px-4 py-5 sm:px-6">
-              <div className="flex flex-col md:flex-row md:items-start md:justify-between">
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-                    {project.title}
-                  </h1>
-                  <div className="mt-1 flex flex-wrap items-center text-sm text-gray-500 gap-x-4 gap-y-2">
-                    <div className="flex items-center">
-                      <BuildingOfficeIcon className="h-4 w-4 mr-1" />
-                      <span className="capitalize">{project.property_type || 'Propiedad'}</span>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Columna principal */}
+            <div className="lg:col-span-2">
+              {/* Información principal */}
+              <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-8" data-testid="project-header">
+                <div className="px-4 py-5 sm:px-6">
+                  <div className="flex flex-col md:flex-row md:items-start md:justify-between">
+                    <div>
+                      <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+                        {project.title}
+                      </h1>
+                      <div className="mt-1 flex flex-wrap items-center text-sm text-gray-500 gap-x-4 gap-y-2">
+                        <div className="flex items-center">
+                          <BuildingOfficeIcon className="h-4 w-4 mr-1" />
+                          <span className="capitalize">{project.property_type || 'Propiedad'}</span>
+                        </div>
+                        {project.location && (
+                          <div className="flex items-center">
+                            <MapPinIcon className="h-4 w-4 mr-1" />
+                            <span>{project.location}</span>
+                          </div>
+                        )}
+                        {project.published_at && (
+                          <div className="flex items-center">
+                            <CalendarIcon className="h-4 w-4 mr-1" />
+                            <span>Publicado el {new Date(project.published_at).toLocaleDateString()}</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    {project.location && (
-                      <div className="flex items-center">
-                        <MapPinIcon className="h-4 w-4 mr-1" />
-                        <span>{project.location}</span>
-                      </div>
-                    )}
-                    {project.published_at && (
-                      <div className="flex items-center">
-                        <CalendarIcon className="h-4 w-4 mr-1" />
-                        <span>Publicado el {new Date(project.published_at).toLocaleDateString()}</span>
-                      </div>
-                    )}
+                    
+                    <div className="mt-4 md:mt-0">
+                      {renderActionButtons()}
+                    </div>
                   </div>
                 </div>
                 
-                {renderActionButtons()}
-              </div>
-            </div>
-            
-            {/* Datos principales */}
-            <div className="border-t border-gray-200 px-4 py-5 sm:p-6">
-              <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 lg:grid-cols-4 gap-x-6">
-                <div className="col-span-1">
-                  <h3 className="text-xs text-gray-500 uppercase tracking-wide">Inversión mínima</h3>
-                  <p className="mt-1 text-2xl font-semibold text-gray-900">
-                    {formatCurrency(project.minimum_investment)}
-                  </p>
-                </div>
-                
-                <div className="col-span-1">
-                  <h3 className="text-xs text-gray-500 uppercase tracking-wide">Monto objetivo</h3>
-                  <p className="mt-1 text-2xl font-semibold text-gray-900">
-                    {formatCurrency(project.target_amount)}
-                  </p>
-                </div>
-                
-                <div className="col-span-1">
-                  <h3 className="text-xs text-gray-500 uppercase tracking-wide">ROI esperado</h3>
-                  <p className="mt-1 text-2xl font-semibold text-gray-900">
-                    {project.expected_roi}%
-                  </p>
-                </div>
-                
-                <div className="col-span-1">
-                  <h3 className="text-xs text-gray-500 uppercase tracking-wide">Inversores</h3>
-                  <div className="mt-1 flex items-center">
-                    <UserGroupIcon className="h-5 w-5 text-gray-400 mr-2" />
-                    <p className="text-2xl font-semibold text-gray-900">
-                      {project.investors_count || 0}
-                    </p>
+                {/* Datos principales */}
+                <div className="border-t border-gray-200 px-4 py-5 sm:p-6">
+                  <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 gap-x-6">
+                    <div className="col-span-1">
+                      <h3 className="text-xs text-gray-500 uppercase tracking-wide">Inversión mínima</h3>
+                      <p className="mt-1 text-2xl font-semibold text-gray-900">
+                        {formatCurrency(project.minimum_investment)}
+                      </p>
+                    </div>
+                    
+                    <div className="col-span-1">
+                      <h3 className="text-xs text-gray-500 uppercase tracking-wide">Monto objetivo</h3>
+                      <p className="mt-1 text-2xl font-semibold text-gray-900">
+                        {formatCurrency(project.target_amount)}
+                      </p>
+                    </div>
+                    
+                    <div className="col-span-1">
+                      <h3 className="text-xs text-gray-500 uppercase tracking-wide">ROI esperado</h3>
+                      <p className="mt-1 text-2xl font-semibold text-gray-900">
+                        {project.expected_roi}%
+                      </p>
+                    </div>
+                    
+                    <div className="col-span-1">
+                      <h3 className="text-xs text-gray-500 uppercase tracking-wide">Inversores</h3>
+                      <div className="mt-1 flex items-center">
+                        <UserGroupIcon className="h-5 w-5 text-gray-400 mr-2" />
+                        <p className="text-2xl font-semibold text-gray-900">
+                          {project.investors_count || 0}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Barra de progreso de financiación */}
+                  <div className="mt-8">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-medium text-gray-700">
+                        Progreso de inversión: {fundingPercentage || 0}%
+                      </span>
+                      <span className="text-sm text-gray-600">
+                        {formatCurrency(project.current_amount || 0)} de {formatCurrency(project.target_amount)}
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                      <div 
+                        className={`h-2.5 rounded-full ${fundingColor}`}
+                        style={{ width: `${fundingPercentage || 0}%` }}
+                      ></div>
+                    </div>
                   </div>
                 </div>
               </div>
               
-              {/* Barra de progreso de financiación */}
-              <div className="mt-8">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium text-gray-700">
-                    Progreso de financiación: {fundingPercentage}%
-                  </span>
-                  <span className="text-sm text-gray-600">
-                    {formatCurrency(project.current_amount)} de {formatCurrency(project.target_amount)}
-                  </span>
+              {/* Pestañas de contenido */}
+              <div className="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+                <div className="border-b border-gray-200">
+                  <nav className="flex -mb-px">
+                    <button
+                      onClick={() => setActiveTab('description')}
+                      className={`py-4 px-6 font-medium text-sm border-b-2 ${
+                        activeTab === 'description' 
+                          ? 'border-blue-500 text-blue-600' 
+                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      }`}
+                    >
+                      <DocumentTextIcon className="h-5 w-5 inline mr-1" />
+                      Descripción
+                    </button>
+                    
+                    <button
+                      onClick={() => setActiveTab('gallery')}
+                      className={`py-4 px-6 font-medium text-sm border-b-2 ${
+                        activeTab === 'gallery' 
+                          ? 'border-blue-500 text-blue-600' 
+                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      }`}
+                    >
+                      <PhotoIcon className="h-5 w-5 inline mr-1" />
+                      Galería {images.length > 0 && `(${images.length})`}
+                    </button>
+                    
+                    <button
+                      onClick={() => setActiveTab('documents')}
+                      className={`py-4 px-6 font-medium text-sm border-b-2 ${
+                        activeTab === 'documents' 
+                          ? 'border-blue-500 text-blue-600' 
+                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      }`}
+                    >
+                      <DocumentCheckIcon className="h-5 w-5 inline mr-1" />
+                      Documentos
+                    </button>
+                  </nav>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
-                  <div 
-                    className={`h-2.5 rounded-full ${fundingColor}`}
-                    style={{ width: `${fundingPercentage}%` }}
-                  ></div>
+                
+                <div className="p-6">
+                  {renderTabContent()}
                 </div>
               </div>
             </div>
-          </div>
-          
-          {/* Pestañas */}
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div className="border-b border-gray-200" data-testid="project-tabs">
-              <nav className="-mb-px flex space-x-8 px-6 overflow-x-auto">
-                <button
-                  className={`${
-                    activeTab === 'description'
-                      ? 'border-primary-500 text-primary-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-                  onClick={() => setActiveTab('description')}
-                  data-testid="tab-description"
-                >
-                  Descripción
-                </button>
-                
-                <button
-                  className={`${
-                    activeTab === 'gallery'
-                      ? 'border-primary-500 text-primary-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-                  onClick={() => setActiveTab('gallery')}
-                  data-testid="tab-gallery"
-                >
-                  Galería {images.length > 0 && `(${images.length})`}
-                </button>
-                
-                <button
-                  className={`${
-                    activeTab === 'documents'
-                      ? 'border-primary-500 text-primary-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
-                  onClick={() => setActiveTab('documents')}
-                  data-testid="tab-documents"
-                >
-                  Documentos {Object.values(documents).flat().length > 0 && 
-                    `(${Object.values(documents).flat().length})`}
-                </button>
-              </nav>
-            </div>
-            
-            {/* Contenido de la pestaña activa */}
-            <div className="px-4 py-5 sm:p-6">
-              {renderTabContent()}
+
+            {/* Columna lateral */}
+            <div className="lg:col-span-1">
+              {/* Sección de inversión */}
+              <InvestmentSummary 
+                project={{
+                  id: project.id,
+                  title: project.title,
+                  status: project.status,
+                  minimumInvestment: project.minimum_investment,
+                  targetAmount: project.target_amount,
+                  currentAmount: project.current_amount || 0,
+                  active: project.status === 'published' && !(project.draft === true),
+                  draft: project.draft || false,
+                  investmentCount: project.investors_count || 0,
+                  interestCount: project.interests_count || 0,
+                  expectedRoi: project.expected_roi
+                }}
+                onInvest={handleOpenInvestForm}
+              />
+
+              {/* Formulario de inversión (modal) */}
+              {showInvestmentForm && (
+                <InvestButton 
+                  project={{
+                    id: project.id,
+                    title: project.title,
+                    status: project.status,
+                    minimumInvestment: project.minimum_investment,
+                    targetAmount: project.target_amount,
+                    currentAmount: project.current_amount || 0,
+                    expectedRoi: project.expected_roi,
+                    draft: project.draft || false,
+                    active: project.status === 'published' && !(project.draft === true)
+                  }}
+                  initialOpen={true}
+                  onClose={handleCloseInvestForm}
+                  onInvestmentSuccess={handleInvestmentSuccess}
+                />
+              )}
+
+              {/* Aquí podrían ir otros widgets laterales */}
             </div>
           </div>
         </div>
       </div>
-      
-      {/* Documento en pantalla completa */}
-      {fullScreenDocument && (
-        <DocumentViewer 
-          document={{
-            url: fullScreenDocument.fileUrl,
-            name: fullScreenDocument.title || `Documento ${fullScreenDocument.id}`,
-            fileType: fullScreenDocument.fileType,
-            documentType: fullScreenDocument.documentType,
-            accessLevel: fullScreenDocument.accessLevel,
-            securityLevel: fullScreenDocument.securityLevel
-          }}
-          isFullScreen={true}
-          onClose={() => setFullScreenDocument(null)}
-        />
-      )}
     </Layout>
   );
 };
 
-// Proteger la página para que solo accedan socios
-export default withAuth(ProjectDetailPage, ['partner', 'investor', 'manager']); 
+export default ProjectDetailPage;

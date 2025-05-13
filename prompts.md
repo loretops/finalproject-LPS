@@ -321,6 +321,25 @@ vamos con el ticket#22. Estoy pendando que , para no perder todos mis prompts de
 - Acuerdate también de actualizar siempre el archivo @production_deployment.md
 ```
 
+**Prompt 10:**
+```
+Revisa cual el la siguiente HU a desarrollar, crea una rama, y desarrolla los tickets igual que has hecho en las anteriores @tickets.md  , fijandote en como te lo he pedido otras veces, @prompts.md , creando un archivo cuyo nombre contenga el numero de la HU, igual que antes: prompts_HUnumero_historia, actualizando tambien @development_status.md , sin perder de vista @production_deployment.md . 
+Crea los tickets, y no desarrolles nada aún
+```
+
+**Prompt 11:**
+```
+Desarrolla los tickets de la HU3, y escribelos al final del archivo @tickets.md 
+```
+
+**Prompt 12:**
+```
+Para la HU3:  hay que desarrollar todos y cada uno de los tickets de esta Historia de Usuario, como buen desarrollador full-stack. Recuerda escribirlos en el orden logico de desarrollo, segun sus dependencias, y escribelos en un nuevo archivo que se llame tickets_HU3.md
+Fijate en los tickets escritos anteriormente, que son muy completos. Quiero que cada ticket permita al desarrollador tener toda la información para desarrollar lo necesario de princpio a fin, todo lo necesario para backend, frontend, y bases de datos, así como los tests necesarios para que el desarrollo sea robusto. He dicho los necesraios, que no significa hacer demasiados tests, sino solo lso que aporten valor añ desarrollo, y reduzcan futuros errores. Para los tickets que implican frontend hay que tener en cuenta librerias o dependiencias instaladas, o si fuera necesario recomendar otras. Para cada ticket hay que recomendar buenas prácticas. No olvides que esto es MVP, y aceurdate que cualquier alteración del modelo de datos hay que tenerla en cuenta para modificar base de datos y archivos implicados.
+```
+
+Para ver todos los prompts relacionados con el desarrollo de la Historia de Usuario 3, consulta [prompts_HU3.md](prompts_HU3.md).
+
 ## 7. Pull requests
 
 **Prompt 1:**
@@ -382,27 +401,4 @@ no creo que haya quedado estandarizado. Pero bueno, ya lo afrontaremos. Mira htt
 ```
 He pinchado en las flechas para ordenar asecndentemente la columna TITULO y no lo hace
 ```
-
-**Prompt 5:**
-```
-Ya está terminada esta Historia de Usuario, así que vamos a hacer una nueva PR, pero asegurate que sea a mi repositorio, no al original. Actualiza @prompts.md con esto, en la sección Pull Requests, y documenta el @readme.md en la misma sección. Vamos paso a paso
-```
-
-**Prompt 9:**
-```
-has probado los tests?
-```
-
-## Historia de Usuario 9 - Marcar "Me Interesa"
-
-- En realidad la HU9 no está funcionando bien. Así que quiero empezar a desarrollarla. Empezemos por crear los tickets completos.
-- Fijate en @user-stories.md, y en los tickets escritos @tickets.md.
-- Fijate en los tickets escritos para la HU1. A mi me parece que están muy bien.
-- habría que añadir los tickets a contonuación en el archivo@tickets.md, y preparar el archivo @development_status.md para ir haciendo seguimiento del desarrollo de los mismos. Así que como experto desarrollador full-satck y product manager, con toda la documentación de la que dispones. Como te he dicho, debes dar todo el detalle requerido para desarrollar la tarea de inicio a fin, teniendo en cuenta las buenas prácticas al respecto. No desarrolles nada aún, solo crea los tickets, en el orden lógico de ejecución para que pueda crearse el flujo de uso. No te inventes nada, todo debe ajustarse al proyecto real. El orden de creación debe tener en cuenta las dependencias técnicas. Revisa que cubra los requerimientos de frontend, backend y basese de datos. No añadas nada que no sea necesario para un MVP, y ten en cuenta que si ves impresciniidible hacer odificaciones en el modelo de datos, habrá que revisar cuáles ya que habrá que actualizar varios archivos.
-- Acuerdate también de actualizar siempre el archivo @production_deployment.md
-
-
-
-
-
 

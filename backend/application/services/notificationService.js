@@ -4,130 +4,180 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 /**
- * Servicio para la gestión de notificaciones del sistema.
+ * Servicio para la gestión de notificaciones en el sistema.
  */
 class NotificationService {
   /**
-   * Crea una nueva notificación para un usuario.
+   * Crea una nueva notificación.
    * @param {Object} notificationData - Datos de la notificación
-   * @param {string} notificationData.userId - ID del usuario destinatario
-   * @param {string} notificationData.type - Tipo de notificación (new_interest, project_update, etc.)
+   * @param {string} notificationData.userId - ID del usuario que recibirá la notificación
+   * @param {string} notificationData.type - Tipo de notificación
    * @param {string} notificationData.content - Contenido de la notificación
-   * @param {string} [notificationData.relatedId] - ID opcional de entidad relacionada (proyecto, interés, etc.)
-   * @returns {Promise<Object>} Notificación creada
+   * @param {string} [notificationData.relatedId] - ID opcional relacionado (inversión, proyecto, etc.)
+   * @returns {Promise<Object>} - La notificación creada
    */
   async createNotification(notificationData) {
-    if (!notificationData.userId || !notificationData.type || !notificationData.content) {
-      throw new Error('Los campos userId, type y content son obligatorios para crear una notificación');
+    const { userId, type, content, relatedId } = notificationData;
+
+    if (!userId || !type || !content) {
+      throw new Error('Usuario, tipo y contenido son requeridos para crear una notificación');
     }
-    
+
     try {
-      return await prisma.notification.create({
+      const notification = await prisma.notification.create({
         data: {
-          userId: notificationData.userId,
-          type: notificationData.type,
-          content: notificationData.content,
-          relatedId: notificationData.relatedId,
+          userId,
+          type,
+          content,
+          relatedId,
           read: false,
-          // createdAt se asigna automáticamente
+          createdAt: new Date()
         }
       });
+
+      return notification;
     } catch (error) {
-      console.error('Error en NotificationService.createNotification:', error);
-      throw error;
+      console.error('Error al crear notificación:', error);
+      throw new Error(`Error al crear notificación: ${error.message}`);
     }
   }
-  
-  /**
-   * Marca una notificación como leída.
-   * @param {string} notificationId - ID de la notificación
-   * @returns {Promise<Object>} Notificación actualizada
-   */
-  async markAsRead(notificationId) {
-    try {
-      return await prisma.notification.update({
-        where: { id: notificationId },
-        data: { read: true }
-      });
-    } catch (error) {
-      console.error('Error en NotificationService.markAsRead:', error);
-      throw error;
-    }
-  }
-  
+
   /**
    * Obtiene todas las notificaciones de un usuario.
    * @param {string} userId - ID del usuario
-   * @param {Object} options - Opciones de filtrado/paginación
-   * @param {boolean} [options.unreadOnly=false] - Filtrar solo no leídas
-   * @param {number} [options.limit] - Límite de resultados
-   * @param {number} [options.offset] - Offset para paginación
-   * @returns {Promise<Array<Object>>} Lista de notificaciones
+   * @param {Object} options - Opciones de filtrado
+   * @param {boolean} [options.unreadOnly=false] - Filtrar solo por no leídas
+   * @param {number} [options.limit=10] - Límite de resultados
+   * @returns {Promise<Array>} - Lista de notificaciones del usuario
    */
   async getUserNotifications(userId, options = {}) {
+    const { unreadOnly = false, limit = 10 } = options;
+
+    if (!userId) {
+      throw new Error('ID de usuario requerido');
+    }
+
     try {
-      const { unreadOnly = false, limit, offset } = options;
-      
-      const whereClause = { userId };
+      const where = { userId };
       if (unreadOnly) {
-        whereClause.read = false;
+        where.read = false;
       }
-      
-      const query = {
-        where: whereClause,
+
+      const notifications = await prisma.notification.findMany({
+        where,
         orderBy: {
           createdAt: 'desc'
-        }
-      };
-      
-      // Añadir paginación si se proporciona
-      if (limit !== undefined) {
-        query.take = limit;
-      }
-      if (offset !== undefined) {
-        query.skip = offset;
-      }
-      
-      return await prisma.notification.findMany(query);
+        },
+        take: limit
+      });
+
+      return notifications;
     } catch (error) {
-      console.error('Error en NotificationService.getUserNotifications:', error);
-      throw error;
+      console.error('Error al obtener notificaciones del usuario:', error);
+      throw new Error(`Error al obtener notificaciones: ${error.message}`);
     }
   }
-  
+
   /**
-   * Crea una notificación para interés en proyecto.
-   * @param {Object} interestData - Datos del interés
-   * @param {Object} userData - Datos del usuario que mostró interés
-   * @param {Object} projectData - Datos del proyecto
-   * @returns {Promise<Object>} Notificación creada
+   * Marca una notificación como leída.
+   * @param {string} notificationId - ID de la notificación
+   * @param {string} userId - ID del usuario propietario
+   * @returns {Promise<Object>} - La notificación actualizada
    */
-  async createInterestNotification(interestData, userData, projectData) {
+  async markAsRead(notificationId, userId) {
+    if (!notificationId || !userId) {
+      throw new Error('ID de notificación y ID de usuario son requeridos');
+    }
+
     try {
-      // Determinar el destinatario (gestor del proyecto)
-      const project = await prisma.project.findUnique({
-        where: { id: projectData.id },
-        select: { createdBy: true, title: true }
+      // Verificar que la notificación pertenece al usuario
+      const notification = await prisma.notification.findFirst({
+        where: {
+          id: notificationId,
+          userId
+        }
       });
-      
-      if (!project) {
-        throw new Error('Proyecto no encontrado');
+
+      if (!notification) {
+        throw new Error('Notificación no encontrada o no pertenece al usuario');
       }
-      
-      // Crear notificación para el gestor del proyecto
-      const content = `${userData.firstName} ${userData.lastName} ha mostrado interés en el proyecto "${project.title}"`;
-      
-      return await this.createNotification({
-        userId: project.createdBy,
-        type: 'new_interest',
-        content,
-        relatedId: interestData.id
+
+      // Actualizar a leída
+      const updatedNotification = await prisma.notification.update({
+        where: { id: notificationId },
+        data: { read: true }
       });
+
+      return updatedNotification;
     } catch (error) {
-      console.error('Error en NotificationService.createInterestNotification:', error);
-      throw error;
+      console.error('Error al marcar notificación como leída:', error);
+      throw new Error(`Error al marcar notificación como leída: ${error.message}`);
+    }
+  }
+
+  /**
+   * Marca todas las notificaciones de un usuario como leídas.
+   * @param {string} userId - ID del usuario
+   * @returns {Promise<number>} - Número de notificaciones actualizadas
+   */
+  async markAllAsRead(userId) {
+    if (!userId) {
+      throw new Error('ID de usuario requerido');
+    }
+
+    try {
+      const result = await prisma.notification.updateMany({
+        where: {
+          userId,
+          read: false
+        },
+        data: {
+          read: true
+        }
+      });
+
+      return result.count;
+    } catch (error) {
+      console.error('Error al marcar todas las notificaciones como leídas:', error);
+      throw new Error(`Error al marcar notificaciones como leídas: ${error.message}`);
+    }
+  }
+
+  /**
+   * Elimina una notificación.
+   * @param {string} notificationId - ID de la notificación
+   * @param {string} userId - ID del usuario propietario
+   * @returns {Promise<Object>} - La notificación eliminada
+   */
+  async deleteNotification(notificationId, userId) {
+    if (!notificationId || !userId) {
+      throw new Error('ID de notificación y ID de usuario son requeridos');
+    }
+
+    try {
+      // Verificar que la notificación pertenece al usuario
+      const notification = await prisma.notification.findFirst({
+        where: {
+          id: notificationId,
+          userId
+        }
+      });
+
+      if (!notification) {
+        throw new Error('Notificación no encontrada o no pertenece al usuario');
+      }
+
+      // Eliminar la notificación
+      const deletedNotification = await prisma.notification.delete({
+        where: { id: notificationId }
+      });
+
+      return deletedNotification;
+    } catch (error) {
+      console.error('Error al eliminar notificación:', error);
+      throw new Error(`Error al eliminar notificación: ${error.message}`);
     }
   }
 }
 
-module.exports = new NotificationService(); 
+module.exports = NotificationService; 

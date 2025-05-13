@@ -63,7 +63,8 @@ class PrismaProjectRepository extends ProjectRepository {
       // Construir filtros
       const where = {};
       
-      if (status) {
+      // Solo aplicar filtro de status si es diferente de "all"
+      if (status && status !== 'all') {
         where.status = status;
       }
       
@@ -83,6 +84,8 @@ class PrismaProjectRepository extends ProjectRepository {
           mode: 'insensitive'
         };
       }
+
+      console.log('Filtros aplicados:', where);
 
       // Calcular paginación
       const skip = (page - 1) * limit;

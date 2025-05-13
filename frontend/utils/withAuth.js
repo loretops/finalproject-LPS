@@ -28,23 +28,27 @@ export function withAuth(Component, allowedRoles = []) {
         return;
       }
       
-      // Temporalmente: permitir acceso independientemente de los roles
-      // Solo mostrar advertencia en consola para depuración
+      // Verificar si el usuario tiene los roles requeridos
       if (allowedRoles.length > 0) {
         console.log('withAuth - Roles del usuario:', user.roles || 'No roles definidos');
         
-        /*
+        // Convertir roles a un array si no lo es
+        const userRoles = Array.isArray(user.roles) ? user.roles : [user.role || user.roles].filter(Boolean);
+        console.log('withAuth - Roles del usuario (normalizados):', userRoles);
+        
         const hasRole = allowedRoles.some(role => 
-          user.roles && (user.roles.includes(role) || user.roles.includes('admin'))
+          userRoles.includes(role) || userRoles.includes('admin')
         );
+        
+        console.log('withAuth - ¿Usuario tiene rol permitido?', hasRole);
         
         if (!hasRole) {
           // No autorizado, redirigir a dashboard
-          console.warn('Usuario no tiene los roles requeridos:', allowedRoles);
+          console.warn('withAuth - Usuario no tiene los roles requeridos:', allowedRoles);
+          console.warn('withAuth - Roles del usuario:', userRoles);
           router.push('/dashboard');
           return;
         }
-        */
       }
       
       // Autorizado
