@@ -7,6 +7,7 @@
 | HU #1: Registro mediante invitación | 13 | 10 | 3 | 0 | 0 |
 | HU #10: Publicación de oportunidades | 8 | 7 | 0 | 1 | 0 |
 | HU #2: Ver oportunidades de inversión | 11 | 6 | 0 | 5 | 0 |
+| HU #9: Marcar "Me Interesa" | 8 | 0 | 8 | 0 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -117,6 +118,22 @@ gantt
 | #28 | Componente visor de documentos | ✅ | 8/8 | 15/15 | Implementado visor que soporta múltiples formatos (PDF, imágenes, video) con controles según nivel de seguridad |
 | #26 | Página de detalle de proyecto para socios | ✅ | 10/10 | 0/0 | Implementada página completa con tabs para descripción, galería y documentos. Integrada con componentes de visualización de imágenes y documentos. |
 | #30 | Tests e2e para flujo de visualización de proyectos | ✅ | 7/7 | 7/7 | Implementados tests end-to-end utilizando Cypress con pruebas simuladas que verifican el flujo completo desde el listado hasta el detalle, incluyendo filtrado, navegación, y visualización de imágenes y documentos. |
+
+### HU #9: Marcar "Me Interesa"
+
+**Objetivo:** Permitir a los socios indicar interés en proyectos de inversión para recibir más información sin compromiso.
+
+| ID | Título | Estado | AC | Tests | Notas |
+|----|--------|--------|----|----|-------|
+| #31 | Modelo de datos para intereses en proyectos | ⏳ | 0/6 | 0/0 | Pendiente de implementación |
+| #32 | Servicio backend para gestión de intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #33 | API Endpoints para gestión de intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #34 | Servicio frontend para gestión de intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #35 | Componente UI botón "Me Interesa" | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #36 | Integración del botón de interés en páginas | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #37 | Página de "Mis Intereses" para socios | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #38 | Sistema de notificaciones para intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #39 | Tests e2e para flujo de interés en proyectos | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
 
 ## 🚀 Plan de Desarrollo para HU #2
 
@@ -478,6 +495,18 @@ Las mejoras aplicadas incluyen:
 - [x] Ticket #16: Interfaz de administración de proyectos (listado)
 - [x] Ticket #17: Formulario de creación/edición de proyectos
 - [x] Ticket #18: Componente de gestión de documentos del proyecto
+
+### Historia de Usuario 9: Marcar "Me Interesa"
+
+- [ ] Ticket #31: Modelo de datos para intereses en proyectos
+- [ ] Ticket #32: Servicio backend para gestión de intereses
+- [ ] Ticket #33: API Endpoints para gestión de intereses
+- [ ] Ticket #34: Servicio frontend para gestión de intereses
+- [ ] Ticket #35: Componente UI botón "Me Interesa"
+- [ ] Ticket #36: Integración del botón de interés en páginas
+- [ ] Ticket #37: Página de "Mis Intereses" para socios
+- [ ] Ticket #38: Sistema de notificaciones para intereses
+- [ ] Ticket #39: Tests e2e para flujo de interés en proyectos
 
 ## Implementaciones recientes
 
