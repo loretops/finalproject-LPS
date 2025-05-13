@@ -131,6 +131,7 @@ gantt
 | #34 | Servicio frontend para gestión de intereses | ✅ | 7/7 | 8/8 | Servicio implementado y testeado con todos los métodos necesarios |
 | #35 | Componente UI botón "Me Interesa" | ✅ | 7/7 | 2/6 | Implementación funcional pero los tests tienen problemas con localStorage y toast |
 | #36 | Integración del botón de interés en páginas de proyectos | ✅ | 7/7 | 0/0 | Componente correctamente integrado en páginas de detalle y listado de proyectos |
+| #37 | Página de "Mis Intereses" para socios | ✅ | 7/7 | 0/0 | Implementada página para que los socios puedan ver y gestionar sus proyectos con interés |
 
 ## 🚀 Plan de Desarrollo para HU #2
 
@@ -501,63 +502,23 @@ Las mejoras aplicadas incluyen:
 - [x] Ticket #34: Servicio frontend para gestión de intereses
 - [x] Ticket #35: Componente UI botón "Me Interesa"
 - [x] Ticket #36: Integración del botón de interés en páginas de proyectos
+- [x] Ticket #37: Página de "Mis Intereses" para socios
 
 ## Implementaciones recientes
 
-### Integración del botón de interés en páginas de proyectos (Ticket #36)
+### Página de "Mis Intereses" para socios (Ticket #37)
 
-Se ha completado la integración del componente `InterestButton` en las principales páginas de proyectos:
+Se ha implementado con éxito la página "Mis Intereses" que permite a los socios visualizar y gestionar los proyectos en los que han mostrado interés:
 
-1. ✅ Integrado el botón "Me Interesa" en la página de detalles de proyecto (`/projects/[id].jsx`)
-2. ✅ Integrado el botón "Me Interesa" en las tarjetas de proyecto (`ProjectCard.jsx`)
-3. ✅ Actualizada la página de listado de proyectos para usar el nuevo componente
-4. ✅ Implementada carga de intereses del usuario al iniciar para mostrar el estado correcto
-5. ✅ Mejorada la experiencia de usuario con feedback visual inmediato al cambiar el estado
-6. ✅ Optimizada la visualización del componente según el contexto (con/sin texto, tamaños)
-7. ✅ Aplicada coherencia visual en toda la aplicación
+1. ✅ Creada página en `/interests/index.jsx` con diseño atractivo y funcional
+2. ✅ Implementada carga de intereses del usuario utilizando interestService
+3. ✅ Añadida funcionalidad para eliminar intereses desde la interfaz
+4. ✅ Implementada visualización de tarjetas de proyectos con ProjectCard
+5. ✅ Añadido manejo de estados (carga, vacío, error) con retroalimentación visual
+6. ✅ Aplicada protección de ruta con withAuth para asegurar acceso solo a socios autorizados
+7. ✅ Actualizada navegación con enlace a la nueva página en el menú principal
 
-Esta integración permite a los socios marcar fácilmente su interés en cualquier proyecto, tanto desde la página de listado como desde la página de detalle. El estado de interés se mantiene sincronizado gracias al uso del servicio especializado `interestService` implementado previamente.
-
-### Componente UI botón "Me Interesa" (Ticket #35)
-
-Se ha implementado con éxito el componente UI de botón "Me Interesa" para permitir a los socios indicar su interés en proyectos de inversión:
-
-1. ✅ Creado componente `InterestButton` con soporte para diferentes variantes visuales
-2. ✅ Implementada integración con el servicio frontend de intereses
-3. ✅ Añadida gestión de estados (carga, interesado, no interesado) con feedback visual
-4. ✅ Implementada lógica para redirigir al login si el usuario no está autenticado
-5. ✅ Desarrollado manejo de errores con notificaciones toast
-6. ✅ Incorporadas animaciones y transformaciones para mejorar UX
-7. ✅ Creada página de ejemplo para demostrar las diferentes variantes del botón
-
-Este componente proporciona una interfaz visual interactiva para que los socios muestren su interés en proyectos. El botón cambia de apariencia dependiendo del estado del interés y ofrece retroalimentación visual clara para mejorar la experiencia de usuario.
-
-### Componente de gestión de documentos (Ticket #18)
-
-Se ha completado la implementación del componente para gestionar documentos asociados a proyectos de inversión, que:
-
-1. ✅ Permite a los gestores subir diferentes tipos de archivos (PDF, imágenes, videos)
-2. ✅ Clasifica documentos por tipo (legal, financiero, técnico, marketing, etc.)
-3. ✅ Asigna niveles de acceso a cada documento (público, socio, inversor, administrador)
-4. ✅ Muestra progreso de carga en tiempo real
-5. ✅ Permite eliminar documentos existentes
-6. ✅ Implementa validaciones de tipo y tamaño
-
-**Nota importante**: Para el MVP, el componente utiliza un almacenamiento temporal en memoria que no persiste los documentos en el servidor. Esto permite demostrar toda la funcionalidad de la UI mientras se implementa la solución completa en el backend.
-
-**Pendiente para producción**:
-- Modificar el backend para procesar correctamente los metadatos con los archivos subidos (problema con Multer)
-- Implementar el almacenamiento real y persistente de documentos
-- Completar la integración entre frontend y backend para la gestión completa de documentos
-
-### Corrección de Error de Páginas Duplicadas
-
-Se ha resuelto un error en la aplicación donde existían dos archivos que apuntaban a la misma ruta:
-
-- Error: `Duplicate page detected. pages/admin/projects.js and pages/admin/projects/index.js resolve to /admin/projects`
-- Solución: Se eliminó el archivo `pages/admin/projects.js` y se mantuvo la versión más completa y organizada en `pages/admin/projects/index.js`
-
-Esta corrección elimina las advertencias en la consola durante el desarrollo y previene comportamientos inesperados relacionados con el enrutamiento.
+Esta página proporciona a los socios un lugar centralizado para gestionar sus intereses en proyectos, permitiéndoles ver rápidamente todos los proyectos en los que han mostrado interés y eliminar aquellos que ya no les interesen.
 
 ## Próximos Tickets a Desarrollar
 

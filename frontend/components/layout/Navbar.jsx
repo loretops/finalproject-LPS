@@ -11,9 +11,14 @@ const getNavigationItems = (user) => {
   const items = [
     { name: 'Inicio', href: '/', public: true },
     { name: 'Dashboard', href: '/dashboard', public: false },
-    { name: 'Proyectos', href: '/proyectos', public: false },
+    { name: 'Proyectos', href: '/projects', public: true },
     { name: 'Sobre Nosotros', href: '/sobre-nosotros', public: true },
   ];
+  
+  // Agregar ítem de intereses para usuarios autenticados
+  if (user) {
+    items.push({ name: 'Mis Intereses', href: '/interests', public: false });
+  }
   
   // Agregar ítems administrativos si el usuario tiene rol manager o admin
   if (user && user.role && (user.role === 'manager' || user.role === 'admin')) {
