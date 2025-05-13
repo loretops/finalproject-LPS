@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import withAuth from '../../components/Auth/withAuth';
 import publicProjectService from '../../services/publicProjectService';
+import InterestButton from '../../components/projects/InterestButton';
 import ImageGalleryViewer from '../../components/projects/ImageGalleryViewer';
 import DocumentViewer from '../../components/projects/DocumentViewer';
 import Button from '../../components/ui/Button';
@@ -13,7 +14,6 @@ import {
   CurrencyDollarIcon,
   ChartBarIcon,
   DocumentTextIcon,
-  HeartIcon,
   ShareIcon,
   UserGroupIcon,
   ArrowLeftIcon,
@@ -250,6 +250,31 @@ const ProjectDetailPage = () => {
     }
   };
   
+  // Contenido para la sección de acciones (interés, compartir)
+  const renderActionButtons = () => (
+    <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mt-6">
+      <InterestButton 
+        projectId={project.id}
+        size="lg"
+        onInterestChange={(newState) => {
+          // Opcional: Actualizar algún estado o realizar alguna acción adicional
+          console.log(`Usuario ${newState ? 'mostró' : 'eliminó'} interés en proyecto ${project.id}`);
+        }}
+      />
+      
+      <Button
+        variant="outline"
+        size="lg"
+        onClick={handleShareClick}
+        aria-label="Compartir proyecto"
+        className="flex items-center"
+      >
+        <ShareIcon className="w-5 h-5 mr-2" />
+        Compartir
+      </Button>
+    </div>
+  );
+  
   // Renderizar estado de carga
   if (loading) {
     return (
@@ -360,26 +385,7 @@ const ProjectDetailPage = () => {
                   </div>
                 </div>
                 
-                <div className="flex space-x-2 mt-4 md:mt-0">
-                  <Button
-                    variant={isInterested ? "primary" : "outline"}
-                    onClick={handleInterestClick}
-                    className="flex items-center"
-                    data-testid="interest-button"
-                  >
-                    <HeartIcon className={`h-5 w-5 mr-1 ${isInterested ? 'text-white' : 'text-primary-600'}`} />
-                    {isInterested ? 'Interesado' : 'Marcar interés'}
-                  </Button>
-                  
-                  <Button
-                    variant="outline"
-                    onClick={handleShareClick}
-                    className="flex items-center"
-                  >
-                    <ShareIcon className="h-5 w-5 mr-1" />
-                    Compartir
-                  </Button>
-                </div>
+                {renderActionButtons()}
               </div>
             </div>
             

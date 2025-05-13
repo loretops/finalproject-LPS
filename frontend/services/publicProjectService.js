@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { apiClient } from './authService';
+import interestService from './interestService';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001/api';
 
@@ -209,22 +210,13 @@ const publicProjectService = {
   /**
    * Registra el interés de un socio en un proyecto publicado
    * @param {string} projectId ID del proyecto
+   * @param {string} [notes] Notas opcionales sobre el interés
    * @returns {Promise<Object>} Confirmación del registro de interés
    */
-  async registerInterest(projectId) {
-    // Aplicar control de frecuencia
-    await throttleRequest();
-    
+  async registerInterest(projectId, notes = null) {
     try {
-      // Esta función es un placeholder para la implementación futura
-      // cuando se desarrolle el ticket correspondiente
-      
-      // Usar apiClient que ya tiene configurado el interceptor para el token
-      const response = await apiClient.post(`/projects/public/${projectId}/interest`, null, {
-        timeout: 10000 // 10 segundos de timeout
-      });
-      
-      return response.data;
+      // Utilizamos el servicio especializado de intereses
+      return await interestService.registerInterest(projectId, notes);
     } catch (error) {
       console.error(`Error al registrar interés en proyecto ${projectId}:`, error);
       throw error;

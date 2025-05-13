@@ -10,6 +10,7 @@ import {
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import Card from '../ui/Card';
 import Button from '../ui/Button';
+import InterestButton from './InterestButton';
 
 /**
  * Componente de tarjeta para mostrar una oportunidad de inversión inmobiliaria
@@ -28,14 +29,12 @@ import Button from '../ui/Button';
  * @param {string} props.project.image_url - URL de la imagen principal (opcional)
  * @param {string} props.project.status - Estado del proyecto
  * @param {string} [props.variant='default'] - Variante de la tarjeta: 'default', 'compact', 'featured'
- * @param {function} [props.onInterestClick] - Función a ejecutar cuando se marca interés
- * @param {boolean} [props.isInterested=false] - Si el usuario ha marcado interés en este proyecto
+ * @param {function} [props.onInterestChange] - Función a ejecutar cuando cambia el estado de interés
  */
 const ProjectCard = ({ 
   project, 
   variant = 'default',
-  onInterestClick,
-  isInterested = false
+  onInterestChange
 }) => {
   const {
     id,
@@ -122,14 +121,43 @@ const ProjectCard = ({
     }
   };
 
-  // Manejar clic en botón de interés
-  const handleInterestClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (onInterestClick) {
-      onInterestClick(id);
-    }
-  };
+  // Renderizar el footer con botones y datos financieros
+  const renderFooter = () => (
+    <div className="mt-4 pt-3 border-t flex items-center justify-between">
+      {/* Información financiera */}
+      <div>
+        {/* Datos de interés financiero según variante */}
+        {variant === 'compact' ? (
+          <div className="flex items-center space-x-2">
+            <div className="flex items-center text-xs font-medium text-gray-700">
+              <ChartBarIcon className="w-3 h-3 mr-1 text-primary-500" />
+              <span>{expected_roi}% ROI</span>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col space-y-1">
+            <div className="flex items-center text-xs font-medium text-gray-700">
+              <ChartBarIcon className="w-3 h-3 mr-1 text-primary-500" />
+              <span>{expected_roi}% ROI est.</span>
+            </div>
+            <div className="flex items-center text-xs font-medium text-gray-700">
+              <CurrencyDollarIcon className="w-3 h-3 mr-1 text-primary-500" />
+              <span>Min: {formatCurrency(minimum_investment)}</span>
+            </div>
+          </div>
+        )}
+      </div>
+      
+      {/* Botón de interés */}
+      <InterestButton
+        projectId={id}
+        variant="outline"
+        size="sm"
+        showText={variant !== 'compact'}
+        onInterestChange={onInterestChange}
+      />
+    </div>
+  );
 
   // Renderizado base de la tarjeta
   return (
@@ -199,51 +227,14 @@ const ProjectCard = ({
           </div>
         </div>
         
-        <div className={`mt-4 grid grid-cols-2 gap-4 border-t border-gray-200 pt-4 ${variant === 'featured' ? 'text-base' : 'text-sm'}`}>
-          <div>
-            <div className="text-xs text-gray-500">Inversión mínima</div>
-            <div className="mt-1 flex items-center font-medium">
-              <CurrencyDollarIcon className="mr-1 h-4 w-4 text-gray-500" />
-              {formatCurrency(minimum_investment)}
-            </div>
-          </div>
-          
-          <div>
-            <div className="text-xs text-gray-500">ROI esperado</div>
-            <div className="mt-1 flex items-center font-medium">
-              <ChartBarIcon className="mr-1 h-4 w-4 text-gray-500" />
-              {expected_roi}%
-            </div>
-          </div>
-        </div>
-        
-        <div className="mt-4 flex justify-between items-center">
-          <Link 
-            href={`/projects/${id}`}
-            className={`inline-flex items-center text-primary-600 hover:text-primary-700 font-medium ${variant === 'compact' ? 'text-xs' : 'text-sm'}`}
-            data-testid="view-details-link"
-          >
-            Ver detalles
-            <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </Link>
-          
-          {onInterestClick && (
-            <button
-              onClick={handleInterestClick}
-              className="inline-flex items-center justify-center rounded-full p-1.5 text-gray-500 hover:bg-gray-100 focus:outline-none"
-              aria-label={isInterested ? "Eliminar interés" : "Marcar interés"}
-            >
-              {isInterested ? (
-                <HeartIconSolid className="h-5 w-5 text-red-500" />
-              ) : (
-                <HeartIcon className="h-5 w-5" />
-              )}
-            </button>
-          )}
-        </div>
+        {/* Footer con botones y datos financieros */}
+        {renderFooter()}
       </div>
+      
+      {/* Link general para toda la tarjeta */}
+      <Link href={`/projects/${id}`} aria-label={`Ver detalles de ${title}`} className="absolute inset-0">
+        <span className="sr-only">Ver detalles de {title}</span>
+      </Link>
     </Card>
   );
 };

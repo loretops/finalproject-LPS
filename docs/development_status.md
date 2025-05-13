@@ -503,12 +503,26 @@ Las mejoras aplicadas incluyen:
 - [x] Ticket #33: API Endpoints para gestión de intereses
 - [x] Ticket #34: Servicio frontend para gestión de intereses
 - [x] Ticket #35: Componente UI botón "Me Interesa"
-- [ ] Ticket #36: Integración del botón de interés en páginas de proyectos
+- [x] Ticket #36: Integración del botón de interés en páginas de proyectos
 - [ ] Ticket #37: Página de "Mis Intereses" para socios
 - [ ] Ticket #38: Sistema de notificaciones para intereses
 - [ ] Ticket #39: Tests e2e para flujo de interés en proyectos
 
 ## Implementaciones recientes
+
+### Integración del botón de interés en páginas de proyectos (Ticket #36)
+
+Se ha completado la integración del componente `InterestButton` en las principales páginas de proyectos:
+
+1. ✅ Integrado el botón "Me Interesa" en la página de detalles de proyecto (`/projects/[id].jsx`)
+2. ✅ Integrado el botón "Me Interesa" en las tarjetas de proyecto (`ProjectCard.jsx`)
+3. ✅ Actualizada la página de listado de proyectos para usar el nuevo componente
+4. ✅ Implementada carga de intereses del usuario al iniciar para mostrar el estado correcto
+5. ✅ Mejorada la experiencia de usuario con feedback visual inmediato al cambiar el estado
+6. ✅ Optimizada la visualización del componente según el contexto (con/sin texto, tamaños)
+7. ✅ Aplicada coherencia visual en toda la aplicación
+
+Esta integración permite a los socios marcar fácilmente su interés en cualquier proyecto, tanto desde la página de listado como desde la página de detalle. El estado de interés se mantiene sincronizado gracias al uso del servicio especializado `interestService` implementado previamente.
 
 ### Componente UI botón "Me Interesa" (Ticket #35)
 

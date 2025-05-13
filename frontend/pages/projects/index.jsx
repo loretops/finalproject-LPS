@@ -5,6 +5,7 @@ import ProjectFilters from '../../components/projects/filters/ProjectFilters';
 import ProjectSorting from '../../components/projects/filters/ProjectSorting';
 import ProjectCard from '../../components/projects/ProjectCard';
 import publicProjectService from '../../services/publicProjectService';
+import interestService from '../../services/interestService';
 import { useAuth } from '../../context/AuthContext';
 import withAuth from '../../components/Auth/withAuth';
 
@@ -17,7 +18,7 @@ const ITEMS_PER_PAGE = 9;
 const ProjectsListPage = () => {
   const router = useRouter();
   const { query } = router;
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   
   // Referencia para evitar múltiples solicitudes
   const isFetchingRef = useRef(false);
@@ -35,7 +36,8 @@ const ProjectsListPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   
   // Estado para intereses del usuario
-  const [interests, setInterests] = useState([]);
+  const [interestProjectIds, setInterestProjectIds] = useState(new Set());
+  const [isLoadingInterests, setIsLoadingInterests] = useState(true);
   
   // Extraer listas únicas de tipos de propiedad y ubicaciones
   const [propertyTypes, setPropertyTypes] = useState([]);
@@ -127,6 +129,26 @@ const ProjectsListPage = () => {
     }
   }, [router.isReady, user, filters, sortField, sortDirection, currentPage]);
   
+  // Efecto para cargar intereses del usuario al iniciar
+  useEffect(() => {
+    const loadUserInterests = async () => {
+      if (!user || !isAuthenticated) return;
+      
+      try {
+        setIsLoadingInterests(true);
+        // Utilizamos el nuevo servicio para obtener todos los IDs de proyectos marcados como interés
+        const projectIds = await interestService.getUserInterestProjectIds();
+        setInterestProjectIds(projectIds);
+      } catch (error) {
+        console.error('Error al cargar intereses del usuario:', error);
+      } finally {
+        setIsLoadingInterests(false);
+      }
+    };
+    
+    loadUserInterests();
+  }, [user, isAuthenticated]);
+  
   // Efecto separado para actualizar la URL cuando cambian los filtros
   useEffect(() => {
     if (!router.isReady) return;
@@ -170,24 +192,18 @@ const ProjectsListPage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   
-  // Manejar clic en botón de interés
-  const handleInterestClick = async (projectId) => {
-    try {
-      // Verificar si ya está marcado como interés
-      const isAlreadyInterested = interests.includes(projectId);
-      
-      if (isAlreadyInterested) {
-        // Remover el interés (para el MVP, solo se actualiza localmente)
-        setInterests(interests.filter(id => id !== projectId));
-      } else {
-        // Marcar interés
-        await publicProjectService.registerInterest(projectId);
-        setInterests([...interests, projectId]);
-      }
-    } catch (err) {
-      console.error('Error al marcar interés:', err);
-      // Mostrar notificación de error en una implementación real
+  // Manejar cambio de estado de interés
+  const handleInterestChange = (projectId, newState) => {
+    // Actualizar el conjunto local de IDs de proyectos con interés
+    const newInterestProjectIds = new Set(interestProjectIds);
+    
+    if (newState) {
+      newInterestProjectIds.add(projectId);
+    } else {
+      newInterestProjectIds.delete(projectId);
     }
+    
+    setInterestProjectIds(newInterestProjectIds);
   };
   
   // Calcular número total de páginas
@@ -280,7 +296,7 @@ const ProjectsListPage = () => {
                 </div>
                 
                 {/* Listado de proyectos */}
-                {loading ? (
+                {loading || isLoadingInterests ? (
                   <div className="py-12 text-center">
                     <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-600"></div>
                     <p className="mt-2 text-gray-500">Cargando proyectos...</p>
@@ -323,8 +339,7 @@ const ProjectsListPage = () => {
                       <ProjectCard 
                         key={project.id} 
                         project={project}
-                        onInterestClick={handleInterestClick}
-                        isInterested={interests.includes(project.id)}
+                        onInterestChange={(newState) => handleInterestChange(project.id, newState)}
                         data-testid="project-card"
                       />
                     ))}
