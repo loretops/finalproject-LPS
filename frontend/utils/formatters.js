@@ -1,32 +1,44 @@
 /**
- * Formatea un valor numérico como moneda (EUR)
- * @param {number} value - Valor a formatear
- * @returns {string} Valor formateado como moneda
+ * Formatea un número como moneda (EUR)
+ * @param {number|string} value - Valor a formatear
+ * @param {string} [locale='es-ES'] - Configuración regional
+ * @param {string} [currency='EUR'] - Moneda
+ * @returns {string} - Valor formateado como moneda
  */
-export const formatCurrency = (value) => {
-  if (value === undefined || value === null) return '';
+export const formatCurrency = (value, locale = 'es-ES', currency = 'EUR') => {
+  // Asegurar que value es un número
+  const numValue = typeof value === 'string' ? parseFloat(value) : value;
   
-  return new Intl.NumberFormat('es-ES', {
+  if (isNaN(numValue)) {
+    return '0,00 €';
+  }
+  
+  return new Intl.NumberFormat(locale, {
     style: 'currency',
-    currency: 'EUR',
+    currency,
     minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }).format(value);
+    maximumFractionDigits: 2
+  }).format(numValue);
 };
 
 /**
- * Formatea una fecha en formato local español
+ * Formatea una fecha en formato legible
  * @param {string|Date} date - Fecha a formatear
- * @returns {string} Fecha formateada
+ * @param {string} [locale='es-ES'] - Configuración regional
+ * @returns {string} - Fecha formateada
  */
-export const formatDate = (date) => {
+export const formatDate = (date, locale = 'es-ES') => {
   if (!date) return '';
   
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const dateObj = date instanceof Date ? date : new Date(date);
   
-  return new Intl.DateTimeFormat('es-ES', {
+  if (isNaN(dateObj.getTime())) {
+    return '';
+  }
+  
+  return new Intl.DateTimeFormat(locale, {
     year: 'numeric',
-    month: 'short',
+    month: 'long',
     day: 'numeric'
   }).format(dateObj);
 };
@@ -94,4 +106,26 @@ export const truncateText = (text, maxLength = 100) => {
   if (text.length <= maxLength) return text;
   
   return text.substring(0, maxLength) + '...';
+};
+
+/**
+ * Formatea un número como porcentaje
+ * @param {number|string} value - Valor a formatear
+ * @param {number} [decimals=1] - Número de decimales
+ * @param {string} [locale='es-ES'] - Configuración regional
+ * @returns {string} - Valor formateado como porcentaje
+ */
+export const formatPercentage = (value, decimals = 1, locale = 'es-ES') => {
+  // Asegurar que value es un número
+  const numValue = typeof value === 'string' ? parseFloat(value) : value;
+  
+  if (isNaN(numValue)) {
+    return '0%';
+  }
+  
+  return new Intl.NumberFormat(locale, {
+    style: 'percent',
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  }).format(numValue / 100);
 }; 
