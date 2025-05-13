@@ -10,19 +10,32 @@ import { formatCurrency } from '../../utils/formatters';
  * Componente para mostrar un botón de inversión en un proyecto
  * Incluye un modal con el formulario de inversión
  */
-const InvestButton = ({ project, onInvestmentSuccess }) => {
-  const [showModal, setShowModal] = useState(false);
+const InvestButton = ({ project, initialOpen = false, onClose, onInvestmentSuccess }) => {
+  const [showModal, setShowModal] = useState(initialOpen);
   const [isLoadingProject, setIsLoadingProject] = useState(false);
-  const [projectDetails, setProjectDetails] = useState(project);
+  const [projectDetails, setProjectDetails] = useState(project || {});
   const { isAuthenticated, isLoading, user } = useAuth();
   const router = useRouter();
 
-  // Verificar estado del proyecto
-  const isProjectFull = parseFloat(projectDetails.currentAmount) >= parseFloat(projectDetails.targetAmount);
-  const isUnavailable = projectDetails.status !== 'published' || isProjectFull;
+  // Verificar si tenemos datos de proyecto válidos
+  const projectDataAvailable = projectDetails && 
+    typeof projectDetails === 'object' && 
+    Object.keys(projectDetails).length > 0;
+
+  // Verificar estado del proyecto (con comprobaciones de seguridad)
+  const currentAmount = projectDataAvailable && projectDetails.currentAmount ? 
+    parseFloat(projectDetails.currentAmount) : 0;
+  const targetAmount = projectDataAvailable && projectDetails.targetAmount ? 
+    parseFloat(projectDetails.targetAmount) : 0;
+  
+  const isProjectFull = currentAmount >= targetAmount && targetAmount > 0;
+  const isUnavailable = !projectDataAvailable || 
+    projectDetails.status !== 'published' || 
+    isProjectFull;
   
   // Determinar el texto del botón según el estado
   const getButtonText = () => {
+    if (!projectDataAvailable) return 'Cargando proyecto...';
     if (isProjectFull) return 'Financiación completada';
     if (projectDetails.status !== 'published') return 'No disponible para inversión';
     return 'Invertir en este proyecto';
@@ -41,8 +54,10 @@ const InvestButton = ({ project, onInvestmentSuccess }) => {
     // Obtener datos actualizados del proyecto antes de mostrar el formulario
     setIsLoadingProject(true);
     try {
-      const response = await projectService.getProjectById(projectDetails.id);
-      setProjectDetails(response.data);
+      if (projectDataAvailable && projectDetails.id) {
+        const response = await projectService.getProjectById(projectDetails.id);
+        setProjectDetails(response.data);
+      }
       setShowModal(true);
     } catch (error) {
       console.error('Error al cargar detalles del proyecto:', error);
@@ -56,6 +71,7 @@ const InvestButton = ({ project, onInvestmentSuccess }) => {
    */
   const handleCloseModal = () => {
     setShowModal(false);
+    if (onClose) onClose();
   };
 
   /**
@@ -63,10 +79,12 @@ const InvestButton = ({ project, onInvestmentSuccess }) => {
    */
   const handleInvestmentSuccess = (investmentData) => {
     // Actualizar los datos del proyecto para reflejar la nueva inversión
-    setProjectDetails(prev => ({
-      ...prev,
-      currentAmount: parseFloat(prev.currentAmount) + parseFloat(investmentData.amount)
-    }));
+    if (projectDataAvailable) {
+      setProjectDetails(prev => ({
+        ...prev,
+        currentAmount: (parseFloat(prev.currentAmount) || 0) + parseFloat(investmentData.amount)
+      }));
+    }
     
     // Cerrar el modal
     setShowModal(false);
@@ -97,7 +115,7 @@ const InvestButton = ({ project, onInvestmentSuccess }) => {
         >
           {isLoadingProject ? 'Cargando...' : getButtonText()}
         </button>
-        {isProjectFull && (
+        {isProjectFull && projectDataAvailable && (
           <div className="mt-2 text-center text-green-600 font-medium">
             ¡Este proyecto ha alcanzado su objetivo de {formatCurrency(projectDetails.targetAmount)}!
           </div>
@@ -105,7 +123,7 @@ const InvestButton = ({ project, onInvestmentSuccess }) => {
       </div>
 
       {/* Modal de inversión */}
-      {showModal && (
+      {showModal && projectDataAvailable && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-screen overflow-y-auto">
             <div className="p-4 border-b border-gray-200 flex justify-between items-center">
@@ -142,8 +160,12 @@ InvestButton.propTypes = {
     status: PropTypes.string.isRequired,
     minimumInvestment: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     targetAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    currentAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired
+    currentAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
   }).isRequired,
+  /** Indica si el modal debe abrirse al montar el componente */
+  initialOpen: PropTypes.bool,
+  /** Función a llamar cuando se cierra el modal */
+  onClose: PropTypes.func,
   /** Función a llamar después de una inversión exitosa */
   onInvestmentSuccess: PropTypes.func
 };

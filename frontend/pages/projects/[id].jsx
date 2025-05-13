@@ -19,6 +19,7 @@ import InterestButton from '../../components/projects/InterestButton';
 import ImageGalleryViewer from '../../components/projects/ImageGalleryViewer';
 import DocumentViewer from '../../components/projects/DocumentViewer';
 import InvestButton from '../../components/projects/InvestButton';
+import InvestmentSummary from '../../components/projects/InvestmentSummary';
 import publicProjectService from '../../services/publicProjectService';
 import { formatCurrency } from '../../utils/formatters';
 
@@ -50,7 +51,7 @@ const ProjectDetailPage = () => {
   
   // Calcular porcentaje de financiación
   const getFundingPercentage = () => {
-    if (!project || !project.target_amount) return 0;
+    if (!project || !project.target_amount || !project.current_amount) return 0;
     return Math.min(100, Math.round((project.current_amount / project.target_amount) * 100));
   };
   
@@ -148,6 +149,19 @@ const ProjectDetailPage = () => {
         current_amount: parseFloat(prevProject.current_amount) + parseFloat(investmentData.amount)
       }));
     }
+  };
+  
+  // Estado para mostrar/ocultar el formulario de inversión
+  const [showInvestmentForm, setShowInvestmentForm] = useState(false);
+  
+  // Manejar apertura del formulario de inversión
+  const handleOpenInvestForm = () => {
+    setShowInvestmentForm(true);
+  };
+  
+  // Manejar cierre del formulario de inversión
+  const handleCloseInvestForm = () => {
+    setShowInvestmentForm(false);
   };
   
   // Manejar el clic en el botón de interés
@@ -443,16 +457,16 @@ const ProjectDetailPage = () => {
                   <div className="mt-8">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium text-gray-700">
-                        Progreso de financiación: {fundingPercentage}%
+                        Progreso de inversión: {fundingPercentage || 0}%
                       </span>
                       <span className="text-sm text-gray-600">
-                        {formatCurrency(project.current_amount)} de {formatCurrency(project.target_amount)}
+                        {formatCurrency(project.current_amount || 0)} de {formatCurrency(project.target_amount)}
                       </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2.5">
                       <div 
                         className={`h-2.5 rounded-full ${fundingColor}`}
-                        style={{ width: `${fundingPercentage}%` }}
+                        style={{ width: `${fundingPercentage || 0}%` }}
                       ></div>
                     </div>
                   </div>
@@ -510,17 +524,42 @@ const ProjectDetailPage = () => {
             {/* Columna lateral */}
             <div className="lg:col-span-1">
               {/* Sección de inversión */}
-              <InvestButton 
+              <InvestmentSummary 
                 project={{
                   id: project.id,
                   title: project.title,
                   status: project.status,
                   minimumInvestment: project.minimum_investment,
                   targetAmount: project.target_amount,
-                  currentAmount: project.current_amount
+                  currentAmount: project.current_amount || 0,
+                  active: project.status === 'published' && !(project.draft === true),
+                  draft: project.draft || false,
+                  investmentCount: project.investors_count || 0,
+                  interestCount: project.interests_count || 0,
+                  expectedRoi: project.expected_roi
                 }}
-                onInvestmentSuccess={handleInvestmentSuccess}
+                onInvest={handleOpenInvestForm}
               />
+
+              {/* Formulario de inversión (modal) */}
+              {showInvestmentForm && (
+                <InvestButton 
+                  project={{
+                    id: project.id,
+                    title: project.title,
+                    status: project.status,
+                    minimumInvestment: project.minimum_investment,
+                    targetAmount: project.target_amount,
+                    currentAmount: project.current_amount || 0,
+                    expectedRoi: project.expected_roi,
+                    draft: project.draft || false,
+                    active: project.status === 'published' && !(project.draft === true)
+                  }}
+                  initialOpen={true}
+                  onClose={handleCloseInvestForm}
+                  onInvestmentSuccess={handleInvestmentSuccess}
+                />
+              )}
 
               {/* Aquí podrían ir otros widgets laterales */}
             </div>

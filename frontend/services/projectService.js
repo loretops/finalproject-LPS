@@ -139,10 +139,17 @@ const projectService = {
         throw new Error('La respuesta de la API no tiene datos');
       }
       
+      // Verificar explícitamente si los datos están en el formato esperado
       if (response.data.data === undefined) {
         console.error('⚠️ No hay campo "data" en la respuesta:', response.data);
         
-        // Intentar adaptarse a diferentes formatos de respuesta
+        // Log específico para depuración
+        console.log('⚠️ Tipo de response.data:', typeof response.data);
+        if (typeof response.data === 'object') {
+          console.log('⚠️ Claves disponibles en response.data:', Object.keys(response.data));
+        }
+        
+        // Intentar adaptar la respuesta
         let projectsData = [];
         let paginationInfo = {
           page: 1,
@@ -150,27 +157,39 @@ const projectService = {
           totalItems: 0,
         };
         
-        // Caso 1: La respuesta es directamente un array de proyectos
+        // Si la respuesta es un array directamente
         if (Array.isArray(response.data)) {
-          console.log('🔄 Adaptando respuesta: array de proyectos');
+          console.log('🔄 Adaptando respuesta: array de proyectos directo');
           projectsData = response.data;
           paginationInfo.totalItems = response.data.length;
         } 
-        // Caso 2: La respuesta es un objeto que contiene los proyectos directamente
+        // Si la respuesta es un objeto
         else if (typeof response.data === 'object') {
-          // Buscar cualquier propiedad que pueda ser un array de proyectos
-          for (const key in response.data) {
+          // Buscar cualquier propiedad que pueda ser un array
+          Object.keys(response.data).forEach(key => {
             if (Array.isArray(response.data[key])) {
-              console.log(`🔄 Adaptando respuesta: usando campo "${key}" como datos`);
+              console.log(`🔄 Adaptando respuesta: usando propiedad "${key}" como datos`);
               projectsData = response.data[key];
-              break;
+              
+              // Actualizar paginación si está disponible
+              if (response.data.pagination) {
+                paginationInfo = response.data.pagination;
+              } else {
+                paginationInfo.totalItems = projectsData.length;
+              }
             }
-          }
+          });
         }
         
-        // Usar datos adaptados
+        // Normalizar cada proyecto individualmente
+        const normalizedProjects = projectsData.map(project => {
+          const normalized = normalizeProject(camelToSnake(project));
+          console.log('🔄 Proyecto normalizado individual:', normalized);
+          return normalized;
+        });
+        
         const responseData = {
-          data: projectsData.map(project => normalizeProject(camelToSnake(project))),
+          data: normalizedProjects,
           pagination: paginationInfo
         };
         
@@ -195,6 +214,8 @@ const projectService = {
       };
       
       console.log('🔄 Datos normalizados finales:', responseData);
+      console.log('🔄 ¿Es un array data?', Array.isArray(responseData.data));
+      console.log('🔄 Longitud de data:', responseData.data.length);
       
       return responseData;
     } catch (error) {

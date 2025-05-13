@@ -1,8 +1,9 @@
 const { PrismaClient } = require('@prisma/client');
+const NotificationService = require('./notificationService');
+
 const prisma = new PrismaClient();
 const Investment = require('../../domain/entities/investment');
 const Project = require('../../domain/entities/project');
-const NotificationService = require('./notificationService');
 
 /**
  * Servicio para la gestión de inversiones en proyectos.
@@ -34,8 +35,8 @@ class InvestmentService {
       throw new Error('El monto debe ser un valor numérico positivo');
     }
 
-    // Usar transacción para garantizar consistencia
-    return await prisma.$transaction(async (prismaClient) => {
+    // Crear la inversión dentro de una transacción
+    const investment = await prisma.$transaction(async (prismaClient) => {
       // Obtener el proyecto
       const projectData = await prismaClient.project.findUnique({
         where: { id: projectId }
@@ -58,15 +59,31 @@ class InvestmentService {
         throw new Error(`La inversión debe ser al menos de ${project.minimumInvestment}`);
       }
 
-      // Crear la inversión en la base de datos
-      const createdInvestment = await prismaClient.investment.create({
+      // Crear la inversión
+      const newInvestment = await prismaClient.investment.create({
         data: {
           userId,
           projectId,
           amount,
-          notes,
           status: 'pending',
-          investedAt: new Date()
+          notes: notes || null
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true
+            }
+          },
+          project: {
+            select: {
+              id: true,
+              title: true,
+              createdBy: true
+            }
+          }
         }
       });
 
@@ -81,16 +98,27 @@ class InvestmentService {
       });
 
       // Crear notificación para el gestor del proyecto
+      if (newInvestment.project.createdBy) {
+        await this.notificationService.createNotification({
+          userId: newInvestment.project.createdBy,
+          type: 'investment_new',
+          content: `${newInvestment.user.firstName} ${newInvestment.user.lastName} ha invertido ${amount}€ en tu proyecto "${newInvestment.project.title}"`,
+          relatedId: newInvestment.id
+        });
+      }
+
+      // Crear notificación para el usuario que invierte
       await this.notificationService.createNotification({
-        userId: projectData.createdBy,
-        type: 'new_investment',
-        content: `Nueva inversión de ${amount} en el proyecto ${projectData.title}`,
-        relatedId: createdInvestment.id
+        userId: investmentData.userId,
+        type: 'investment_created',
+        content: `Has invertido ${amount}€ en el proyecto "${newInvestment.project.title}". Tu inversión está pendiente de confirmación.`,
+        relatedId: newInvestment.id
       });
 
-      // Retornar la inversión creada
-      return createdInvestment;
+      return newInvestment;
     });
+
+    return investment;
   }
 
   /**
@@ -159,45 +187,140 @@ class InvestmentService {
       throw new Error('ID de proyecto requerido');
     }
 
-    const { status, page = 1, limit = 10 } = options;
+    const {
+      status,
+      page = 1,
+      limit = 10
+    } = options;
+
     const skip = (page - 1) * limit;
 
-    // Construir filtros
+    // Construir el filtro
     const where = { projectId };
     if (status) {
       where.status = status;
     }
 
-    // Obtener inversiones con datos básicos del usuario
-    const investments = await prisma.investment.findMany({
-      where,
-      include: {
-        user: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true
+    // Obtener las inversiones
+    const [investments, total] = await Promise.all([
+      prisma.investment.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { investedAt: 'desc' },
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true
+            }
+          },
+          project: {
+            select: {
+              id: true,
+              title: true
+            }
           }
         }
-      },
-      orderBy: { investedAt: 'desc' },
-      skip,
-      take: limit
-    });
+      }),
+      prisma.investment.count({ where })
+    ]);
 
-    // Contar total para paginación
-    const total = await prisma.investment.count({ where });
+    // Calcular metadatos de paginación
+    const totalPages = Math.ceil(total / limit);
 
     return {
       data: investments,
       pagination: {
-        total,
         page,
         limit,
-        totalPages: Math.ceil(total / limit)
+        totalItems: total,
+        totalPages
       }
     };
+  }
+
+  /**
+   * Obtiene todas las inversiones en la plataforma.
+   * @param {Object} options - Opciones de filtrado y paginación
+   * @param {string} [options.status] - Filtrar por estado
+   * @param {string} [options.projectId] - Filtrar por proyecto
+   * @param {number} [options.page=1] - Número de página
+   * @param {number} [options.limit=50] - Elementos por página
+   * @returns {Promise<Object>} - Lista de inversiones y metadatos de paginación
+   */
+  async getAllInvestments(options = {}) {
+    const {
+      status,
+      projectId,
+      page = 1,
+      limit = 50
+    } = options;
+
+    const skip = (page - 1) * limit;
+
+    // Construir el filtro
+    const where = {};
+    
+    if (status) {
+      where.status = status;
+    }
+    
+    if (projectId) {
+      where.projectId = projectId;
+    }
+
+    console.log('Filtros para getAllInvestments:', where);
+
+    // Obtener las inversiones con un join a usuarios y proyectos
+    try {
+      const [investments, total] = await Promise.all([
+        prisma.investment.findMany({
+          where,
+          skip,
+          take: limit,
+          orderBy: { investedAt: 'desc' },
+          include: {
+            user: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true
+              }
+            },
+            project: {
+              select: {
+                id: true,
+                title: true,
+                status: true
+              }
+            }
+          }
+        }),
+        prisma.investment.count({ where })
+      ]);
+
+      console.log(`Encontradas ${investments.length} inversiones de un total de ${total}`);
+
+      // Calcular metadatos de paginación
+      const totalPages = Math.ceil(total / limit);
+
+      return {
+        data: investments,
+        pagination: {
+          page,
+          limit,
+          totalItems: total,
+          totalPages
+        }
+      };
+    } catch (error) {
+      console.error('Error en InvestmentService.getAllInvestments:', error);
+      throw error;
+    }
   }
 
   /**
@@ -238,16 +361,22 @@ class InvestmentService {
   /**
    * Actualiza el estado de una inversión.
    * @param {string} id - ID de la inversión
-   * @param {string} status - Nuevo estado ('confirmed', 'rejected', 'cancelled')
-   * @param {string} [contractReference] - Referencia del contrato (para estado confirmed)
+   * @param {Object} updateData - Datos para actualizar la inversión
+   * @param {string} updateData.status - Nuevo estado ('confirmed', 'rejected', 'canceled')
+   * @param {string} [updateData.contractReference] - Referencia del contrato (para estado confirmed)
+   * @param {string} [updateData.notes] - Notas adicionales sobre el cambio de estado
    * @returns {Promise<Object>} - La inversión actualizada
    */
-  async updateInvestmentStatus(id, status, contractReference = null) {
-    if (!id || !status) {
+  async updateInvestmentStatus(id, updateData) {
+    if (!id || !updateData || !updateData.status) {
       throw new Error('ID de inversión y nuevo estado son requeridos');
     }
 
-    const validStatuses = ['pending', 'confirmed', 'rejected', 'cancelled'];
+    const status = updateData.status;
+    const contractReference = updateData.contractReference;
+    const notes = updateData.notes;
+    
+    const validStatuses = ['pending', 'confirmed', 'rejected', 'canceled'];
     if (!validStatuses.includes(status)) {
       throw new Error('Estado de inversión no válido');
     }
@@ -274,15 +403,20 @@ class InvestmentService {
     // Usar transacción para mantener consistencia
     return await prisma.$transaction(async (prismaClient) => {
       // Actualizar la inversión
-      const updateData = { status };
+      const updateDataDB = { status };
       
       // Añadir referencia de contrato si es necesario
       if (status === 'confirmed' && contractReference) {
-        updateData.contractReference = contractReference;
+        updateDataDB.contractReference = contractReference;
+      }
+      
+      // Añadir notas si se proporcionan
+      if (notes) {
+        updateDataDB.notes = notes;
       }
 
       // Si se cancela una inversión que estaba confirmada, ajustar monto del proyecto
-      if (status === 'cancelled' && investment.status === 'confirmed') {
+      if (status === 'canceled' && investment.status === 'confirmed') {
         await prismaClient.project.update({
           where: { id: currentInvestment.projectId },
           data: {
@@ -296,7 +430,7 @@ class InvestmentService {
       // Actualizar inversión en la base de datos
       const updatedInvestment = await prismaClient.investment.update({
         where: { id },
-        data: updateData,
+        data: updateDataDB,
         include: {
           user: {
             select: {
@@ -369,7 +503,7 @@ class InvestmentService {
     }
 
     // Actualizar el estado a cancelado
-    return await this.updateInvestmentStatus(id, 'cancelled');
+    return await this.updateInvestmentStatus(id, { status: 'canceled' });
   }
 }
 

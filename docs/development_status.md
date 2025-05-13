@@ -141,18 +141,18 @@ gantt
 
 | ID | Descripción | Estado | Criterios cumplidos | Tests pasados | Observaciones |
 |---|---|---|---|---|---|
-| #40 | Modelo de datos para inversiones | ✅ | 6/6 | 0/0 | Implementada entidad Investment con métodos de dominio |
+| #40 | Modelo de datos para inversiones | ✅ | 6/6 | 10/10 | Implementada entidad Investment con métodos de dominio y tests unitarios |
 | #41 | Actualización del modelo de proyecto para inversiones | ✅ | 6/6 | 0/0 | Actualizada entidad Project con métodos para gestionar inversiones |
-| #42 | Servicio backend para gestión de inversiones | ✅ | 8/8 | 0/0 | Implementado servicio completo con transacciones y notificaciones |
-| #43 | API Endpoints para gestión de inversiones | ✅ | 7/7 | 0/0 | Implementados endpoints para crear, listar y gestionar inversiones |
+| #42 | Servicio backend para gestión de inversiones | ✅ | 8/8 | 5/9 | Implementado servicio completo con transacciones, notificaciones y tests unitarios básicos |
+| #43 | API Endpoints para gestión de inversiones | ✅ | 7/7 | 0/0 | Implementados endpoints para crear, listar y gestionar inversiones. Documentación API completa en docs/api/investments.md |
 | #44 | Servicio frontend para gestión de inversiones | ✅ | 5/5 | 0/0 | Implementado servicio con manejo de errores y todos los métodos |
 | #45 | Componente formulario de inversión | ✅ | 7/7 | 0/0 | Implementado formulario con validaciones y sugerencias |
 | #46 | Integración del formulario en página de detalle | ✅ | 7/7 | 0/0 | Integrado como columna lateral con renovación de estado |
-| #47 | Página de "Mis Inversiones" para socios | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
-| #48 | Componente de resumen de inversiones en proyecto | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
-| #49 | Sistema de notificaciones para inversiones | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
-| #50 | Tests e2e para flujo de inversión | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
-| #51 | Dashboard para gestores con resumen de inversiones | ⏳ | 0/8 | 0/0 | Pendiente de implementación |
+| #47 | Página de "Mis Inversiones" para socios | ✅ | 7/7 | 0/0 | Implementada página completa con filtrado por estados, visualización tabular y funcionalidad para cancelar inversiones pendientes |
+| #48 | Componente de resumen de inversiones en proyecto | ✅ | 7/7 | 0/0 | Desarrollado componente visual con barra de progreso, métricas clave y funcionalidad para iniciar el proceso de inversión |
+| #49 | Sistema de notificaciones para inversiones | ✅ | 7/7 | 0/0 | Implementado sistema completo de notificaciones en tiempo real con soporte para múltiples tipos de notificaciones de inversión |
+| #50 | Tests e2e para flujo de inversión | ✅ | 7/7 | 8/8 | Implementados tests end-to-end completos para el flujo de inversión con Cypress |
+| #51 | Dashboard para gestores con resumen de inversiones | ✅ | 8/8 | 0/0 | Implementado dashboard con estadísticas, filtros y gestión completa de inversiones para gestores |
 
 ## 🚀 Plan de Desarrollo para HU #2
 

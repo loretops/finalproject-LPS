@@ -1,33 +1,48 @@
 /**
- * Formatea un número como moneda (EUR)
- * @param {number|string} value - Valor a formatear
- * @param {string} [locale='es-ES'] - Configuración regional
- * @param {string} [currency='EUR'] - Moneda
- * @returns {string} - Valor formateado como moneda
+ * Formatea un número como moneda
+ * @param {number|string} amount - Cantidad a formatear
+ * @param {string} [currency='EUR'] - Moneda (por defecto EUR)
+ * @param {string} [locale='es-ES'] - Configuración regional para el formato
+ * @returns {string} - Cantidad formateada con símbolo de moneda
  */
-export const formatCurrency = (value, locale = 'es-ES', currency = 'EUR') => {
-  // Asegurar que value es un número
-  const numValue = typeof value === 'string' ? parseFloat(value) : value;
-  
-  if (isNaN(numValue)) {
-    return '0,00 €';
-  }
-  
-  return new Intl.NumberFormat(locale, {
+export const formatCurrency = (amount, currency = 'EUR', locale = 'es-ES') => {
+  const formatter = new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
     minimumFractionDigits: 0,
-    maximumFractionDigits: 2
-  }).format(numValue);
+    maximumFractionDigits: 0
+  });
+  
+  return formatter.format(amount);
 };
 
 /**
- * Formatea una fecha en formato legible
+ * Formatea un número como porcentaje
+ * @param {number|string} value - Valor a formatear
+ * @param {number} [decimals=0] - Número de decimales a mostrar
+ * @param {string} [locale='es-ES'] - Configuración regional para el formato
+ * @returns {string} - Porcentaje formateado
+ */
+export const formatPercent = (value, decimals = 0, locale = 'es-ES') => {
+  const formatter = new Intl.NumberFormat(locale, {
+    style: 'percent',
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  });
+  
+  return formatter.format(value / 100);
+};
+
+/**
+ * Formatea una fecha
  * @param {string|Date} date - Fecha a formatear
- * @param {string} [locale='es-ES'] - Configuración regional
+ * @param {Object} [options] - Opciones de formato
+ * @param {boolean} [options.includeTime=false] - Si se debe incluir la hora
+ * @param {string} [options.dateStyle] - Estilo de fecha ('full', 'long', 'medium', 'short')
+ * @param {string} [options.locale='es-ES'] - Configuración regional para el formato
  * @returns {string} - Fecha formateada
  */
-export const formatDate = (date, locale = 'es-ES') => {
+export const formatDate = (date, options = {}) => {
   if (!date) return '';
   
   const dateObj = date instanceof Date ? date : new Date(date);
@@ -36,11 +51,30 @@ export const formatDate = (date, locale = 'es-ES') => {
     return '';
   }
   
-  return new Intl.DateTimeFormat(locale, {
+  const { 
+    includeTime = false, 
+    dateStyle,
+    locale = 'es-ES' 
+  } = options;
+  
+  // Si se proporciona dateStyle, usar directamente
+  if (dateStyle) {
+    return new Intl.DateTimeFormat(locale, { dateStyle }).format(dateObj);
+  }
+  
+  // Si no, usar el formato personalizado
+  const formatOptions = {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
-  }).format(dateObj);
+  };
+  
+  if (includeTime) {
+    formatOptions.hour = '2-digit';
+    formatOptions.minute = '2-digit';
+  }
+  
+  return new Intl.DateTimeFormat(locale, formatOptions).format(dateObj);
 };
 
 /**

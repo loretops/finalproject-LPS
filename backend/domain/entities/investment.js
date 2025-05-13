@@ -34,10 +34,10 @@ class Investment {
 
   /**
    * Cambia el estado de la inversión
-   * @param {string} newStatus - Nuevo estado ('pending', 'confirmed', 'rejected', 'cancelled')
+   * @param {string} newStatus - Nuevo estado ('pending', 'confirmed', 'rejected', 'canceled')
    */
   updateStatus(newStatus) {
-    const validStatuses = ['pending', 'confirmed', 'rejected', 'cancelled'];
+    const validStatuses = ['pending', 'confirmed', 'rejected', 'canceled'];
     
     if (!validStatuses.includes(newStatus)) {
       throw new Error(`Estado de inversión no válido: ${newStatus}`);

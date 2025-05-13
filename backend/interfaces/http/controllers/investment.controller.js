@@ -7,6 +7,15 @@ const { validationResult } = require('express-validator');
 class InvestmentController {
   constructor() {
     this.investmentService = new InvestmentService();
+    
+    // Vincular métodos al contexto correcto
+    this.investInProject = this.investInProject.bind(this);
+    this.getUserInvestments = this.getUserInvestments.bind(this);
+    this.getProjectInvestments = this.getProjectInvestments.bind(this);
+    this.getInvestmentById = this.getInvestmentById.bind(this);
+    this.cancelInvestment = this.cancelInvestment.bind(this);
+    this.updateInvestmentStatus = this.updateInvestmentStatus.bind(this);
+    this.getAllInvestments = this.getAllInvestments.bind(this);
   }
 
   /**
@@ -116,26 +125,61 @@ class InvestmentController {
   }
 
   /**
+   * Obtiene todas las inversiones en la plataforma.
+   * Solo accesible para gestores y administradores.
+   * @param {Request} req - Objeto de solicitud Express
+   * @param {Response} res - Objeto de respuesta Express
+   * @returns {Response} - Respuesta con todas las inversiones
+   */
+  async getAllInvestments(req, res) {
+    try {
+      console.log('Obteniendo todas las inversiones');
+      
+      const { status, page, limit, projectId } = req.query;
+
+      const options = {
+        status,
+        projectId,
+        page: page ? parseInt(page, 10) : 1,
+        limit: limit ? parseInt(limit, 10) : 50
+      };
+
+      console.log('Opciones de filtrado:', options);
+
+      const result = await this.investmentService.getAllInvestments(options);
+
+      return res.status(200).json(result);
+    } catch (error) {
+      console.error('Error en InvestmentController.getAllInvestments:', error);
+      return res.status(500).json({ 
+        message: 'Error al obtener todas las inversiones',
+        error: error.message 
+      });
+    }
+  }
+
+  /**
    * Obtiene el detalle de una inversión específica.
+   * Los usuarios solo pueden ver sus propias inversiones.
+   * Gestores y administradores pueden ver cualquier inversión.
    * @param {Request} req - Objeto de solicitud Express
    * @param {Response} res - Objeto de respuesta Express
    * @returns {Response} - Respuesta con el detalle de la inversión
    */
   async getInvestmentById(req, res) {
     try {
-      const { id } = req.params;
+      const { investmentId } = req.params;
       const userId = req.user.id;
       const userRole = req.user.role;
 
-      const investment = await this.investmentService.getInvestmentById(id);
-
-      if (!investment) {
-        return res.status(404).json({ message: 'Inversión no encontrada' });
-      }
-
-      // Verificar permisos: solo el propio usuario o gestores/admin pueden ver
-      if (investment.userId !== userId && userRole !== 'manager' && userRole !== 'admin') {
-        return res.status(403).json({ message: 'No tienes permiso para ver esta inversión' });
+      // Verificar acceso
+      const investment = await this.investmentService.getInvestmentById(investmentId);
+      
+      // Si no es gestor o admin, verificar que la inversión pertenezca al usuario
+      if (!['manager', 'admin'].includes(userRole) && investment.userId !== userId) {
+        return res.status(403).json({ 
+          message: 'No tienes permiso para ver esta inversión' 
+        });
       }
 
       return res.status(200).json({
@@ -143,6 +187,11 @@ class InvestmentController {
       });
     } catch (error) {
       console.error('Error en InvestmentController.getInvestmentById:', error);
+      
+      if (error.message.includes('no encontrada')) {
+        return res.status(404).json({ message: error.message });
+      }
+      
       return res.status(500).json({ 
         message: 'Error al obtener detalle de la inversión',
         error: error.message 
@@ -152,17 +201,35 @@ class InvestmentController {
 
   /**
    * Cancela una inversión pendiente.
-   * Solo el usuario que realizó la inversión puede cancelarla.
+   * Los usuarios solo pueden cancelar sus propias inversiones pendientes.
    * @param {Request} req - Objeto de solicitud Express
    * @param {Response} res - Objeto de respuesta Express
    * @returns {Response} - Respuesta con la inversión cancelada
    */
   async cancelInvestment(req, res) {
     try {
-      const { id } = req.params;
+      const { investmentId } = req.params;
       const userId = req.user.id;
+      const userRole = req.user.role;
 
-      const cancelledInvestment = await this.investmentService.cancelInvestment(id, userId);
+      // Verificar que la inversión exista y pertenezca al usuario (o sea admin/gestor)
+      const investment = await this.investmentService.getInvestmentById(investmentId);
+      
+      // Si no es gestor o admin, verificar que la inversión pertenezca al usuario
+      if (!['manager', 'admin'].includes(userRole) && investment.userId !== userId) {
+        return res.status(403).json({ 
+          message: 'No tienes permiso para cancelar esta inversión' 
+        });
+      }
+
+      // Verificar que la inversión esté en estado pendiente
+      if (investment.status !== 'pending') {
+        return res.status(400).json({ 
+          message: 'Solo se pueden cancelar inversiones en estado pendiente' 
+        });
+      }
+
+      const cancelledInvestment = await this.investmentService.cancelInvestment(investmentId);
 
       return res.status(200).json({
         message: 'Inversión cancelada con éxito',
@@ -171,11 +238,8 @@ class InvestmentController {
     } catch (error) {
       console.error('Error en InvestmentController.cancelInvestment:', error);
       
-      // Manejo específico de errores conocidos
-      if (error.message.includes('no encontrada') || 
-          error.message.includes('no pertenece al usuario') ||
-          error.message.includes('Solo se pueden cancelar')) {
-        return res.status(400).json({ message: error.message });
+      if (error.message.includes('no encontrada')) {
+        return res.status(404).json({ message: error.message });
       }
       
       return res.status(500).json({ 
@@ -186,7 +250,8 @@ class InvestmentController {
   }
 
   /**
-   * Actualiza el estado de una inversión (solo gestores/admin).
+   * Actualiza el estado de una inversión.
+   * Solo accesible para gestores y administradores.
    * @param {Request} req - Objeto de solicitud Express
    * @param {Response} res - Objeto de respuesta Express
    * @returns {Response} - Respuesta con la inversión actualizada
@@ -199,11 +264,13 @@ class InvestmentController {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { id } = req.params;
-      const { status, contractReference } = req.body;
+      const { investmentId } = req.params;
+      const { status, contractReference, notes } = req.body;
 
-      // Esta operación solo debe ser accesible para gestores/admin (verificado en middleware)
-      const updatedInvestment = await this.investmentService.updateInvestmentStatus(id, status, contractReference);
+      const updatedInvestment = await this.investmentService.updateInvestmentStatus(
+        investmentId, 
+        { status, contractReference, notes }
+      );
 
       return res.status(200).json({
         message: 'Estado de inversión actualizado con éxito',
@@ -212,14 +279,12 @@ class InvestmentController {
     } catch (error) {
       console.error('Error en InvestmentController.updateInvestmentStatus:', error);
       
-      // Manejo específico de errores conocidos
-      if (error.message.includes('no encontrada') || 
-          error.message.includes('Estado de inversión no válido')) {
-        return res.status(400).json({ message: error.message });
+      if (error.message.includes('no encontrada')) {
+        return res.status(404).json({ message: error.message });
       }
       
       return res.status(500).json({ 
-        message: 'Error al actualizar estado de la inversión',
+        message: 'Error al actualizar el estado de la inversión',
         error: error.message 
       });
     }

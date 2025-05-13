@@ -4,9 +4,31 @@ import Link from 'next/link';
 import { useAuth } from '../../context/AuthContext';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import NotificationBell from '../common/NotificationBell';
+
+// Función para verificar si el usuario tiene un rol específico
+const hasRole = (user, roleToCheck) => {
+  if (!user) return false;
+  
+  // Manejar diferentes formatos de roles
+  const userRoles = Array.isArray(user.roles) 
+    ? user.roles 
+    : typeof user.role === 'string' 
+      ? [user.role] 
+      : typeof user.roles === 'string' 
+        ? [user.roles]
+        : [];
+  
+  console.log('Navbar - Roles del usuario:', userRoles);
+  
+  // Verificar si el usuario tiene el rol o es admin
+  return userRoles.includes(roleToCheck) || userRoles.includes('admin');
+};
 
 // Función para filtrar elementos de navegación según rol
 const getNavigationItems = (user) => {
+  console.log('Navbar - Usuario actual:', user);
+  
   // Navegación básica
   const items = [
     { name: 'Inicio', href: '/', public: true },
@@ -18,11 +40,14 @@ const getNavigationItems = (user) => {
   // Agregar ítem de intereses para usuarios autenticados
   if (user) {
     items.push({ name: 'Mis Intereses', href: '/interests', public: false });
+    items.push({ name: 'Mis Inversiones', href: '/investments', public: false });
   }
   
   // Agregar ítems administrativos si el usuario tiene rol manager o admin
-  if (user && user.role && (user.role === 'manager' || user.role === 'admin')) {
+  if (user && (hasRole(user, 'manager') || hasRole(user, 'admin'))) {
     items.push({ name: 'Admin Proyectos', href: '/admin/projects', public: false });
+    items.push({ name: 'Admin Inversiones', href: '/admin/investments', public: false });
+    console.log('Navbar - Agregando elementos de administración para rol manager/admin');
   }
   
   return items;
@@ -82,6 +107,7 @@ const Navbar = () => {
                           ? 'border-primary-500 text-gray-900'
                           : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                       }`}
+                      data-cy={`nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
                     >
                       {item.name}
                     </Link>
@@ -91,10 +117,17 @@ const Navbar = () => {
               
               {/* Botones de usuario y menú móvil */}
               <div className="flex items-center">
+                {/* Mostrar campana de notificaciones solo para usuarios autenticados */}
+                {user && (
+                  <div className="mr-2">
+                    <NotificationBell />
+                  </div>
+                )}
+                
                 {user ? (
                   <Menu as="div" className="relative ml-3">
                     <div>
-                      <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+                      <Menu.Button className="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
                         <span className="sr-only">Abrir menú de usuario</span>
                         <UserCircleIcon className="h-8 w-8 text-gray-400" aria-hidden="true" />
                       </Menu.Button>
@@ -134,6 +167,7 @@ const Navbar = () => {
                               className={`block w-full text-left px-4 py-2 text-sm ${
                                 active ? 'bg-gray-100' : ''
                               } text-gray-700`}
+                              data-cy="logout-button"
                             >
                               Cerrar Sesión
                             </button>
@@ -143,10 +177,11 @@ const Navbar = () => {
                     </Transition>
                   </Menu>
                 ) : (
-                  <div className="hidden sm:flex sm:items-center">
+                  <div className="flex items-center">
                     <Link
                       href="/login"
-                      className="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium"
+                      className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-primary-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-primary-700"
+                      data-cy="login-button"
                     >
                       Iniciar Sesión
                     </Link>
@@ -154,7 +189,7 @@ const Navbar = () => {
                 )}
                 
                 {/* Botón de menú móvil */}
-                <div className="-mr-2 flex items-center sm:hidden">
+                <div className="flex items-center sm:hidden ml-2">
                   <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
                     <span className="sr-only">Abrir menú principal</span>
                     {open ? (
@@ -181,6 +216,7 @@ const Navbar = () => {
                       ? 'border-primary-500 bg-primary-50 text-primary-700'
                       : 'border-transparent text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700'
                   }`}
+                  data-cy={`mobile-nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   {item.name}
                 </Disclosure.Button>
@@ -190,6 +226,7 @@ const Navbar = () => {
                   as={Link}
                   href="/login"
                   className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                  data-cy="mobile-login-button"
                 >
                   Iniciar Sesión
                 </Disclosure.Button>
@@ -220,6 +257,7 @@ const Navbar = () => {
                     as="button"
                     onClick={handleLogout}
                     className="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                    data-cy="mobile-logout-button"
                   >
                     Cerrar Sesión
                   </Disclosure.Button>
