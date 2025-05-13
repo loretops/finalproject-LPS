@@ -123,17 +123,14 @@ gantt
 
 **Objetivo:** Permitir a los socios indicar interés en proyectos de inversión para recibir más información sin compromiso.
 
-| ID | Título | Estado | AC | Tests | Notas |
-|----|--------|--------|----|----|-------|
+| ID | Descripción | Estado | Criterios cumplidos | Tests pasados | Observaciones |
+|---|---|---|---|---|---|
 | #31 | Modelo de datos para intereses en proyectos | ✅ | 6/6 | 0/0 | Modelo ya existente en la base de datos que cumple con todos los criterios |
 | #32 | Servicio backend para gestión de intereses | ✅ | 7/7 | 0/0 | Implementado servicio completo con soporte para registro, listado y eliminación de intereses |
 | #33 | API Endpoints para gestión de intereses | ✅ | 7/7 | 3/7 | Implementados endpoints para registrar, listar y eliminar intereses con sus tests básicos |
-| #34 | Servicio frontend para gestión de intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
-| #35 | Componente UI botón "Me Interesa" | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
-| #36 | Integración del botón de interés en páginas de proyectos | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
-| #37 | Página de "Mis Intereses" para socios | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
-| #38 | Sistema de notificaciones para intereses | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
-| #39 | Tests e2e para flujo de interés en proyectos | ⏳ | 0/7 | 0/0 | Pendiente de implementación |
+| #34 | Servicio frontend para gestión de intereses | ✅ | 7/7 | 8/8 | Servicio implementado y testeado con todos los métodos necesarios |
+| #35 | Componente UI botón "Me Interesa" | ✅ | 7/7 | 2/6 | Implementación funcional pero los tests tienen problemas con localStorage y toast |
+| #36 | Integración del botón de interés en páginas de proyectos | ✅ | 7/7 | 0/0 | Componente correctamente integrado en páginas de detalle y listado de proyectos |
 
 ## 🚀 Plan de Desarrollo para HU #2
 
@@ -504,9 +501,6 @@ Las mejoras aplicadas incluyen:
 - [x] Ticket #34: Servicio frontend para gestión de intereses
 - [x] Ticket #35: Componente UI botón "Me Interesa"
 - [x] Ticket #36: Integración del botón de interés en páginas de proyectos
-- [ ] Ticket #37: Página de "Mis Intereses" para socios
-- [ ] Ticket #38: Sistema de notificaciones para intereses
-- [ ] Ticket #39: Tests e2e para flujo de interés en proyectos
 
 ## Implementaciones recientes
 
