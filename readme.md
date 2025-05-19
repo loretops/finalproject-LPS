@@ -2019,3 +2019,10 @@ Crear el modelo de datos para gestionar invitaciones de usuarios al club. Implem
 *   **Autor(a):** loretops
 *   **Propósito:** Esta Pull Request resuelve los problemas de la Historia de Usuario 9 relacionados con la funcionalidad del botón "Me Interesa" en las tarjetas de proyectos. Corrige varios problemas de propagación de eventos que impedían que el botón fuera clickable debido a que el enlace de la tarjeta capturaba el evento. Incluye mejoras en los componentes ProjectCard e InterestButton para asegurar que los eventos de clic se capturen correctamente, se detengan y no se propaguen al contenedor padre. También mejora el mensaje de paginación en la lista de proyectos para evitar problemas con valores NaN. Esta corrección permite a los usuarios expresar adecuadamente su interés en los proyectos directamente desde la vista de lista.
 
+**Pull Request 4: Implementación de la funcionalidad "Invierto" (HU3)**
+*   **Número y Título:** #4 - Implement "Invierto" functionality (HU3)
+*   **Enlace:** https://github.com/loretops/finalproject-LPS/pull/4
+*   **Fecha de Creación:** Mayo 2024 (Estado: Abierta)
+*   **Autor(a):** loretops
+*   **Propósito:** Esta Pull Request implementa la Historia de Usuario 3, permitiendo a los socios registrar su intención formal de invertir en un proyecto indicando el monto específico. Incluye la creación del modelo de Investment con todos sus campos, endpoints de API para registrar inversiones, listar inversiones por proyecto y por usuario, interfaz de usuario para el formulario de inversión con validación de montos mínimos, actualización automática del monto total comprometido en cada proyecto, y sistema de notificaciones para gestores y otros socios. También implementa las pruebas unitarias y de integración necesarias para garantizar el correcto funcionamiento de esta funcionalidad crítica para el modelo de negocio de la plataforma.
+

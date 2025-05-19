@@ -64,8 +64,9 @@ const ProjectDetailPage = () => {
   
   // Calcular porcentaje de financiación
   const getFundingPercentage = () => {
-    if (!project || !project.target_amount) return 0;
-    return Math.min(100, Math.round((project.current_amount / project.target_amount) * 100));
+    if (!project || !project.target_amount || project.target_amount <= 0) return 0;
+    const currentAmount = project.current_amount || 0; // Asignar 0 por defecto si es undefined o null
+    return Math.min(100, Math.round((currentAmount / project.target_amount) * 100));
   };
   
   // Procesar los documentos en las categorías adecuadas
@@ -442,10 +443,10 @@ const ProjectDetailPage = () => {
               <div className="mt-8">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-medium text-gray-700">
-                    Progreso de financiación: {fundingPercentage}%
+                    Progreso de inversión: {fundingPercentage}%
                   </span>
                   <span className="text-sm text-gray-600">
-                    {formatCurrency(project.current_amount)} de {formatCurrency(project.target_amount)}
+                    {formatCurrency(project.current_amount || 0)} de {formatCurrency(project.target_amount)}
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2.5">

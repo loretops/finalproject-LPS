@@ -101,7 +101,8 @@ const ProjectCard = ({
   // Calcular el porcentaje de financiación
   const calculateFundingPercentage = () => {
     if (!target_amount || target_amount <= 0) return 0;
-    const percentage = (current_amount / target_amount) * 100;
+    const currentAmount = current_amount || 0; // Asignar 0 por defecto si es undefined o null
+    const percentage = (currentAmount / target_amount) * 100;
     return Math.min(Math.round(percentage), 100); // No permitir valores mayores a 100%
   };
 
@@ -200,8 +201,8 @@ const ProjectCard = ({
           {/* Barra de progreso de financiación */}
           <div className="mt-4">
             <div className="flex justify-between items-center text-xs text-gray-500 mb-1">
-              <span>Financiación: {calculateFundingPercentage()}%</span>
-              <span>{formatCurrency(current_amount)} / {formatCurrency(target_amount)}</span>
+              <span>Inversión: {calculateFundingPercentage()}%</span>
+              <span>{formatCurrency(current_amount || 0)} / {formatCurrency(target_amount)}</span>
             </div>
             <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
               <div 

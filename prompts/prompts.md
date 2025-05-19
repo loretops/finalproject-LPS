@@ -14,6 +14,7 @@ Puedes añadir adicionalmente la conversación completa como link o archivo adju
 8. [Seguridad](#8-seguridad)
 9. [Configuración del proyecto](#9-configuración-del-proyecto)
 10. [Estandarización de la interfaz](#10-estandarización-de-la-interfaz)
+11. [Historias de Usuario específicas](#11-historias-de-usuario-específicas)
 
 ---
 
@@ -333,11 +334,21 @@ Tengo un problema con el repositorio, y es que he ido haciendo commit y push en 
 @readme.md Tengo que documentar las Pull Request en @readme.md , como parte de la documentación de alto nivel que tengo que presentar, y como parte de la documenatción de un proyecto bien desarrollado, pero no sé muy bien qué debo poner. ¿Me puedes ayudar? Puedes revisar los cambios del repositorio
 ```
 
+**Prompt 3:**
+```
+Prepara una nueva PR, y documentala en @prompts.md y en @readme.md , porque ya hemos terminado la HU9
+```
+
+**Prompt 4:**
+```
+prepara esta inforamción pero en un texto en formato markdown que yo pueda copiar, pero teniendo en cuenta que esta pULL REQUEST atienda a la implementacion de la HU3. Y actualiza también @prompts.md  y @readme.md  en la sección Pull requests
+```
 
 ## 8. Seguridad
 
 **Prompt 1:**
-```@readme.md 
+```
+@readme.md 
 Tengo que seguir documentando el proyecto. Revisa todos los archivos para poder aportar este punto: Enumera y describe las prácticas de seguridad principales que se han implementado en el proyecto, añadiendo ejemplos si procede, pero solo para lo que se ha desarrollado por ahora. De hecho se debe indicar que es lo que hay en este punto del proyecto, y más adelante se mejorará este punto. 
 Si hay algún punto claro de lo que se va a desarrollar en el futuro, se pueden añadir aquí tambien. de hecho hay puntos de seguridad fundamentales en este proyecto, así que profundiza lo que necesites, sin perder de vista que es un MVP, y yo soy una progaramdora junior, y no puedo mantener un proyecto muy complejo
 @rules.mdc 
@@ -384,21 +395,21 @@ He pinchado en las flechas para ordenar asecndentemente la columna TITULO y no l
 Ya está terminada esta Historia de Usuario, así que vamos a hacer una nueva PR, pero asegurate que sea a mi repositorio, no al original. Actualiza @prompts.md con esto, en la sección Pull Requests, y documenta el @readme.md en la misma sección. Vamos paso a paso
 ```
 
-**Prompt 9:**
+**Prompt 6:**
 ```
 has probado los tests?
 ```
 
-## Historia de Usuario 9 - Marcar "Me Interesa"
+## 11. Historias de Usuario específicas
 
-- En realidad la HU9 no está funcionando bien. Así que quiero empezar a desarrollarla. Empezemos por crear los tickets completos.
-- Fijate en @user-stories.md, y en los tickets escritos @tickets.md.
-- Fijate en los tickets escritos para la HU1. A mi me parece que están muy bien.
-- habría que añadir los tickets a contonuación en el archivo@tickets.md, y preparar el archivo @development_status.md para ir haciendo seguimiento del desarrollo de los mismos. Así que como experto desarrollador full-satck y product manager, con toda la documentación de la que dispones. Como te he dicho, debes dar todo el detalle requerido para desarrollar la tarea de inicio a fin, teniendo en cuenta las buenas prácticas al respecto. No desarrolles nada aún, solo crea los tickets, en el orden lógico de ejecución para que pueda crearse el flujo de uso. No te inventes nada, todo debe ajustarse al proyecto real. El orden de creación debe tener en cuenta las dependencias técnicas. Revisa que cubra los requerimientos de frontend, backend y basese de datos. No añadas nada que no sea necesario para un MVP, y ten en cuenta que si ves impresciniidible hacer odificaciones en el modelo de datos, habrá que revisar cuáles ya que habrá que actualizar varios archivos.
-- Acuerdate también de actualizar siempre el archivo @production_deployment.md
+### Historia de Usuario 2: Ver oportunidades de inversión
+[Ver prompts completos](prompts/prompts_HU2.md)
 
+### Historia de Usuario 3: Marcar Invierto
+[Ver prompts completos](prompts/prompts_HU3.md)
 
+### Historia de Usuario 9: Marcar "Me Interesa"
+[Ver prompts completos](prompts/prompts_HU9.md)
 
-
-
-
+### Análisis del producto
+[Ver análisis completo](prompts/prompts_analisis_product_3.md) 
