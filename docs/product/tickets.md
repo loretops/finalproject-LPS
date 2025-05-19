@@ -1456,3 +1456,496 @@
 - [Historia de usuario](../product/user-stories.md#-historia-9--marcar-me-interesa-must-have)
 - [Configuración de testing](../technical/testing-guide.md)
 - [Tests e2e existentes](../technical/e2e-tests.md)
+
+
+# Tickets para Historia de Usuario 3 - Marcar "Invierto"
+
+> Este documento contiene los tickets de desarrollo para la HU3 (Marcar "Invierto"), que permite a los socios indicar su intención formal de invertir en un proyecto y especificar el monto.
+
+## Dependencias y Orden de Desarrollo
+
+Para la Historia de Usuario 3, el orden recomendado de desarrollo es:
+
+1. **Fase 1 - Modelos de Datos**
+   - **#40: Modelo de datos para inversiones** - Implementar entidades y modelo en la base de datos
+   - **#41: Actualización del modelo de proyecto para inversiones** - Añadir campos necesarios para gestionar inversiones
+
+2. **Fase 2 - Backend**
+   - **#42: Servicio backend para gestión de inversiones** - Implementar la lógica de negocio para inversiones
+   - **#43: API Endpoints para gestión de inversiones** - Crear los endpoints para interactuar con el servicio
+
+3. **Fase 3 - Frontend (Servicios y Componentes)**
+   - **#44: Servicio frontend para gestión de inversiones** - Crear la capa de servicio en el frontend
+   - **#45: Componente formulario de inversión** - Implementar el formulario para realizar inversiones
+   - **#46: Integración del formulario en página de detalle** - Integrar el formulario en la página de detalle de proyecto
+
+4. **Fase 4 - Páginas y Componentes Adicionales**
+   - **#47: Página de "Mis Inversiones" para socios** - Implementar la página para visualizar inversiones realizadas
+   - **#48: Componente de resumen de inversiones en proyecto** - Mostrar información resumida de inversiones en proyectos
+
+5. **Fase 5 - Notificaciones y Pruebas**
+   - **#49: Sistema de notificaciones para inversiones** - Implementar notificaciones automáticas
+   - **#50: Tests e2e para flujo de inversión** - Validar el flujo completo con pruebas e2e
+   - **#51: Dashboard para gestores con resumen de inversiones** - Crear panel para gestores con información de inversiones
+
+## Detalle de Tickets
+
+## Ticket #40: Modelo de datos para inversiones
+
+**Título:** Implementar modelo de datos para inversiones
+
+**Descripción:** Crear las entidades y el modelo de datos necesarios para gestionar las inversiones de los socios en proyectos inmobiliarios. Esto incluye la definición de la entidad Investment en el dominio y las migraciones necesarias en la base de datos.
+
+**Criterios de Aceptación:**
+- Se define la entidad `Investment` en el dominio con todos los campos requeridos
+- Se implementa la migración en Prisma para la tabla `investments` si no existe ya
+- Se cumple con los requisitos de campos especificados en la HU3
+- Se establecen correctamente las relaciones con los modelos de User y Project
+- Se crean los índices necesarios para optimizar las consultas
+- Se implementan las validaciones básicas a nivel de modelo
+
+**Prioridad:** Alta
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo Backend
+
+**Etiquetas:** Backend, Base de Datos, Dominio, MVP
+
+**Tareas:**
+1. Verificar que el modelo `Investment` ya definido en schema.prisma cumple con los requisitos
+2. Implementar la entidad `Investment` en `backend/domain/entities/investment.js`
+3. Definir las validaciones de negocio para la entidad (monto mínimo, validaciones, etc.)
+4. Asegurar que las relaciones con User y Project estén correctamente definidas
+5. Implementar métodos auxiliares en la entidad para cálculos y validaciones específicas
+6. Actualizar documentación de modelos si es necesario
+
+**Enlaces:**
+- [Historia de usuario](docs/product/user-stories.md#-historia-3--marcar-invierto-must-have)
+- [Esquema de base de datos](backend/prisma/schema.prisma)
+- [Guía de entidades de dominio](docs/technical/domain-entities.md)
+
+## Ticket #41: Actualización del modelo de proyecto para inversiones
+
+**Título:** Actualizar modelo de proyecto para soportar inversiones
+
+**Descripción:** Actualizar el modelo de Project para soportar adecuadamente las inversiones, implementando los métodos necesarios para gestionar montos de inversión, calcular porcentajes de financiación y validar reglas de negocio relacionadas.
+
+**Criterios de Aceptación:**
+- El modelo Project puede calcular correctamente el porcentaje financiado
+- Se implementan métodos para actualizar el campo `currentAmount` al registrar inversiones
+- Se incluyen validaciones para verificar que una inversión cumple con el monto mínimo
+- Se añaden métodos para determinar si un proyecto está completamente financiado
+- Se crea lógica para validar si un proyecto permite nuevas inversiones basado en su estado
+- El modelo mantiene integridad referencial con las inversiones asociadas
+
+**Prioridad:** Alta
+
+**Estimación:** 2 puntos de historia
+
+**Asignado a:** Equipo Backend
+
+**Etiquetas:** Backend, Base de Datos, Dominio, MVP
+
+**Tareas:**
+1. Actualizar entidad Project en `backend/domain/entities/project.js` con nuevos métodos
+2. Implementar método para calcular el porcentaje de financiación actual
+3. Añadir método para incrementar `currentAmount` al registrar inversiones
+4. Implementar método para validar si una inversión cumple requisitos mínimos
+5. Crear método para determinar si un proyecto acepta más inversiones
+6. Actualizar validaciones relevantes para mantener integridad de datos
+
+**Enlaces:**
+- [Historia de usuario](docs/product/user-stories.md#-historia-3--marcar-invierto-must-have)
+- [Entidad Project existente](backend/domain/entities/project.js)
+- [Guía de actualización de modelos](docs/technical/model-update-guide.md)
+
+## Ticket #42: Servicio backend para gestión de inversiones
+
+**Título:** Implementar servicio backend para gestión de inversiones
+
+**Descripción:** Crear un servicio que implemente toda la lógica de negocio relacionada con las inversiones, incluyendo la creación, consulta, actualización y validación de inversiones en proyectos.
+
+**Criterios de Aceptación:**
+- Se implementa un servicio completo que gestiona el ciclo de vida de las inversiones
+- El servicio incluye métodos para registrar nuevas inversiones
+- Se implementa lógica para listar inversiones por usuario y por proyecto
+- Se incluyen validaciones de reglas de negocio (monto mínimo, proyecto disponible, etc.)
+- La actualización del monto acumulado en el proyecto se realiza transaccionalmente
+- El servicio maneja correctamente la creación de notificaciones asociadas
+- Se implementa un manejo adecuado de errores y excepciones
+- Las operaciones críticas son transaccionales para garantizar integridad de datos
+
+**Prioridad:** Alta
+
+**Estimación:** 5 puntos de historia
+
+**Asignado a:** Equipo Backend
+
+**Etiquetas:** Backend, Servicios, Transacciones, MVP
+
+**Tareas:**
+1. Crear `backend/application/services/investmentService.js`
+2. Implementar método para registrar inversión (`createInvestment`)
+3. Desarrollar método para listar inversiones por usuario (`getUserInvestments`)
+4. Implementar método para listar inversiones por proyecto (`getProjectInvestments`)
+5. Añadir método para cancelar una inversión si el estado lo permite (`cancelInvestment`)
+6. Crear método para confirmar una inversión (`confirmInvestment`)
+7. Implementar lógica transaccional para actualizar montos del proyecto
+8. Integrar con servicio de notificaciones para generar alertas
+
+**Enlaces:**
+- [Historia de usuario](docs/product/user-stories.md#-historia-3--marcar-invierto-must-have)
+- [Guía de servicios backend](docs/technical/backend-services.md)
+- [Manejo de transacciones](docs/technical/transaction-management.md)
+
+## Ticket #43: API Endpoints para gestión de inversiones
+
+**Título:** Implementar API endpoints para gestión de inversiones
+
+**Descripción:** Crear los endpoints de API necesarios para que el frontend pueda interactuar con el servicio de inversiones, incluyendo rutas para registrar, listar y gestionar inversiones.
+
+**Criterios de Aceptación:**
+- Se implementa el endpoint POST `/api/projects/:id/invest` para registrar inversiones
+- Se crea el endpoint GET `/api/projects/:id/investments` para listar inversiones por proyecto
+- Se implementa el endpoint GET `/api/users/me/investments` para listar inversiones del usuario
+- Se añade validación de permisos para asegurar que solo los usuarios autorizados acceden
+- Todos los endpoints devuelven códigos HTTP apropiados según el resultado de la operación
+- La documentación Swagger/OpenAPI se actualiza con los nuevos endpoints
+- Se implementa la validación de entrada para parámetros y cuerpo de peticiones
+
+**Prioridad:** Alta
+
+**Estimación:** 4 puntos de historia
+
+**Asignado a:** Equipo Backend
+
+**Etiquetas:** Backend, API, REST, MVP
+
+**Tareas:**
+1. Crear `backend/interfaces/controllers/investmentController.js`
+2. Implementar método para registrar inversión (`investInProject`)
+3. Desarrollar método para listar inversiones de un proyecto (`getProjectInvestments`)
+4. Implementar método para listar inversiones del usuario (`getUserInvestments`)
+5. Crear `backend/interfaces/routes/investmentRoutes.js` para definir rutas
+6. Aplicar middleware de autenticación y verificación de roles
+7. Implementar validaciones de entrada con express-validator
+8. Actualizar documentación de API con nuevos endpoints
+9. Crear tests básicos para validar funcionamiento de los endpoints
+
+**Enlaces:**
+- [Historia de usuario](docs/product/user-stories.md#-historia-3--marcar-invierto-must-have)
+- [Guía de controladores](docs/technical/controllers-guide.md)
+- [Documentación API](docs/api/README.md)
+
+## Ticket #44: Servicio frontend para gestión de inversiones
+
+**Título:** Implementar servicio frontend para gestión de inversiones
+
+**Descripción:** Crear un servicio en el frontend que interactúe con los endpoints de la API de inversiones, permitiendo a los componentes realizar operaciones relacionadas con inversiones de manera centralizada.
+
+**Criterios de Aceptación:**
+- Se implementa un servicio completo en `frontend/services/investmentService.js`
+- El servicio incluye método para realizar inversión en un proyecto (`investInProject`)
+- Se implementa método para listar inversiones del usuario (`getUserInvestments`)
+- Se añade método para listar inversiones en un proyecto (`getProjectInvestments`)
+- El servicio maneja correctamente errores y devoluciones de la API
+- Se implementa manejo de estado (loading, error, success) para operaciones asíncronas
+- Se crean interfaces TypeScript para los tipos de datos involucrados
+
+**Prioridad:** Alta
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo Frontend
+
+**Etiquetas:** Frontend, Servicios, MVP
+
+**Tareas:**
+1. Crear `frontend/services/investmentService.js`
+2. Implementar método para realizar inversión (`investInProject`)
+3. Desarrollar método para listar inversiones del usuario (`getUserInvestments`)
+4. Implementar método para listar inversiones en proyecto (`getProjectInvestments`) 
+5. Añadir manejo de errores y mensajes para el usuario
+6. Crear interfaces TypeScript para los tipos de datos
+7. Integrar con sistema de autenticación para encabezados JWT
+8. Escribir tests básicos para verificar funcionamiento del servicio
+
+**Enlaces:**
+- [Historia de usuario](docs/product/user-stories.md#-historia-3--marcar-invierto-must-have)
+- [Guía de servicios frontend](docs/technical/frontend-services.md)
+- [Configuración de axios](docs/technical/http-client.md)
+
+## Ticket #45: Componente formulario de inversión
+
+**Título:** Implementar componente de formulario para inversiones
+
+**Descripción:** Crear un componente de formulario para que los socios puedan realizar inversiones en proyectos, incluyendo campos para especificar el monto y notas adicionales.
+
+**Criterios de Aceptación:**
+- Se implementa un componente `InvestmentForm` reutilizable
+- El formulario incluye campo para ingresar el monto a invertir con validación
+- Se muestra claramente el monto mínimo de inversión del proyecto
+- Incluye validación para asegurar que el monto cumple con los requisitos
+- Se permite al usuario añadir notas opcionales sobre su inversión
+- Muestra confirmación antes de enviar para evitar errores accidentales
+- Ofrece feedback visual durante el proceso de envío y tras completarse
+- Es responsive y accesible en diferentes dispositivos
+- Mantiene consistencia con el diseño general de la aplicación
+
+**Prioridad:** Alta
+
+**Estimación:** 5 puntos de historia
+
+**Asignado a:** Equipo Frontend
+
+**Etiquetas:** Frontend, UI/UX, Componentes, MVP
+
+**Tareas:**
+1. Crear componente `InvestmentForm` en `frontend/components/projects/InvestmentForm.jsx`
+2. Implementar formulario con formik o react-hook-form para gestión de estado
+3. Añadir validaciones para el campo de monto (mínimo, formato, etc.)
+4. Implementar campo de notas opcional con contador de caracteres
+5. Desarrollar modal de confirmación antes de enviar inversión
+6. Crear estados visuales para diferentes situaciones (enviando, éxito, error)
+7. Conectar con el servicio de inversiones para enviar datos
+8. Implementar tests básicos del componente
+
+**Enlaces:**
+- [Historia de usuario](docs/product/user-stories.md#-historia-3--marcar-invierto-must-have)
+- [Guía de componentes](docs/technical/component-guide.md)
+- [Guía de estilos UI](docs/design/ui-styleguide.md)
+
+## Ticket #46: Integración del formulario en página de detalle
+
+**Título:** Integrar formulario de inversión en la página de detalle de proyecto
+
+**Descripción:** Integrar el componente de formulario de inversión en la página de detalle de proyecto, asegurando que funcione correctamente con los datos del proyecto y la lógica de navegación.
+
+**Criterios de Aceptación:**
+- El formulario de inversión se integra correctamente en la página de detalle de proyecto
+- Se muestra de forma destacada y accesible para los usuarios
+- El monto mínimo se precarga del proyecto actual automáticamente
+- Se implementa lógica para mostrar/ocultar el formulario según el estado del proyecto
+- Al completar la inversión se muestra una confirmación y se actualiza la UI
+- Se dirige al usuario a una página de resumen o confirmación tras invertir
+- La integración es consistente con el diseño general de la página
+- Se mantiene la experiencia responsive en todos los dispositivos
+
+**Prioridad:** Alta
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo Frontend
+
+**Etiquetas:** Frontend, UI/UX, Integración, MVP
+
+**Tareas:**
+1. Actualizar `frontend/pages/projects/[id].jsx` para integrar el formulario
+2. Implementar sección destacada para el formulario de inversión
+3. Añadir lógica condicional para mostrar/ocultar formulario según estado
+4. Desarrollar flujo de confirmación tras inversión exitosa
+5. Crear página o modal de confirmación/resumen post-inversión
+6. Asegurar que la UI se actualiza correctamente tras una inversión
+7. Mantener coherencia visual con el resto de la página
+8. Implementar tests de integración
+
+**Enlaces:**
+- [Historia de usuario](docs/product/user-stories.md#-historia-3--marcar-invierto-must-have)
+- [Página de detalle de proyecto](frontend/pages/projects/[id].jsx)
+- [Guía de navegación](docs/technical/frontend-navigation.md)
+
+## Ticket #47: Página de "Mis Inversiones" para socios
+
+**Título:** Implementar página de listado de inversiones del usuario
+
+**Descripción:** Crear una página que permita a los socios ver todas sus inversiones actuales, con detalles de cada una y acceso rápido a los proyectos relacionados.
+
+**Criterios de Aceptación:**
+- Se implementa la página en `/account/investments` accesible solo para socios autenticados
+- Muestra un listado de todas las inversiones realizadas por el usuario
+- Incluye detalles clave: proyecto, monto, fecha, estado, ROI esperado
+- Permite filtrar inversiones por estado (pendientes, confirmadas, etc.)
+- Ofrece acceso directo a la página de detalle de cada proyecto
+- Muestra resumen total de inversiones y estadísticas básicas
+- Es responsive y accesible en todos los dispositivos
+- Implementa estados visuales para diferentes situaciones (cargando, vacío, error)
+
+**Prioridad:** Media
+
+**Estimación:** 4 puntos de historia
+
+**Asignado a:** Equipo Frontend
+
+**Etiquetas:** Frontend, UI/UX, MVP
+
+**Tareas:**
+1. Crear componente de página para listado de inversiones en `frontend/pages/account/investments.js`
+2. Implementar llamada al servicio para obtener inversiones del usuario
+3. Desarrollar componente de tabla o lista para mostrar inversiones
+4. Implementar filtros y ordenación para la lista de inversiones
+5. Crear componente de resumen con estadísticas (total invertido, proyectos, etc.)
+6. Desarrollar estados visuales para diferentes situaciones
+7. Integrar con sistema de navegación y protección de rutas
+8. Implementar tests básicos de la página
+
+**Enlaces:**
+- [Historia de usuario](docs/product/user-stories.md#-historia-3--marcar-invierto-must-have)
+- [Estructura de cuenta de usuario](docs/technical/frontend-structure.md)
+- [Componentes UI existentes](docs/technical/ui-components.md)
+
+## Ticket #48: Componente de resumen de inversiones en proyecto
+
+**Título:** Implementar componente de resumen de inversiones en proyecto
+
+**Descripción:** Crear un componente que muestre un resumen visual de las inversiones en un proyecto, incluyendo el progreso de financiación, número de inversores y otra información relevante.
+
+**Criterios de Aceptación:**
+- Se implementa un componente `InvestmentSummary` reutilizable
+- El componente muestra claramente el progreso de financiación con una barra visual
+- Incluye detalles como: cantidad recaudada, objetivo, porcentaje completado
+- Muestra información sobre número de inversores (opcional según permisos)
+- Permite diferentes variantes visuales (completa, compacta, etc.)
+- Es responsive y se adapta a diferentes contenedores
+- Mantiene consistencia con el diseño general de la aplicación
+- Los datos se actualizan automáticamente cuando cambia el proyecto
+
+**Prioridad:** Media
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo Frontend
+
+**Etiquetas:** Frontend, UI/UX, Componentes, MVP
+
+**Tareas:**
+1. Crear componente `InvestmentSummary` en `frontend/components/projects/InvestmentSummary.jsx`
+2. Implementar barra de progreso visual para financiación
+3. Desarrollar cálculos para porcentajes y visualización de datos
+4. Crear diferentes variantes visuales del componente
+5. Implementar lógica para mostrar/ocultar información según permisos
+6. Asegurar que el componente es responsive y accesible
+7. Integrar con el tema visual de la aplicación
+8. Escribir tests para verificar cálculos y visualización
+
+**Enlaces:**
+- [Historia de usuario](docs/product/user-stories.md#-historia-3--marcar-invierto-must-have)
+- [Guía de componentes](docs/technical/component-guide.md)
+- [Biblioteca de componentes UI](docs/technical/ui-components.md)
+
+## Ticket #49: Sistema de notificaciones para inversiones
+
+**Título:** Implementar sistema de notificaciones para nuevas inversiones
+
+**Descripción:** Crear un sistema que genere notificaciones automáticas cuando un socio realiza una inversión, permitiendo a los gestores y otros socios mantenerse informados.
+
+**Criterios de Aceptación:**
+- Se registra una notificación automática cuando un socio realiza una inversión
+- Las notificaciones se envían al gestor/creador del proyecto y otros socios
+- El sistema soporta notificaciones en la plataforma (y opcionalmente por email)
+- Las notificaciones incluyen información relevante (proyecto, monto, usuario)
+- Los gestores pueden ver un listado de todas las notificaciones recientes
+- Se marca el estado de leído/no leído en notificaciones
+- El sistema es escalable para soportar otros tipos de notificaciones en el futuro
+
+**Prioridad:** Media
+
+**Estimación:** 5 puntos de historia
+
+**Asignado a:** Equipo Full-Stack
+
+**Etiquetas:** Backend, Frontend, Notificaciones, MVP
+
+**Tareas:**
+1. Verificar o extender el modelo Notification para soportar inversiones
+2. Actualizar o crear servicio de notificaciones en backend
+3. Implementar generación automática de notificaciones al realizar inversión
+4. Verificar endpoint API para obtener notificaciones del usuario
+5. Actualizar componente de indicador de notificaciones en la interfaz
+6. Asegurar que la página o modal de notificaciones muestra las nuevas
+7. Implementar sistema para marcar notificaciones como leídas
+8. Integrar con sistema de emails (opcional para MVP)
+9. Escribir tests para verificar funcionamiento
+
+**Enlaces:**
+- [Historia de usuario](docs/product/user-stories.md#-historia-3--marcar-invierto-must-have)
+- [Sistema de notificaciones](docs/technical/notification-system.md)
+- [Configuración de email](docs/technical/email-service.md)
+
+## Ticket #50: Tests e2e para flujo de inversión
+
+**Título:** Implementar tests end-to-end para flujo de inversión en proyectos
+
+**Descripción:** Crear tests end-to-end que validen el flujo completo de inversión en proyectos, desde la visualización del proyecto hasta la confirmación de la inversión y su visualización en el listado personal.
+
+**Criterios de Aceptación:**
+- Se implementan tests e2e con Cypress o similar para el flujo completo
+- Los tests cubren la acción de invertir desde la página de detalle del proyecto
+- Se verifica la validación de montos mínimos y errores en formulario
+- Se prueba la visualización de la página "Mis Inversiones"
+- Los tests incluyen verificación de interfaz (estados visuales, feedback)
+- Se verifica la actualización de la barra de progreso del proyecto
+- El código de prueba es mantenible y está bien documentado
+- Se incluyen escenarios positivos y negativos (errores, validaciones)
+
+**Prioridad:** Baja
+
+**Estimación:** 3 puntos de historia
+
+**Asignado a:** Equipo QA/Frontend
+
+**Etiquetas:** Testing, E2E, Calidad, MVP
+
+**Tareas:**
+1. Configurar escenarios de prueba y datos iniciales
+2. Implementar test para navegar al detalle de un proyecto
+3. Crear test para completar y enviar formulario de inversión
+4. Verificar validaciones y mensajes de error
+5. Comprobar página de confirmación post-inversión
+6. Implementar test para verificar página "Mis Inversiones"
+7. Comprobar actualización de datos del proyecto tras inversión
+8. Documentar los test cases creados
+
+**Enlaces:**
+- [Historia de usuario](docs/product/user-stories.md#-historia-3--marcar-invierto-must-have)
+- [Configuración de Cypress](cypress/README.md)
+- [Guía de testing e2e](docs/technical/e2e-testing-guide.md)
+
+## Ticket #51: Dashboard para gestores con resumen de inversiones
+
+**Título:** Implementar dashboard para gestores con resumen de inversiones
+
+**Descripción:** Crear un panel de control para gestores que muestre información consolidada sobre las inversiones en todos los proyectos, permitiendo monitorear el progreso de financiación y gestionar el estado de las inversiones.
+
+**Criterios de Aceptación:**
+- Se implementa dashboard en el área de administración para gestores
+- Muestra resumen global de inversiones por proyecto
+- Incluye estadísticas clave: total recaudado, proyectos financiados, inversiones pendientes
+- Permite ver y gestionar las inversiones en estado pendiente
+- Incluye gráficos para visualizar tendencias de inversión
+- Ofrece filtros para analizar datos por período, proyecto o estado
+- Es responsive y optimizado para diferentes dispositivos
+- Los datos se actualizan en tiempo real o con refresco periódico
+
+**Prioridad:** Baja
+
+**Estimación:** 5 puntos de historia
+
+**Asignado a:** Equipo Frontend
+
+**Etiquetas:** Frontend, Dashboard, Gestión, UI/UX
+
+**Tareas:**
+1. Crear página de dashboard en área de administración
+2. Implementar componentes para visualización de estadísticas globales
+3. Desarrollar tabla de inversiones pendientes con opciones de gestión
+4. Crear componentes de gráficos para visualizar datos (barras, líneas, etc.)
+5. Implementar filtros para análisis de datos
+6. Integrar con servicios de inversión para obtener datos actualizados
+7. Diseñar interfaz responsive y optimizada para diferentes dispositivos
+8. Escribir tests para verificar funcionalidad
+
+**Enlaces:**
+- [Historia de usuario](docs/product/user-stories.md#-historia-3--marcar-invierto-must-have)
+- [Panel de administración](docs/technical/admin-panel.md)
+- [Biblioteca de visualización de datos](docs/technical/data-visualization.md) 

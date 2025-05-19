@@ -178,6 +178,29 @@ server {
   - Configurar envío de emails para notificaciones de nuevos intereses
 - 🔄 Considerar límites de ratio para prevenir abuso (máximo de intereses por usuario/día)
 
+### Sistema de Inversiones
+- 🔄 **Nuevo módulo**: Configurar correctamente la infraestructura para inversiones
+  - Asegurar la ejecución de migraciones para el modelo `Investment`
+  - Configurar la actualización transaccional del campo `current_amount` en proyectos
+  - Implementar mecanismos de auditoría para cambios en inversiones (historial)
+- 🔄 Consideraciones de seguridad específicas:
+  - Implementar verificación adicional para confirmación de inversiones
+  - Considerar autenticación de dos factores para montos elevados
+  - Establecer límites de inversión por periodo según políticas del club
+- 🔄 Configurar notificaciones para inversiones:
+  - Notificaciones por email para todas las acciones relacionadas con inversiones
+  - Alertas para gestores sobre nuevas inversiones o cambios de estado
+  - Resúmenes periódicos de estado de inversiones para socios
+- 🔄 Configuración del dashboard:
+  - Optimizar consultas para estadísticas de inversión (considerar vistas en la BD)
+  - Configurar caching para datos frecuentemente consultados
+  - Implementar permisos granulares para acceso según rol
+- 🔄 **Gestión de transacciones**: Implementar sistema robusto de gestión transaccional
+  - Asegurar atomicidad de operaciones de inversión (registro + actualización de montos)
+  - Implementar bloqueo optimista para evitar condiciones de carrera
+  - Configurar logs detallados para auditoría financiera
+  - Considerar implementar sistema de colas para operaciones asíncronas en caso de alto volumen
+
 ### Frontend General
 - ✅ Rutas protegidas implementadas
 - ✅ Componentes de UI desarrollados

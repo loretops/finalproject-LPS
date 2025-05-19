@@ -60,9 +60,13 @@ class ProjectController {
         sortDirection
       };
 
-      console.log('Opciones de búsqueda:', options);
+      console.log('ProjectController.list - Parámetros recibidos:', req.query);
+      console.log('ProjectController.list - Opciones de búsqueda:', options);
 
       const result = await projectService.getProjects(options);
+      
+      console.log(`ProjectController.list - Total de proyectos encontrados: ${result.data.length}`);
+      
       res.status(200).json(result);
     } catch (error) {
       console.error('Error en ProjectController.list:', error);

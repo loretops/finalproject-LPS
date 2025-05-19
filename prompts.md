@@ -14,7 +14,6 @@ Puedes añadir adicionalmente la conversación completa como link o archivo adju
 8. [Seguridad](#8-seguridad)
 9. [Configuración del proyecto](#9-configuración-del-proyecto)
 10. [Estandarización de la interfaz](#10-estandarización-de-la-interfaz)
-11. [Historias de Usuario específicas](#11-historias-de-usuario-específicas)
 
 ---
 
@@ -322,6 +321,25 @@ vamos con el ticket#22. Estoy pendando que , para no perder todos mis prompts de
 - Acuerdate también de actualizar siempre el archivo @production_deployment.md
 ```
 
+**Prompt 10:**
+```
+Revisa cual el la siguiente HU a desarrollar, crea una rama, y desarrolla los tickets igual que has hecho en las anteriores @tickets.md  , fijandote en como te lo he pedido otras veces, @prompts.md , creando un archivo cuyo nombre contenga el numero de la HU, igual que antes: prompts_HUnumero_historia, actualizando tambien @development_status.md , sin perder de vista @production_deployment.md . 
+Crea los tickets, y no desarrolles nada aún
+```
+
+**Prompt 11:**
+```
+Desarrolla los tickets de la HU3, y escribelos al final del archivo @tickets.md 
+```
+
+**Prompt 12:**
+```
+Para la HU3:  hay que desarrollar todos y cada uno de los tickets de esta Historia de Usuario, como buen desarrollador full-stack. Recuerda escribirlos en el orden logico de desarrollo, segun sus dependencias, y escribelos en un nuevo archivo que se llame tickets_HU3.md
+Fijate en los tickets escritos anteriormente, que son muy completos. Quiero que cada ticket permita al desarrollador tener toda la información para desarrollar lo necesario de princpio a fin, todo lo necesario para backend, frontend, y bases de datos, así como los tests necesarios para que el desarrollo sea robusto. He dicho los necesraios, que no significa hacer demasiados tests, sino solo lso que aporten valor añ desarrollo, y reduzcan futuros errores. Para los tickets que implican frontend hay que tener en cuenta librerias o dependiencias instaladas, o si fuera necesario recomendar otras. Para cada ticket hay que recomendar buenas prácticas. No olvides que esto es MVP, y aceurdate que cualquier alteración del modelo de datos hay que tenerla en cuenta para modificar base de datos y archivos implicados.
+```
+
+Para ver todos los prompts relacionados con el desarrollo de la Historia de Usuario 3, consulta [prompts_HU3.md](prompts_HU3.md).
+
 ## 7. Pull requests
 
 **Prompt 1:**
@@ -339,16 +357,10 @@ Tengo un problema con el repositorio, y es que he ido haciendo commit y push en 
 Prepara una nueva PR, y documentala en @prompts.md y en @readme.md , porque ya hemos terminado la HU9
 ```
 
-**Prompt 4:**
-```
-prepara esta inforamción pero en un texto en formato markdown que yo pueda copiar, pero teniendo en cuenta que esta pULL REQUEST atienda a la implementacion de la HU3. Y actualiza también @prompts.md  y @readme.md  en la sección Pull requests
-```
-
 ## 8. Seguridad
 
 **Prompt 1:**
-```
-@readme.md 
+```@readme.md 
 Tengo que seguir documentando el proyecto. Revisa todos los archivos para poder aportar este punto: Enumera y describe las prácticas de seguridad principales que se han implementado en el proyecto, añadiendo ejemplos si procede, pero solo para lo que se ha desarrollado por ahora. De hecho se debe indicar que es lo que hay en este punto del proyecto, y más adelante se mejorará este punto. 
 Si hay algún punto claro de lo que se va a desarrollar en el futuro, se pueden añadir aquí tambien. de hecho hay puntos de seguridad fundamentales en este proyecto, así que profundiza lo que necesites, sin perder de vista que es un MVP, y yo soy una progaramdora junior, y no puedo mantener un proyecto muy complejo
 @rules.mdc 
@@ -390,45 +402,3 @@ no creo que haya quedado estandarizado. Pero bueno, ya lo afrontaremos. Mira htt
 He pinchado en las flechas para ordenar asecndentemente la columna TITULO y no lo hace
 ```
 
-**Prompt 5:**
-```
-Ya está terminada esta Historia de Usuario, así que vamos a hacer una nueva PR, pero asegurate que sea a mi repositorio, no al original. Actualiza @prompts.md con esto, en la sección Pull Requests, y documenta el @readme.md en la misma sección. Vamos paso a paso
-```
-
-**Prompt 6:**
-```
-has probado los tests?
-```
-
-## 11. Historias de Usuario específicas
-
-### Historia de Usuario 2: Ver oportunidades de inversión
-[Ver prompts completos](prompts/prompts_HU2.md)
-
-### Historia de Usuario 3: Marcar Invierto
-[Ver prompts completos](prompts/prompts_HU3.md)
-
-### Historia de Usuario 9: Marcar "Me Interesa"
-[Ver prompts completos](prompts/prompts_HU9.md)
-
-### Análisis del producto
-[Ver análisis completo](prompts/prompts_analisis_product_3.md) ## Implementación de tickets de Historia de Usuario 3
-
-- [Ver prompts para el desarrollo de HU3](prompts_HU3.md)
-
-## Historia de Usuario 3: Marcar "Invierto"
-
-### Implementación completa de la funcionalidad "Marcar Invierto"
-
-Se ha implementado toda la funcionalidad para que los socios puedan indicar su intención formal de invertir en un proyecto y especificar el monto. Ver todos los prompts y detalles en [prompts_HU3.md](prompts_HU3.md).
-
-### Implementación de Tickets #47 y #48
-
-```
-Las pruebas de implementación actual me parecería bien hacerlas si lo ves importante para un desarrollo consistente, teniendo en cuenta que es un MVP, y que a veces hay que tener cuidado de no excederse en los tests si no son necesarios. Pero bajo tu experiencia como desarrollador full-stack, toma la decisión.
-Una vez decidido si vas a hacer más pruebas, dime qué pasos vas a seguir
-```
-
-Se implementaron la página "Mis Inversiones" y el componente de resumen de inversiones para proyectos. Ver todos los detalles en [prompts_HU3.md](prompts_HU3.md).
-
-Prompt para desarrollar la funcionalidad de "Marcar Invierto" que permite a los socios indicar su intención formal de invertir en un proyecto, incluyendo la creación de modelos de datos, servicios backend y componentes frontend. 

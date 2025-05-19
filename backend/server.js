@@ -10,6 +10,8 @@ const projectRoutes = require('./interfaces/http/routes/project.routes'); // Imp
 const publicProjectRoutes = require('./interfaces/http/routes/publicProject.routes'); // Importar rutas de proyectos públicos
 const projectDocumentRoutes = require('./application/routes/projectDocumentRoutes'); // Importar rutas de documentos
 const interestRoutes = require('./interfaces/http/routes/interest.routes'); // Importar rutas de intereses
+const investmentRoutes = require('./interfaces/http/routes/investment.routes'); // Importar rutas de inversiones
+const notificationRoutes = require('./interfaces/http/routes/notification.routes'); // Importar rutas de notificaciones
 
 // <<< AÑADIR ESTE LOG AL INICIO >>>
 console.log('DEBUG STARTUP - Reading FRONTEND_URL env var:', process.env.FRONTEND_URL);
@@ -31,7 +33,7 @@ app.use((req, res, next) => {
   const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:3001';
   res.header('Access-Control-Allow-Origin', allowedOrigin);
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
   }
@@ -44,7 +46,9 @@ app.use('/api/invitations', invitationRoutes); // Usar rutas de invitaciones
 app.use('/api/projects/public', publicProjectRoutes); // Usar rutas de proyectos públicos
 app.use('/api/projects', projectRoutes); // Usar rutas de proyectos
 app.use('/api/interests', interestRoutes); // Usar rutas de intereses
+app.use('/api', investmentRoutes); // Usar rutas de inversiones
 app.use('/api', projectDocumentRoutes); // Usar rutas de documentos de proyectos
+app.use('/api/notifications', notificationRoutes); // Añadir rutas de notificaciones
 
 // Ruta básica de health check
 app.use('/api/health', (req, res) => {
