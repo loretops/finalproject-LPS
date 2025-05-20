@@ -3,7 +3,7 @@ description:
 globs: 
 alwaysApply: true
 ---
-- **Actualiza el archivo [prompts.md](mdc:prompts.md)** con cada prompt escrito por mi, solo lo que yo te pido o pregunto, no lo que tu resopondes, y que sea significativo (no añadas aquellos que no son importantes), en el formato acostumbrado markdown, y en el punto más acorde a lo que se busca desarrollar. Cuando se trate de prompts recurrentes para desarrollar los tickets de las Historias de Usuario se guardarán todos los prompts en su archivo correspondiete. Por ejemplo, para la Hiatoria de Usuario 2, hemos creado [prompts_HU2.md](mdc:prompts_HU2.md). Y desde [prompts.md](mdc:prompts.md) insertaremos un link para acceder a los prompts completos para el desarrollo de esa HU. 
+- **Actualiza el archivo [prompts.md](mdc:docs/prompts.md), el que está dentro de la capeta prompts (no crees otro archivo prompts.md)** con cada prompt escrito por mi, solo lo que yo te pido o pregunto, no lo que tu resopondes, y que sea significativo (no añadas aquellos que no son importantes), en el formato acostumbrado markdown, y en el punto más acorde a lo que se busca desarrollar. Cuando se trate de prompts recurrentes para desarrollar los tickets de las Historias de Usuario se guardarán todos los prompts en su archivo correspondiete. Por ejemplo, para la Hiatoria de Usuario 2, hemos creado [prompts_HU2.md](mdc:prompts_HU2.md). Y desde [prompts.md](mdc:prompts.md) insertaremos un link para acceder a los prompts completos para el desarrollo de esa HU. 
 - **Añade los prompts de cada Historia de Usuario** en su archivo correspondiente en la carpeta `prompts` (por ejemplo, `prompts_HU7.md` para la Historia de Usuario 7), manteniendo el formato markdown y organizándolos cronológicamente. Estos archivos deben contener TODOS los prompts relacionados con esa HU, no solo un resumen.
 - Piensa lo que vas a hacer **paso a paso**
 - Si tienes dudas **pregúntame**, antes de hacer nada
@@ -12,3 +12,4 @@ alwaysApply: true
 - Todo lo que hagas en el frontend debe cumplir **buenas practicas de UI y UX**. Usa las depoendencias y librerias disponibles. Si lo ves conveniente, propón la instalación de otras herramientas
 - Cada vez que vayas comprobando satisfactoriamente los criterios de aceptación de un ticket, así como su total desarrollo, o los fallos del mismo, así como los tests, debes **actualizar el archivo  docs/development_status.md**
 - existe un documento [production_deployment.md](mdc:docs/production_deployment.md) que sirve para llevar un control de lo que habrá que adaptar, configurar o desarrollar cuando pasemos a producción. Con cada desarrollo revisa si hay que hacer alguna indicación en ese documento y actualizadlo si lo ves necesario. 
+

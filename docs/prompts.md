@@ -1,3 +1,0 @@
-## Sistema de errores y logging
-
-- "Por ahora atcualiza si es necesario @investment-flow.md  y @development_status.md. Y vete haciendo uno por uno los siguientes puntos: * Manejo de errores en cliente: El frontend muestra mensajes de error genéricos. Sería bueno mejorar la claridad de estos mensajes para que los usuarios entiendan exactamente qué ocurrió. * Monitoreo de errores 500: Sería bueno implementar algún sistema de alerta o logging más detallado para errores 500, ya que son críticos y pueden indicar problemas graves en la aplicación." 

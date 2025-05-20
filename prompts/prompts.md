@@ -344,6 +344,10 @@ Prepara una nueva PR, y documentala en @prompts.md y en @readme.md , porque ya h
 prepara esta inforamción pero en un texto en formato markdown que yo pueda copiar, pero teniendo en cuenta que esta pULL REQUEST atienda a la implementacion de la HU3. Y actualiza también @prompts.md  y @readme.md  en la sección Pull requests
 ```
 
+**Prompt 5:**
+```
+Crea la documentación adecuada para la PR, tanto la que he de añadir en la propia PR, como la que debe ir en la documentación: @prompts.md y @readme.md 
+
 ## 8. Seguridad
 
 **Prompt 1:**
