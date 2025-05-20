@@ -22,6 +22,17 @@ class UserRepository {
     throw new Error('Method not implemented: findById');
   }
 
+  /**
+   * Updates a user by their ID.
+   * @param {string} id - The user ID to update.
+   * @param {Object} data - The data to update.
+   * @returns {Promise<User>} The updated user object.
+   * @throws {Error} If the method is not implemented.
+   */
+  async update(id, data) {
+    throw new Error('Method not implemented: update');
+  }
+
   // Define other abstract methods as needed (create, update, delete, etc.)
 }
 

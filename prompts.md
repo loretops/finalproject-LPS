@@ -419,3 +419,14 @@ no creo que haya quedado estandarizado. Pero bueno, ya lo afrontaremos. Mira htt
 He pinchado en las flechas para ordenar asecndentemente la columna TITULO y no lo hace
 ```
 
+### 13. Email Verification Implementation (HU7)
+
+Para ver los prompts específicos usados durante la implementación de la Historia de Usuario 7 (Confirmación de correo electrónico), consulta el archivo: [prompts_HU7.md](prompts/prompts_HU7.md)
+
+En esta implementación:
+- Se implementó el sistema de verificación de email para confirmar la identidad de nuevos usuarios
+- Se creó un servicio completo de generación y verificación de tokens
+- Se desarrollaron APIs para el envío, verificación y reenvío de emails
+- Se integraron plantillas de correo electrónico responsive
+- Se implementaron y ejecutaron tests unitarios para validar el funcionamiento correcto
+

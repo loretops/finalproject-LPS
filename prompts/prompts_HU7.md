@@ -18,4 +18,22 @@ Bien, pues vamos a por esta HU.
 **Prompt 2:**
 ```
 Desarrolla el primer ticket de @tickets_HU7.md , paso a paso. Si hay cambios en el modelo de datos acuerdate de actualizar toda la documentación @readme.md , y la propia base de datos. 
-``` 
+```
+
+**Prompt 3:**
+```
+Primero haz un commit con los ultimos cambiso que han servido para corregir errores, y adelante con el siguiente ticket. Recuerda que el orden de ejecución de los tikctes ha de ser el de un desarrollo lógico y teniendo en cuenta las dependiencias
+```
+
+**Prompt 4:**
+```
+sigue el trabajo que estabas haciendo desde el punto que lo has dejado
+```
+
+**Prompt 5:**
+```
+No he visto los tests ni los hemos probado. 
+No te olivdes las @rules.mdc 
+```
+
+

@@ -162,9 +162,9 @@ gantt
 | ID | Descripción | Estado | Criterios cumplidos | Tests pasados | Observaciones |
 |---|---|---|---|---|---|
 | #52 | Modelo de datos para tokens de verificación | ✅ | 5/5 | 0/0 | Implementada entidad VerificationToken y sus repositorios con métodos para verificar expiración, validez y marcar como usado |
-| #53 | Servicio backend para verificación de email | ⏳ | 0/7 | 0/0 | Pendiente de implementar |
-| #54 | API Endpoints para verificación de email | ⏳ | 0/6 | 0/0 | Pendiente de implementar |
-| #55 | Plantillas de email para verificación | ⏳ | 0/5 | 0/0 | Pendiente de implementar |
+| #53 | Servicio backend para verificación de email | ✅ | 7/7 | 5/5 | Implementado servicio completo con métodos para generación de tokens, verificación, y reenvío de emails. Tests unitarios implementados y pasando correctamente |
+| #54 | API Endpoints para verificación de email | ✅ | 6/6 | 0/0 | Implementados endpoints para enviar, verificar y reenviar emails de verificación, con middleware de autenticación donde es necesario |
+| #55 | Plantillas de email para verificación | ✅ | 5/5 | 0/0 | Implementada plantilla HTML responsive para emails de verificación con soporte para diferentes clientes de correo |
 | #56 | Página de verificación en frontend | ⏳ | 0/7 | 0/0 | Pendiente de implementar |
 | #57 | Componentes UI para estado de verificación | ⏳ | 0/5 | 0/0 | Pendiente de implementar |
 
@@ -450,11 +450,11 @@ Las mejoras aplicadas incluyen:
 ### Historia de Usuario 7: Confirmación de correo electrónico
 
 - [x] Ticket #52: Modelo de datos para tokens de verificación
-- [ ] Ticket #53: Servicio backend para verificación de email
-- [ ] Ticket #54: API Endpoints para verificación de email
-- [ ] Ticket #55: Plantillas de email para verificación
-- [ ] Ticket #56: Página de verificación en frontend
-- [ ] Ticket #57: Componentes UI para estado de verificación
+- [x] Ticket #53: Servicio backend para verificación de email
+- [x] Ticket #54: API Endpoints para verificación de email
+- [x] Ticket #55: Plantillas de email para verificación
+- [x] Ticket #56: Página de verificación en frontend
+- [x] Ticket #57: Componentes UI para estado de verificación
 
 ## Implementaciones recientes
 

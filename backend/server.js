@@ -17,6 +17,7 @@ const interestRoutes = require('./interfaces/http/routes/interest.routes');
 const investmentRoutes = require('./interfaces/http/routes/investment.routes');
 const notificationRoutes = require('./interfaces/http/routes/notification.routes');
 const logRoutes = require('./interfaces/http/routes/log.routes');
+const verificationRoutes = require('./interfaces/http/routes/verification.routes');
 
 // <<< AÑADIR ESTE LOG AL INICIO >>>
 console.log('DEBUG STARTUP - Reading FRONTEND_URL env var:', process.env.FRONTEND_URL);
@@ -73,6 +74,7 @@ app.use('/api', investmentRoutes);
 app.use('/api', projectDocumentRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/logs', logRoutes);
+app.use('/api/verification', verificationRoutes);
 
 // Ruta de ejemplo usando Prisma
 app.get('/api/roles', async (req, res) => {

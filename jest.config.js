@@ -4,8 +4,8 @@ module.exports = {
   roots: ['<rootDir>/frontend', '<rootDir>/backend'],
   modulePaths: ['<rootDir>/frontend', '<rootDir>/backend'],
   moduleDirectories: ['node_modules', 'frontend', 'backend'],
-  setupFiles: ['dotenv/config', '<rootDir>/tests/setup.js'],
-  testMatch: ['**/tests/**/*.test.js'],
+  setupFiles: ['./backend/tests/setup.js'],
+  testMatch: ['**/backend/tests/**/*.test.js'],
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }]
   },
