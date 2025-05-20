@@ -36,4 +36,91 @@ No he visto los tests ni los hemos probado.
 No te olivdes las @rules.mdc 
 ```
 
+**Prompt 6:**
+```
+Entiendo que queda hacer commit antes de afrontar el desarrollo del siguiente ticket
+```
+
+**Prompt 7:**
+```
+Comineza a desarrollar el siguiente ticket, y no te olvides de las @rules.mdc 
+```
+
+**Prompt 8:**
+```
+No termino de entneder esta lógica, porque hasta ahora, cuando una persona recibia una invitación a su coirreo, mediante un link podía entrar en un formulario de registro. El usuario se registraba y automaticamente, ese email era el de un nevo socio.  ¿Ahora que has desarrollado?
+```
+
+**Prompt 9:**
+```
+Bien, sigue. No te olvides de las @rules.mdc en ningun momento
+```
+
+**Prompt 10:**
+```
+Vamos a probarlo, no? Que pruebas propones para que sea un testeo completo y eficaz? Acuerdate de las @rules.mdc 
+```
+
+**Prompt 11:**
+```
+en el index 
+Build Error
+
+Failed to compile
+Next.js (14.2.28) is outdated (learn more)
+./components/ui/VerificationBanner.jsx:2:1
+
+Module not found: Can't resolve 'react-icons/fa'
+  1 | import React, { useState, useEffect } from 'react';
+> 2 | import { FaExclamationTriangle, FaTimesCircle, FaTimes, FaEnvelope } from 'react-icons/fa';
+    | ^
+  3 | import VerificationService from '../../services/verificationService';
+  4 | import Button from './Button';
+  5 |
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./components/layout/Layout.jsx
+
+./pages/investments/[id].jsx
+```
+
+**Prompt 12:**
+```
+1 of 1 error
+Next.js (14.2.28) is outdated (learn more)
+Server Error
+
+TypeError: Cannot read properties of undefined (reading '_context')
+This error happened while generating the page. Any console logs will be displayed in the terminal window.
+Source
+React
+
+components/layout/Layout.jsx (21:31) @ AuthContext
+
+  19 |   hideVerificationBanner = false 
+  20 | }) => {
+> 21 |   const { user } = useContext(AuthContext);
+     |                               ^
+  22 |   
+  23 |   // Mostrar el banner solo si hay un usuario autenticado y no está oculto explícitamente
+  24 |   const showVerificationBanner = !hideVerificationBanner && user;
+```
+
+**Prompt 13:**
+```
+he parado sin querer el proceso, sigue desde el punto donde lo dejaste
+```
+
+**Prompt 14:**
+```
+ses uperponen dos elementos
+```
+
+**Prompt 15:**
+```
+Yo creo que está todo bien desarrollado. Actualiza @development_status.md , y @prompts.md  y @prompts_HU7.md  y haz commit. Y después siguiente ticket
+```
+
 

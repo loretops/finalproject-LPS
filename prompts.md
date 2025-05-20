@@ -13,6 +13,7 @@ Este documento recoge todos los prompts significativos utilizados durante el des
 
 - [Ver todos los prompts de Historia de Usuario 2](mdc:prompts/prompts_HU2.md)
 - [Ver todos los prompts de Historia de Usuario 7](mdc:prompts/prompts_HU7.md)
+- [Ver todos los prompts de Historia de Usuario 9](mdc:prompts/prompts_HU9.md)
 
 ## Corrección de bugs
 

@@ -9,7 +9,7 @@
 | HU #2: Ver oportunidades de inversión | 11 | 6 | 0 | 5 | 0 |
 | HU #9: Marcar "Me Interesa" | 8 | 8 | 0 | 0 | 0 |
 | HU #3: Marcar "Invierto" | 12 | 7 | 0 | 5 | 0 |
-| HU #7: Confirmación de correo electrónico | 6 | 0 | 0 | 6 | 0 |
+| HU #7: Confirmación de correo electrónico | 6 | 6 | 0 | 0 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -165,8 +165,8 @@ gantt
 | #53 | Servicio backend para verificación de email | ✅ | 7/7 | 5/5 | Implementado servicio completo con métodos para generación de tokens, verificación, y reenvío de emails. Tests unitarios implementados y pasando correctamente |
 | #54 | API Endpoints para verificación de email | ✅ | 6/6 | 0/0 | Implementados endpoints para enviar, verificar y reenviar emails de verificación, con middleware de autenticación donde es necesario |
 | #55 | Plantillas de email para verificación | ✅ | 5/5 | 0/0 | Implementada plantilla HTML responsive para emails de verificación con soporte para diferentes clientes de correo |
-| #56 | Página de verificación en frontend | ⏳ | 0/7 | 0/0 | Pendiente de implementar |
-| #57 | Componentes UI para estado de verificación | ⏳ | 0/5 | 0/0 | Pendiente de implementar |
+| #56 | Página de verificación en frontend | ✅ | 7/7 | 0/0 | Implementadas páginas de verificación y de reenvío de email, con manejo de diferentes estados y mensajes de error específicos |
+| #57 | Componentes UI para estado de verificación | ✅ | 5/5 | 0/0 | Implementados componentes reutilizables para mostrar el estado de verificación (VerificationStatus y VerificationBanner) e integrados en el layout principal y en la página de perfil |
 
 ## 🚀 Plan de Desarrollo para HU #2
 
