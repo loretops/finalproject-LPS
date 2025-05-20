@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { BellIcon } from '@heroicons/react/24/outline';
 import notificationService from '../../services/notificationService';
 import { useRouter } from 'next/router';
+import { useAuth } from '../../context/AuthContext';
 
 const NotificationBell = () => {
   const [notifications, setNotifications] = useState([]);
@@ -10,6 +11,7 @@ const NotificationBell = () => {
   const [isLoading, setIsLoading] = useState(true);
   const dropdownRef = useRef(null);
   const router = useRouter();
+  const { user } = useAuth();
 
   // Función para cargar notificaciones
   const loadNotifications = async () => {
@@ -62,11 +64,15 @@ const NotificationBell = () => {
         setUnreadCount(prevCount => prevCount - 1);
       }
       
-      // Navegar a la página relacionada según el tipo de notificación
-      if (notification.type === 'investment_new' && notification.relatedId) {
-        router.push(`/investments/${notification.relatedId}`);
-      } else if (notification.type === 'investment_status_change' && notification.relatedId) {
-        router.push(`/investments/${notification.relatedId}`);
+      // Navegar a la página relacionada según el tipo de notificación y el rol del usuario
+      if (notification.type.includes('investment_') && notification.relatedId) {
+        // Si es gestor o admin, redirigir a la página de administración
+        if (user?.role === 'manager' || user?.role === 'admin') {
+          router.push(`/admin/investments/${notification.relatedId}`);
+        } else {
+          // Para socios e inversores, usar la ruta normal
+          router.push(`/investments/${notification.relatedId}`);
+        }
       } else if (notification.type.includes('project_') && notification.relatedId) {
         router.push(`/projects/${notification.relatedId}`);
       } else {

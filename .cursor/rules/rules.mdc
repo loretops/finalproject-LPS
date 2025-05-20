@@ -3,8 +3,8 @@ description:
 globs: 
 alwaysApply: true
 ---
-
 - **Actualiza el archivo [prompts.md](mdc:prompts.md)** con cada prompt escrito por mi, solo lo que yo te pido o pregunto, no lo que tu resopondes, y que sea significativo (no añadas aquellos que no son importantes), en el formato acostumbrado markdown, y en el punto más acorde a lo que se busca desarrollar. Cuando se trate de prompts recurrentes para desarrollar los tickets de las Historias de Usuario se guardarán todos los prompts en su archivo correspondiete. Por ejemplo, para la Hiatoria de Usuario 2, hemos creado [prompts_HU2.md](mdc:prompts_HU2.md). Y desde [prompts.md](mdc:prompts.md) insertaremos un link para acceder a los prompts completos para el desarrollo de esa HU. 
+- **Añade los prompts de cada Historia de Usuario** en su archivo correspondiente en la carpeta `prompts` (por ejemplo, `prompts_HU7.md` para la Historia de Usuario 7), manteniendo el formato markdown y organizándolos cronológicamente. Estos archivos deben contener TODOS los prompts relacionados con esa HU, no solo un resumen.
 - Piensa lo que vas a hacer **paso a paso**
 - Si tienes dudas **pregúntame**, antes de hacer nada
 - Quiero un **proyecto sencillo**, **fácil de mantener**, y que **en el futuro pueda ser escalable**

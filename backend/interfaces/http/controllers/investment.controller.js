@@ -229,7 +229,7 @@ class InvestmentController {
         });
       }
 
-      const cancelledInvestment = await this.investmentService.cancelInvestment(investmentId);
+      const cancelledInvestment = await this.investmentService.cancelInvestment(investmentId, userId);
 
       return res.status(200).json({
         message: 'Inversión cancelada con éxito',

@@ -85,17 +85,22 @@ class AuthController {
    */
   async register(req, res) {
     try {
+      console.log('🔍 REGISTRO: Iniciando proceso de registro');
       const { firstName, lastName, email, password, token } = req.body;
+      console.log('🔍 REGISTRO: Datos recibidos:', { firstName, lastName, email, token, password: '***REDACTED***' });
 
       // 1. Validación básica
       if (!firstName || !lastName || !email || !password || !token) {
+        console.log('🔍 REGISTRO: Error de validación - campos faltantes');
         return res.status(400).json({ 
           message: 'All fields are required: firstName, lastName, email, password, and invitation token.' 
         });
       }
 
       // 2. Validar el token de invitación
+      console.log('🔍 REGISTRO: Validando token de invitación:', token);
       const validationResult = await invitationService.validateInvitationToken(token);
+      console.log('🔍 REGISTRO: Resultado de validación de token:', validationResult);
 
       if (!validationResult.isValid) {
         // Si el token no es válido, devolver el error apropiado
@@ -117,11 +122,13 @@ class AuthController {
             break;
         }
 
+        console.log(`🔍 REGISTRO: Token inválido - ${message}`);
         return res.status(statusCode).json({ message });
       }
 
       // 3. Verificar que el email coincide con el de la invitación
       if (validationResult.email.toLowerCase() !== email.toLowerCase()) {
+        console.log(`🔍 REGISTRO: Email no coincide - Invitación: ${validationResult.email}, Registro: ${email}`);
         return res.status(400).json({ 
           message: 'The email does not match the invitation.' 
         });
@@ -136,36 +143,63 @@ class AuthController {
         role: 'partner' // Asignar rol automáticamente
       };
 
-      const newUser = await registerUser(userData);
+      console.log('🔍 REGISTRO: Intentando registrar usuario:', { ...userData, password: '[REDACTED]' });
 
-      // 5. Marcar la invitación como utilizada
-      await invitationService.markInvitationAsUsed(token);
+      try {
+        const newUser = await registerUser(userData);
+        console.log('🔍 REGISTRO: Usuario creado exitosamente:', { id: newUser.id, email: newUser.email });
 
-      // 6. Generar token JWT para la sesión inicial
-      const authToken = await loginUser({ email, password });
+        // 5. Marcar la invitación como utilizada
+        console.log('🔍 REGISTRO: Marcando invitación como utilizada');
+        await invitationService.markInvitationAsUsed(token);
+        console.log('🔍 REGISTRO: Invitación marcada como utilizada exitosamente');
 
-      // 7. Responder con éxito y el token
-      res.status(201).json({
-        message: 'Registration successful.',
-        user: { id: newUser.id, email: newUser.email, firstName: newUser.firstName, role: newUser.role }, // Devolver info básica del usuario
-        token: authToken
-      });
+        // 6. Generar token JWT para la sesión inicial
+        console.log('🔍 REGISTRO: Generando token JWT para inicio de sesión');
+        const authToken = await loginUser({ email, password });
+        console.log('🔍 REGISTRO: Token JWT generado exitosamente');
+
+        // 7. Responder con éxito y el token
+        console.log('🔍 REGISTRO: Enviando respuesta exitosa al cliente');
+        res.status(201).json({
+          message: 'Registration successful.',
+          user: { 
+            id: newUser.id, 
+            email: newUser.email, 
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            role: newUser.role 
+          },
+          token: authToken
+        });
+      } catch (registerError) {
+        console.error('🔍 REGISTRO: Error específico en registerUser:', registerError);
+        // Re-lanzar para ser manejado por el catch exterior
+        throw registerError;
+      }
 
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error('🔍 REGISTRO ERROR DETALLADO:', error);
+      console.error('🔍 REGISTRO ERROR Stack:', error.stack);
       
       // Manejo de errores específicos
       if (error.message.includes('already exists')) {
         return res.status(409).json({ message: 'A user with this email already exists.' });
       }
       
-      if (error.message.includes('password')) {
-        // Podríamos ser más específicos si el caso de uso devuelve errores de validación de contraseña
+      if (error.message.includes('Password must')) {
         return res.status(400).json({ message: error.message }); 
+      }
+
+      if (error.message.includes('Role')) {
+        return res.status(500).json({ message: 'Error configuring user role. Please contact support.' });
       }
       
       // Error genérico
-      res.status(500).json({ message: 'An error occurred during registration.' });
+      res.status(500).json({ 
+        message: 'An error occurred during registration.',
+        error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      });
     }
   }
 

@@ -411,8 +411,13 @@ has probado los tests?
 ### Historia de Usuario 9: Marcar "Me Interesa"
 [Ver prompts completos](prompts/prompts_HU9.md)
 
+### Historia de Usuario 7: Confirmación de correo electrónico
+[Ver prompts completos](prompts/prompts_HU7.md)
+
 ### Análisis del producto
-[Ver análisis completo](prompts/prompts_analisis_product_3.md) ## Implementación de tickets de Historia de Usuario 3
+[Ver análisis completo](prompts/prompts_analisis_product_3.md)
+
+## Implementación de tickets de Historia de Usuario 3
 
 - [Ver prompts para el desarrollo de HU3](prompts_HU3.md)
 
@@ -432,3 +437,8 @@ Una vez decidido si vas a hacer más pruebas, dime qué pasos vas a seguir
 Se implementaron la página "Mis Inversiones" y el componente de resumen de inversiones para proyectos. Ver todos los detalles en [prompts_HU3.md](prompts_HU3.md).
 
 Prompt para desarrollar la funcionalidad de "Marcar Invierto" que permite a los socios indicar su intención formal de invertir en un proyecto, incluyendo la creación de modelos de datos, servicios backend y componentes frontend. 
+
+
+## Sistema de errores y logging
+
+- "Por ahora atcualiza si es necesario @investment-flow.md  y @development_status.md. Y vete haciendo uno por uno los siguientes puntos: * Manejo de errores en cliente: El frontend muestra mensajes de error genéricos. Sería bueno mejorar la claridad de estos mensajes para que los usuarios entiendan exactamente qué ocurrió. * Monitoreo de errores 500: Sería bueno implementar algún sistema de alerta o logging más detallado para errores 500, ya que son críticos y pueden indicar problemas graves en la aplicación."

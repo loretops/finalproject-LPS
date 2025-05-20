@@ -1,0 +1,9 @@
+{
+  "name": "project-diagnosis-scripts",
+  "version": "1.0.0",
+  "description": "Scripts de diagnóstico para el proyecto",
+  "type": "module",
+  "dependencies": {
+    "node-fetch": "^3.3.0"
+  }
+} 

@@ -159,6 +159,9 @@ server {
 - ✅ CRUD de proyectos completo
 - ✅ UI de administración implementada
 - ✅ Sistema de publicación implementado
+- 🔴 **Importante**: Reactivar validación de documentos legales antes de producción
+  - En `backend/application/services/projectService.js`: Descomentar la sección que verifica la existencia de documentos legales
+  - Esta validación se ha desactivado temporalmente para desarrollo, pero es crítica en producción
 
 ### Gestión de Documentos
 - ✅ UI de gestión de documentos implementada

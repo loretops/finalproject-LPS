@@ -90,7 +90,10 @@ const InterestButton = ({
     }
     
     if (!sanitizedProjectId) {
-      console.error('No se puede registrar interés: ID de proyecto no válido');
+      console.error('No se puede registrar interés: ID de proyecto no válido', {
+        original: projectId,
+        sanitized: sanitizedProjectId
+      });
       toast.error('No se pudo procesar la acción. ID de proyecto no válido.');
       return;
     }
@@ -98,10 +101,15 @@ const InterestButton = ({
     setIsLoading(true);
     
     try {
+      console.log('Estado de interés antes de la acción:', isInterested ? 'Interesado' : 'No interesado');
+      
       if (isInterested) {
         // Obtenemos primero el ID del interés
         const interests = await interestService.getUserInterests({ status: 'active' });
+        console.log('Intereses obtenidos:', interests);
+        
         const interest = interests.find(i => i.project?.id === sanitizedProjectId);
+        console.log('Interés encontrado:', interest);
         
         if (interest) {
           await interestService.removeInterest(interest.id);
@@ -112,17 +120,57 @@ const InterestButton = ({
           if (onInterestChange) {
             onInterestChange(false);
           }
+        } else {
+          // Si no encontramos el interés pero el estado es "interesado", corregir el estado
+          console.warn('Estado inconsistente: isInterested=true pero no se encontró el interés');
+          setIsInterested(false);
+          toast.error('No se encontró tu interés previo en este proyecto');
         }
       } else {
-        await interestService.registerInterest(sanitizedProjectId);
-        setIsInterested(true);
-        
-        toast.success('Has mostrado interés en este proyecto', {
-          description: 'Te mantendremos informado de las novedades'
-        });
-        
-        if (onInterestChange) {
-          onInterestChange(true);
+        try {
+          await interestService.registerInterest(sanitizedProjectId);
+          setIsInterested(true);
+          
+          toast.success('Has mostrado interés en este proyecto', {
+            description: 'Te mantendremos informado de las novedades'
+          });
+          
+          if (onInterestChange) {
+            onInterestChange(true);
+          }
+        } catch (error) {
+          // Si el error es 409 (Conflict), significa que ya tiene interés
+          if (error.response && error.response.status === 409) {
+            // Actualizar el estado para mostrar como interesado
+            setIsInterested(true);
+            
+            toast.success('Ya habías mostrado interés en este proyecto anteriormente');
+            
+            if (onInterestChange) {
+              onInterestChange(true);
+            }
+          } else if (error.response && error.response.status === 500) {
+            // Error del servidor
+            const errorDetail = error.response?.data?.message || 'Error interno del servidor';
+            console.error('Error 500 detallado:', {
+              projectId: sanitizedProjectId,
+              error: errorDetail,
+              response: error.response?.data
+            });
+            
+            toast.error(`Error en el servidor: ${errorDetail}. Por favor, inténtalo de nuevo más tarde.`);
+            
+            // Vamos a actualizar el estado de interés para evitar inconsistencias
+            try {
+              const hasInterest = await interestService.checkUserInterest(sanitizedProjectId);
+              setIsInterested(hasInterest);
+            } catch (checkError) {
+              console.error('Error al verificar estado de interés:', checkError);
+            }
+          } else {
+            // Propagar el error para que sea manejado por el bloque catch externo
+            throw error;
+          }
         }
       }
     } catch (error) {
@@ -132,6 +180,17 @@ const InterestButton = ({
       
       toast.error(errorMessage);
       console.error('Error al actualizar interés:', error);
+      
+      // Intentar recuperar el estado actual de interés para evitar inconsistencias
+      try {
+        const currentInterestState = await interestService.checkUserInterest(sanitizedProjectId);
+        if (currentInterestState !== isInterested) {
+          console.log('Corrigiendo estado inconsistente de interés');
+          setIsInterested(currentInterestState);
+        }
+      } catch (checkError) {
+        console.error('Error al verificar estado actual de interés:', checkError);
+      }
     } finally {
       setIsLoading(false);
     }

@@ -129,20 +129,27 @@ const ProjectDetailPage = () => {
   };
   
   // Manejar publicación del proyecto
-  const handlePublish = async () => {
-    setIsPublishing(true);
-    
+  const handlePublish = async (publishedProject) => {
     try {
-      const updatedProject = await projectService.publishProject(id);
-      setProject(updatedProject);
-      setIsPublishModalOpen(false);
+      console.log("✅ Proyecto publicado recibido del modal:", publishedProject);
+      
+      // Actualizar el proyecto en el estado
+      setProject({
+        ...project,
+        status: 'published',
+        draft: false,
+        published_at: publishedProject.published_at || new Date().toISOString()
+      });
+      
       toast.success('Proyecto publicado con éxito');
+      
+      // Recargar la página para mostrar la versión actualizada del proyecto
+      setTimeout(() => {
+        router.reload();
+      }, 1500);
     } catch (err) {
-      console.error('Error al publicar proyecto:', err);
-      toast.error('No se pudo publicar el proyecto');
-      setError('No se pudo publicar el proyecto. Por favor, inténtelo de nuevo.');
-    } finally {
-      setIsPublishing(false);
+      console.error('Error al actualizar estado del proyecto:', err);
+      setError(`Error al actualizar interfaz: ${err.message}`);
     }
   };
   
@@ -323,10 +330,10 @@ const ProjectDetailPage = () => {
         
         {/* Modal de publicación */}
         <PublishProjectModal
-          project={project}
+          projectId={id}
           isOpen={isPublishModalOpen}
           onClose={handleClosePublishModal}
-          onPublish={handlePublish}
+          onSuccess={handlePublish}
           isPublishing={isPublishing}
         />
       </div>

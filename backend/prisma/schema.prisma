@@ -1,26 +1,12 @@
-// Este archivo define el modelo de datos para Prisma ORM
-// Documentación: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
-// Configuración de la conexión a la base de datos
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// Configuración del generador de cliente
-generator client {
-  provider = "prisma-client-js"
-}
-
-// Definición de Enums
-enum InvitationStatus {
-  PENDING
-  USED
-  EXPIRED
-}
-
-// Definición de los modelos basados en el diagrama ER
-// Roles de usuario
 model Role {
   id          String   @id @default(uuid())
   name        String   @unique
@@ -31,48 +17,46 @@ model Role {
   @@map("roles")
 }
 
-// Usuarios del sistema
 model User {
-  id                  String               @id @default(uuid())
-  firstName           String             @map("first_name")
-  lastName            String             @map("last_name")
-  email               String             @unique
-  passwordHash        String             @map("password_hash")
-  roleId              String             @map("role_id")
-  status              String             @default("pending")
-  emailVerified       Boolean            @default(false) @map("email_verified")
-  emailVerifiedAt     DateTime?          @map("email_verified_at")
-  failedLoginAttempts Int                @default(0) @map("failed_login_attempts")
-  lockedUntil         DateTime?          @map("locked_until")
-  createdAt           DateTime           @default(now()) @map("created_at")
-  updatedAt           DateTime           @updatedAt @map("updated_at")
-  role                Role               @relation(fields: [roleId], references: [id])
-  invitationsSent     Invitation[]
-  investments         Investment[]
-  notifications       Notification[]
-  createdProjects     Project[]            @relation("ProjectCreator")
-  publishedProjects   Project[]            @relation("ProjectPublisher")
-  verificationTokens  VerificationToken[]
-  interests           Interest[]
-  messagesSent        Message[]
-  documentViews       DocumentView[]
-  projectUpdates      ProjectUpdate[]
+  id                  String                    @id @default(uuid())
+  email               String                    @unique
+  passwordHash        String                    @map("password_hash")
+  roleId              String                    @map("role_id")
+  status              String                    @default("pending")
+  emailVerified       Boolean                   @default(false) @map("email_verified")
+  emailVerifiedAt     DateTime?                 @map("email_verified_at")
+  failedLoginAttempts Int                       @default(0) @map("failed_login_attempts")
+  lockedUntil         DateTime?                 @map("locked_until")
+  createdAt           DateTime                  @default(now()) @map("created_at")
+  updatedAt           DateTime                  @updatedAt @map("updated_at")
+  firstName           String                    @map("first_name")
+  lastName            String                    @map("last_name")
   conversations       ConversationParticipant[]
+  documentViews       DocumentView[]
+  interests           Interest[]
+  investments         Investment[]
+  invitationsSent     Invitation[]
+  messagesSent        Message[]
+  notifications       Notification[]
+  projectUpdates      ProjectUpdate[]
+  createdProjects     Project[]                 @relation("ProjectCreator")
+  publishedProjects   Project[]                 @relation("ProjectPublisher")
+  role                Role                      @relation(fields: [roleId], references: [id])
+  verificationTokens  VerificationToken[]
 
   @@index([roleId])
   @@index([status, emailVerified])
   @@map("users")
 }
 
-// Invitaciones para unirse al club
 model Invitation {
   id        String           @id @default(uuid())
   email     String
   token     String           @unique
   invitedBy String           @map("invited_by")
-  status    InvitationStatus @default(PENDING)
   createdAt DateTime         @default(now()) @map("created_at")
   expiresAt DateTime         @map("expires_at")
+  status    InvitationStatus @default(PENDING)
   inviter   User             @relation(fields: [invitedBy], references: [id])
 
   @@index([email])
@@ -80,7 +64,6 @@ model Invitation {
   @@map("invitations")
 }
 
-// Tokens de verificación para email
 model VerificationToken {
   id        String   @id @default(uuid())
   userId    String   @map("user_id")
@@ -95,7 +78,6 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-// Proyectos de inversión
 model Project {
   id                String            @id @default(uuid())
   title             String
@@ -112,13 +94,13 @@ model Project {
   createdBy         String            @map("created_by")
   publishedBy       String?           @map("published_by")
   createdAt         DateTime          @default(now()) @map("created_at")
+  conversations     Conversation[]
+  interests         Interest[]
+  investments       Investment[]
+  documents         ProjectDocument[]
+  updates           ProjectUpdate[]
   creator           User              @relation("ProjectCreator", fields: [createdBy], references: [id])
   publisher         User?             @relation("ProjectPublisher", fields: [publishedBy], references: [id])
-  documents         ProjectDocument[]
-  investments       Investment[]
-  updates           ProjectUpdate[]
-  interests         Interest[]
-  conversations     Conversation[]
 
   @@index([status])
   @@index([propertyType])
@@ -128,18 +110,17 @@ model Project {
   @@map("projects")
 }
 
-// Documentos asociados a proyectos
 model ProjectDocument {
-  id           String        @id @default(uuid())
-  projectId    String        @map("project_id")
-  fileUrl      String        @map("file_url")
-  fileType     String        @map("file_type")
-  documentType String        @map("document_type")
-  accessLevel  String        @map("access_level")
-  securityLevel String       @default("view_only") @map("security_level")
-  createdAt    DateTime      @default(now()) @map("created_at")
-  project      Project       @relation(fields: [projectId], references: [id])
-  views        DocumentView[]
+  id            String         @id @default(uuid())
+  projectId     String         @map("project_id")
+  fileUrl       String         @map("file_url")
+  fileType      String         @map("file_type")
+  documentType  String         @map("document_type")
+  accessLevel   String         @map("access_level")
+  securityLevel String         @default("view_only") @map("security_level")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  views         DocumentView[]
+  project       Project        @relation(fields: [projectId], references: [id])
 
   @@index([projectId])
   @@index([documentType])
@@ -147,15 +128,14 @@ model ProjectDocument {
   @@map("project_documents")
 }
 
-// Registro de vistas de documentos
 model DocumentView {
-  id          String         @id @default(uuid())
-  documentId  String         @map("document_id")
-  userId      String         @map("user_id")
-  ipAddress   String         @map("ip_address")
-  viewedAt    DateTime       @default(now()) @map("viewed_at")
-  document    ProjectDocument @relation(fields: [documentId], references: [id])
-  user        User           @relation(fields: [userId], references: [id])
+  id         String          @id @default(uuid())
+  documentId String          @map("document_id")
+  userId     String          @map("user_id")
+  ipAddress  String          @map("ip_address")
+  viewedAt   DateTime        @default(now()) @map("viewed_at")
+  document   ProjectDocument @relation(fields: [documentId], references: [id])
+  user       User            @relation(fields: [userId], references: [id])
 
   @@index([documentId])
   @@index([userId])
@@ -163,7 +143,6 @@ model DocumentView {
   @@map("document_views")
 }
 
-// Expresiones de interés en proyectos
 model Interest {
   id        String   @id @default(uuid())
   userId    String   @map("user_id")
@@ -171,8 +150,8 @@ model Interest {
   status    String   @default("active")
   notes     String?
   createdAt DateTime @default(now()) @map("created_at")
-  user      User     @relation(fields: [userId], references: [id])
   project   Project  @relation(fields: [projectId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, projectId])
   @@index([userId])
@@ -181,7 +160,6 @@ model Interest {
   @@map("interests")
 }
 
-// Inversiones realizadas
 model Investment {
   id                String   @id @default(uuid())
   userId            String   @map("user_id")
@@ -191,8 +169,8 @@ model Investment {
   status            String   @default("pending")
   notes             String?
   contractReference String?  @map("contract_reference")
-  user              User     @relation(fields: [userId], references: [id])
   project           Project  @relation(fields: [projectId], references: [id])
+  user              User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([projectId])
@@ -201,25 +179,23 @@ model Investment {
   @@map("investments")
 }
 
-// Actualizaciones de proyectos
 model ProjectUpdate {
-  id          String   @id @default(uuid())
-  projectId   String   @map("project_id")
-  title       String
-  content     String
-  videoUrl    String?  @map("video_url")
-  updateDate  DateTime @map("update_date")
-  createdBy   String   @map("created_by")
-  createdAt   DateTime @default(now()) @map("created_at")
-  project     Project  @relation(fields: [projectId], references: [id])
-  creator     User     @relation(fields: [createdBy], references: [id])
+  id         String   @id @default(uuid())
+  projectId  String   @map("project_id")
+  title      String
+  content    String
+  videoUrl   String?  @map("video_url")
+  updateDate DateTime @map("update_date")
+  createdBy  String   @map("created_by")
+  createdAt  DateTime @default(now()) @map("created_at")
+  creator    User     @relation(fields: [createdBy], references: [id])
+  project    Project  @relation(fields: [projectId], references: [id])
 
   @@index([projectId])
   @@index([updateDate])
   @@map("project_updates")
 }
 
-// Notificaciones para usuarios
 model Notification {
   id        String   @id @default(uuid())
   userId    String   @map("user_id")
@@ -237,21 +213,19 @@ model Notification {
   @@map("notifications")
 }
 
-// Conversaciones
 model Conversation {
-  id          String                    @id @default(uuid())
-  projectId   String?                   @map("project_id")
-  title       String
-  createdAt   DateTime                  @default(now()) @map("created_at")
-  project     Project?                  @relation(fields: [projectId], references: [id])
+  id           String                    @id @default(uuid())
+  projectId    String?                   @map("project_id")
+  title        String
+  createdAt    DateTime                  @default(now()) @map("created_at")
   participants ConversationParticipant[]
-  messages    Message[]
+  project      Project?                  @relation(fields: [projectId], references: [id])
+  messages     Message[]
 
   @@index([projectId])
   @@map("conversations")
 }
 
-// Participantes de conversaciones
 model ConversationParticipant {
   id             String       @id @default(uuid())
   conversationId String       @map("conversation_id")
@@ -266,7 +240,6 @@ model ConversationParticipant {
   @@map("conversation_participants")
 }
 
-// Mensajes
 model Message {
   id             String       @id @default(uuid())
   conversationId String       @map("conversation_id")
@@ -282,4 +255,10 @@ model Message {
   @@index([read])
   @@index([createdAt])
   @@map("messages")
+}
+
+enum InvitationStatus {
+  PENDING
+  USED
+  EXPIRED
 }

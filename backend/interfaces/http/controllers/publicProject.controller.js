@@ -13,6 +13,13 @@ class PublicProjectController {
    */
   async list(req, res) {
     try {
+      // Verificar que req.user exista y tenga un rol definido
+      if (!req.user || !req.user.role) {
+        return res.status(401).json({
+          message: 'No autorizado - Se requiere autenticación con rol válido'
+        });
+      }
+      
       // Extraer parámetros de consulta (query params)
       const {
         propertyType,
@@ -61,6 +68,14 @@ class PublicProjectController {
   async getById(req, res) {
     try {
       const { id } = req.params;
+      
+      // Verificar que req.user exista y tenga un rol definido
+      if (!req.user || !req.user.role) {
+        return res.status(401).json({
+          message: 'No autorizado - Se requiere autenticación con rol válido'
+        });
+      }
+      
       // Pasar el rol del usuario como opción
       const options = {
         userRole: req.user.role

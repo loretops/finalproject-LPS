@@ -16,7 +16,7 @@ si, quiero seguir, pero si lo ves necesario quizá sería bueno hacer alguna pru
 
 **Prompt 3:**
 ```
-Si, ve paso por paso, siguiendo las byuenas practicas
+Si, ve paso por paso, siguiendo las buenas practicas
 ```
 
 **Prompt 4:**

@@ -128,17 +128,19 @@ Las inversiones pueden pasar por los siguientes estados:
 1. **pending**: Estado inicial cuando un socio registra su intención de invertir
 2. **confirmed**: Cuando un gestor confirma la inversión (tras la firma de contrato)
 3. **rejected**: Cuando un gestor rechaza la inversión
-4. **cancelled**: Cuando el socio cancela su inversión (solo en estado pending)
+4. **canceled**: Cuando el socio cancela su inversión (solo en estado pending)
+
+> Nota: Por retrocompatibilidad, el sistema acepta tanto "canceled" como "cancelled", pero internamente se estandariza a "canceled". La entidad Investment convierte automáticamente 'cancelled' a 'canceled' para garantizar consistencia en toda la aplicación.
 
 ```mermaid
 stateDiagram-v2
     [*] --> pending: Socio invierte
     pending --> confirmed: Gestor confirma
     pending --> rejected: Gestor rechaza
-    pending --> cancelled: Socio cancela
+    pending --> canceled: Socio cancela
     confirmed --> [*]
     rejected --> [*]
-    cancelled --> [*]
+    canceled --> [*]
 ```
 
 ## Gestión de Transacciones
@@ -167,12 +169,32 @@ return await prisma.$transaction(async (prismaClient) => {
     }
   });
   
-  // 5. Crear notificaciones
-  await this.notificationService.createNotification({...});
+  // 5. Crear notificaciones (con manejo de errores para evitar fallas en la transacción)
+  try {
+    await this.notificationService.createNotification({...});
+  } catch (notificationError) {
+    console.error('Error al enviar notificaciones:', notificationError);
+    // Las notificaciones no bloquean la transacción principal
+  }
   
   return createdInvestment;
 });
 ```
+
+### Manejo de Errores
+
+El sistema implementa un manejo robusto de errores en múltiples niveles:
+
+1. **Transacciones:** Las operaciones críticas utilizan transacciones para garantizar consistencia
+2. **Validación:** Tanto el frontend como el backend validan los datos antes de procesarlos
+3. **Notificaciones:** Los errores en notificaciones se registran pero no bloquean operaciones principales
+4. **Compatibilidad:** Se mantiene compatibilidad con términos legacy ("cancelled" vs "canceled")
+
+En caso de errores, el sistema:
+- Registra información detallada en los logs
+- Revierte las transacciones cuando es necesario
+- Devuelve mensajes de error descriptivos al cliente
+- Preserva la integridad referencial de los datos
 
 ## Seguridad y Permisos
 

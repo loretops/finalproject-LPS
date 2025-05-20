@@ -1,18 +1,11 @@
 module.exports = {
   // Default environment is node, which should fix Prisma and TextEncoder issues
-  testEnvironment: 'jsdom',
+  testEnvironment: 'node',
   roots: ['<rootDir>/frontend', '<rootDir>/backend'],
   modulePaths: ['<rootDir>/frontend', '<rootDir>/backend'],
   moduleDirectories: ['node_modules', 'frontend', 'backend'],
-  setupFilesAfterEnv: [
-    '<rootDir>/frontend/tests/setup.js',
-    '<rootDir>/backend/tests/setup.js'
-  ],
-  testMatch: [
-    '<rootDir>/frontend/tests/**/*.test.js',
-    '<rootDir>/frontend/**/__tests__/**/*.js',
-    '<rootDir>/backend/tests/**/*.test.js'
-  ],
+  setupFiles: ['dotenv/config', '<rootDir>/tests/setup.js'],
+  testMatch: ['**/tests/**/*.test.js'],
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }]
   },

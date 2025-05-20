@@ -97,23 +97,30 @@ class InvestmentService {
         }
       });
 
-      // Crear notificación para el gestor del proyecto
-      if (newInvestment.project.createdBy) {
+      // Enviar notificaciones (con manejo de errores para evitar que falle la transacción)
+      try {
+        // Crear notificación para el gestor del proyecto
+        if (newInvestment.project && newInvestment.project.createdBy) {
+          await this.notificationService.createNotification({
+            userId: newInvestment.project.createdBy,
+            type: 'investment_new',
+            content: `${newInvestment.user.firstName} ${newInvestment.user.lastName} ha invertido ${amount}€ en tu proyecto "${newInvestment.project.title || 'Sin título'}"`,
+            relatedId: newInvestment.id
+          });
+        }
+
+        // Crear notificación para el usuario que invierte
         await this.notificationService.createNotification({
-          userId: newInvestment.project.createdBy,
-          type: 'investment_new',
-          content: `${newInvestment.user.firstName} ${newInvestment.user.lastName} ha invertido ${amount}€ en tu proyecto "${newInvestment.project.title}"`,
+          userId: investmentData.userId,
+          type: 'investment_created',
+          content: `Has invertido ${amount}€ en el proyecto "${newInvestment.project && newInvestment.project.title ? newInvestment.project.title : 'Sin título'}". Tu inversión está pendiente de confirmación.`,
           relatedId: newInvestment.id
         });
+      } catch (notificationError) {
+        // Registrar el error pero permitir que la transacción continúe
+        console.error('Error al enviar notificaciones de nueva inversión:', notificationError);
+        // Aquí se podría implementar un sistema de reintentos o un log más detallado
       }
-
-      // Crear notificación para el usuario que invierte
-      await this.notificationService.createNotification({
-        userId: investmentData.userId,
-        type: 'investment_created',
-        content: `Has invertido ${amount}€ en el proyecto "${newInvestment.project.title}". Tu inversión está pendiente de confirmación.`,
-        relatedId: newInvestment.id
-      });
 
       return newInvestment;
     });
@@ -452,22 +459,29 @@ class InvestmentService {
         }
       });
 
-      // Crear notificación para el usuario
-      await this.notificationService.createNotification({
-        userId: updatedInvestment.userId,
-        type: 'investment_status_change',
-        content: `El estado de tu inversión en ${updatedInvestment.project.title} ha cambiado a ${status}`,
-        relatedId: id
-      });
-
-      // Si hay cambio de estado, notificar también al gestor del proyecto
-      if (updatedInvestment.project.createdBy) {
+      // Enviar notificaciones (con manejo de errores para evitar que falle la transacción)
+      try {
+        // Crear notificación para el usuario
         await this.notificationService.createNotification({
-          userId: updatedInvestment.project.createdBy,
+          userId: updatedInvestment.userId,
           type: 'investment_status_change',
-          content: `El estado de la inversión de ${updatedInvestment.user.firstName} ${updatedInvestment.user.lastName} en ${updatedInvestment.project.title} ha cambiado a ${status}`,
+          content: `El estado de tu inversión en ${updatedInvestment.project.title} ha cambiado a ${status}`,
           relatedId: id
         });
+
+        // Si hay cambio de estado, notificar también al gestor del proyecto
+        if (updatedInvestment.project.createdBy) {
+          await this.notificationService.createNotification({
+            userId: updatedInvestment.project.createdBy,
+            type: 'investment_status_change',
+            content: `El estado de la inversión de ${updatedInvestment.user.firstName} ${updatedInvestment.user.lastName} en ${updatedInvestment.project.title} ha cambiado a ${status}`,
+            relatedId: id
+          });
+        }
+      } catch (notificationError) {
+        // Registrar el error pero permitir que la transacción continúe
+        console.error('Error al enviar notificaciones de cambio de estado:', notificationError);
+        // Aquí se podría implementar un sistema de reintentos o un log más detallado
       }
 
       return updatedInvestment;
@@ -502,8 +516,60 @@ class InvestmentService {
       throw new Error('Solo se pueden cancelar inversiones en estado pendiente');
     }
 
-    // Actualizar el estado a cancelado
-    return await this.updateInvestmentStatus(id, { status: 'canceled' });
+    // Actualizar el estado a cancelado usando directamente prisma
+    try {
+      const updatedInvestment = await prisma.investment.update({
+        where: { id },
+        data: { status: 'canceled' },
+        include: {
+          user: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true
+            }
+          },
+          project: {
+            select: {
+              id: true,
+              title: true,
+              expectedRoi: true,
+              status: true,
+              createdBy: true
+            }
+          }
+        }
+      });
+      
+      // Enviar notificaciones sin bloquear la operación principal
+      try {
+        // Notificar al usuario
+        await this.notificationService.createNotification({
+          userId: updatedInvestment.userId,
+          type: 'investment_status_change',
+          content: `Has cancelado tu inversión en ${updatedInvestment.project && updatedInvestment.project.title ? updatedInvestment.project.title : 'Sin título'}`,
+          relatedId: id
+        });
+        
+        // Notificar al gestor del proyecto
+        if (updatedInvestment.project && updatedInvestment.project.createdBy) {
+          await this.notificationService.createNotification({
+            userId: updatedInvestment.project.createdBy,
+            type: 'investment_status_change',
+            content: `${updatedInvestment.user.firstName} ${updatedInvestment.user.lastName} ha cancelado su inversión en ${updatedInvestment.project.title || 'Sin título'}`,
+            relatedId: id
+          });
+        }
+      } catch (notificationError) {
+        console.error('Error al enviar notificaciones de cancelación:', notificationError);
+      }
+      
+      return updatedInvestment;
+    } catch (error) {
+      console.error('Error al cancelar inversión:', error);
+      throw new Error(`Error al cancelar la inversión: ${error.message}`);
+    }
   }
 }
 

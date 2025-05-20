@@ -1,6 +1,23 @@
-> Detalla en esta sección los prompts principales utilizados durante la creación del proyecto, que justifiquen el uso de asistentes de código en todas las fases del ciclo de vida del desarrollo. Esperamos un máximo de 3 por sección, principalmente los de creación inicial o  los de corrección o adición de funcionalidades que consideres más relevantes.
-Puedes añadir adicionalmente la conversación completa como link o archivo adjunto si así lo consideras
+# Prompts Utilizados para el Desarrollo
 
+Este documento recoge todos los prompts significativos utilizados durante el desarrollo del proyecto. Esto ayuda a mantener un registro histórico del proceso de desarrollo y facilita la replicación de ciertos aspectos del desarrollo en el futuro.
+
+## Configuración del Proyecto y Setup
+
+- Crea un proyecto completo para una plataforma de crowdfunding inmobiliario, con frontend en Next.js y backend en Express.js.
+- Diseña un esquema de base de datos para una plataforma de crowdfunding inmobiliario.
+- Crea la arquitectura y estructura del proyecto para una plataforma de crowdfunding inmobiliario.
+- Implementa un sistema de autenticación con JWT para la plataforma.
+
+## Desarrollo de Características Específicas
+
+- [Ver todos los prompts de Historia de Usuario 2](mdc:prompts/prompts_HU2.md)
+- [Ver todos los prompts de Historia de Usuario 7](mdc:prompts/prompts_HU7.md)
+
+## Corrección de bugs
+
+- corrige el archivo @ProjectCard.jsx
+- sigue el mismo error: al dar a publicar no hace nada, y se queda la pantalla en blanco
 
 ## Índice
 

@@ -72,22 +72,66 @@ const normalizeText = (text) => {
  * @returns {Object} - Proyecto normalizado
  */
 const normalizeProject = (project) => {
-  if (!project) return {};
+  if (!project) {
+    console.warn('⚠️ Se intentó normalizar un proyecto nulo o indefinido');
+    return {
+      id: '',
+      title: '',
+      description: '',
+      minimum_investment: 0,
+      target_amount: 0,
+      expected_roi: 0,
+      status: 'draft',
+      created_at: new Date().toISOString(),
+      property_type: 'residential',
+      location: ''
+    };
+  }
   
-  return {
-    id: project.id || '',
-    title: project.title || '',
-    description: project.description || '',
-    minimum_investment: project.minimum_investment || 0,
-    target_amount: project.target_amount || 0,
-    expected_roi: project.expected_roi || 0,
-    status: project.status || 'draft',
-    created_at: project.created_at || new Date().toISOString(),
-    updated_at: project.updated_at || new Date().toISOString(),
-    // Asegurar que otros campos requeridos tengan valores por defecto
-    property_type: project.property_type || 'residential',
-    location: project.location || ''
-  };
+  try {
+    console.log('🔄 Normalizando proyecto:', typeof project, project.id || 'sin ID');
+    
+    const normalized = {
+      id: project.id || '',
+      title: project.title || '',
+      description: project.description || '',
+      minimum_investment: parseFloat(project.minimum_investment || 0),
+      target_amount: parseFloat(project.target_amount || 0),
+      expected_roi: parseFloat(project.expected_roi || 0),
+      status: project.status || 'draft',
+      created_at: project.created_at || new Date().toISOString(),
+      updated_at: project.updated_at || new Date().toISOString(),
+      property_type: project.property_type || 'residential',
+      location: project.location || '',
+      draft: project.draft !== undefined ? Boolean(project.draft) : true,
+      published_at: project.published_at || null,
+      // Manejo seguro de objetos anidados
+      creator: project.creator ? {
+        id: project.creator.id || '',
+        first_name: project.creator.first_name || '',
+        last_name: project.creator.last_name || ''
+      } : null,
+      publisher: project.publisher ? {
+        id: project.publisher.id || '',
+        first_name: project.publisher.first_name || '',
+        last_name: project.publisher.last_name || ''
+      } : null
+    };
+    
+    console.log('✅ Proyecto normalizado:', normalized);
+    return normalized;
+  } catch (error) {
+    console.error('❌ Error al normalizar proyecto:', error);
+    console.error('❌ Datos que causaron el error:', project);
+    
+    // Devolver un objeto mínimo en caso de error
+    return {
+      id: project.id || '',
+      title: project.title || '',
+      description: project.description || '',
+      status: project.status || 'draft'
+    };
+  }
 };
 
 /**
@@ -558,13 +602,52 @@ const projectService = {
    */
   async publishProject(id) {
     try {
+      console.log(`🚀 Intentando publicar proyecto con ID: ${id}`);
+      
       // Usar apiClient que ya tiene configurado el interceptor para el token
       const response = await apiClient.post(`/projects/${id}/publish`, {});
       
-      // Normalizar el proyecto antes de devolverlo
-      return normalizeProject(camelToSnake(response.data));
+      console.log(`✅ Respuesta del servidor al publicar:`, response.data);
+      
+      // Si no hay datos en la respuesta, devolver un objeto con valores por defecto
+      if (!response.data) {
+        console.warn('⚠️ La respuesta no tiene datos al publicar. Usando valores por defecto.');
+        return {
+          id: id,
+          status: 'published',
+          draft: false,
+          published_at: new Date().toISOString()
+        };
+      }
+      
+      try {
+        // Normalizar el proyecto antes de devolverlo
+        const normalizedData = normalizeProject(camelToSnake(response.data));
+        console.log(`✅ Datos normalizados después de publicar:`, normalizedData);
+        return normalizedData;
+      } catch (normalizeError) {
+        console.error(`❌ Error al normalizar datos después de publicar:`, normalizeError);
+        console.error(`❌ Datos que causaron el error:`, response.data);
+        // Devolver los datos sin normalizar como último recurso
+        return response.data;
+      }
     } catch (error) {
-      console.error(`Error al publicar proyecto con ID ${id}:`, error);
+      console.error(`❌ Error al publicar proyecto con ID ${id}:`, error);
+      
+      // Mostrar más información detallada sobre el error
+      if (error.response) {
+        console.error('❌ Detalles del error de respuesta:', {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+          headers: JSON.stringify(error.response.headers)
+        });
+      } else if (error.request) {
+        console.error('❌ Error de solicitud (no hubo respuesta):', error.request);
+      } else {
+        console.error('❌ Error al configurar la solicitud:', error.message);
+      }
+      
       throw error;
     }
   },

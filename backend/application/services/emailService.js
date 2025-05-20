@@ -1,14 +1,35 @@
 const nodemailer = require('nodemailer');
+const path = require('path');
+const dotenv = require('dotenv');
+
+// Cargar variables de entorno del backend primero
+dotenv.config({ path: path.join(__dirname, '../../../.env') });
 
 // Configuración del transporte SMTP desde variables de entorno
+console.log('Configurando transporte SMTP con:', {
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  user: process.env.SMTP_USER,
+  secure: parseInt(process.env.SMTP_PORT || '587', 10) === 465
+});
+
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: parseInt(process.env.SMTP_PORT || '587', 10),
-  secure: parseInt(process.env.SMTP_PORT || '587', 10) === 465, // true para 465, false para otros puertos como 587
+  secure: parseInt(process.env.SMTP_PORT || '587', 10) === 465,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
+});
+
+// Verificar la configuración del transporte
+transporter.verify(function(error, success) {
+  if (error) {
+    console.error('Error en la configuración del transporte SMTP:', error);
+  } else {
+    console.log('Servidor SMTP listo para enviar mensajes');
+  }
 });
 
 const senderEmail = process.env.EMAIL_FROM || 'noreply@example.com';
@@ -62,8 +83,16 @@ function getInvitationEmailHtml(toEmail, invitationLink) {
  */
 async function sendInvitationEmail(toEmail, token) {
   if (!toEmail || !token) {
+    console.error('Error: Email o token faltante', { toEmail, token });
     throw new Error('Recipient email and token are required to send invitation.');
   }
+
+  console.log('Preparando envío de email de invitación:', {
+    to: toEmail,
+    from: senderEmail,
+    frontendUrl,
+    token
+  });
 
   const invitationLink = `${frontendUrl}/invitation/${token}`;
   const htmlContent = getInvitationEmailHtml(toEmail, invitationLink);
@@ -77,14 +106,28 @@ async function sendInvitationEmail(toEmail, token) {
 
   try {
     console.log(`Intentando enviar email de invitación a ${toEmail}...`);
+    console.log('Opciones de email:', {
+      from: mailOptions.from,
+      to: mailOptions.to,
+      subject: mailOptions.subject
+    });
+    
     const info = await transporter.sendMail(mailOptions);
-    console.log('Email de invitación enviado con éxito:', info.messageId);
-    // console.log('Preview URL (si usas Ethereal):', nodemailer.getTestMessageUrl(info));
+    console.log('Email de invitación enviado con éxito:', {
+      messageId: info.messageId,
+      response: info.response,
+      accepted: info.accepted,
+      rejected: info.rejected
+    });
+    return info;
   } catch (error) {
-    console.error(`Error al enviar email de invitación a ${toEmail}:`, error);
-    // Decidir si relanzar el error o solo registrarlo
-    // Por ahora, lo registramos pero no bloqueamos el flujo (ej. la creación de la invitación puede haber sido exitosa)
-    // throw new Error('Failed to send invitation email.');
+    console.error(`Error detallado al enviar email de invitación a ${toEmail}:`, {
+      error: error.message,
+      code: error.code,
+      command: error.command,
+      stack: error.stack
+    });
+    throw new Error(`Failed to send invitation email: ${error.message}`);
   }
 }
 

@@ -19,36 +19,55 @@ class InterestService {
    * @returns {Promise<Object>} Interés registrado
    */
   async registerInterest(userId, projectId, notes = null) {
+    // Validación inicial de parámetros
     if (!userId || !projectId) {
       throw new Error('El ID del usuario y del proyecto son obligatorios');
     }
     
     try {
       // Verificar que el proyecto existe y está publicado
+      console.log(`[InterestService] Verificando proyecto ${projectId}`);
       const project = await projectService.getProjectById(projectId);
+      
       if (!project) {
+        console.error(`[InterestService] Proyecto no encontrado: ${projectId}`);
         throw new Error('Proyecto no encontrado');
       }
       
+      console.log(`[InterestService] Estado del proyecto: ${project.status}`);
       if (project.status !== 'published') {
         throw new Error('Solo se puede mostrar interés en proyectos publicados');
       }
       
       // Verificar si ya existe un interés activo para este usuario y proyecto
+      console.log(`[InterestService] Verificando interés existente - Usuario: ${userId}, Proyecto: ${projectId}`);
       const existingInterest = await interestRepository.findByUserAndProject(userId, projectId);
+      
       if (existingInterest) {
+        console.log(`[InterestService] Interés existente encontrado: ${existingInterest.id}, Estado: ${existingInterest.status}`);
+        
         if (existingInterest.status === 'active') {
-          throw new Error('Ya has mostrado interés en este proyecto');
+          // Devolver el interés existente en lugar de lanzar error
+          return existingInterest;
         } else {
           // Si existe pero no está activo, actualizamos su estado y notas
-          const updatedInterest = await interestRepository.updateStatus(existingInterest.id, 'active');
+          console.log(`[InterestService] Reactivando interés: ${existingInterest.id}`);
+          let updatedInterest;
           
-          // Actualizamos las notas si se proporcionaron
-          if (notes) {
-            await prisma.interest.update({
-              where: { id: existingInterest.id },
-              data: { notes }
-            });
+          try {
+            updatedInterest = await interestRepository.updateStatus(existingInterest.id, 'active');
+            
+            // Actualizamos las notas si se proporcionaron
+            if (notes) {
+              await prisma.interest.update({
+                where: { id: existingInterest.id },
+                data: { notes }
+              });
+            }
+          } catch (updateError) {
+            console.error(`[InterestService] Error al actualizar interés: ${updateError.message}`);
+            // Si falla la actualización, devolvemos el interés existente
+            return existingInterest;
           }
           
           return updatedInterest;
@@ -56,6 +75,7 @@ class InterestService {
       }
       
       // Crear el nuevo interés
+      console.log(`[InterestService] Creando nuevo interés`);
       const interestData = {
         userId,
         projectId,
@@ -63,20 +83,47 @@ class InterestService {
         notes
       };
       
-      const interest = await interestRepository.create(interestData);
+      let interest;
+      try {
+        interest = await interestRepository.create(interestData);
+      } catch (createError) {
+        // Capturar errores específicos de Prisma
+        if (createError.code === 'P2002') {
+          console.log('[InterestService] Conflicto de clave única, intentando obtener el interés existente');
+          // Si hay un error de clave única, intentamos obtener el interés existente
+          const existingInterest = await interestRepository.findByUserAndProject(userId, projectId);
+          if (existingInterest) {
+            return existingInterest;
+          }
+          // Si no podemos encontrarlo, propagamos el error original
+          throw new Error('Ya existe un interés para este usuario y proyecto');
+        }
+        throw createError;
+      }
       
       // Obtener información del usuario para la notificación
-      const user = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { firstName: true, lastName: true, email: true }
-      });
-      
-      // Crear notificación para el gestor del proyecto
-      await notificationService.createInterestNotification(interest, user, project);
+      console.log(`[InterestService] Preparando notificación`);
+      try {
+        const user = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { firstName: true, lastName: true, email: true }
+        });
+        
+        if (user && project) {
+          // Crear notificación para el gestor del proyecto
+          await notificationService.createInterestNotification(interest, user, project);
+        } else {
+          console.warn(`[InterestService] No se pudo crear notificación: datos insuficientes`);
+        }
+      } catch (notificationError) {
+        // Si hay un error al crear la notificación, lo registramos pero permitimos continuar
+        console.error('[InterestService] Error al crear notificación:', notificationError);
+      }
       
       return interest;
     } catch (error) {
-      console.error('Error en InterestService.registerInterest:', error);
+      console.error(`[InterestService] Error en registerInterest:`, error);
+      // Re-lanzar el error original para que sea manejado por el controlador
       throw error;
     }
   }

@@ -9,6 +9,7 @@
 | HU #2: Ver oportunidades de inversión | 11 | 6 | 0 | 5 | 0 |
 | HU #9: Marcar "Me Interesa" | 8 | 8 | 0 | 0 | 0 |
 | HU #3: Marcar "Invierto" | 12 | 7 | 0 | 5 | 0 |
+| HU #7: Confirmación de correo electrónico | 6 | 0 | 0 | 6 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -154,6 +155,19 @@ gantt
 | #50 | Tests e2e para flujo de inversión | ✅ | 7/7 | 8/8 | Implementados tests end-to-end completos para el flujo de inversión con Cypress |
 | #51 | Dashboard para gestores con resumen de inversiones | ✅ | 8/8 | 0/0 | Implementado dashboard con estadísticas, filtros y gestión completa de inversiones para gestores |
 
+### HU #7: Confirmación de correo electrónico
+
+**Objetivo:** Permitir a los nuevos socios confirmar su correo electrónico tras el registro para verificar su identidad y activar completamente su cuenta.
+
+| ID | Descripción | Estado | Criterios cumplidos | Tests pasados | Observaciones |
+|---|---|---|---|---|---|
+| #52 | Modelo de datos para tokens de verificación | ✅ | 5/5 | 0/0 | Implementada entidad VerificationToken y sus repositorios con métodos para verificar expiración, validez y marcar como usado |
+| #53 | Servicio backend para verificación de email | ⏳ | 0/7 | 0/0 | Pendiente de implementar |
+| #54 | API Endpoints para verificación de email | ⏳ | 0/6 | 0/0 | Pendiente de implementar |
+| #55 | Plantillas de email para verificación | ⏳ | 0/5 | 0/0 | Pendiente de implementar |
+| #56 | Página de verificación en frontend | ⏳ | 0/7 | 0/0 | Pendiente de implementar |
+| #57 | Componentes UI para estado de verificación | ⏳ | 0/5 | 0/0 | Pendiente de implementar |
+
 ## 🚀 Plan de Desarrollo para HU #2
 
 ```mermaid
@@ -237,6 +251,26 @@ Para la Historia de Usuario 2, el orden recomendado de desarrollo es:
 
 ## 📋 Logros Recientes
 
+- **Mejora en el manejo de errores del cliente:** Se ha implementado un sistema avanzado de manejo de errores en el frontend.
+  - Creado módulo `errorHandler.js` para centralizar el manejo de errores
+  - Implementadas notificaciones toast específicas según tipo de error con iconos y estilos personalizados
+  - Añadido contexto a los mensajes de error para mayor claridad
+  - Estandarizados los mensajes según códigos HTTP para mejorar experiencia de usuario
+
+- **Implementación de sistema de monitoreo de errores:** Se ha desarrollado un sistema para registrar y monitorizar errores críticos.
+  - Creado módulo `errorMonitor.js` para registro centralizado de errores
+  - Implementada API en `/api/logs/errors` para recibir reportes desde el cliente
+  - Añadida deduplicación para evitar reportes redundantes
+  - Configurada recolección de datos de contexto (dispositivo, navegador, URL) para facilitar diagnóstico
+  - Priorización especial para errores 500 con registro detallado
+
+- **Corrección de error 500 en cancelación de inversiones:** Se ha solucionado el problema que causaba un error interno del servidor al intentar cancelar inversiones pendientes.
+  - Mejorado el método `cancelInvestment` para usar Prisma directamente en lugar de llamadas anidadas
+  - Implementado manejo robusto de errores con mensajes descriptivos
+  - Añadida protección contra fallos en notificaciones mediante bloques try/catch
+  - Estandarizada la terminología "canceled" vs "cancelled" manteniendo compatibilidad hacia atrás
+  - Realizadas pruebas unitarias para verificar funcionamiento correcto
+
 - **Ticket #30 completado:** Se han implementado con éxito los tests end-to-end para el flujo de visualización de proyectos.
   - Configurado Cypress como framework de testing e2e
   - Implementados 7 tests que comprueban todo el flujo desde el listado hasta el detalle de proyecto
@@ -246,156 +280,29 @@ Para la Historia de Usuario 2, el orden recomendado de desarrollo es:
   - Implementados tests para funcionalidades como marcar interés en proyectos
   - Preparados tests para diferentes estados de la aplicación (con/sin datos)
 
-- **Ticket #26 completado:** Se ha implementado con éxito la página de detalle de proyecto para socios.
-  - Creada página dinámica en `/projects/[id].jsx` que muestra información detallada del proyecto
-  - Implementada interfaz con pestañas para visualizar: descripción, galería de imágenes y documentos
-  - Integrada con los componentes ImageGalleryViewer y DocumentViewer
-  - Añadida visualización de información financiera y progreso de financiación
-  - Implementada funcionalidad para marcar interés y compartir proyectos
-  - Añadido manejo de estados de carga, error y contenido vacío
-  - Implementada visualización responsiva para diferentes dispositivos
-  - Aplicada protección de ruta con withAuth para asegurar que solo socios accedan
-  - Implementada visualización de documentos según nivel de acceso
-  - Añadido modo de pantalla completa para documentos
-
-- **Ticket #28 completado:** Se ha implementado con éxito el componente visor de documentos.
-  - Creado componente `DocumentViewer` con soporte para múltiples tipos de documentos (PDF, imágenes, videos, Office)
-  - Implementado manejo de niveles de seguridad (solo visualización, descarga, impresión)
-  - Añadido modo de pantalla completa con controles completos
-  - Implementada detección automática de tipo de documento
-  - Añadido soporte para visualización de metadatos del documento
-  - Implementado manejo de errores y estados de carga
-  - Desarrollada página de demostración en `/examples/document-viewer`
-  - Creados tests exhaustivos para validar funcionalidades principales
-  - Optimizado para diferentes dispositivos y tamaños de pantalla
-  - Implementados controles de accesibilidad
-
-- **Ticket #27 completado:** Se ha implementado con éxito el componente visor de galería de imágenes.
-  - Creado componente `ImageGalleryViewer` con interfaz intuitiva y responsive
-  - Implementada navegación entre imágenes con controles visuales y soporte para teclado
-  - Añadido modo de pantalla completa para visualización óptima
-  - Implementada visualización de miniaturas con selección activa
-  - Añadido soporte para mostrar título y descripción de cada imagen
-  - Implementado manejo de estados de carga y errores con retroalimentación visual
-  - Desarrollada página de demostración en `/examples/image-gallery`
-  - Creados tests exhaustivos para validar funcionalidades principales
-  - Optimizado para diferentes dispositivos y tamaños de pantalla
-  - Implementada accesibilidad con etiquetas ARIA y navegación por teclado
-
-- **Ticket #23 completado:** Se ha implementado con éxito la página de listado de proyectos para socios.
-  - Implementada página principal `/projects/index.jsx` con listado completo de proyectos
-  - Integrados los componentes de filtrado y ordenación (ProjectFilters y ProjectSorting)
-  - Implementada paginación con navegación intuitiva y sincronización con filtros
-  - Añadido soporte para mantener filtros en la URL para compartir enlaces
-  - Creada página placeholder para detalle de proyecto (/projects/[id])
-  - Implementado manejo de estados de carga y error con retroalimentación visual
-  - Optimizada para dispositivos móviles y escritorio
-  - Protegida con control de acceso basado en roles mediante withAuth
-  - Implementada funcionalidad para marcar interés en proyectos
-
-- **Ticket #24 completado:** Se ha implementado con éxito el componente de tarjeta de proyecto para mostrar oportunidades de inversión.
-  - Mejorado el componente `ProjectCard` para mostrar información clave de cada proyecto
-  - Implementado indicador visual de progreso de financiación con diferentes colores según el porcentaje
-  - Añadido soporte para múltiples variantes de visualización (normal, compacta, destacada)
-  - Implementada funcionalidad para marcar interés en proyectos con feedback visual
-  - Optimizado para mostrar u ocultar elementos según la variante seleccionada
-  - Integrado con los componentes UI existentes (Card, Button)
-  - Implementada visualización responsive para todo tipo de dispositivos
-  - Creados tests exhaustivos para validar todas las funcionalidades
-  - Añadido soporte para formateo de valores monetarios según configuración regional
-
-- **Ticket #22 completado:** Se ha implementado con éxito el servicio frontend para consumo de API de proyectos públicos.
-  - Creado nuevo servicio `publicProjectService.js` para consumir los endpoints de proyectos públicos
-  - Implementado método `getPublishedProjects` para obtener listado paginado y filtrado
-  - Implementado método `getPublishedProjectById` para obtener detalle de un proyecto específico
-  - Implementado método placeholder `registerInterest` para futuras implementaciones
-  - Configurado manejo de errores específicos para diferentes códigos HTTP (403, 404, 500)
-  - Creado archivo de pruebas con casos de uso comunes y manejo de errores
-  - Reutilizada funcionalidad del `apiClient` para autenticación automática
-  - Implementada normalización de datos para compatibilidad frontend/backend
-
-- **Ticket #21 completado:** Se ha implementado con éxito el endpoint API para detalle completo de proyectos.
-  - Mejorado el método getProjectById del servicio para incluir documentos asociados
-  - Implementado filtrado de documentos según nivel de acceso del usuario (visitor, partner, investor, manager)
-  - Añadido registro de visualizaciones para análisis de interés
-  - Optimizada la respuesta para incluir solo la información relevante
-  - Implementados controles de acceso para verificar que el proyecto esté publicado
-  - Creados tests para validar el comportamiento y seguridad del endpoint
-  - Actualizada la documentación del DTO para incluir documentos en la respuesta
-
-- **Ticket #20 completado:** Se ha implementado con éxito los endpoints API para listar y filtrar proyectos publicados.
-  - Creado nuevo controlador PublicProjectController para manejar las solicitudes específicas de proyectos publicados
-  - Implementado método getPublishedProjects en el servicio de proyectos que garantiza que solo se muestren proyectos con estado 'published'
-  - Configuradas rutas protegidas en publicProject.routes.js que requieren autenticación y rol de socio
-  - Implementado soporte para filtrado (tipo de propiedad, ROI mínimo, ubicación)
-  - Añadido soporte para paginación y ordenación de resultados
-  - Optimización de formato de respuesta específico para socios
-  - Aplicados tests para verificar el funcionamiento correcto
-  
-- **Ticket #29 validado:** Se ha verificado que el middleware existente cumple con los requisitos para la autenticación de socios.
-  - Validado que jwtAuthMiddleware verifica correctamente los tokens JWT
-  - Comprobado que roleAuthMiddleware verifica correctamente el rol de socio ('partner')
-  - Confirmado que las rutas de proyectos públicos están protegidas adecuadamente
-  - Realizado pruebas para asegurar que solo usuarios con rol de socio pueden acceder a los endpoints
-
-- **Ticket #14 completado:** Se ha implementado con éxito el servicio de almacenamiento de documentos.
-  - Creación de interfaz y servicio para gestión de archivos
-  - Implementación de optimización automática de imágenes
-  - Validación de tipos de archivos permitidos por MIME type
-  - Generación de nombres de archivo seguros con UUID
-  - Integración con el modelo ProjectDocument existente 
-  - Desarrollo de endpoints para subida, listado y eliminación de documentos
-  - Documentación completa del servicio y API en `/docs/technical/document-storage-service.md`
-  - Implementación de tests unitarios e integración para garantizar la calidad del código:
-    - Tests unitarios para LocalStorageService (generación de nombres, almacenamiento, etc.)
-    - Tests para validación de tipos de archivos y configuración
-    - Tests para middleware de subida de archivos (Multer)
-    - Tests de integración para el servicio de documentos
-    - Tests para el controlador de la API
-
-- **Ticket #17 completado:** Se ha implementado con éxito el formulario de creación/edición de proyectos.
-  - Implementación de validaciones exhaustivas para todos los campos del formulario
-  - Normalización de datos para manejar caracteres especiales y formatos de texto
-  - Verificación previa del estado del proyecto antes de permitir edición
-  - Creación de un enfoque de actualización por etapas para enviar solo campos modificados
-  - Integración de pruebas completas con diagnósticos detallados de errores
-
-- **Corrección de Error 500 en actualizaciones de proyectos:**
-  - Diagnóstico inicial reveló problemas con el envío de datos a la API del backend
-  - Implementada normalización de datos para manejar caracteres especiales y formatos de texto
-  - Añadida verificación del estado del proyecto antes de intentos de edición
-  - Creado enfoque de actualización por etapas para enviar solo campos modificados
-  - Implementadas pruebas exhaustivas con diagnósticos detallados de errores
-
-- **Corrección de Error 404 en eliminación de proyectos:**
-  - Mejorado el manejo de errores para gestionar casos donde los proyectos ya fueron eliminados
-  - Implementadas notificaciones toast amigables para estados de éxito, información y error
-  - Añadidas actualizaciones automáticas de UI para mantener consistencia sin requerir recarga de datos
-
-- **Ticket #19 completado:** Implementación completa del flujo de publicación de proyectos:
-  - Creado componente PublishProjectModal con vista previa detallada del proyecto
-  - Implementada validación exhaustiva antes de permitir la publicación
-  - Añadidas advertencias claras sobre las implicaciones de publicar (no se pueden editar proyectos publicados)
-  - Añadido checkbox de confirmación explícita para prevenir publicaciones accidentales
-  - Implementada retroalimentación visual con animación en la tabla para destacar el cambio de estado
-  - Integrado sistema de notificaciones toast para mejorar la experiencia de usuario
-  - Implementado manejo de estados durante la publicación para prevenir acciones duplicadas
-
 ## 🛣️ Próximos Pasos
 
-1. Completar la integración del backend para el componente de gestión de documentos (#18)
+1. Implementar la Historia de Usuario 7: Confirmación de correo electrónico (Must Have)
+   - ⏳ Desarrollar el servicio de verificación de email en el backend
+   - ⏳ Implementar endpoints API para verificación y reenvío de confirmación
+   - ⏳ Crear plantillas de email para verificación
+   - ⏳ Desarrollar página de verificación en el frontend
+   - ⏳ Implementar componentes de estado de verificación
+   - ⏳ Configurar redirecciones y flujos de usuario para emails no verificados
+
+2. Completar la integración del backend para el componente de gestión de documentos (#18)
    - ✅ Implementación de la UI completa con todas las funcionalidades
    - ✅ Simulación local para demostrar la funcionalidad
    - ⏳ Modificar backend para aceptar correctamente metadatos con archivos subidos
    - ⏳ Implementar persistencia real de documentos en servidor
 
-2. Completar los tests pendientes del servicio de invitaciones (#4)
+3. Completar los tests pendientes del servicio de invitaciones (#4)
 
-3. Finalizar los tickets pendientes de registro mediante invitación (#9, #10)
+4. Finalizar los tickets pendientes de registro mediante invitación (#9, #10)
 
-4. Implementar tests para el servicio de almacenamiento de documentos
+5. Implementar tests para el servicio de almacenamiento de documentos
 
-5. Continuar el desarrollo de la Historia de Usuario 2: Ver oportunidades de inversión ✅ COMPLETADO
+6. Continuar el desarrollo de la Historia de Usuario 2: Ver oportunidades de inversión ✅ COMPLETADO
    - ✅ Implementar endpoints de API para proyectos públicos (Ticket #20)
    - ✅ Validar middleware de verificación de rol de socio (Ticket #29)
    - ✅ Completar API endpoints para detalle de un proyecto (Ticket #21)
@@ -540,6 +447,15 @@ Las mejoras aplicadas incluyen:
 - [x] Ticket #50: Tests e2e para flujo de inversión
 - [x] Ticket #51: Dashboard para gestores con resumen de inversiones
 
+### Historia de Usuario 7: Confirmación de correo electrónico
+
+- [x] Ticket #52: Modelo de datos para tokens de verificación
+- [ ] Ticket #53: Servicio backend para verificación de email
+- [ ] Ticket #54: API Endpoints para verificación de email
+- [ ] Ticket #55: Plantillas de email para verificación
+- [ ] Ticket #56: Página de verificación en frontend
+- [ ] Ticket #57: Componentes UI para estado de verificación
+
 ## Implementaciones recientes
 
 ### Página de "Mis Intereses" para socios (Ticket #37)
@@ -559,6 +475,7 @@ Esta página proporciona a los socios un lugar centralizado para gestionar sus i
 ## Próximos Tickets a Desarrollar
 
 - [ ] Ticket #19: Página de publicación y vista previa del proyecto
+- [ ] Ticket #52: Modelo de datos para tokens de verificación (HU7 - Confirmación de correo electrónico)
 
 ## ✨ Mejoras Recientes
 
@@ -597,3 +514,14 @@ Esta estandarización proporciona varias ventajas:
 - Mejor experiencia de usuario con interfaces familiares
 - Base sólida para el desarrollo futuro
 - Navegación intuitiva y consistente entre secciones
+
+## Correcciones de errores (Bugfixes)
+
+- [x] Corregido error de validación de contraseñas durante el registro.
+- [x] Implementada mejor gestión de errores en el frontend durante el registro.
+- [x] Mejorado el manejo de errores en los servicios de frontend para proyectos.
+- [x] Corregido problema con pantalla en blanco al publicar proyectos.
+- [x] Implementada normalización robusta de datos en el formulario de proyectos.
+- [x] Corregido error de compilación por importación duplicada de React en ProjectCard.jsx.
+- [x] Solucionado problema de pantalla en blanco al publicar proyectos mediante implementación de fetch directo en lugar de servicios complejos.
+- [x] Corregido error 500 al cancelar inversiones pendientes.

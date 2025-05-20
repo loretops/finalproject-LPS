@@ -202,7 +202,7 @@ const ProjectCard = ({
           <div className="mt-4">
             <div className="flex justify-between items-center text-xs text-gray-500 mb-1">
               <span>Inversión: {calculateFundingPercentage()}%</span>
-              <span>{formatCurrency(current_amount)} / {formatCurrency(target_amount)}</span>
+              <span>{formatCurrency(current_amount || 0)} / {formatCurrency(target_amount)}</span>
             </div>
             <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
               <div 

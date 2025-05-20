@@ -1,4 +1,6 @@
 import { apiClient } from './authService';
+import errorHandler from '../utils/errorHandler';
+import errorMonitor from '../utils/errorMonitor';
 
 /**
  * Normaliza un objeto de inversión para asegurar consistencia
@@ -261,6 +263,16 @@ class InvestmentService {
       };
     } catch (error) {
       console.error('Error al cancelar inversión:', error);
+      
+      // Monitorear errores del servidor
+      if (error.status >= 500) {
+        errorMonitor.logServerError(error, {
+          component: 'InvestmentService',
+          action: 'cancelInvestment',
+          additionalData: { investmentId }
+        });
+      }
+      
       throw this.handleError(error);
     }
   }
@@ -303,24 +315,67 @@ class InvestmentService {
   handleError(error) {
     if (error.response) {
       // El servidor respondió con un código de error
-      const message = 
-        error.response.data.message || 
-        error.response.data.error || 
-        'Ocurrió un error con tu solicitud';
+      const status = error.response.status;
+      let message = error.response.data.message || error.response.data.error || 'Ocurrió un error con tu solicitud';
+      
+      // Añadir contexto al mensaje según el código de estado
+      switch (status) {
+        case 400:
+          // Si hay errores de validación específicos, mostrarlos
+          if (error.response.data.errors && Array.isArray(error.response.data.errors)) {
+            const validationErrors = error.response.data.errors.map(e => e.msg || e.message).join(', ');
+            message = `Datos inválidos: ${validationErrors}`;
+          } else {
+            message = `Error de validación: ${message}`;
+          }
+          break;
+        case 401:
+          message = 'Tu sesión ha caducado. Por favor, vuelve a iniciar sesión.';
+          break;
+        case 403:
+          message = 'No tienes permiso para realizar esta acción.';
+          break;
+        case 404:
+          message = 'El recurso solicitado no existe o ha sido eliminado.';
+          break;
+        case 409:
+          message = `Conflicto: ${message}`;
+          break;
+        case 500:
+          message = 'Error interno del servidor. Por favor, inténtalo de nuevo más tarde o contacta con soporte.';
+          // Loguear detalles adicionales para diagnóstico
+          console.error('Error 500 - Detalles técnicos:', {
+            url: error.config?.url,
+            method: error.config?.method,
+            data: error.config?.data,
+            responseData: error.response.data
+          });
+          break;
+        default:
+          if (status >= 500) {
+            message = 'Error en el servidor. Por favor, inténtalo de nuevo más tarde.';
+          }
+      }
       
       const formattedError = new Error(message);
-      formattedError.status = error.response.status;
+      formattedError.status = status;
       formattedError.data = error.response.data;
+      formattedError.code = error.response.data.code || `HTTP_${status}`;
       return formattedError;
     }
     
     if (error.request) {
       // La solicitud fue realizada pero no se recibió respuesta
-      return new Error('No se recibió respuesta del servidor. Por favor, verifica tu conexión.');
+      console.error('Error de red - Sin respuesta:', {
+        url: error.config?.url,
+        method: error.config?.method
+      });
+      return new Error('No se pudo conectar con el servidor. Por favor, verifica tu conexión a internet e inténtalo de nuevo.');
     }
     
     // Error al configurar la solicitud
-    return error;
+    console.error('Error de configuración de solicitud:', error.message);
+    return new Error('Error al procesar tu solicitud. Por favor, inténtalo de nuevo o contacta con soporte.');
   }
 }
 

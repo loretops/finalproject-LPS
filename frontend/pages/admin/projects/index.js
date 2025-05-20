@@ -240,27 +240,64 @@ const ProjectsPage = () => {
     
     setIsPublishing(true);
     try {
+      console.log('🔍 Iniciando publicación del proyecto:', selectedProject.id);
       const updatedProject = await projectService.publishProject(selectedProject.id);
+      console.log('✅ Proyecto publicado exitosamente:', updatedProject);
       
       // Actualizar el proyecto en la lista sin necesidad de recargar todo
-      setProjects(projects.map(project => 
-        project.id === selectedProject.id ? updatedProject : project
-      ));
+      try {
+        console.log('🔄 Actualizando lista de proyectos');
+        const updatedProjects = projects.map(project => 
+          project.id === selectedProject.id ? updatedProject : project
+        );
+        setProjects(updatedProjects);
+        console.log('✅ Lista de proyectos actualizada');
+      } catch (updateError) {
+        console.error('❌ Error al actualizar la lista de proyectos:', updateError);
+        // No fallar completamente si solo hay un error en la actualización de la UI
+      }
       
       // Establecer el ID del proyecto publicado para la animación
-      setLastPublishedId(selectedProject.id);
+      try {
+        setLastPublishedId(selectedProject.id);
+      } catch (animationError) {
+        console.error('❌ Error al establecer ID para animación:', animationError);
+        // No fallar por problemas con la animación
+      }
       
       // Cerrar el modal y limpiar estados
-      setIsPublishModalOpen(false);
-      setSelectedProject(null);
+      try {
+        setIsPublishModalOpen(false);
+        setSelectedProject(null);
+      } catch (stateError) {
+        console.error('❌ Error al cerrar modal y limpiar estado:', stateError);
+        // Intentar forzar el cierre del modal en caso de error
+        setTimeout(() => {
+          setIsPublishModalOpen(false);
+          setSelectedProject(null);
+        }, 500);
+      }
       
       // Mostrar mensaje de éxito
       toast.success('Proyecto publicado con éxito');
       setError(null);
     } catch (err) {
-      console.error('Error al publicar proyecto:', err);
-      toast.error('Error al publicar el proyecto');
-      setError('Hubo un error al publicar el proyecto. Por favor, inténtalo de nuevo.');
+      console.error('❌ Error detallado al publicar proyecto:', err);
+      
+      // Extraer un mensaje más específico del error
+      let errorMessage = 'Error desconocido';
+      
+      if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      console.error('❌ Mensaje de error a mostrar:', errorMessage);
+      toast.error(`Error: ${errorMessage}`);
+      setError(`Hubo un error al publicar el proyecto: ${errorMessage}`);
+      
+      // Dejamos el modal abierto para que el usuario vea el error
     } finally {
       setIsPublishing(false);
     }
@@ -448,7 +485,155 @@ const ProjectsPage = () => {
       </div>
       
       {/* Modal de publicación de proyecto */}
-      <PublishProjectModal
+      {isPublishModalOpen && (
+        <div className="fixed inset-0 z-10 overflow-y-auto">
+          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div 
+              className="fixed inset-0 bg-black/50"
+              onClick={() => {
+                setIsPublishModalOpen(false);
+                setSelectedProject(null);
+              }}
+              aria-hidden="true"
+            ></div>
+            
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
+              &#8203;
+            </span>
+            
+            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div className="bg-white px-4 pt-5 pb-4 sm:p-6">
+                <div className="sm:flex sm:items-start">
+                  <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                    <h3 className="text-lg leading-6 font-medium text-gray-900">
+                      Publicar Proyecto
+                    </h3>
+                    
+                    {error && (
+                      <div className="mt-2 p-3 bg-red-100 border-l-4 border-red-500 rounded text-red-700 text-sm">
+                        <div className="flex items-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                          </svg>
+                          <span>{error}</span>
+                        </div>
+                        {(error.includes('descripción') || error.includes('documento legal')) && (
+                          <div className="mt-2 ml-7">
+                            <p>Para solucionar este problema:</p>
+                            <ul className="list-disc ml-5 mt-1">
+                              {error.includes('descripción') && (
+                                <li className="mt-1">
+                                  <a href={`/admin/projects/${selectedProject?.id}/edit`} className="text-blue-700 underline hover:text-blue-900">Editar la descripción</a> para que tenga al menos 50 caracteres
+                                </li>
+                              )}
+                              {error.includes('documento legal') && (
+                                <li className="mt-1">
+                                  <a href={`/admin/projects/${selectedProject?.id}/documents/add`} className="text-blue-700 underline hover:text-blue-900">Añadir un documento legal</a> al proyecto
+                                </li>
+                              )}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
+                    <div className="mt-4">
+                      <p className="text-sm text-gray-500">
+                        ¿Estás seguro de que deseas publicar este proyecto? 
+                        Una vez publicado, estará visible para todos los socios.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button
+                  type="button"
+                  onClick={() => {
+                    try {
+                      console.log("🚀 Iniciando publicación directa");
+                      setIsPublishing(true);
+                      
+                      // Llamada directa a la API sin usar el modal complejo
+                      fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001/api'}/projects/${selectedProject.id}/publish`, {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                        },
+                        body: JSON.stringify({})
+                      })
+                      .then(response => {
+                        console.log("✅ Respuesta recibida:", response.status);
+                        if (!response.ok) {
+                          // Intentar obtener el mensaje de error detallado del backend
+                          return response.json().then(errorData => {
+                            console.log("❌ Datos de error recibidos:", errorData);
+                            throw new Error(errorData.message || `Error ${response.status}: ${response.statusText}`);
+                          }).catch(jsonError => {
+                            // Si no se puede parsear como JSON, usar el error original
+                            throw new Error(`Error ${response.status}: ${response.statusText}`);
+                          });
+                        }
+                        return response.json();
+                      })
+                      .then(data => {
+                        console.log("✅ Proyecto publicado con éxito:", data);
+                        // Actualizar UI
+                        const updatedProjects = projects.map(project => 
+                          project.id === selectedProject.id ? {...project, status: 'published', draft: false} : project
+                        );
+                        setProjects(updatedProjects);
+                        toast.success('Proyecto publicado con éxito');
+                        setIsPublishModalOpen(false);
+                      })
+                      .catch(error => {
+                        console.error("❌ Error en publicación directa:", error);
+                        setError(`Error al publicar: ${error.message}`);
+                      })
+                      .finally(() => {
+                        setIsPublishing(false);
+                      });
+                    } catch (error) {
+                      console.error("❌ Error general en proceso de publicación:", error);
+                      setError(`Error inesperado: ${error.message}`);
+                      setIsPublishing(false);
+                    }
+                  }}
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary-600 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm"
+                  disabled={isPublishing}
+                >
+                  {isPublishing ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Publicando...
+                    </>
+                  ) : (
+                    'Publicar Proyecto'
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsPublishModalOpen(false);
+                    setSelectedProject(null);
+                  }}
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Modal original (lo dejamos comentado por ahora) */}
+      {/* <PublishProjectModal
         project={selectedProject}
         isOpen={isPublishModalOpen}
         onClose={() => {
@@ -457,7 +642,7 @@ const ProjectsPage = () => {
         }}
         onPublish={handlePublishConfirm}
         isPublishing={isPublishing}
-      />
+      /> */}
     </AdminLayout>
   );
 };
