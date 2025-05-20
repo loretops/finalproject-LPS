@@ -15,39 +15,68 @@ class InterestController {
       const { projectId, notes } = req.body;
       const userId = req.user.id;
 
+      console.log(`[InterestController] Solicitud de interés recibida - Usuario: ${userId}, Proyecto: ${projectId}`);
+
       if (!projectId) {
+        console.warn(`[InterestController] Solicitud rechazada - ID de proyecto no proporcionado`);
         return res.status(400).json({
           message: 'Se requiere el ID del proyecto'
         });
       }
 
-      const interest = await interestService.registerInterest(userId, projectId, notes);
-      res.status(201).json(interest);
+      try {
+        const interest = await interestService.registerInterest(userId, projectId, notes);
+        console.log(`[InterestController] Interés registrado correctamente: ${interest.id}`);
+        res.status(201).json(interest);
+      } catch (serviceError) {
+        console.error(`[InterestController] Error del servicio: ${serviceError.message}`);
+        
+        // Manejar distintos tipos de error con respuestas específicas
+        if (serviceError.message.includes('Ya has mostrado interés') || 
+            serviceError.message.includes('Ya existe un interés')) {
+          return res.status(409).json({ // Conflict
+            message: serviceError.message
+          });
+        }
+        
+        if (serviceError.message.includes('Proyecto no encontrado')) {
+          return res.status(404).json({
+            message: serviceError.message
+          });
+        }
+        
+        if (serviceError.message.includes('Solo se puede mostrar interés en proyectos publicados')) {
+          return res.status(400).json({
+            message: serviceError.message
+          });
+        }
+        
+        // Para errores de Prisma, proporcionar mensajes más amigables
+        if (serviceError.code === 'P2002') {
+          return res.status(409).json({
+            message: 'Ya has mostrado interés en este proyecto'
+          });
+        }
+        
+        if (serviceError.code === 'P2003') {
+          return res.status(400).json({
+            message: 'La referencia al proyecto o usuario no es válida'
+          });
+        }
+        
+        // Error genérico para cualquier otro caso
+        throw serviceError; // Re-lanzar para el manejo general de errores abajo
+      }
     } catch (error) {
-      console.error('Error en InterestController.registerInterest:', error);
+      console.error('[InterestController] Error inesperado en registerInterest:', error);
       
-      // Manejar distintos tipos de error con respuestas específicas
-      if (error.message.includes('Ya has mostrado interés')) {
-        return res.status(409).json({ // Conflict
-          message: error.message
-        });
-      }
-      
-      if (error.message.includes('Proyecto no encontrado')) {
-        return res.status(404).json({
-          message: error.message
-        });
-      }
-      
-      if (error.message.includes('Solo se puede mostrar interés en proyectos publicados')) {
-        return res.status(400).json({
-          message: error.message
-        });
-      }
+      // Detalle técnico solo para logs, no para respuesta al usuario
+      const errorDetail = error.code || error.name || 'UnknownError';
+      console.error(`[InterestController] Tipo de error: ${errorDetail}, Stack: ${error.stack}`);
       
       res.status(500).json({
         message: 'Error al registrar interés en el proyecto',
-        error: error.message
+        error: 'Se ha producido un error interno. Por favor, inténtalo de nuevo más tarde.'
       });
     }
   }

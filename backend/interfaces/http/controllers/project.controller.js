@@ -155,7 +155,10 @@ class ProjectController {
       const { id } = req.params;
       const publisherId = req.user.id;
 
+      console.log(`Intentando publicar proyecto con ID ${id} por usuario ${publisherId}`);
+      
       const publishedProject = await projectService.publishProject(id, publisherId);
+      console.log(`Proyecto ${id} publicado exitosamente`);
       res.status(200).json(publishedProject);
     } catch (error) {
       console.error('Error en ProjectController.publish:', error);
@@ -163,19 +166,40 @@ class ProjectController {
       // Manejar diferentes tipos de error
       if (error.message.includes('no encontrado')) {
         return res.status(404).json({
-          message: error.message
+          message: error.message,
+          type: 'not_found_error'
         });
       }
       
-      if (error.message.includes('ya está publicado')) {
+      // Errores de validación específicos - código 400 (Bad Request)
+      const validationPhrases = [
+        'ya está publicado',
+        'debe tener',
+        'debe especificar',
+        'es requerido',
+        'documento legal',
+        'descripción',
+        'título',
+        'inversión mínima',
+        'monto objetivo',
+        'ubicación',
+        'tipo de propiedad',
+        'al menos',
+        'caracteres'
+      ];
+      
+      if (validationPhrases.some(phrase => error.message.toLowerCase().includes(phrase.toLowerCase()))) {
+        console.log(`Error de validación detectado: ${error.message}`);
         return res.status(400).json({
-          message: error.message
+          message: error.message,
+          type: 'validation_error'
         });
       }
 
       res.status(500).json({
         message: 'Error al publicar el proyecto',
-        error: error.message
+        error: error.message,
+        type: 'server_error'
       });
     }
   }

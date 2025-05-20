@@ -153,16 +153,136 @@ const PublishProjectModal = ({ projectId, isOpen, onClose, onSuccess }) => {
     setError(null);
     
     try {
-      await projectService.publishProject(projectId);
-      if (onSuccess) {
-        onSuccess();
+      console.log('📢 Iniciando publicación del proyecto:', projectId);
+      
+      // Usar fetch directamente para mejor control del manejo de errores
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001/api'}/projects/${projectId}/publish`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify({})
+      });
+      
+      console.log('📢 Respuesta recibida:', response.status, response.statusText);
+      
+      if (!response.ok) {
+        let errorData = {};
+        let errorMessage = `Error ${response.status}: ${response.statusText}`;
+        
+        try {
+          // Intentar parsear el error como JSON
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            errorData = await response.json();
+            console.log('📢 Datos de error recibidos:', errorData);
+            errorMessage = errorData.message || errorMessage;
+          } else {
+            const textError = await response.text();
+            console.log('📢 Texto de error recibido:', textError);
+            errorMessage = textError || errorMessage;
+          }
+        } catch (parseError) {
+          console.error('📢 Error al parsear respuesta de error:', parseError);
+        }
+        
+        console.error('📢 Error en respuesta:', errorMessage);
+        
+        // Actualizar la UI para mostrar el error
+        updateValidationUI(errorMessage);
+        
+        // Mostrar el mensaje de error en el modal
+        setError(errorMessage);
+        
+        throw new Error(errorMessage);
       }
+      
+      const result = await response.json();
+      console.log('📢 Resultado de la publicación:', result);
+      
+      if (onSuccess) {
+        console.log('📢 Llamando a onSuccess');
+        try {
+          onSuccess(result);
+          console.log('📢 onSuccess completado');
+        } catch (callbackError) {
+          console.error('📢 Error en callback onSuccess:', callbackError);
+          // No propagar este error, continuar con el cierre normal
+        }
+      }
+      
+      console.log('📢 Cerrando modal de publicación');
       onClose();
     } catch (err) {
-      console.error('Error al publicar proyecto:', err);
-      setError('No se pudo publicar el proyecto: ' + (err.message || 'Error desconocido'));
+      console.error('📢 Error detallado al publicar proyecto:', err);
+      
+      // Extraer mensaje más específico si está disponible
+      let errorMessage = 'Error desconocido';
+      
+      if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      console.error('📢 Mensaje de error a mostrar:', errorMessage);
+      setError('No se pudo publicar el proyecto: ' + errorMessage);
+      
+      // No cerrar el modal en caso de error para que el usuario vea el mensaje
     } finally {
       setPublishLoading(false);
+    }
+  };
+  
+  // Función para actualizar la UI de validación basada en el mensaje de error
+  const updateValidationUI = (errorMessage) => {
+    if (!errorMessage) return;
+    
+    console.log('📢 Actualizando UI con mensaje de error:', errorMessage);
+    const lowerMessage = errorMessage.toLowerCase();
+    
+    // Actualizar estado de validación basado en el mensaje
+    if (lowerMessage.includes('descripción') || lowerMessage.includes('descripc')) {
+      setChecks(prev => ({
+        ...prev,
+        description: { ...prev.description, pass: false }
+      }));
+    }
+    
+    if (lowerMessage.includes('documento legal') || lowerMessage.includes('documentación legal')) {
+      setChecks(prev => ({
+        ...prev,
+        legalDocs: { ...prev.legalDocs, pass: false }
+      }));
+    }
+    
+    if (lowerMessage.includes('título')) {
+      setChecks(prev => ({
+        ...prev,
+        title: { ...prev.title, pass: false }
+      }));
+    }
+    
+    if (lowerMessage.includes('inversión') || lowerMessage.includes('monto')) {
+      setChecks(prev => ({
+        ...prev,
+        investment: { ...prev.investment, pass: false }
+      }));
+    }
+    
+    if (lowerMessage.includes('ubicación') || lowerMessage.includes('localización')) {
+      setChecks(prev => ({
+        ...prev,
+        location: { ...prev.location, pass: false }
+      }));
+    }
+    
+    if (lowerMessage.includes('roi') || lowerMessage.includes('rentabilidad')) {
+      setChecks(prev => ({
+        ...prev,
+        roi: { ...prev.roi, pass: false }
+      }));
     }
   };
   
@@ -172,7 +292,7 @@ const PublishProjectModal = ({ projectId, isOpen, onClose, onSuccess }) => {
     <div className="fixed inset-0 z-10 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div 
-          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          className="fixed inset-0 bg-black/50"
           onClick={onClose}
           aria-hidden="true"
         ></div>
@@ -201,8 +321,11 @@ const PublishProjectModal = ({ projectId, isOpen, onClose, onSuccess }) => {
                 </h3>
                 
                 {error && (
-                  <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
-                    {error}
+                  <div className="mt-2 p-3 bg-red-100 border-l-4 border-red-500 rounded text-red-700 text-sm">
+                    <div className="flex items-center">
+                      <ExclamationTriangleIcon className="h-5 w-5 mr-2 flex-shrink-0" />
+                      <span>{error}</span>
+                    </div>
                   </div>
                 )}
                 
@@ -229,7 +352,7 @@ const PublishProjectModal = ({ projectId, isOpen, onClose, onSuccess }) => {
                       {Object.entries(checks)
                         .filter(([key]) => ['title', 'description', 'investment', 'location', 'legalDocs'].includes(key))
                         .map(([key, { pass, message }]) => (
-                          <div key={key} className="px-4 py-3 flex items-center">
+                          <div key={key} className={`px-4 py-3 flex items-center ${!pass ? 'bg-red-50' : ''}`}>
                             <div className={`flex-shrink-0 h-5 w-5 ${pass ? 'text-green-500' : 'text-red-500'}`}>
                               {pass ? (
                                 <CheckCircleIcon className="h-5 w-5" />
@@ -238,9 +361,27 @@ const PublishProjectModal = ({ projectId, isOpen, onClose, onSuccess }) => {
                               )}
                             </div>
                             <div className="ml-3">
-                              <p className={`text-sm ${pass ? 'text-gray-800' : 'text-gray-600'}`}>
+                              <p className={`text-sm ${pass ? 'text-gray-800' : 'text-red-700 font-medium'}`}>
                                 {message}
                               </p>
+                              {!pass && ['title', 'description', 'legalDocs'].includes(key) && (
+                                <p className="text-xs text-red-600 mt-1">
+                                  {key === 'title' && 'El título del proyecto es obligatorio y debe ser descriptivo.'}
+                                  {key === 'description' && 'La descripción debe tener al menos 50 caracteres y detallar el proyecto.'}
+                                  {key === 'legalDocs' && (
+                                    <>
+                                      Debe subir al menos un documento legal antes de publicar.
+                                      <a 
+                                        href={`/admin/projects/${projectId}/documents/add`} 
+                                        target="_blank" 
+                                        className="block mt-1 text-blue-600 hover:text-blue-800 underline"
+                                      >
+                                        + Añadir documento legal
+                                      </a>
+                                    </>
+                                  )}
+                                </p>
+                              )}
                             </div>
                           </div>
                         ))

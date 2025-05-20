@@ -11,14 +11,36 @@ const interestService = {
    * @returns {Promise<Object>} Información del interés registrado
    */
   async registerInterest(projectId, notes = null) {
+    // Verificación previa del ID del proyecto
+    if (!projectId) {
+      console.error('registerInterest: Se intentó registrar interés con un projectId nulo o vacío');
+      throw new Error('ID de proyecto no válido');
+    }
+
     try {
+      console.log(`Intentando registrar interés en proyecto: ${projectId}`);
+      
       const response = await apiClient.post('/interests', {
         projectId,
         notes
       });
+      
+      console.log('Interés registrado exitosamente:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error al registrar interés:', error);
+      // Si el error es de tipo 409 (Conflict), proporcionar un mensaje más descriptivo
+      if (error.response && error.response.status === 409) {
+        console.log('Ya has mostrado interés en este proyecto anteriormente');
+      } else if (error.response && error.response.status === 500) {
+        // Para errores del servidor, intentar extraer información detallada
+        console.error('Error 500 del servidor al registrar interés:', {
+          projectId,
+          errorDetail: error.response?.data,
+          statusText: error.response?.statusText
+        });
+      } else {
+        console.error('Error al registrar interés:', error);
+      }
       throw error;
     }
   },
@@ -94,10 +116,26 @@ const interestService = {
    * @returns {Promise<boolean>} Verdadero si el usuario tiene interés activo
    */
   async checkUserInterest(projectId) {
+    if (!projectId) {
+      console.warn('checkUserInterest: Se proporcionó un projectId inválido');
+      return false;
+    }
+    
     try {
       // Obtenemos los intereses del usuario y filtramos por el proyecto específico
       const interests = await this.getUserInterests({ status: 'active' });
-      return interests.some(interest => interest.project?.id === projectId);
+      
+      if (!Array.isArray(interests)) {
+        console.warn('checkUserInterest: La respuesta no es un array válido');
+        return false;
+      }
+      
+      // Comprobamos si existe algún interés en este proyecto específico
+      const hasInterest = interests.some(interest => 
+        interest && interest.project && interest.project.id === projectId
+      );
+      
+      return hasInterest;
     } catch (error) {
       console.error(`Error al verificar interés en proyecto ${projectId}:`, error);
       // Si hay un error, devolvemos false para no bloquear la UI

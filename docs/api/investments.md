@@ -113,7 +113,7 @@ GET /users/me/investments
 
 | Parámetro | Tipo   | Requerido | Descripción                                           |
 |-----------|--------|-----------|-------------------------------------------------------|
-| status    | string | No        | Filtrar por estado (pending, confirmed, rejected, cancelled) |
+| status    | string | No        | Filtrar por estado (pending, confirmed, rejected, canceled) |
 | page      | number | No        | Número de página (por defecto: 1)                     |
 | limit     | number | No        | Cantidad de elementos por página (por defecto: 10)    |
 
@@ -196,7 +196,7 @@ GET /projects/:projectId/investments
 
 | Parámetro | Tipo   | Requerido | Descripción                                           |
 |-----------|--------|-----------|-------------------------------------------------------|
-| status    | string | No        | Filtrar por estado (pending, confirmed, rejected, cancelled) |
+| status    | string | No        | Filtrar por estado (pending, confirmed, rejected, canceled) |
 | page      | number | No        | Número de página (por defecto: 1)                     |
 | limit     | number | No        | Cantidad de elementos por página (por defecto: 10)    |
 
@@ -445,7 +445,7 @@ PATCH /investments/:id/status
 
 | Parámetro         | Tipo   | Requerido | Descripción                                        |
 |-------------------|--------|-----------|---------------------------------------------------|
-| status            | string | Sí        | Nuevo estado (pending, confirmed, rejected, cancelled) |
+| status            | string | Sí        | Nuevo estado (pending, confirmed, rejected, canceled) |
 | contractReference | string | No        | Referencia del contrato (requerido para 'confirmed') |
 
 #### Cabeceras requeridas
@@ -527,4 +527,6 @@ Content-Type: application/json
   "message": "Error al actualizar estado de la inversión",
   "error": "Detalles del error"
 }
-``` 
+```
+
+> Nota: Por retrocompatibilidad, el sistema acepta tanto "canceled" como "cancelled", pero internamente se estandariza a "canceled". 

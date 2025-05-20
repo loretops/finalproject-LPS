@@ -70,7 +70,7 @@ router.patch('/investments/:investmentId/status',
   roleAuthMiddleware(['manager', 'admin']),
   [
     param('investmentId').isUUID().withMessage('ID de inversión inválido'),
-    body('status').isIn(['pending', 'confirmed', 'rejected', 'canceled']).withMessage('Estado inválido'),
+    body('status').isIn(['pending', 'confirmed', 'rejected', 'canceled', 'cancelled']).withMessage('Estado inválido'),
     body('contractReference').optional().isString().trim().isLength({ max: 255 }).withMessage('La referencia de contrato no puede exceder 255 caracteres')
   ],
   investmentController.updateInvestmentStatus

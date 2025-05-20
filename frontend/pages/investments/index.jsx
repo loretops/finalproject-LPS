@@ -14,9 +14,12 @@ import {
   CheckCircleIcon, 
   XCircleIcon, 
   BuildingLibraryIcon,
-  ArrowPathIcon
+  ArrowPathIcon,
+  ChevronRightIcon
 } from '@heroicons/react/24/outline';
 import { formatCurrency } from '../../utils/formatters';
+import { handleClientError } from '../../utils/errorHandler';
+import errorMonitor from '../../utils/errorMonitor';
 
 /**
  * Página de "Mis Inversiones" donde los socios pueden ver y gestionar sus inversiones
@@ -37,29 +40,34 @@ const MyInvestmentsPage = () => {
     { id: 'all', label: 'Todas' },
     { id: 'pending', label: 'Pendientes' },
     { id: 'confirmed', label: 'Confirmadas' },
-    { id: 'cancelled', label: 'Canceladas' },
+    { id: 'canceled', label: 'Canceladas' },
     { id: 'rejected', label: 'Rechazadas' }
   ];
   
   // Cargar inversiones del usuario
   const loadInvestments = async (status = null) => {
-    setIsLoading(true);
-    setError(null);
-    
     try {
-      // Opciones para el filtrado
-      const options = { limit: 50 };
-      if (status && status !== 'all') {
+      setIsLoading(true);
+      setError(null);
+      
+      const options = {};
+      if (status) {
         options.status = status;
       }
       
-      // Obtener lista de inversiones
       const response = await investmentService.getUserInvestments(options);
       setInvestments(response.data || []);
     } catch (err) {
-      console.error('Error al cargar inversiones:', err);
+      errorMonitor.logError(err, {
+        component: 'MyInvestmentsPage',
+        action: 'loadInvestments',
+        additionalData: { status }
+      });
+      
       setError('No se pudieron cargar tus inversiones. Por favor, inténtalo de nuevo más tarde.');
-      toast.error('Error al cargar tus inversiones');
+      handleClientError(err, { 
+        context: 'Error al cargar inversiones'
+      });
     } finally {
       setIsLoading(false);
     }
@@ -80,15 +88,26 @@ const MyInvestmentsPage = () => {
       // Actualizar la lista de inversiones para reflejar la cancelación
       setInvestments(investments.map(investment => 
         investment.id === investmentId 
-          ? { ...investment, status: 'cancelled' } 
+          ? { ...investment, status: 'canceled' } 
           : investment
       ));
       
       // Mostrar mensaje de éxito
       toast.success(`Se ha cancelado tu inversión en ${projectTitle || 'el proyecto'}`);
     } catch (err) {
-      console.error('Error al cancelar inversión:', err);
-      toast.error(err.message || 'No se pudo cancelar la inversión');
+      // Monitorear los errores 500
+      if (err.status >= 500) {
+        errorMonitor.logServerError(err, {
+          component: 'MyInvestmentsPage',
+          action: 'cancelInvestment',
+          additionalData: { investmentId }
+        });
+      }
+      
+      // Mostrar error amigable al usuario
+      handleClientError(err, { 
+        context: 'Error al cancelar la inversión'
+      });
     } finally {
       setCancellingId(null);
     }
@@ -113,7 +132,7 @@ const MyInvestmentsPage = () => {
         return <ClockIcon className="h-5 w-5 text-yellow-500" />;
       case 'confirmed':
         return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
-      case 'cancelled':
+      case 'canceled':
         return <XCircleIcon className="h-5 w-5 text-gray-500" />;
       case 'rejected':
         return <XCircleIcon className="h-5 w-5 text-red-500" />;
@@ -127,7 +146,7 @@ const MyInvestmentsPage = () => {
     switch (status) {
       case 'pending': return 'Pendiente';
       case 'confirmed': return 'Confirmada';
-      case 'cancelled': return 'Cancelada';
+      case 'canceled': return 'Cancelada';
       case 'rejected': return 'Rechazada';
       default: return 'Desconocido';
     }

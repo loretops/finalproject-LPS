@@ -1,5 +1,6 @@
 const PrismaProjectRepository = require('../../infrastructure/repositories/PrismaProjectRepository');
 const { toProjectResponse, toProjectListItem } = require('../../interfaces/http/dto/project.dto');
+const Project = require('../../domain/entities/project');
 
 // Instanciar el repositorio (podría usar Inyección de Dependencias para mejor testabilidad)
 const projectRepository = new PrismaProjectRepository();
@@ -186,13 +187,48 @@ class ProjectService {
 
     try {
       // Verificar que el proyecto existe y es un borrador
-      const existingProject = await projectRepository.findById(id);
+      const existingProject = await projectRepository.findById(id, { includeDocuments: true });
       if (!existingProject) {
         throw new Error('Proyecto no encontrado');
       }
 
       if (!existingProject.draft) {
         throw new Error('El proyecto ya está publicado');
+      }
+
+      // Realizar validaciones adicionales
+      // 1. Verificar longitud mínima de la descripción
+      if (!existingProject.description || existingProject.description.trim().length < 50) {
+        throw new Error('La descripción del proyecto debe tener al menos 50 caracteres');
+      }
+
+      // 2. Verificar que tiene al menos un documento legal (DESHABILITADO TEMPORALMENTE EN DESARROLLO)
+      /* COMENTADO TEMPORALMENTE PARA DESARROLLO
+      const hasLegalDocs = existingProject.documents && 
+                           existingProject.documents.some(doc => doc.documentType === 'legal');
+      if (!hasLegalDocs) {
+        console.log('Error de validación: No se encontraron documentos legales para el proyecto', id);
+        throw new Error('El proyecto debe tener al menos un documento legal antes de ser publicado');
+      }
+      */
+      console.log('NOTA: Validación de documentos legales temporalmente deshabilitada para desarrollo');
+
+      // 3. Validar otros campos obligatorios usando el método de la entidad
+      const projectEntity = new Project({
+        id: existingProject.id,
+        title: existingProject.title,
+        description: existingProject.description,
+        minimumInvestment: existingProject.minimumInvestment,
+        targetAmount: existingProject.targetAmount,
+        expectedRoi: existingProject.expectedRoi,
+        location: existingProject.location,
+        propertyType: existingProject.propertyType
+      });
+      
+      try {
+        projectEntity.validateForPublication();
+      } catch (validationError) {
+        throw validationError; // Propagar el error de validación
       }
 
       const publishedProject = await projectRepository.publish(id, publisherId);

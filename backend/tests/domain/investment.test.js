@@ -74,8 +74,8 @@ describe('Investment Entity', () => {
       investment.updateStatus('rejected');
       expect(investment.status).toBe('rejected');
       
-      investment.updateStatus('cancelled');
-      expect(investment.status).toBe('cancelled');
+      investment.updateStatus('canceled');
+      expect(investment.status).toBe('canceled');
       
       investment.updateStatus('pending');
       expect(investment.status).toBe('pending');
@@ -111,14 +111,14 @@ describe('Investment Entity', () => {
         status: 'rejected'
       });
       
-      const cancelledInvestment = new Investment({
+      const canceledInvestment = new Investment({
         ...validInvestmentData,
-        status: 'cancelled'
+        status: 'canceled'
       });
       
       expect(confirmedInvestment.isPending()).toBe(false);
       expect(rejectedInvestment.isPending()).toBe(false);
-      expect(cancelledInvestment.isPending()).toBe(false);
+      expect(canceledInvestment.isPending()).toBe(false);
     });
   });
   
@@ -143,14 +143,14 @@ describe('Investment Entity', () => {
         status: 'rejected'
       });
       
-      const cancelledInvestment = new Investment({
+      const canceledInvestment = new Investment({
         ...validInvestmentData,
-        status: 'cancelled'
+        status: 'canceled'
       });
       
       expect(pendingInvestment.isConfirmed()).toBe(false);
       expect(rejectedInvestment.isConfirmed()).toBe(false);
-      expect(cancelledInvestment.isConfirmed()).toBe(false);
+      expect(canceledInvestment.isConfirmed()).toBe(false);
     });
   });
   

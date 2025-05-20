@@ -88,15 +88,16 @@ describe('InvestmentService', () => {
       expect(prisma.project.findUnique).toHaveBeenCalledWith({
         where: { id: investmentData.projectId }
       });
-      expect(prisma.investment.create).toHaveBeenCalledWith({
+      expect(prisma.investment.create).toHaveBeenCalledWith(expect.objectContaining({
         data: expect.objectContaining({
           userId: investmentData.userId,
           projectId: investmentData.projectId,
           amount: investmentData.amount,
           notes: investmentData.notes,
           status: 'pending'
-        })
-      });
+        }),
+        include: expect.any(Object)
+      }));
       expect(prisma.project.update).toHaveBeenCalledWith({
         where: { id: investmentData.projectId },
         data: {
@@ -213,7 +214,7 @@ describe('InvestmentService', () => {
       };
       const mockUpdatedInvestment = {
         ...mockInvestment,
-        status: 'cancelled'
+        status: 'canceled'
       };
       
       // Mock prisma client responses

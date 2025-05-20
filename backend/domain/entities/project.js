@@ -131,8 +131,11 @@ class Project {
     if (!this.title || this.title.trim() === '') 
       throw new Error('El proyecto debe tener un título');
     
-    if (!this.description || this.description.trim() === '') 
+    if (!this.description) 
       throw new Error('El proyecto debe tener una descripción');
+    
+    if (this.description.trim().length < 50)
+      throw new Error('La descripción del proyecto debe tener al menos 50 caracteres (actualmente tiene ' + this.description.trim().length + ')');
     
     if (!this.minimumInvestment || this.minimumInvestment <= 0)
       throw new Error('El proyecto debe especificar una inversión mínima válida');

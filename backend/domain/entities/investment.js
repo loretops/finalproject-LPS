@@ -37,6 +37,11 @@ class Investment {
    * @param {string} newStatus - Nuevo estado ('pending', 'confirmed', 'rejected', 'canceled')
    */
   updateStatus(newStatus) {
+    // Convertir 'cancelled' a 'canceled' para mantener compatibilidad
+    if (newStatus === 'cancelled') {
+      newStatus = 'canceled';
+    }
+    
     const validStatuses = ['pending', 'confirmed', 'rejected', 'canceled'];
     
     if (!validStatuses.includes(newStatus)) {

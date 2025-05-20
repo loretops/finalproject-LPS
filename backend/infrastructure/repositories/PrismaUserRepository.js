@@ -60,6 +60,26 @@ class PrismaUserRepository extends UserRepository {
     }
   }
 
+  /**
+   * Updates a user by their ID
+   * @param {string} id - The ID of the user to update
+   * @param {Object} data - The data to update
+   * @returns {Promise<User>} The updated user
+   */
+  async update(id, data) {
+    try {
+      const updatedUser = await prisma.user.update({
+        where: { id },
+        data
+      });
+
+      return updatedUser;
+    } catch (error) {
+      console.error("Error updating user in PrismaUserRepository:", error);
+      throw error;
+    }
+  }
+
   // Implement other methods (create, update, etc.) as needed
 }
 
