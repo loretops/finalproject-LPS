@@ -86,7 +86,7 @@ const Navbar = () => {
   const navItems = navigation.filter(item => item.public || user);
 
   return (
-    <Disclosure as="nav" className={`fixed w-full z-10 transition-all duration-300 ${
+    <Disclosure as="nav" className={`fixed w-full z-20 transition-all duration-300 ${
       isScrolled ? 'bg-white shadow-md' : 'bg-transparent'
     }`}>
       {({ open }) => (
