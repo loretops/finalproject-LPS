@@ -15,6 +15,7 @@ Puedes añadir adicionalmente la conversación completa como link o archivo adju
 9. [Configuración del proyecto](#9-configuración-del-proyecto)
 10. [Estandarización de la interfaz](#10-estandarización-de-la-interfaz)
 11. [Historias de Usuario específicas](#11-historias-de-usuario-específicas)
+12. [Despliegue y configuración de entornos](#12-despliegue-y-configuración-de-entornos)
 
 ---
 
@@ -446,3 +447,18 @@ Prompt para desarrollar la funcionalidad de "Marcar Invierto" que permite a los 
 ## Sistema de errores y logging
 
 - "Por ahora atcualiza si es necesario @investment-flow.md  y @development_status.md. Y vete haciendo uno por uno los siguientes puntos: * Manejo de errores en cliente: El frontend muestra mensajes de error genéricos. Sería bueno mejorar la claridad de estos mensajes para que los usuarios entiendan exactamente qué ocurrió. * Monitoreo de errores 500: Sería bueno implementar algún sistema de alerta o logging más detallado para errores 500, ya que son críticos y pueden indicar problemas graves en la aplicación."
+
+## 12. Despliegue y configuración de entornos
+
+**Prompt 1:**
+```
+Acuerdate de las @rules.mdc  
+Entonces, podemos considerar que tenemos un MVP. 
+Necesitamos prepararnos para realizar el despliegue. Hay que evaluar dos opciones:
+1. Entorno temporal de prueba en servicios gratuitos
+2. Entorno privado, definitivo
+
+Para ambas opciones analiza la infaestructura completa necesaria para llevar a cabo el despliegue del MVP. Si se trata de la opción 2, debe dar soporte a la escalabilidad del proyecto. La infraestructura debe ser segura, estable y a la vez buscar la opción más barata. 
+
+Creo que tenemos documentación acerca de este tipo de información. Si lo crees conveniente, guarda tus concluisones en un documento antiguo, o existente, Lo que resulta mejor para poder tomar deicisiones y tener documentación para revisar en el futuro
+```
