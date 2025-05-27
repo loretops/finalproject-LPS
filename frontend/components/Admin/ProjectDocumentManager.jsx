@@ -126,71 +126,22 @@ const ProjectDocumentManager = ({ projectId, readOnly = false }) => {
     
     setIsLoading(true);
     setError(null);
-    
-    // Mostrar mensaje de carga
-    setSuccessMessage('Procesando documento... Por favor espera.');
-    
+    setSuccessMessage('Subiendo documento... Por favor espera.');
     try {
-      // NUEVA SOLUCIÓN: Eludir el problema de Multer dividiendo el proceso en dos pasos
-      
-      // Paso 1: Crear un registro de documento TEMPORAL con JSON (sin archivo)
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001/api';
-      const metadataUrl = `${API_URL}/documents/create-empty`;
-      
-      // Preparar metadatos
-      const metadata = {
+      // Subida real al backend (y Cloudinary)
+      const uploaded = await documentService.uploadDocument(
         projectId,
-        documentType: newDocument.documentType || 'legal',
-        accessLevel: newDocument.accessLevel || 'partner',
-        securityLevel: newDocument.securityLevel || 'view_only',
-        title: newDocument.title || newDocument.file.name,
-        description: newDocument.description || '',
-        tempKey: Date.now().toString() // Clave única para este proceso
-      };
-      
-      console.log('Solución alternativa en dos pasos:');
-      console.log('1. Crear documento vacío con metadatos:', metadata);
-      
-      // SIMPLIFICACIÓN: Como sabemos que el endpoint de arriba no existe,
-      // en este MVP vamos a crear un documento "falso" para poder mostrar la funcionalidad
-      // En un entorno de producción, se implementaría correctamente este endpoint
-      
-      // Simular creación exitosa de documento (solo para el MVP)
-      const mockDocumentId = `temp-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-      const mockDocument = {
-        id: mockDocumentId,
-        ...metadata,
-        createdAt: new Date().toISOString(),
-        url: URL.createObjectURL(newDocument.file) // URL temporal para visualización
-      };
-      
-      // En un proyecto real, se usaría este código:
-      /*
-      const response = await fetch(metadataUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-        },
-        body: JSON.stringify(metadata)
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || errorData.error || 'Error al crear registro de documento');
-      }
-      
-      const documentData = await response.json();
-      */
-      
-      // Paso 2: Crear una entrada local en memoria mientras se implementa el backend
-      console.log('2. Documento creado localmente (simulado):', mockDocument);
-      
-      // Actualizar mensaje para el usuario
+        newDocument.file,
+        {
+          documentType: newDocument.documentType,
+          accessLevel: newDocument.accessLevel,
+          securityLevel: newDocument.securityLevel,
+          title: newDocument.title,
+          description: newDocument.description
+        }
+      );
       setSuccessMessage('¡Documento subido correctamente!');
       setTimeout(() => setSuccessMessage(''), 3000);
-      
-      // Resetear formulario
       setNewDocument({
         file: null,
         documentType: 'legal',
@@ -199,17 +150,9 @@ const ProjectDocumentManager = ({ projectId, readOnly = false }) => {
         title: '',
         description: ''
       });
-      
-      // Limpiar progreso
       setUploadProgress({});
-      
-      // Actualizar la lista de documentos
-      setDocuments(prev => [mockDocument, ...prev]);
-      
-      // Mostrar mensaje explicativo para desarrollo (solo durante el MVP)
-      console.info('NOTA DE DESARROLLO: En esta versión MVP, los documentos se muestran localmente ' +
-                   'pero no persisten en el servidor. Una vez implementado el endpoint correcto ' +
-                   'en el backend, se enviará el archivo al servidor correctamente.');
+      // Recargar documentos desde el backend
+      loadDocuments();
     } catch (err) {
       console.error('Error al subir documento:', err);
       setError('Error al subir el documento. ' + (err.message || 'Por favor, inténtalo de nuevo.'));

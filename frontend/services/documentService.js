@@ -29,6 +29,11 @@ const documentService = {
       // Usar apiClient que ya tiene configurado el interceptor para el token
       const response = await apiClient.get(`/projects/${projectId}/documents${queryString}`);
       
+      // Manejar formato con propiedad 'documents'
+      if (response.data.documents && Array.isArray(response.data.documents)) {
+        return response.data.documents;
+      }
+      
       // Asegurar que la respuesta es un array
       if (!response.data) {
         console.warn('La respuesta de getProjectDocuments no tiene datos');
@@ -106,17 +111,15 @@ const documentService = {
       // Crear FormData con el mínimo de campos posible
       const formData = new FormData();
       formData.append(fieldName, file);
-      
-      // Añadir solo los campos requeridos mínimos
-      // NO añadir ningún otro campo para evitar problemas de procesamiento
       formData.append('documentType', metadata.documentType || 'legal');
       formData.append('accessLevel', metadata.accessLevel || 'partner');
+      formData.append('securityLevel', metadata.securityLevel || 'view_only');
       
       console.log('Enviando documento al servidor:');
       console.log('- Endpoint:', endpoint);
       console.log('- Tipo de archivo:', file.type);
       console.log('- Nombre del campo:', fieldName);
-      console.log('- Campos en FormData: document, documentType, accessLevel');
+      console.log('- Campos en FormData: document, documentType, accessLevel, securityLevel');
       
       // Usar fetch nativo en lugar de axios para máxima compatibilidad
       // Esto evita cualquier transformación que pueda estar haciendo axios
@@ -162,6 +165,7 @@ const documentService = {
           minimalForm.append(fieldName, file);
           minimalForm.append('documentType', metadata.documentType || 'legal');
           minimalForm.append('accessLevel', metadata.accessLevel || 'partner');
+          minimalForm.append('securityLevel', metadata.securityLevel || 'view_only');
           
           // Usar axios directamente con configuración mínima
           const response = await axios.post(`${API_URL}${endpoint}`, minimalForm, {

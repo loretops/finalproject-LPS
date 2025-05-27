@@ -875,6 +875,7 @@ Esta estrategia de pruebas en múltiples niveles ayuda a detectar problemas temp
         VARCHAR file_type "idx"
         VARCHAR access_level
         VARCHAR document_type "idx"
+        VARCHAR title "Nombre del documento"
         VARCHAR security_level
         TIMESTAMP created_at
     }
@@ -1100,6 +1101,7 @@ Documentos asociados a un proyecto, como archivos legales, técnicos, imágenes,
 | document_type | VARCHAR | Categoría (legal, economic, technical, image, video) | NOT NULL |
 | access_level | VARCHAR | Nivel de acceso (public, partner, investor) | NOT NULL |
 | security_level | VARCHAR | Nivel de seguridad (downloadable, view_only, watermarked) | NOT NULL, DEFAULT: 'view_only' |
+| title | VARCHAR | Nombre del documento | NULLABLE |
 | created_at | TIMESTAMP | Fecha de creación | NOT NULL, DEFAULT: now() |
 
 ##### Índices

@@ -20,6 +20,8 @@ class ProjectDocumentController {
    */
   async uploadProjectDocument(req, res) {
     try {
+      console.log('req.body:', req.body);
+      console.log('req.file:', req.file);
       const { projectId } = req.params;
       const file = req.file;
       

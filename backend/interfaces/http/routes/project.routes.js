@@ -53,11 +53,11 @@ router.post(
 
 // POST /api/projects/:id/documents - Subir documento a un proyecto
 // Protegido: Requiere autenticación (JWT) y rol 'manager'
-router.post(
-  '/:id/documents',
-  jwtAuthMiddleware,
-  roleAuthMiddleware('manager'),
-  projectController.addDocument
-);
+// router.post(
+//   '/:id/documents',
+//   jwtAuthMiddleware,
+//   roleAuthMiddleware('manager'),
+//   projectController.addDocument
+// );
 
 module.exports = router; 
