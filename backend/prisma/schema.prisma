@@ -118,6 +118,7 @@ model ProjectDocument {
   documentType  String         @map("document_type")
   accessLevel   String         @map("access_level")
   securityLevel String         @default("view_only") @map("security_level")
+  title         String?        @map("title")
   createdAt     DateTime       @default(now()) @map("created_at")
   views         DocumentView[]
   project       Project        @relation(fields: [projectId], references: [id])

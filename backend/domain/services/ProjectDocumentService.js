@@ -4,7 +4,12 @@
  */
 
 const { PrismaClient } = require('@prisma/client');
-const LocalStorageService = require('../../infrastructure/external/storage/LocalStorageService');
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
+const createError = require('http-errors');
+const fs = require('fs-extra');
+const mime = require('mime-types');
+const storageService = require('../../infrastructure/external/storage/StorageFactory');
 const { 
   PROJECT_DOCUMENT_TYPES, 
   ACCESS_LEVELS, 
@@ -16,7 +21,7 @@ const {
 class ProjectDocumentService {
   constructor() {
     this.prisma = new PrismaClient();
-    this.storageService = new LocalStorageService(); // Podría ser inyectado por DI
+    this.storageService = storageService;
   }
 
   /**
@@ -101,7 +106,8 @@ class ProjectDocumentService {
           fileType: file.mimetype,
           documentType,
           accessLevel,
-          securityLevel
+          securityLevel,
+          title: metadata.title || file.originalname
         }
       });
 
@@ -185,6 +191,9 @@ class ProjectDocumentService {
 
       // Eliminar archivo físico
       await this.storageService.deleteFile(document.fileUrl);
+
+      // Eliminar vistas asociadas para evitar violación de clave foránea
+      await this.prisma.documentView.deleteMany({ where: { documentId } });
 
       // Eliminar registro de base de datos
       await this.prisma.projectDocument.delete({

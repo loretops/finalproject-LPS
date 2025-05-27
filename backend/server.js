@@ -6,6 +6,8 @@ require('dotenv').config({ path: '../.env' }); // Luego carga el .env de la raí
 const express = require('express');
 const path = require('path'); // Agregar path para manejar rutas de archivos
 const { PrismaClient } = require('@prisma/client');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 // Rutas API 
 const authRoutes = require('./interfaces/http/routes/auth.routes');
@@ -28,28 +30,56 @@ const app = express();
 const prisma = new PrismaClient();
 const port = process.env.BACKEND_PORT || 8001;
 
-// Middleware
-app.use(express.json());
+// Middleware de seguridad
+app.use(helmet());
+
+// Configurar rate limiting
+const limiter = rateLimit({
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW || 15) * 60 * 1000, // 15 minutos por defecto
+  max: parseInt(process.env.RATE_LIMIT_MAX || 100), // límite de 100 solicitudes por ventana
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Demasiadas solicitudes, por favor intente más tarde' }
+});
+
+// Aplicar límite de tasa a todas las solicitudes
+app.use(limiter);
+
+// Middleware estándar
+app.use(express.json({ limit: '1mb' })); // Limitar tamaño de payload
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 // Servir archivos estáticos desde el directorio 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Habilitar CORS
 app.use((req, res, next) => {
-  // En desarrollo, aceptar cualquier origen
-  const allowedOrigins = ['http://localhost:3001', 'http://localhost:3000'];
-  const origin = req.headers.origin;
+  // Usar la variable de entorno CORS_ORIGIN si está definida
+  const corsOrigin = process.env.CORS_ORIGIN || '*';
   
-  if (allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
+  if (corsOrigin === '*') {
+    // En desarrollo, aceptar orígenes configurados o cualquiera
+    const allowedOrigins = ['http://localhost:3001', 'http://localhost:3000'];
+    const origin = req.headers.origin;
+    
+    if (allowedOrigins.includes(origin)) {
+      res.header('Access-Control-Allow-Origin', origin);
+    } else {
+      res.header('Access-Control-Allow-Origin', '*');
+    }
   } else {
-    // Para desarrollo, permitir cualquier origen
-    res.header('Access-Control-Allow-Origin', '*');
+    // En producción, usar el origen específico configurado
+    res.header('Access-Control-Allow-Origin', corsOrigin);
   }
   
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
   res.header('Access-Control-Allow-Credentials', 'true');
+  
+  // Cabeceras de seguridad recomendadas por OWASP
+  res.header('X-Content-Type-Options', 'nosniff');
+  res.header('X-Frame-Options', 'DENY');
+  res.header('Content-Security-Policy', "default-src 'self'");
   
   if (req.method === 'OPTIONS') {
     return res.sendStatus(200);
