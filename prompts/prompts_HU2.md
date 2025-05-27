@@ -153,7 +153,12 @@ Lo primero quiero saber si has probado el nuevo desarrollo, y actualizado @devel
 
 **Prompt 20:**
 ```
-si, contonua con el tcket 28. Cuando podré ver el listado de proyectos como socio?
+si, continua con el ticket 28. Cuando podré ver el listado de proyectos como socio?
+```
+
+**Prompt 21:**
+```
+Por qué hacemos un test usando la documentación de Cloudinary para visualizar documentos (guardados en la base de datos)? Si necesitas algún dato de un documento que tengo almacenado en Cloudinary, pregúntame. Quizá haga falta revisar todo el desarrollo relativo a almacenamiento, gestión y acceso de documentos.
 ```
 
 ## Implementación Ticket #26: Página de detalle de proyecto para socios

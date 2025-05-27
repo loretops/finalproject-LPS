@@ -462,3 +462,48 @@ Para ambas opciones analiza la infaestructura completa necesaria para llevar a c
 
 Creo que tenemos documentación acerca de este tipo de información. Si lo crees conveniente, guarda tus concluisones en un documento antiguo, o existente, Lo que resulta mejor para poder tomar deicisiones y tener documentación para revisar en el futuro
 ```
+
+**Prompt 2:**
+```
+dime todas las opcioines de despliegue en un entorno real, busacndo pros y contras en cuanto a costes y facilidad de gestion y mantenimeinto del proyecto
+```
+
+**Prompt 3:**
+```
+si quisiera usar servicios de pago, que tengan una buena relación calidad precio, y que sea una infarestructura sencilla, ¿qué me recomiendas? Revias bien mi proyecto, para que no sete escape nada
+```
+
+**Prompt 4:**
+```
+es mejor eso? No es mejor un servidor VPS en cualquier hosting como tropical server?
+```
+
+**Prompt 5:**
+```
+en un VPS en Tropical srever podría desplegar por completo mi MVP? Incluido el almacenamiento de documentos? Por cierto llevas siglos olvidandote de las @rules.mdc 
+```
+
+**Prompt 6:**
+```
+Bueno, todas tus respuetsas me han parecido muy interesantes, pero respecto a las @rules.mdc es que no estás actualizando los @prompts.md , y ya hay muchos prompts que has omitido. A ver si consigues actualizar un poco el archivo
+```
+
+**Prompt 7:**
+```
+Vamos a empezar el despliegue, paso a paso. eres un senior DevOps Engineer. Necesito que me guies en el proceso de despliegue que hemos definido en entornos gratuitod. necesito que sean entornos a los que el Product Owner pueda acceder para testearlo. Has creado un archivo @deployment_free.md : revisalo primero, si quieres, y cuando te parezca adecuado comenzamos po rel primer paso. Revisa si es posible que en vez de Resend usemos GMAIL. Necesito además que uses buenas practicas según el codigo OWASP. Y como siempre que te acuerdes de las @rules.mdc , y por tanto actualices los archivos indicados.
+```
+
+## 11. Mejora de componentes y servicios
+
+### 11.1 Cloudinary y gestión de documentos
+
+**Prompt:**
+```
+@Cliudinary Assets Management 
+Revisa bien como acceder a los documentos almacenados en Cloudinary, e incluso com opoder descargarlos. Revisa la gestion completa de los documentos en nuestro proyecto, porque es una parte básica y fundamental. De hecho, si quieres, puedes desarrollar primero este punto en todos sus casos de uso. ¿Dónde quieres ampliar este tema, en el documento @tickets.md ? Es importante revisar cada caso de uso, y con la documentacion de cloudinary asegurarnos que funciona bien, aunque siempre debemos dejar todo preparado, en la medida que se pueda, para poder usar en el futuro otro gestor de documentación
+```
+
+**Prompt:**
+```
+quiero que desarrolles todos los tickets en un nuevo documento en markdown, en la carpeta@product , y de forma completa con todos los casos de uso, y todos los escenarios según los tipos de documentos qe se pueden subir, los niveles de acceso, y los niveles de seguridad. Que cada actor tenga los accesos adecuados para cada caso de uso. Revisa toda la documentación que necesites: @tickets.md , @user-stories.md , @readme.md . Y apoyate en la documentacion de cloudinary @Cliudinary Assets Management 
+```
