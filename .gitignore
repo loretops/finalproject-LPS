@@ -40,3 +40,5 @@ yarn-error.log*
 ## Excepciones
 # Pero incluir las imágenes de documentación
 !docs/images/ 
+.env.cloud
+.env.cloud
