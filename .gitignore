@@ -39,3 +39,4 @@ yarn-error.log*
 !docs/images/ 
 .env.cloud
 .env.cloud
+.env
