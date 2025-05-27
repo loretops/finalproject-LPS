@@ -28,7 +28,8 @@ console.log('DEBUG STARTUP - Reading FRONTEND_URL env var:', process.env.FRONTEN
 // Inicialización
 const app = express();
 const prisma = new PrismaClient();
-const port = process.env.BACKEND_PORT || 8001;
+const port = process.env.BACKEND_PORT || process.env.PORT || 8001;
+const baseUrl = process.env.BASE_URL || `http://localhost:${port}`;
 
 // Middleware de seguridad
 app.use(helmet());
@@ -57,9 +58,15 @@ app.use((req, res, next) => {
   // Usar la variable de entorno CORS_ORIGIN si está definida
   const corsOrigin = process.env.CORS_ORIGIN || '*';
   
+  // Usar frontendUrl para CORS si está disponible
+  const frontendUrl = process.env.FRONTEND_URL;
+  
   if (corsOrigin === '*') {
     // En desarrollo, aceptar orígenes configurados o cualquiera
-    const allowedOrigins = ['http://localhost:3001', 'http://localhost:3000'];
+    const allowedOrigins = frontendUrl 
+      ? [frontendUrl, 'http://localhost:3001', 'http://localhost:3000'] 
+      : ['http://localhost:3001', 'http://localhost:3000'];
+    
     const origin = req.headers.origin;
     
     if (allowedOrigins.includes(origin)) {
@@ -132,8 +139,8 @@ module.exports = app;
 // <<< Iniciar servidor solo si el script se ejecuta directamente >>>
 if (require.main === module) {
   const server = app.listen(port, () => {
-    console.log(`Servidor backend ejecutándose en http://localhost:${port}`);
-    console.log(`Archivos estáticos disponibles en http://localhost:${port}/uploads`);
+    console.log(`Servidor backend ejecutándose en ${baseUrl}`);
+    console.log(`Archivos estáticos disponibles en ${baseUrl}/uploads`);
   });
 
   // Manejar cierre correctamente

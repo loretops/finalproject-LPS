@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001/api';
+// Usar la variable NEXT_PUBLIC_API_URL que ya debe venir configurada desde next.config.js
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Crear una instancia de Axios preconfigurada
 // Esta instancia será usada para todas las llamadas a la API

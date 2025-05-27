@@ -26,7 +26,9 @@ transporter.verify(function(error, success) {
 });
 
 const senderEmail = process.env.EMAIL_FROM || 'noreply@example.com';
-const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+// Configurar la URL del frontend con parámetros por defecto para desarrollo
+const frontendPort = process.env.FRONTEND_PORT || 3001;
+const frontendUrl = process.env.FRONTEND_URL || `http://localhost:${frontendPort}`;
 
 /**
  * Servicio para envío de emails con soporte para múltiples plantillas

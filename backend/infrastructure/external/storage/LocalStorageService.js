@@ -20,7 +20,10 @@ class LocalStorageService extends StorageInterface {
   constructor() {
     super();
     this.baseDir = path.join(process.cwd(), 'backend', 'public', 'uploads');
-    this.baseUrl = process.env.BASE_URL || 'http://localhost:8001';
+    
+    // Usar la variable de entorno BASE_URL o construir la URL con el puerto
+    const port = process.env.BACKEND_PORT || process.env.PORT || 8001;
+    this.baseUrl = process.env.BASE_URL || `http://localhost:${port}`;
   }
 
   /**

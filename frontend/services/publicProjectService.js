@@ -2,7 +2,8 @@ import axios from 'axios';
 import { apiClient } from './authService';
 import interestService from './interestService';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001/api';
+// Usar la variable NEXT_PUBLIC_API_URL que ya debe venir configurada desde next.config.js
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Control de frecuencia para evitar llamadas excesivas
 let lastRequestTime = 0;

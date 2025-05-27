@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { apiClient, getAuthToken } from './authService';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001/api';
+// Usar la variable NEXT_PUBLIC_API_URL que ya debe venir configurada desde next.config.js
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 /**
  * Convertir claves en snake_case a camelCase para compatibilidad con el backend

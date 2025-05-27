@@ -1,7 +1,8 @@
 import { apiClient, getAuthToken } from './authService';
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001/api';
+// Usar la variable NEXT_PUBLIC_API_URL que ya debe venir configurada desde next.config.js
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 /**
  * Servicio para gestionar documentos de proyectos
