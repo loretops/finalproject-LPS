@@ -57,6 +57,17 @@ class CloudinaryStorageService extends StorageInterface {
 
   /**
    * Sube un archivo a Cloudinary
+   *
+   * ¡ATENCIÓN!
+   * ------------------------------------------------------------
+   * Esta solución ha sido comprobada y es ESTABLE para la subida
+   * de documentos (PDF, Office, etc) a Cloudinary. No modificar
+   * la lógica de este método salvo causa mayor o bug crítico.
+   * Cualquier cambio puede romper la subida y visualización de
+   * documentos en la plataforma. Consultar con el equipo antes de
+   * modificar.
+   * ------------------------------------------------------------
+   *
    * @param {Buffer} buffer - Buffer del archivo
    * @param {string} folder - Carpeta en Cloudinary
    * @param {string} filename - Nombre del archivo
