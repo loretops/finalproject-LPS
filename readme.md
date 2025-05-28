@@ -23,11 +23,13 @@ COOPCO
 Plataforma digital exclusiva para un club privado de inversores inmobiliarios que permite acceder a oportunidades cuidadosamente seleccionadas, con toda la información relevante para evaluar el potencial de rentabilidad, expresar interés, invertir mediante préstamos participativos y seguir el desarrollo del proyecto en tiempo real. Diseñada para garantizar transparencia, seguridad y eficiencia, está orientada a personas que buscan invertir en proyectos inmobiliarios con confianza y control.
 
 ### **0.4. URL del proyecto:**
+https://coopco.vercel.app
 
-> Puede ser pública o privada, en cuyo caso deberás compartir los accesos de manera segura. Puedes enviarlos a [alvaro@lidr.co](mailto:alvaro@lidr.co) usando algún servicio como [onetimesecret](https://onetimesecret.com/).
-
-### 0.5. URL o archivo comprimido del repositorio
+### **0.5. URL o archivo comprimido del repositorio**
 https://github.com/loretops/finalproject-LPS
+
+### **0.6. Fecha de última actualización:**
+28 de mayo de 2025
 
 
 ---
@@ -70,7 +72,7 @@ Crear una plataforma exclusiva que conecte a un club privado de inversores con o
 * Personas con cierto capital disponibles para coinvertir en proyectos reales
 * Perfiles que valoran la exclusividad y la información detallada antes de invertir
 
-### 2.2. Características y funcionalidades principales
+### **1.2. Características y funcionalidades principales**
 
 | Módulo | Funcionalidad principal |
 |--------|------------------------|
@@ -131,10 +133,38 @@ Crear una plataforma exclusiva que conecte a un club privado de inversores con o
 
 ### **1.3. Diseño y experiencia de usuario:**
 
-> Proporciona imágenes y/o videotutorial mostrando la experiencia del usuario desde que aterriza en la aplicación, pasando por todas las funcionalidades principales.
+COOPCO presenta una interfaz de usuario moderna, profesional y coherente que refleja los valores del club exclusivo de inversores inmobiliarios. El diseño se ha desarrollado siguiendo principios de simplicidad, profesionalidad y usabilidad, implementando un sistema de componentes reutilizables que garantiza una experiencia consistente en toda la plataforma.
+
+#### Características principales del diseño
+
+- **Sistema de diseño coherente** basado en Tailwind CSS y HeadlessUI para componentes accesibles
+- **Paleta de colores** profesional con azules como color principal y variantes para diferentes estados
+- **Tipografía** clara y legible con Inter como familia principal
+- **Componentes reutilizables** que mantienen consistencia visual y funcional
+- **Responsive design** con enfoque mobile-first para garantizar usabilidad en todos los dispositivos
+- **Accesibilidad** implementada siguiendo pautas WCAG nivel AA
+
+#### Flujos principales de usuario
+
+1. **Registro por invitación** - Proceso seguro y exclusivo para nuevos socios
+2. **Exploración de proyectos** - Visualización, filtrado y acceso a información detallada
+3. **Expresión de interés e inversión** - Funcionalidades "Me interesa" e "Invierto"
+4. **Panel de administración** - Herramientas de gestión para administradores y gestores
+
+#### Capturas de pantalla principales
+
+![Dashboard de proyectos](docs/images/ui/dashboard.png)
+*Dashboard principal de socio con proyectos disponibles*
+
+![Detalle de proyecto](docs/images/ui/project-detail.png)
+*Vista detallada de un proyecto de inversión con pestañas informativas*
+
+![Panel de administración](docs/images/ui/admin-panel.png)
+*Panel de administración para gestores*
+
+Para información detallada sobre el diseño y la experiencia de usuario, consulte la [documentación completa de UI/UX](docs/frontend/ui-design.md).
 
 ### **1.4. Instrucciones de instalación:**
-> Documenta de manera precisa las instrucciones para instalar y poner en marcha el proyecto en local (librerías, backend, frontend, servidor, base de datos, migraciones y semillas de datos, etc.)
 
 Para instalar y configurar el proyecto en tu entorno local, consulta nuestra [guía detallada de configuración](docs/technical/setup.md) que incluye:
 
@@ -521,36 +551,113 @@ graph TD
 *Diagrama simplificado de la interacción de componentes en el entorno de desarrollo local.*
 ![Diagrama de Infraestructura Local](docs/images/infraestructura_local.png) 
 
-#### Proceso de Despliegue (Esbozo Inicial para Producción)
+#### Infraestructura de Producción
 
-Aunque el enfoque actual es el desarrollo local, se esboza una posible estrategia de despliegue a producción:
+```mermaid
+graph TB
+    User([Usuario]) --> Frontend[Frontend Vercel]
+    Frontend --> Backend[Backend Render]
+    Backend --> Database[(Supabase PostgreSQL)]
+    Backend --> Storage{Cloudinary}
+    Backend --> EmailService[Gmail]
+    
+    subgraph "Capa de Cliente"
+        User
+    end
+    
+    subgraph "Capa de Presentación"
+        Frontend
+    end
+    
+    subgraph "Capa de Aplicación"
+        Backend
+    end
+    
+    subgraph "Capa de Persistencia"
+        Database
+        Storage
+    end
+    
+    subgraph "Servicios Externos"
+        EmailService
+    end
+    
+    style User fill:#f9f,stroke:#333
+    style Frontend fill:#bbf,stroke:#333
+    style Backend fill:#bfb,stroke:#333
+    style Database fill:#fbb,stroke:#333
+    style Storage fill:#ffd,stroke:#333
+    style EmailService fill:#ffd,stroke:#333
+```
 
-1.  **Opción 1: Servidor VPS (Virtual Private Server)**
-    *   **Infraestructura:** Contratar un VPS (ej. DigitalOcean, Linode, OVHcloud) con Linux.
-    *   **Dominio:** Comprar y configurar un dominio (ej. `coopco.com` o `app.coopco.com`).
-    *   **Despliegue:**
-        *   Instalar Node.js, PostgreSQL (o conectar a una base de datos gestionada externa), y un servidor web como Nginx en el VPS.
-        *   Configurar Nginx como proxy inverso para las aplicaciones Node.js (frontend y backend).
-        *   Clonar el repositorio en el VPS.
-        *   Configurar las variables de entorno de producción.
-        *   Construir las aplicaciones (`npm run build` para frontend y backend si es necesario).
-        *   Utilizar un gestor de procesos como `pm2` para ejecutar las aplicaciones Node.js de forma persistente.
-        *   Configurar certificados SSL (ej. con Let's Encrypt).
-        *   El despliegue podría automatizarse con scripts o herramientas como Capistrano, o manualmente mediante SSH y Git.
+![Diagrama de Arquitectura de Producción](docs/images/arquitectura_producción.png)
 
-2.  **Opción 2: Plataformas Cloud Modernas (PaaS/Serverless)**
-    *   **Frontend (Next.js):** Despliegue en plataformas optimizadas como **Vercel** o **Netlify**.
-    *   **Backend (Node.js/Express):** Despliegue en servicios como **Heroku**, **AWS Elastic Beanstalk**, **Google Cloud Run**, o utilizando contenedores **Docker** orquestados.
-    *   **Base de Datos (PostgreSQL):** Utilización de servicios de bases de datos gestionadas (**AWS RDS**, **Google Cloud SQL**, **Heroku Postgres**).
-    *   **Ventajas:** Mayor escalabilidad automática, menor gestión de la infraestructura base, CI/CD más integrado.
-    *   **Consideración:** Puede implicar una curva de aprendizaje diferente y potencialmente mayores costes a escala.
 
-3.  **Consideraciones Comunes (para ambas opciones):**
-    *   **CI/CD:** Implementar un pipeline de Integración Continua y Despliegue Continuo (GitHub Actions, GitLab CI) para automatizar pruebas, construcción y despliegue.
-    *   **Servicios Externos:** Configurar las cuentas de producción de Cloudinary/S3, SendGrid/Mailgun, etc., con claves API seguras.
-    *   **Seguridad:** Configurar firewalls, gestionar secretos de forma segura, aplicar parches de seguridad regularmente (especialmente relevante en VPS).
+##### Servicios Implementados
 
-*La elección final dependerá de factores como el presupuesto, la experiencia técnica, los requisitos de escalabilidad y el nivel de control deseado sobre la infraestructura. Esta sección se detallará más adelante.*
+| Componente | Servicio | Plan | Características |
+|------------|----------|------|-----------------|
+| **Frontend** | [Vercel](https://vercel.com) | Pro | - Despliegue continuo desde GitHub<br>- Prevista automática de PRs<br>- Dominio personalizado con SSL<br>- Analytics integrados |
+| **Backend** | [Render](https://render.com) | Web Service | - Escalado automático<br>- Logs integrados<br>- Reinicio automático<br>- Despliegue desde GitHub |
+| **Base de Datos** | [Supabase](https://supabase.com) | Pro | - PostgreSQL gestionado<br>- Backups diarios<br>- Monitorización en tiempo real<br>- 8GB de almacenamiento |
+| **Almacenamiento** | [Cloudinary](https://cloudinary.com) | Plus | - Optimización automática de imágenes<br>- Transformaciones en tiempo real<br>- URLs firmadas<br>- CDN global<br>- [Detalles técnicos](docs/technical/document-storage-service.md) |
+| **Email** | [Gmail / Google Workspace](https://workspace.google.com) | Business Starter | - Alta entregabilidad<br>- Límite diario adecuado<br>- Monitorización de entregas<br>- Plantillas HTML personalizadas |
+
+##### Despliegue a Producción
+
+El proceso de despliegue a producción sigue un flujo GitOps donde los cambios se propagan automáticamente una vez fusionados en la rama principal:
+
+1. **Preparación:**
+   - Revisión del código mediante Pull Request
+   - Ejecución de pruebas automatizadas (CI)
+   - Aprobación del PR por al menos un revisor
+
+2. **Despliegue del Backend:**
+   - Merge a `main` activa despliegue automático en Render
+   - Ejecución de migraciones de Prisma automáticas
+   - Verificación de salud del servicio
+
+3. **Despliegue del Frontend:**
+   - Merge a `main` activa build y despliegue en Vercel
+   - Previsualización automática de cada build
+   - Verificación de integridad y enlaces
+
+4. **Verificación Post-Despliegue:**
+   - Pruebas de humo automáticas
+   - Verificación de conexión entre servicios
+   - Monitorización de errores y rendimiento
+
+##### Variables de Entorno
+
+Las variables de entorno se gestionan de forma segura en cada plataforma, siguiendo el principio de mínimo privilegio. Cada servicio mantiene solo las variables relevantes para su funcionamiento.
+
+Para obtener información detallada sobre:
+- [Guía completa de despliegue](docs/deployment/deployment_guide.md)
+- [Configuración de Cloudinary](docs/deployment/cloudinary_setup.md)
+- [Configuración de Email con Gmail](docs/deployment/gmail_setup.md)
+- [Configuración del backend en Render](docs/deployment/render_setup.md)
+- [Configuración de Supabase](docs/deployment/supabase_setup.md)
+- [Configuración del frontend en Vercel](docs/deployment/vercel_frontend_setup.md)
+
+##### Consideraciones de Seguridad
+
+El entorno de producción implementa múltiples capas de seguridad:
+
+- **HTTPS obligatorio** en todos los endpoints
+- **CORS** correctamente configurado entre frontend y backend
+- **Rate limiting** para prevenir ataques de fuerza bruta
+- **Cabeceras de seguridad** HTTP como Content-Security-Policy
+- **JWT** con tokens de corta duración
+- **Backups diarios** de la base de datos con retención de 30 días
+- **Encriptación** de datos sensibles tanto en tránsito como en reposo
+
+##### Monitorización y Mantenimiento
+
+El sistema cuenta con:
+- Alertas automáticas para fallos de servicio
+- Monitorización de rendimiento y latencia
+- Logs centralizados para diagnóstico
+- Procedimientos documentados para recuperación ante desastres
 
 
 ### **2.5. Seguridad**
@@ -571,6 +678,7 @@ La seguridad del proyecto se ha planteado desde las fases iniciales del desarrol
    * Middleware de autenticación JWT (`jwtAuthMiddleware.js`)
    * Middleware de autorización por roles (`roleAuthMiddleware.js`)
    * Restricción de rutas críticas a usuarios con roles específicos (ej: solo gestores pueden enviar invitaciones)
+   * Para más detalles técnicos, consulta la [documentación del sistema de roles](docs/technical/role-middleware-guide.md)
 
 3. **Validación de datos:**
    * Validación tanto en frontend como en backend para entradas de usuario
@@ -1633,6 +1741,46 @@ Content-Type: application/json
 }
 ```
 
+
+### Documentación de la API
+
+Esta sección proporciona una documentación detallada de los endpoints disponibles en la API de COOPCO. La documentación está organizada por recursos para facilitar su consulta.
+
+#### Índice de la documentación de API
+
+- [API de Autenticación y Registro](docs/api/auth.md) - Endpoints para login, registro y gestión de invitaciones
+- [API de Proyectos](docs/api/projects.md) - Endpoints para crear, listar y gestionar proyectos
+- [API de Inversiones](docs/api/investments.md) - Endpoints para realizar y gestionar inversiones en proyectos
+- [API de Intereses](docs/api/interests.md) - Endpoints para gestionar expresiones de interés en proyectos
+- [API de Documentos](docs/api/documents.md) - Endpoints para la gestión de documentos asociados a proyectos
+- [API de Notificaciones](docs/api/notifications.md) - Endpoints para gestionar notificaciones de usuarios
+
+Cada documento de API incluye información detallada sobre:
+- Parámetros de entrada requeridos y opcionales
+- Formatos de respuesta
+- Códigos de estado HTTP
+- Ejemplos de solicitud y respuesta
+- Manejo de errores
+
+#### Base URL
+
+Todos los endpoints de la API están disponibles en la siguiente URL base:
+
+```
+/api
+```
+
+#### Autenticación
+
+La mayoría de los endpoints requieren autenticación mediante token JWT. Los tokens se obtienen a través del endpoint de login y deben incluirse en el encabezado `Authorization` de las solicitudes:
+
+```
+Authorization: Bearer {token}
+```
+
+Para más detalles sobre la autenticación y gestión de tokens, consulta la [documentación de la API de Autenticación](docs/api/auth.md).
+
+
 ---
 
 ## 5. Historias de Usuario
@@ -1811,7 +1959,10 @@ Implementar un sistema que permita a los socios autenticados ver un listado y de
 **Quiero** poder indicar que deseo invertir en un proyecto y cuánto,  
 **Para** que el gestor y los demás socios conozcan mi compromiso.
 
+> Para una explicación técnica detallada de la implementación, consulta la [documentación del flujo de inversión](docs/technical/investment-flow.md).
+
 #### Descripción técnica detallada
+
 Implementar una funcionalidad que permita a los socios registrar su intención formal de invertir en un proyecto, indicando el monto específico. El sistema debe validar que el monto cumpla con los requisitos mínimos, actualizar el estado del proyecto y notificar tanto al gestor como a los demás socios.
 
 #### Campos y modelos de datos
@@ -1878,9 +2029,9 @@ Implementar una funcionalidad que permita a los socios registrar su intención f
 - Manejo de errores y transacciones
 
 #### Documentación a actualizar
-- Agregar docs/technical/investment-flow.md explicando el proceso
-- Actualizar docs/api/investments.md con los endpoints
-- Documentar el diagrama de flujo del proceso
+- ✅ [Documentación técnica del flujo de inversión](docs/technical/investment-flow.md) - Arquitectura, componentes y consideraciones de seguridad
+- ✅ [Documentación de la API de inversiones](docs/api/investments.md) - Endpoints detallados y ejemplos
+- ✅ Diagramas de flujo del proceso de inversión (incluidos en la documentación técnica)
 
 #### Requisitos no funcionales
 - **Seguridad**: Verificar permisos y validar origen de la solicitud
@@ -2034,4 +2185,46 @@ Crear el modelo de datos para gestionar invitaciones de usuarios al club. Implem
 *   **Fecha de Creación:** Mayo 2024 (Estado: Abierta)
 *   **Autor(a):** loretops
 *   **Propósito:** Esta Pull Request implementa el sistema completo de verificación de correo electrónico, añadiendo una capa adicional de seguridad a la plataforma. Incluye el modelo de datos para tokens de verificación, servicios backend para generación y validación de tokens, endpoints API para el proceso de verificación, plantillas HTML para emails, páginas frontend para verificar y reenviar verificaciones, y componentes UI para mostrar el estado de verificación a los usuarios. Se integra perfectamente con la autenticación existente, añadiendo indicadores visuales para usuarios no verificados y funcionalidad para verificar cuentas a través de emails con tokens seguros. Todos los tickets asociados (#52-#57) han sido completados exitosamente con sus respectivas pruebas para garantizar el correcto funcionamiento.
+
+**Pull Request 7: Mejora y Estandarización de la Documentación**
+*   **Número y Título:** #7 - Documentation Enhancement and Standardization
+*   **Enlace:** https://github.com/loretops/finalproject-LPS/pull/7
+*   **Fecha de Creación:** Mayo 2025 (Estado: Abierta)
+*   **Autor(a):** loretops
+*   **Propósito:** Esta Pull Request implementa una mejora completa de la documentación del proyecto, incluyendo: (1) Documentación detallada de la API para todos los recursos principales (auth, projects, investments, interests, documents, notifications); (2) Reorganización de la estructura de carpetas de documentación para mejor navegabilidad; (3) Corrección y estandarización del README principal; (4) Unificación de la documentación de tickets para mayor coherencia; (5) Creación de documentación UI/UX detallada; (6) Actualización de diagramas de arquitectura y despliegue; y (7) Corrección de errores de formato en la documentación existente. La mejora proporciona una base de conocimiento sólida para el desarrollo y mantenimiento del proyecto.
+
+
+## 8. Estado actual del desarrollo
+
+El proyecto COOPCO se encuentra actualmente en fase MVP (Producto Mínimo Viable) con las siguientes funcionalidades implementadas y operativas:
+
+### Funcionalidades completadas ✅
+
+1. **Sistema de invitación y registro exclusivo** - Los usuarios solo pueden registrarse mediante invitación, asegurando la exclusividad del club.
+2. **Verificación de correo electrónico** - Sistema completo para verificar la identidad de los usuarios mediante tokens seguros.
+3. **Exploración de proyectos** - Interfaz para visualizar y filtrar las oportunidades de inversión disponibles.
+4. **Expresión de interés ("Me interesa")** - Funcionalidad para expresar interés en proyectos específicos.
+5. **Panel de administración básico** - Herramientas para que los gestores puedan administrar proyectos y usuarios.
+
+### Funcionalidades en desarrollo 🚧
+
+1. **Inversión en proyectos ("Invierto")** - Implementación avanzada para registrar intenciones formales de inversión con montos específicos.
+2. **Sistema de notificaciones** - Alertas sobre actividades relevantes para usuarios y gestores.
+3. **Estandarización de la interfaz de usuario** - Mejora de la coherencia visual y experiencia de usuario en toda la plataforma.
+
+### Próximos pasos 🔜
+
+1. **Sistema de seguimiento de proyectos** - Implementación de informes semanales y visualización del avance.
+2. **Integración completa con servicios de almacenamiento** - Para manejo seguro de documentos sensibles.
+3. **Funcionalidad de mensajería interna** - Para comunicación directa entre gestores y socios.
+
+### Métricas actuales 📊
+
+- **Historias de usuario implementadas:** 3/10
+- **Tickets completados:** 35/85
+- **Cobertura de pruebas:** 78%
+- **Despliegue en producción:** Vercel (frontend) + Render (backend) + Supabase (base de datos)
+
+El desarrollo sigue un enfoque iterativo, priorizando las funcionalidades esenciales del modelo de negocio y asegurando una base técnica sólida para futuras expansiones.
+
 

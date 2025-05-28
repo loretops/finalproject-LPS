@@ -1,6 +1,6 @@
-# Servicio de Almacenamiento de Documentos
+# Servicio de Almacenamiento de Documentos: Arquitectura y Seguridad
 
-Esta documentación describe la implementación del Servicio de Almacenamiento de Documentos para el proyecto COOPCO, que permite la gestión de archivos asociados a proyectos de inversión.
+Esta documentación técnica describe la implementación interna del Servicio de Almacenamiento de Documentos para el proyecto COOPCO, enfocándose en la arquitectura, lógica de negocio y consideraciones de seguridad. Para la configuración básica de Cloudinary, consulte [Configuración de Cloudinary](../deployment/cloudinary_setup.md).
 
 ## Descripción General
 

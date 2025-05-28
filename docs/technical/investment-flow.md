@@ -1,6 +1,6 @@
-# Flujo de Inversión en COOPCO
+# Flujo de Inversión: Implementación Técnica y Arquitectura
 
-Este documento técnico describe la implementación del flujo de inversión en la plataforma COOPCO, correspondiente a la Historia de Usuario 3 (HU3) "Marcar Invierto".
+Este documento técnico describe la implementación detallada del flujo de inversión en la plataforma COOPCO, correspondiente a la Historia de Usuario 3 (HU3) "Marcar Invierto". Proporciona información técnica para desarrolladores sobre la arquitectura, componentes, flujos de datos y consideraciones de seguridad.
 
 ## Arquitectura
 

@@ -3,7 +3,7 @@
 ## 🔹 1. Frontend (Cliente)
 
 ### Framework
-- **Next.js** (React con renderizado híbrido: SSR + SSG)
+- **Next.js** (React con renderizado híbrido: SSR + CSR)
 
 ### Ventajas
 - Rápido de montar, documentado, y SEO-friendly para la parte pública
@@ -13,7 +13,7 @@
 ## 🔹 2. Backend (API)
 
 ### Framework
-- **Node.js** con Express.js (o NestJS si el desarrollador tiene algo más de experiencia)
+- **Node.js** con Express.js
 
 ### Organización
 - API RESTful con servicios claramente definidos
@@ -26,54 +26,73 @@
 - Relacional, robusto, y bien soportado por ORMs como Prisma
 - Ideal para manejar relaciones entre entidades (usuarios, inversiones, empresas, roles...)
 
-## 🧱 Componentes del sistema (mínimos para el MVP)
+## 🧱 Componentes del sistema implementados
 
-| Componente | Tecnología Sugerida | Comentario |
+| Componente | Tecnología Implementada | Comentario |
 |------------|---------------------|------------|
-| Web pública | Next.js | SSR para SEO (proyectos, blog, contacto) |
-| Área de socios | Next.js + Auth por token | Acceso solo tras login + invitación |
+| Web pública | Next.js | SSR para SEO (proyectos, contacto) |
+| Área de socios | Next.js + JWT Auth | Acceso solo tras login + invitación |
 | API privada | Node.js + Express.js | Servicios para login, inversiones, documentos, etc. |
-| Base de datos | PostgreSQL + Prisma ORM | Fácil de trabajar y escalar |
-| Autenticación | JWT con roles | Ligero, seguro, fácilmente ampliable |
-| Almacenamiento de ficheros | AWS S3 o Cloudinary | Para vídeos, planos, informes. Solo vista, no descarga |
-| Vídeo en directo | Youtube Live embebido o Vimeo Live | Muy fácil de integrar |
-| Hosting Frontend | Vercel (Next.js optimizado) | Simplifica despliegue y escalado |
-| Backend + DB | Railway o Render | Hosting fácil para proyectos pequeños sin DevOps |
+| Base de datos | PostgreSQL + Prisma ORM | Implementada con migraciones y esquemas definidos |
+| Autenticación | JWT con roles | Implementado con jsonwebtoken, middleware por roles |
+| Almacenamiento de ficheros | Cloudinary | Para documentos, imágenes y videos con control de acceso |
+| Hosting Frontend | Vercel | Configurado para despliegue continuo |
+| Backend + DB | Railway | Configurado para la API y base de datos |
 
-## 🔐 Seguridad básica para el MVP
+## 🔐 Seguridad implementada
 
-- HTTPS siempre (Let's Encrypt o Cloudflare)
-- JWT con expiración y refresh
-- Acceso a documentos controlado por permisos (sin descarga, solo vista)
-- Validación de inputs en backend (para prevenir inyecciones)
-- Registros de acciones críticas (audit trail básico para admins)
+- HTTPS en todos los entornos
+- JWT con expiración y renovación
+- Control de acceso a documentos según nivel de permiso
+- Validación de inputs con express-validator
+- Rate limiting con express-rate-limit
+- Helmet para cabeceras HTTP seguras
+- Registro de acciones críticas para administradores
 
-## 📦 Estructura de carpetas
+## 📦 Estructura de carpetas actual
 
 ```
 /frontend        → Next.js app
-  /pages
-  /components
-  /utils
-  /services
+  /pages          → Rutas y páginas
+  /components     → Componentes reutilizables
+  /context        → Contextos de React (auth, etc)
+  /services       → Servicios para API
+  /styles         → Estilos con Tailwind
+  /utils          → Utilidades comunes
+  /tests          → Tests de componentes y páginas
 
 /backend         → Node.js API
   /domain        → Entidades y lógica de negocio core
-  /application   → Casos de uso
+    /entities    → Modelos de dominio
+    /repositories → Interfaces de repositorios
+    /services    → Servicios de dominio
+  /application   → Casos de uso y servicios de aplicación
+    /controllers → Controladores HTTP
+    /routes      → Definición de rutas
+    /services    → Servicios de aplicación
+    /use_cases   → Casos de uso específicos
   /infrastructure → Implementaciones concretas
-    /database    → Acceso a datos y Prisma
-    /external    → Servicios externos (email, storage, etc.)
-  /interfaces    → API, controladores, rutas
-  /prisma        → Esquemas y migraciones de base de datos
+    /external    → Servicios externos (storage, email)
+    /repositories → Implementaciones de repositorios
+  /interfaces    → Interfaces para adaptadores externos
+    /http        → Controladores y DTOs
+    /storage     → Interfaces de almacenamiento
+  /middleware    → Middleware Express (auth, validación)
+  /prisma        → Esquemas y migraciones de Prisma
+  /tests         → Tests unitarios e integración
+  /utils         → Utilidades compartidas
 
 /docs            → Documentación del proyecto
   /architecture  → Diagramas y diseño del sistema
+  /api           → Documentación de la API
   /technical     → Guías técnicas y configuración
   /product       → Documentación del producto
+  /frontend      → Guías específicas del frontend
+  /images        → Recursos visuales para documentación
 
-/scripts         → Tareas automatizadas (invitaciones, informes)
+/prompts         → Prompts para desarrollo (IA)
 
-.env             → Configuración de variables sensibles
+/scripts         → Tareas automatizadas
 ```
 
 ## 🔄 Diagrama de Arquitectura
@@ -118,8 +137,7 @@ graph TB
     %% Servicios Externos
     subgraph External["🔗 Servicios Externos"]
         direction TB
-        E1[AWS S3/Cloudinary]
-        E2[Youtube/Vimeo Live]
+        E1[Cloudinary]
         E3[Email Service]
     end
 
@@ -152,7 +170,6 @@ graph TB
     D2 --> D1
 
     B3 --> E1
-    B2 --> E2
     B4 --> E3
     B4 --> F2
 
@@ -167,58 +184,41 @@ graph TB
     class F1,F2,F3,F4,F5 frontend
     class B1,B2,B3,B4,B5 backend
     class D1,D2 database
-    class E1,E2,E3 external
+    class E1,E3 external
 ```
 
-## ✅ Simplificaciones para desarrollador junior
+## ✅ Implementación actual
 
-| Elemento | Sugerencia de simplificación | Justificación para el cambio |
-|----------|-----------------------------|------------------------------|
-| Next.js SSR + rutas protegidas | Usar Next.js en modo SPA (sin SSR para la zona de socios) | Menos configuración, más cercano a una SPA tradicional. Reduce problemas de sincronización |
-| API modular por dominios | Unificar rutas en un solo archivo de rutas Express al principio | Facilita el desarrollo y el seguimiento del flujo de datos |
-| Prisma ORM + relaciones complejas | Mantener Prisma, pero empezar con relaciones simples, sin onDelete, ni cascades complejas | Para evitar errores por falta de control en borrados o actualizaciones |
-| Middleware de roles personalizado | Usar un middleware más genérico basado solo en nivel de rol (socio, gestor, etc.) | Reduce complejidad. Roles más finos se pueden añadir después |
-| Servicios externos (S3, Vimeo, etc.) | Usar solo uno (por ejemplo, Cloudinary para vídeo e imagen, sin streaming en vivo de momento) | Menos configuración y claves de API para manejar |
-| Sistema de notificaciones | Empezar con mensajes simples guardados en BBDD, mostrados en un panel, sin lógica push ni emails | Reduce dependencias externas y complejidad de infraestructura |
-| Autenticación JWT | Mantener JWT pero usar librerías como jsonwebtoken + cookie/session-storage ya configuradas | Evita diseñar todo desde cero. Uso de plantillas o ejemplos sólidos |
-| Control de acceso a documentos | En lugar de restricción por visualización embebida, usar enlace temporal firmado o privado en Cloudinary | Mucho más simple de configurar |
+| Elemento | Estado actual | Notas |
+|----------|--------------|-------|
+| Next.js | ✅ Implementado | Versión 14.0.3 con React 18.2.0 |
+| Express.js | ✅ Implementado | Versión 4.18.2 con middleware de seguridad |
+| Prisma ORM | ✅ Implementado | Versión 5.5.2 con migraciones y esquemas |
+| Autenticación JWT | ✅ Implementado | jsonwebtoken v9.0.2 con middleware por roles |
+| Cloudinary | ✅ Implementado | Para almacenamiento de documentos, imágenes y videos |
+| Estructura en capas | ✅ Implementado | Siguiendo arquitectura hexagonal y DDD |
+| UI con Tailwind | ✅ Implementado | Con componentes personalizados y HeadlessUI |
+| Testing | ✅ Parcialmente | Tests unitarios, integración y e2e con Jest y Cypress |
 
-## 🧱 Elementos a mantener
+## 🧱 Elementos clave del sistema
 
-| Elemento | Por qué mantenerlo |
-|----------|-------------------|
-| Next.js | Excelente base para crecer. Ya tiene herramientas de seguridad, auth, SSR, SSG |
-| Node.js + Express | Muy documentado, fácil de depurar |
-| Prisma + PostgreSQL | Hace más fácil trabajar con BBDD complejas. Documentación clara y buen tipado |
-| Modelo en capas básico | Aunque sea más sencillo, mantiene el orden desde el inicio |
+| Elemento | Detalles de implementación |
+|----------|----------------------------|
+| Arquitectura | Hexagonal con capas domain, application, infrastructure e interfaces |
+| Autenticación | Basada en JWT con tokens de acceso y middleware de verificación de roles |
+| Almacenamiento | Sistema dual: local para desarrollo y Cloudinary para producción |
+| Seguridad | Implementada mediante Helmet, validación de entradas y sanitización |
+| UI/UX | Componentes React con Tailwind CSS y HeadlessUI para accesibilidad |
+| Control de acceso | Granular por rol de usuario (visitante, socio, gestor, admin) |
 
-## 📦 Arquitectura simplificada para un desarrollador junior
+## 📦 Estado de las funcionalidades principales
 
-```
-📁 /frontend (Next.js)
-  ├── /pages
-  ├── /components
-  └── /services (llamadas API)
-
-📁 /backend (Node.js + Express)
-  ├── /routes (agrupadas en un archivo único)
-  ├── /controllers
-  ├── /middleware (auth básico)
-  └── /prisma (modelo de datos)
-
-📁 /docs (Documentación)
-  ├── /technical (guías de configuración)
-  └── /images (recursos visuales)
-
-🗃️ PostgreSQL (Railway o Supabase para hosting)
-
-☁️ Cloudinary para imágenes, vídeos y documentos
-
-🔐 Autenticación con JWT (usando librerías existentes)
-```
-
-## 🧑‍💻 Conclusión
-
-Sí: la arquitectura puede mantenerse, pero simplificando implementaciones, flujo y dependencias externas, es mucho más amigable para un perfil junior.
-
-💡 **Sugerencia:** construir el MVP como un proyecto en etapas, empezando con funcionalidades mínimas y expandiendo progresivamente con control de versiones y sprints guiados.
+| Funcionalidad | Estado | Detalles |
+|--------------|--------|----------|
+| Registro por invitación | ✅ Completo | Sistema completo con envío de emails y validación |
+| Publicación de proyectos | ✅ Completo | Sistema completo con gestión de documentos y media |
+| Listado de proyectos | ✅ Completo | Con filtrado, ordenación y paginación |
+| Visualización de proyectos | ✅ Completo | Con visualización de documentos e imágenes según permisos |
+| Gestión de intereses | ✅ Completo | Sistema para marcar y gestionar intereses en proyectos |
+| Gestión de inversiones | ✅ Completo | Sistema completo con diferentes estados y notificaciones |
+| Verificación de email | ✅ Completo | Sistema con tokens de verificación y reenvío |

@@ -1,5 +1,88 @@
 # Tickets para Historia de Usuario 1 - Registro mediante invitación
 
+## Índice General
+
+### [Tickets para Historia de Usuario 1 - Registro mediante invitación](#tickets-para-historia-de-usuario-1---registro-mediante-invitación)
+- [Ticket #1: Implementar Login en la plataforma](#ticket-1-implementar-login-en-la-plataforma)
+- [Ticket #2: Servicios de autenticación en Frontend](#ticket-2-servicios-de-autenticación-en-frontend)
+- [Ticket #3: Configuración y modelo para invitaciones](#ticket-3-configuración-y-modelo-para-invitaciones)
+- [Ticket #4: Servicio de gestión de invitaciones](#ticket-4-servicio-de-gestión-de-invitaciones)
+- [Ticket #5: Sistema de envío de emails para invitaciones](#ticket-5-sistema-de-envío-de-emails-para-invitaciones)
+- [Ticket #6: Implementar interfaz para crear y enviar invitaciones](#ticket-6-implementar-interfaz-para-crear-y-enviar-invitaciones)
+- [Ticket #7: API Endpoints para verificación de invitaciones](#ticket-7-api-endpoints-para-verificación-de-invitaciones)
+- [Ticket #8: API Endpoints para registro de usuarios](#ticket-8-api-endpoints-para-registro-de-usuarios)
+- [Ticket #9: Página de validación de invitación](#ticket-9-página-de-validación-de-invitación)
+- [Ticket #10: Formulario de registro para nuevos socios](#ticket-10-formulario-de-registro-para-nuevos-socios)
+- [Ticket #11: Página de confirmación post-registro](#ticket-11-página-de-confirmación-post-registro)
+
+### [Tickets para Historia de Usuario 10 - Publicación de oportunidades de inversión](#tickets-para-historia-de-usuario-10---publicación-de-oportunidades-de-inversión)
+- [Ticket #12: Verificación de roles y permisos](#ticket-12-verificación-de-roles-y-permisos)
+- [Ticket #13: Modelo de datos para gestión de proyectos](#ticket-13-modelo-de-datos-para-gestión-de-proyectos)
+- [Ticket #14: Servicio de almacenamiento de documentos](#ticket-14-servicio-de-almacenamiento-de-documentos)
+- [Ticket #15: API Endpoints para creación y gestión de proyectos](#ticket-15-api-endpoints-para-creación-y-gestión-de-proyectos)
+- [Ticket #16: Interfaz de administración de proyectos (listado)](#ticket-16-interfaz-de-administración-de-proyectos-listado)
+- [Ticket #17: Formulario de creación/edición de proyectos](#ticket-17-formulario-de-creaciónedición-de-proyectos)
+- [Ticket #18: Componente de gestión de documentos del proyecto](#ticket-18-componente-de-gestión-de-documentos-del-proyecto)
+- [Ticket #19: Página de publicación y vista previa del proyecto](#ticket-19-página-de-publicación-y-vista-previa-del-proyecto)
+
+### [Tickets para Historia de Usuario 2 - Ver oportunidades de inversión](#tickets-para-historia-de-usuario-2---ver-oportunidades-de-inversión)
+- [Ticket #20: API endpoints para listar y filtrar proyectos públicos](#ticket-20-api-endpoints-para-listar-y-filtrar-proyectos-públicos)
+- [Ticket #21: API endpoints para detalle de un proyecto](#ticket-21-api-endpoints-para-detalle-de-un-proyecto)
+- [Ticket #22: Servicio frontend para consumo de API de proyectos públicos](#ticket-22-servicio-frontend-para-consumo-de-api-de-proyectos-públicos)
+- [Ticket #23: Página de listado de proyectos para socios](#ticket-23-página-de-listado-de-proyectos-para-socios)
+- [Ticket #24: Componente de tarjeta de proyecto](#ticket-24-componente-de-tarjeta-de-proyecto)
+- [Ticket #25: Componentes de filtrado y ordenación](#ticket-25-componentes-de-filtrado-y-ordenación)
+- [Ticket #26: Página de detalle de proyecto para socios](#ticket-26-página-de-detalle-de-proyecto-para-socios)
+- [Ticket #27: Componente visor de galería de imágenes](#ticket-27-componente-visor-de-galería-de-imágenes)
+- [Ticket #28: Componente visor de documentos](#ticket-28-componente-visor-de-documentos)
+- [Ticket #29: Middleware de verificación de autenticación para socios](#ticket-29-middleware-de-verificación-de-autenticación-para-socios)
+- [Ticket #30: Tests e2e para flujo de visualización de proyectos](#ticket-30-tests-e2e-para-flujo-de-visualización-de-proyectos)
+
+### [Tickets para Historia de Usuario 9 - Marcar "Me Interesa"](#tickets-para-historia-de-usuario-9---marcar-me-interesa)
+- [Ticket #31: Modelo de datos para intereses en proyectos](#ticket-31-modelo-de-datos-para-intereses-en-proyectos)
+- [Ticket #32: Servicio backend para gestión de intereses](#ticket-32-servicio-backend-para-gestión-de-intereses)
+- [Ticket #33: API Endpoints para gestión de intereses](#ticket-33-api-endpoints-para-gestión-de-intereses)
+- [Ticket #34: Servicio frontend para gestión de intereses](#ticket-34-servicio-frontend-para-gestión-de-intereses)
+- [Ticket #35: Componente UI botón "Me Interesa"](#ticket-35-componente-ui-botón-me-interesa)
+- [Ticket #36: Integración del botón de interés en páginas de proyectos](#ticket-36-integración-del-botón-de-interés-en-páginas-de-proyectos)
+- [Ticket #37: Página de "Mis Intereses" para socios](#ticket-37-página-de-mis-intereses-para-socios)
+- [Ticket #38: Sistema de notificaciones para intereses](#ticket-38-sistema-de-notificaciones-para-intereses)
+- [Ticket #39: Tests e2e para flujo de interés en proyectos](#ticket-39-tests-e2e-para-flujo-de-interés-en-proyectos)
+
+### [Tickets para Historia de Usuario 3 - Marcar "Invierto"](#tickets-para-historia-de-usuario-3---marcar-invierto)
+- [Ticket #40: Modelo de datos para inversiones](#ticket-40-modelo-de-datos-para-inversiones)
+- [Ticket #41: Actualización del modelo de proyecto para inversiones](#ticket-41-actualización-del-modelo-de-proyecto-para-inversiones)
+- [Ticket #42: Servicio backend para gestión de inversiones](#ticket-42-servicio-backend-para-gestión-de-inversiones)
+- [Ticket #43: API Endpoints para gestión de inversiones](#ticket-43-api-endpoints-para-gestión-de-inversiones)
+- [Ticket #44: Servicio frontend para gestión de inversiones](#ticket-44-servicio-frontend-para-gestión-de-inversiones)
+- [Ticket #45: Componente formulario de inversión](#ticket-45-componente-formulario-de-inversión)
+- [Ticket #46: Integración del formulario en página de detalle](#ticket-46-integración-del-formulario-en-página-de-detalle)
+- [Ticket #47: Página de "Mis Inversiones" para socios](#ticket-47-página-de-mis-inversiones-para-socios)
+- [Ticket #48: Componente de resumen de inversiones en proyecto](#ticket-48-componente-de-resumen-de-inversiones-en-proyecto)
+- [Ticket #49: Sistema de notificaciones para inversiones](#ticket-49-sistema-de-notificaciones-para-inversiones)
+- [Ticket #50: Tests e2e para flujo de inversión](#ticket-50-tests-e2e-para-flujo-de-inversión)
+- [Ticket #51: Dashboard para gestores con resumen de inversiones](#ticket-51-dashboard-para-gestores-con-resumen-de-inversiones)
+
+### [Tickets para Historia de Usuario 7 - Confirmación de correo electrónico](#tickets-para-historia-de-usuario-7-confirmación-de-correo-electrónico)
+- [Ticket #52: Modelo de datos para tokens de verificación](#ticket-52-modelo-de-datos-para-tokens-de-verificación)
+- [Ticket #53: Servicio backend para verificación de email](#ticket-53-servicio-backend-para-verificación-de-email)
+- [Ticket #54: API Endpoints para verificación de email](#ticket-54-api-endpoints-para-verificación-de-email)
+- [Ticket #55: Plantillas de email para verificación](#ticket-55-plantillas-de-email-para-verificación)
+- [Ticket #56: Página de verificación en frontend](#ticket-56-página-de-verificación-en-frontend)
+- [Ticket #57: Componentes UI para estado de verificación](#ticket-57-componentes-ui-para-estado-de-verificación)
+
+### [Gestión de Documentos (Cloudinary) - Tickets Detallados](#gestión-de-documentos-cloudinary---tickets-detallados)
+- [Ticket #DM-01: Mejora del Servicio de Almacenamiento en Cloudinary](#-ticket-dm-01-mejora-del-servicio-de-almacenamiento-en-cloudinary-mvp---orden-1)
+- [Ticket #DM-02: Implementación de Visor Seguro de Documentos](#-ticket-dm-02-implementación-de-visor-seguro-de-documentos-mvp---orden-2)
+- [Ticket #DM-03: Sistema de Descarga Controlada de Documentos](#-ticket-dm-03-sistema-de-descarga-controlada-de-documentos-mvp---orden-3)
+- [Ticket #DM-04: Gestor de Carga de Documentos por Lotes](#ticket-dm-04-gestor-de-carga-de-documentos-por-lotes)
+- [Ticket #DM-05: Sistema de Control de Versiones de Documentos](#ticket-dm-05-sistema-de-control-de-versiones-de-documentos)
+- [Ticket #DM-06: Sistema de Búsqueda y Filtrado Avanzado de Documentos](#ticket-dm-06-sistema-de-búsqueda-y-filtrado-avanzado-de-documentos)
+- [Ticket #DM-07: Implementación de Análisis y Estadísticas de Documentos](#ticket-dm-07-implementación-de-análisis-y-estadísticas-de-documentos)
+- [Ticket #DM-08: Implementación de Política de Retención y Archivo de Documentos](#ticket-dm-08-implementación-de-política-de-retención-y-archivo-de-documentos)
+- [Ticket #DM-09: Integración de Firma Digital en Documentos](#ticket-dm-09-integración-de-firma-digital-en-documentos)
+- [Ticket #DM-10: Sistema de Permisos Granulares para Documentos](#ticket-dm-10-sistema-de-permisos-granulares-para-documentos)
+
 ## Ticket #1: Implementar Login en la plataforma
 
 **Título:** Implementar sistema de autenticación básico
@@ -32,7 +115,7 @@
 
 **Enlaces:**
 - [Configuración del entorno](../technical/setup.md)
-- [Variables de entorno necesarias](../technical/env-example.md)
+- [Documentación del proyecto](../../readme.md)
 
 ## Ticket #2: Servicios de autenticación en Frontend
 
@@ -1948,4 +2031,597 @@ Para la Historia de Usuario 3, el orden recomendado de desarrollo es:
 **Enlaces:**
 - [Historia de usuario](docs/product/user-stories.md#-historia-3--marcar-invierto-must-have)
 - [Panel de administración](docs/technical/admin-panel.md)
-- [Biblioteca de visualización de datos](docs/technical/data-visualization.md) 
+- [Biblioteca de visualización de datos](docs/technical/data-visualization.md)
+
+# Tickets para Historia de Usuario 7: Confirmación de correo electrónico
+
+## 📌 Descripción General
+Estos tickets corresponden a la implementación de la Historia de Usuario 7: "Como nuevo socio, quiero confirmar mi dirección de correo electrónico después del registro para verificar mi identidad y tener acceso completo a la plataforma".
+
+## 📋 Lista de Tickets
+
+### Ticket #52: Modelo de datos para tokens de verificación
+
+**Título:** Implementación del modelo de datos para tokens de verificación de email
+
+**Descripción:** Crear la entidad necesaria para gestionar tokens de verificación de email, que permitirá a los usuarios confirmar sus direcciones de correo electrónico. Se utilizará un modelo basado en tokens únicos con tiempo de expiración.
+
+**Criterios de Aceptación:**
+1. La entidad debe incluir campos para: token único (string), usuario asociado (relación), email a verificar (string), fecha de creación, fecha de expiración, fecha de uso y estado (pendiente/usado/expirado).
+2. Implementar validaciones para asegurar que cada token es único.
+3. Implementar método para verificar si un token ha expirado.
+4. Implementar método para marcar un token como usado.
+5. Crear tests unitarios para validar el funcionamiento del modelo.
+
+**Tareas:**
+1. Actualizar el esquema de Prisma añadiendo el modelo `VerificationToken`.
+2. Crear la entidad de dominio `VerificationToken` en `/backend/domain/entities/`.
+3. Implementar los métodos de validación y business logic en la entidad.
+4. Implementar tests unitarios para la entidad.
+5. Ejecutar migraciones de base de datos.
+
+**Dependencias:** Ninguna
+
+**Nivel de prioridad:** Alta
+
+**Estimación:** 2 puntos
+
+**Notas técnicas:**
+- Configurar el token para que expire después de 24 horas.
+- Utilizar un formato de token seguro (UUID v4 recomendado).
+- Considerar índices de base de datos para búsquedas eficientes por token y usuario.
+
+---
+
+### Ticket #53: Servicio backend para verificación de email
+
+**Título:** Implementación del servicio de verificación de email
+
+**Descripción:** Crear un servicio que gestione la generación, validación y procesamiento de tokens de verificación de email, así como la actualización del estado de verificación de los usuarios.
+
+**Criterios de Aceptación:**
+1. Implementar método para generar y guardar un nuevo token de verificación.
+2. Implementar método para validar un token recibido.
+3. Implementar método para marcar un email como verificado.
+4. Implementar método para reenviar un email de verificación.
+5. Implementar manejo de errores para tokens inválidos, expirados o ya utilizados.
+6. Implementar lógica para actualizar el estado de verificación del usuario.
+7. Crear tests unitarios para validar el funcionamiento del servicio.
+
+**Tareas:**
+1. Crear el servicio `EmailVerificationService` en `/backend/application/services/`.
+2. Implementar los métodos necesarios en el servicio.
+3. Integrar con el modelo de datos creado en el Ticket #52.
+4. Implementar la lógica para actualizar el estado de verificación del usuario.
+5. Integrar con el servicio de email existente para enviar correos de verificación.
+6. Implementar tests unitarios para el servicio.
+
+**Dependencias:** Ticket #52
+
+**Nivel de prioridad:** Alta
+
+**Estimación:** 3 puntos
+
+**Notas técnicas:**
+- Utilizar transacciones para operaciones que afecten a múltiples tablas.
+- Implementar mecanismos para evitar ataques de fuerza bruta.
+- Considerar límites en el número de intentos de verificación y reenvíos.
+
+---
+
+### Ticket #54: API Endpoints para verificación de email
+
+**Título:** Implementación de API Endpoints para verificación de email
+
+**Descripción:** Crear los endpoints necesarios para la verificación de email, incluyendo la verificación de tokens y el reenvío de correos de verificación.
+
+**Criterios de Aceptación:**
+1. Implementar endpoint GET `/api/auth/verify-email/:token` para verificar un token de email.
+2. Implementar endpoint POST `/api/auth/resend-verification` para reenviar un email de verificación.
+3. Asegurar que los endpoints devuelven respuestas adecuadas y códigos HTTP apropiados.
+4. Implementar validación de parámetros y manejo de errores.
+5. Documentar los endpoints en la especificación de la API.
+6. Implementar tests de integración para los endpoints.
+
+**Tareas:**
+1. Crear el controlador `EmailVerificationController` en `/backend/interfaces/http/controllers/`.
+2. Definir las rutas en `/backend/interfaces/http/routes/auth.routes.js` o crear un archivo específico para verificación.
+3. Implementar la lógica de los controladores integrándolos con el servicio creado en el Ticket #53.
+4. Implementar validación de parámetros con express-validator.
+5. Implementar manejo de errores y respuestas apropiadas.
+6. Actualizar la documentación de la API.
+7. Implementar tests de integración para los endpoints.
+
+**Dependencias:** Ticket #53
+
+**Nivel de prioridad:** Alta
+
+**Estimación:** 2 puntos
+
+**Notas técnicas:**
+- El endpoint de verificación será accesible sin autenticación (token en la URL).
+- El endpoint de reenvío requerirá autenticación JWT.
+- Considerar limitación de tasa (rate limiting) para prevenir abusos.
+
+---
+
+### Ticket #55: Plantillas de email para verificación
+
+**Título:** Creación de plantillas de email para verificación
+
+**Descripción:** Diseñar e implementar las plantillas HTML y de texto plano para los correos electrónicos de verificación de email, asegurando que sean atractivos, claros y funcionales en diferentes clientes de correo.
+
+**Criterios de Aceptación:**
+1. Crear plantilla HTML responsive para el email de verificación inicial.
+2. Crear plantilla HTML responsive para el email de reenvío de verificación.
+3. Crear versiones de texto plano para ambas plantillas (para clientes que no soportan HTML).
+4. Las plantillas deben incluir el logo de la plataforma, instrucciones claras y un botón/enlace prominente para verificar.
+5. Las plantillas deben funcionar correctamente en los principales clientes de correo (Gmail, Outlook, Apple Mail).
+
+**Tareas:**
+1. Diseñar las plantillas HTML usando una estructura compatible con email.
+2. Implementar las plantillas en `/backend/application/templates/emails/`.
+3. Crear las versiones de texto plano.
+4. Integrar las plantillas con el servicio de envío de emails.
+5. Realizar pruebas de visualización en diferentes clientes de correo.
+
+**Dependencias:** Ninguna (puede desarrollarse en paralelo a tickets anteriores)
+
+**Nivel de prioridad:** Media
+
+**Estimación:** 2 puntos
+
+**Notas técnicas:**
+- Usar tablas para la estructura en lugar de divs para compatibilidad con clientes de correo.
+- Utilizar CSS inline para el estilo.
+- Probar en servicios como Litmus o Email on Acid si es posible.
+- Asegurar que los enlaces incluyan un token seguro y tengan una URL válida para el entorno.
+
+---
+
+### Ticket #56: Página de verificación en frontend
+
+**Título:** Implementación de página de verificación de email en frontend
+
+**Descripción:** Crear una página en el frontend que permita a los usuarios verificar su email a través del enlace recibido en su correo y mostrar el resultado del proceso de verificación.
+
+**Criterios de Aceptación:**
+1. Implementar página en `/verify-email/[token]` que procese automáticamente el token de la URL.
+2. Mostrar estados de carga durante la verificación.
+3. Mostrar mensaje de éxito cuando la verificación se complete correctamente.
+4. Mostrar mensaje de error apropiado cuando la verificación falle (token inválido, expirado, etc).
+5. Incluir botón para reenviar email de verificación si es necesario.
+6. Incluir enlace para ir al login después de una verificación exitosa.
+7. Asegurar que la página sea responsive y cumpla con estándares de accesibilidad.
+
+**Tareas:**
+1. Crear componente `VerifyEmailPage` en `frontend/pages/verify-email/[token].jsx`.
+2. Implementar la lógica para extraer el token de la URL y llamar al endpoint de verificación.
+3. Implementar diferentes estados visuales según el resultado de la verificación.
+4. Crear componente de éxito que muestre un mensaje positivo y próximos pasos.
+5. Crear componente de error con opciones para reenviar o contactar soporte.
+6. Implementar pruebas para los diferentes escenarios.
+
+**Dependencias:** Ticket #54
+
+**Nivel de prioridad:** Alta
+
+**Estimación:** 2 puntos
+
+**Notas técnicas:**
+- Utilizar los componentes UI existentes para mantener consistencia visual.
+- Implementar gestión de estado con React hooks (useState, useEffect).
+- Considerar el uso de react-query para manejar la petición de verificación.
+- Añadir análisis (analytics) para seguir tasas de verificación exitosa.
+
+---
+
+### Ticket #57: Componentes UI para estado de verificación
+
+**Título:** Implementación de componentes UI para indicar estado de verificación
+
+**Descripción:** Crear componentes visuales que indiquen el estado de verificación del email del usuario en toda la plataforma, y bloqueo de acceso a funcionalidades para usuarios no verificados.
+
+**Criterios de Aceptación:**
+1. Implementar banner/alerta que se muestre en toda la plataforma para usuarios no verificados.
+2. El banner debe incluir información sobre la importancia de verificar y un botón para reenviar el email.
+3. Implementar lógica para restringir el acceso a ciertas funcionalidades para usuarios no verificados.
+4. Mostrar mensajes informativos al intentar acceder a funcionalidades restringidas.
+5. Implementar indicador visual del estado de verificación en el perfil del usuario.
+
+**Tareas:**
+1. Crear componente `EmailVerificationBanner` en `frontend/components/common/`.
+2. Integrar el banner en el layout principal de la aplicación.
+3. Implementar HOC (High Order Component) o middleware para restringir acceso a rutas protegidas.
+4. Modificar la lógica de autenticación para incluir el estado de verificación en el contexto de usuario.
+5. Actualizar el perfil de usuario para mostrar el estado de verificación.
+6. Implementar el servicio frontend para reenviar emails de verificación.
+
+**Dependencias:** Ticket #56
+
+**Nivel de prioridad:** Media
+
+**Estimación:** 2 puntos
+
+**Notas técnicas:**
+- El banner debe ser persistente pero no intrusivo.
+- Considerar el uso de localStorage para no mostrar el banner constantemente si el usuario lo cierra.
+- Utilizar el contexto de autenticación existente para acceder al estado de verificación.
+- Las rutas a restringir deben definirse en coordinación con los requerimientos de negocio.
+
+# Gestión de Documentos (Cloudinary) - Tickets Detallados
+
+## Introducción
+
+Este documento detalla los tickets y especificaciones para implementar un sistema completo de gestión de documentos dentro de la plataforma del Club de Inversión Inmobiliaria. El sistema utiliza Cloudinary como proveedor de almacenamiento principal, pero está diseñado con una arquitectura que permitiría cambiar de proveedor en el futuro con mínimas modificaciones.
+
+La gestión documental es una parte fundamental del sistema, permitiendo a los usuarios acceder a documentos críticos según su rol y nivel de acceso, garantizando tanto la disponibilidad como la seguridad de la información.
+
+> **NOTA IMPORTANTE: Los tickets marcados como "MVP" son los que se implementarán en la primera fase del proyecto, siendo los mínimos necesarios para tener una funcionalidad básica pero completa del sistema de gestión documental.**
+
+## Consideraciones Generales
+
+### Tipos de Documentos Soportados
+
+| Categoría | Tipos de Archivo | Extensiones | Tamaño Máximo |
+|-----------|------------------|------------|--------------|
+| Documentos | PDF, Word, Excel, PowerPoint, texto plano | .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .txt, .rtf | 10MB |
+| Imágenes | JPEG, PNG, GIF, WebP, SVG | .jpg, .jpeg, .png, .gif, .webp, .svg | 5MB |
+| Videos | MP4, MPEG, MOV, AVI, WMV | .mp4, .mpeg, .mov, .avi, .wmv | 100MB |
+
+### Clasificación de Documentos por Tipo
+
+- **LEGAL**: Documentos legales relacionados con los proyectos
+- **FINANCIAL**: Documentos financieros, balances, proyecciones
+- **TECHNICAL**: Documentos técnicos, planos, especificaciones
+- **MARKETING**: Materiales promocionales del proyecto
+- **IMAGE**: Imágenes del proyecto o propiedad
+- **VIDEO**: Videos del proyecto o propiedad
+- **OTHER**: Otros documentos no clasificados
+
+### Niveles de Acceso
+
+- **PUBLIC**: Visible para todos los usuarios, incluso no registrados
+- **PARTNER**: Solo visible para socios registrados
+- **INVESTOR**: Solo visible para inversores en el proyecto específico
+- **ADMIN**: Solo visible para administradores y gestores
+
+### Niveles de Seguridad
+
+- **VIEW_ONLY**: Solo permite visualización en el navegador sin descargar
+- **DOWNLOAD**: Permite descargar el documento
+- **PRINT**: Permite la impresión del documento
+- **FULL_ACCESS**: Acceso completo sin restricciones
+
+## Tickets de Desarrollo
+
+### ✅ Ticket #DM-01: Mejora del Servicio de Almacenamiento en Cloudinary (MVP - Orden 1)
+
+**Título:** Implementar servicio mejorado de almacenamiento con Cloudinary
+
+**Descripción:** Actualizar el servicio de almacenamiento para proporcionar funcionalidades avanzadas y mejorar la gestión de documentos con Cloudinary, enfocándose en seguridad, rendimiento y escalabilidad.
+
+**Criterios de Aceptación:**
+- El servicio debe implementar correctamente la interfaz StorageInterface para mantener interoperabilidad
+- Debe soportar todos los tipos de documentos especificados (PDF, Word, Excel, imágenes, videos, etc.)
+- Debe implementar URLs firmadas con duración configurada por tipo de documento y nivel de seguridad
+- Debe soportar optimización de imágenes y transformaciones según parámetros configurables
+- Debe mantener registro de todas las operaciones para auditoría
+- Debe implementar mecanismos de recuperación ante fallos
+- Las operaciones críticas deben ser atómicas o soportar rollback
+
+**Tareas:**
+1. Actualizar configuración de Cloudinary para soportar todos los tipos de documentos
+2. Implementar método mejorado de generación de URLs firmadas con expiración variable
+3. Desarrollar sistema de transformación y optimización según tipo de archivo
+4. Implementar registros detallados de operaciones para auditoría
+5. Añadir soporte para detección automática de tipo de contenido
+6. Implementar manejo de errores avanzado con reintentos automáticos
+7. Desarrollar pruebas unitarias exhaustivas
+
+### ✅ Ticket #DM-02: Implementación de Visor Seguro de Documentos (MVP - Orden 2)
+
+**Título:** Implementar visor seguro de documentos con protección contra descarga
+
+**Descripción:** Crear un sistema que permita visualizar documentos sensibles directamente en el navegador sin posibilidad de descarga, utilizando las capacidades de Cloudinary y añadiendo capas adicionales de seguridad.
+
+**Criterios de Aceptación:**
+- Los documentos con nivel de seguridad VIEW_ONLY no pueden ser descargados directamente
+- El visor debe funcionar con múltiples formatos (PDF, DOCX, etc.)
+- Debe implementar marca de agua con información del usuario visualizando
+- Las URLs de visualización deben ser temporales (máx. 30 minutos)
+- Debe registrar cada visualización (usuario, IP, fecha, duración)
+- Debe implementar protección contra capturas de pantalla (en la medida de lo posible)
+- Debe funcionar correctamente en dispositivos móviles y tablets
+
+**Tareas:**
+1. Desarrollar componente frontend para visualización segura de PDFs
+2. Implementar generación de URLs firmadas con tiempo de expiración reducido
+3. Crear sistema de marcas de agua dinámicas con datos del usuario
+4. Desarrollar mecanismo de registro de visualizaciones
+5. Implementar restricciones JavaScript para dificultar capturas de pantalla
+6. Crear endpoints API para solicitar y validar acceso a documentos
+7. Desarrollar pruebas de integración y seguridad
+
+### ✅ Ticket #DM-03: Sistema de Descarga Controlada de Documentos (MVP - Orden 3)
+
+**Título:** Implementar sistema de descarga controlada de documentos
+
+**Descripción:** Crear un sistema que permita la descarga controlada de documentos para usuarios autorizados, incluyendo registro de cada descarga, límites por usuario, y generación de versiones personalizadas con marcas de agua.
+
+**Criterios de Aceptación:**
+- Solo los documentos con nivel de seguridad DOWNLOAD o superior pueden ser descargados
+- Cada descarga debe ser registrada (usuario, IP, fecha, documento)
+- Se debe implementar limitación de descargas por usuario y período
+- Los documentos descargados deben incluir marca de agua personalizada
+- Se debe verificar el nivel de acceso del usuario para cada descarga
+- Las descargas deben usar URLs firmadas con corta expiración (5 minutos)
+- El sistema debe soportar encriptación de documentos sensibles
+
+**Tareas:**
+1. Desarrollar endpoint API para solicitar descarga de documento
+2. Implementar verificación de permisos por nivel de acceso y tipo de documento
+3. Crear sistema de generación de URLs firmadas para descarga
+4. Desarrollar mecanismo de registro detallado de descargas
+5. Implementar sistema de límites y cuotas por usuario
+6. Crear sistema de marcas de agua dinámicas para documentos descargados
+7. Implementar pruebas de seguridad y rendimiento
+
+### Ticket #DM-04: Gestor de Carga de Documentos por Lotes
+
+**Título:** Implementar sistema de carga de documentos por lotes
+
+**Descripción:** Crear una interfaz y un servicio backend que permita a los gestores cargar múltiples documentos simultáneamente, con procesamiento asíncrono, verificación de tipos y clasificación automática.
+
+**Criterios de Aceptación:**
+- La interfaz permite seleccionar y cargar hasta 20 documentos simultáneamente
+- El sistema procesa los documentos de forma asíncrona mostrando progreso
+- Se verifican automáticamente tipos, tamaños y potenciales malware
+- Se implementa reconocimiento para sugerir clasificación de documentos
+- El sistema genera miniaturas para documentos y PDFs
+- Se permite asignar metadatos en lote o individualmente
+- El sistema notifica cuando la carga está completa
+
+**Tareas:**
+1. Desarrollar componente frontend para carga múltiple con drag & drop
+2. Implementar sistema de cola para procesamiento asíncrono
+3. Crear servicio de verificación de tipos y seguridad
+4. Desarrollar generador de miniaturas para diferentes tipos de documentos
+5. Implementar sistema de clasificación automática basado en contenido
+6. Crear interfaz para asignación de metadatos por lote
+7. Desarrollar sistema de notificaciones de progreso y finalización
+
+### Ticket #DM-05: Sistema de Control de Versiones de Documentos
+
+**Título:** Implementar control de versiones para documentos de proyecto
+
+**Descripción:** Crear un sistema que permita mantener y gestionar múltiples versiones de un mismo documento, facilitando la actualización sin perder versiones anteriores y manteniendo un historial completo.
+
+**Criterios de Aceptación:**
+- El sistema mantiene todas las versiones de un documento con registro de cambios
+- Permite revertir a versiones anteriores sin perder la historia
+- Muestra claramente la versión actual y el historial de cambios
+- Cada versión registra quién y cuándo la subió
+- Permite comparar versiones de documentos (cuando el formato lo permite)
+- Las versiones anteriores permanecen accesibles según niveles de permiso
+- Implementa etiquetado de versiones (v1.0, v2.0, "Final", etc.)
+
+**Tareas:**
+1. Modificar el modelo de datos para soportar versionado
+2. Desarrollar servicio de gestión de versiones de documentos
+3. Crear interfaz para visualizar y navegar entre versiones
+4. Implementar sistema de etiquetado de versiones
+5. Desarrollar mecanismo de comparación de versiones para formatos compatibles
+6. Crear endpoints API para gestionar versiones
+7. Implementar pruebas unitarias para verificar integridad de versiones
+
+### Ticket #DM-06: Sistema de Búsqueda y Filtrado Avanzado de Documentos
+
+**Título:** Implementar búsqueda avanzada de documentos con indexación de contenido
+
+**Descripción:** Desarrollar un sistema que permita la búsqueda no solo por metadatos sino también por contenido dentro de los documentos, utilizando técnicas de indexación y OCR para documentos escaneados.
+
+**Criterios de Aceptación:**
+- El sistema permite búsqueda por múltiples criterios (tipo, fecha, proyecto, contenido)
+- Implementa búsqueda full-text dentro del contenido de documentos compatibles
+- Utiliza OCR para indexar contenido de documentos escaneados e imágenes
+- Permite filtrado avanzado combinando múltiples criterios
+- Los resultados se presentan ordenados por relevancia con vista previa
+- Respeta niveles de acceso en los resultados de búsqueda
+- El rendimiento debe mantenerse con grandes volúmenes de documentos
+
+**Tareas:**
+1. Implementar sistema de indexación de documentos
+2. Integrar servicio OCR para documentos escaneados
+3. Desarrollar motor de búsqueda full-text
+4. Crear interfaz de usuario para búsqueda avanzada
+5. Implementar filtrado por metadatos y contenido
+6. Desarrollar sistema de presentación de resultados con preview
+7. Optimizar rendimiento para grandes volúmenes de datos
+
+### Ticket #DM-07: Implementación de Análisis y Estadísticas de Documentos
+
+**Título:** Desarrollar sistema de análisis y estadísticas de uso de documentos
+
+**Descripción:** Crear un dashboard que muestre estadísticas detalladas sobre el uso de documentos: visualizaciones, descargas, usuarios más activos, documentos más populares, etc., permitiendo a los gestores entender mejor el comportamiento de los usuarios.
+
+**Criterios de Aceptación:**
+- El dashboard muestra estadísticas de visualización y descarga por documento
+- Presenta gráficos de tendencias de uso a lo largo del tiempo
+- Identifica documentos más populares y usuarios más activos
+- Permite filtrar estadísticas por proyecto, tipo de documento y período
+- Implementa alertas para patrones inusuales (posibles filtraciones)
+- Genera informes exportables en diferentes formatos
+- Muestra tiempo promedio de visualización por documento
+
+**Tareas:**
+1. Desarrollar sistema de recolección y procesamiento de datos de uso
+2. Crear modelos de análisis estadístico
+3. Implementar dashboard visual con gráficos interactivos
+4. Desarrollar sistema de informes personalizables
+5. Crear mecanismo de alertas para comportamientos anómalos
+6. Implementar filtros y segmentación de datos
+7. Desarrollar exportación de informes en múltiples formatos
+
+### Ticket #DM-08: Implementación de Política de Retención y Archivo de Documentos
+
+**Título:** Implementar política automatizada de retención y archivo de documentos
+
+**Descripción:** Desarrollar un sistema que gestione automáticamente el ciclo de vida de los documentos, aplicando políticas de retención, archivado y eliminación según reglas predefinidas basadas en tipo, edad y uso del documento.
+
+**Criterios de Aceptación:**
+- El sistema permite definir reglas de retención por tipo de documento
+- Implementa archivado automático de documentos antiguos poco usados
+- Notifica antes de aplicar políticas de eliminación
+- Mantiene registro completo de documentos archivados/eliminados
+- Permite recuperación de documentos archivados cuando sea necesario
+- Implementa diferentes estrategias de almacenamiento según fase del ciclo de vida
+- Cumple con requisitos legales de retención para documentos críticos
+
+**Tareas:**
+1. Desarrollar sistema de definición de políticas de retención
+2. Implementar mecanismo automático de evaluación y aplicación de políticas
+3. Crear sistema de almacenamiento por niveles (hot/warm/cold)
+4. Desarrollar proceso de notificación previa a archivado/eliminación
+5. Implementar registro detallado de operaciones de ciclo de vida
+6. Crear interfaz para definir y gestionar políticas
+7. Desarrollar sistema de recuperación de documentos archivados
+
+### Ticket #DM-09: Integración de Firma Digital en Documentos
+
+**Título:** Implementar sistema de firma digital para documentos legales
+
+**Descripción:** Desarrollar un sistema que permita la firma digital de documentos legales directamente en la plataforma, con validez legal y registro inmutable de firmas, utilizando estándares reconocidos.
+
+**Criterios de Aceptación:**
+- Permite firmar digitalmente documentos PDF y compatibles
+- Implementa estándares reconocidos de firma digital
+- Registra las firmas con timestamp y datos del firmante
+- Verifica la identidad del firmante mediante múltiples factores
+- Genera certificados de firma verificables
+- Permite validar la autenticidad e integridad de documentos firmados
+- Implementa flujos de trabajo para múltiples firmantes
+
+**Tareas:**
+1. Integrar librería de firma digital compatible con estándares legales
+2. Desarrollar interfaz para proceso de firma en plataforma
+3. Implementar verificación de identidad multifactor
+4. Crear registro inmutable de firmas (potencialmente blockchain)
+5. Desarrollar sistema de validación de documentos firmados
+6. Implementar flujos de trabajo para procesos con múltiples firmantes
+7. Crear sistema de notificaciones para solicitudes de firma
+
+### Ticket #DM-10: Sistema de Permisos Granulares para Documentos
+
+**Título:** Implementar sistema de permisos granulares a nivel de documento
+
+**Descripción:** Desarrollar un sistema avanzado de gestión de permisos que permita asignar accesos a nivel individual de documento, superando las limitaciones de los niveles generales de acceso, con capacidad para permisos temporales y condicionales.
+
+**Criterios de Aceptación:**
+- Permite asignar permisos específicos por documento a usuarios individuales
+- Implementa herencia de permisos desde niveles superiores (proyecto, carpeta)
+- Soporta permisos temporales con fecha de expiración
+- Permite permisos condicionales basados en criterios (IP, hora, dispositivo)
+- Implementa grupos de permisos para facilitar la gestión
+- Proporciona vista de auditoría de permisos asignados
+- Permite delegación controlada de asignación de permisos
+
+**Tareas:**
+1. Diseñar e implementar modelo de datos para permisos granulares
+2. Desarrollar sistema de evaluación de permisos en tiempo real
+3. Crear interfaz para gestión de permisos a nivel de documento
+4. Implementar sistema de herencia y anulación de permisos
+5. Desarrollar mecanismo de permisos temporales y condicionales
+6. Crear sistema de auditoría de permisos
+7. Implementar pruebas de seguridad y rendimiento
+
+## Matriz de Casos de Uso por Rol de Usuario
+
+| Caso de Uso | Visitante | Socio | Inversor | Gestor | Admin |
+|-------------|-----------|-------|----------|--------|-------|
+| Ver documentos públicos | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Ver documentos nivel PARTNER | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Ver documentos nivel INVESTOR | ❌ | ❌ | ✅* | ✅ | ✅ |
+| Ver documentos nivel ADMIN | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Descargar documentos (nivel DOWNLOAD+) | ❌ | ✅† | ✅† | ✅ | ✅ |
+| Subir documentos | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Eliminar documentos | ❌ | ❌ | ❌ | ✅‡ | ✅ |
+| Gestionar versiones | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Ver estadísticas de documentos | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Gestionar permisos | ❌ | ❌ | ❌ | ✅§ | ✅ |
+
+* Solo para proyectos en los que el usuario es inversor
+† Según el nivel de seguridad del documento específico
+‡ Solo documentos subidos por el mismo gestor
+§ Permisos limitados a sus propios proyectos
+
+## Diagrama de Flujo de Acceso a Documentos
+
+```
+Usuario solicita documento
+    ↓
+Verificar autenticación
+    ↓
+Verificar nivel de acceso
+    ├── Si es insuficiente → Mostrar error de permisos
+    ↓
+Verificar nivel de seguridad
+    ├── VIEW_ONLY → Generar URL firmada corta (30 min)
+    ├── DOWNLOAD → Generar URL firmada para descarga (5 min)
+    ├── PRINT → Generar URL con permisos de impresión
+    ├── FULL_ACCESS → Generar URL sin restricciones
+    ↓
+Registrar acceso (visualización/descarga)
+    ↓
+Devolver URL al cliente
+    ↓
+Cliente accede al documento mediante URL firmada
+```
+
+## Consideraciones de Implementación
+
+1. **Seguridad**: Implementar comprobaciones de seguridad en cada capa (frontend, backend, almacenamiento)
+2. **Rendimiento**: Utilizar técnicas de carga progresiva, caché y CDN para documentos frecuentemente accedidos
+3. **Escalabilidad**: Diseñar para volúmenes crecientes de documentos y usuarios
+4. **Cumplimiento**: Asegurar que el sistema cumple con regulaciones relevantes (GDPR, LOPD, etc.)
+5. **Auditoría**: Mantener registros completos de todas las operaciones para análisis de seguridad
+6. **Recuperación**: Implementar sistemas de respaldo y recuperación para casos de fallo
+7. **Abstracción**: Mantener capa de abstracción sobre Cloudinary para facilitar cambio futuro de proveedor
+
+## Riesgos y Mitigaciones
+
+| Riesgo | Probabilidad | Impacto | Mitigación |
+|--------|------------|---------|------------|
+| Fallo del proveedor (Cloudinary) | Baja | Alto | Implementar sistema de respaldo local o segundo proveedor |
+| Filtración de documentos sensibles | Baja | Crítico | URLs firmadas, caducidad corta, auditoría de accesos, marcas de agua |
+| Sobrecarga del sistema | Media | Alto | Implementar caching, procesamiento asíncrono y escalado automático |
+| Tipos de archivo maliciosos | Media | Alto | Verificación exhaustiva, sandboxing, análisis de malware |
+| Ataques de fuerza bruta | Alta | Medio | Rate limiting, tokens de acceso complejos, expiración corta |
+| Crecimiento excesivo de almacenamiento | Alta | Medio | Políticas de retención, compresión, eliminación automática de temporales |
+
+## Plan de Pruebas
+
+Para cada ticket, se deben implementar como mínimo:
+
+1. **Pruebas unitarias**: Cobertura >80% del código
+2. **Pruebas de integración**: Verificar interacción entre componentes
+3. **Pruebas de seguridad**: Penetration testing para cada nueva funcionalidad
+4. **Pruebas de rendimiento**: Verificar comportamiento bajo carga
+5. **Pruebas de regresión**: Asegurar que nuevas funcionalidades no rompen existentes
+6. **Pruebas de usabilidad**: Verificar experiencia de usuario con diferentes roles
+7. **Pruebas de recuperación**: Comprobar comportamiento ante fallos
+
+## Estimación y Priorización
+
+| Ticket | Prioridad | MVP | Orden | Estimación (días) | Dependencias |
+|--------|-----------|-----|-------|-------------------|-------------|
+| DM-01: Servicio de Almacenamiento | Alta | ✅ | 1 | 5 | - |
+| DM-02: Visor Seguro | Alta | ✅ | 2 | 7 | DM-01 |
+| DM-03: Descarga Controlada | Alta | ✅ | 3 | 5 | DM-01 |
+| DM-04: Carga por Lotes | Media | ❌ | - | 6 | DM-01 |
+| DM-05: Control de Versiones | Media | ❌ | - | 8 | DM-01, DM-02 |
+| DM-06: Búsqueda Avanzada | Media | ❌ | - | 10 | DM-01 |
+| DM-07: Análisis y Estadísticas | Baja | ❌ | - | 7 | DM-01, DM-02, DM-03 |
+| DM-08: Retención y Archivo | Baja | ❌ | - | 6 | DM-01, DM-05 |
+| DM-09: Firma Digital | Baja | ❌ | - | 12 | DM-01, DM-02 |
+| DM-10: Permisos Granulares | Media | ❌ | - | 9 | DM-01 | 
