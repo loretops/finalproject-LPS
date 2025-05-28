@@ -127,83 +127,23 @@ Versión optimizada para reducir costes después de validar el MVP:
 
 ### Base de Datos (Supabase)
 
-1. **Crear cuenta y proyecto**:
-   - Regístrate en [Supabase](https://app.supabase.com/)
-   - Crea un nuevo proyecto con PostgreSQL
-   - Guarda la URL de conexión y contraseña
-
-2. **Ejecutar migraciones**:
-   ```bash
-   export DATABASE_URL=postgresql://postgres:[TU-PASSWORD]@[TU-HOST]:[TU-PUERTO]/postgres
-   cd backend
-   npx prisma migrate deploy
-   ```
+Para la configuración detallada, consulta la [Guía de Supabase](supabase_setup.md).
 
 ### Almacenamiento (Cloudinary)
 
-1. **Crear cuenta**:
-   - Regístrate en [Cloudinary](https://cloudinary.com/users/register/free)
-   - Accede al dashboard y encuentra tus credenciales
-
-2. **Crear estructura de carpetas** (recomendado):
-   - Crea carpetas para `documents`, `images` y `thumbnails`
-
-3. **Configuraciones de seguridad recomendadas**:
-   - Habilita "Strict Transformations"
-   - Configura "Allowed Formats"
-   - Activa "Signed Uploads" si es posible
+Para la configuración detallada, consulta la [Guía de Cloudinary](cloudinary_setup.md).
 
 ### Email (Gmail)
 
-1. **Obtener contraseña de aplicación**:
-   - Ve a [Tu cuenta de Google](https://myaccount.google.com/)
-   - Habilita verificación en dos pasos si no está habilitada
-   - Crea una contraseña de aplicación específica
-
-2. **Consideraciones**:
-   - Límite de ~500 correos diarios
-   - Máximo 100 destinatarios por correo
-   - Tamaño máximo de adjuntos: 25MB
+Para la configuración detallada, consulta la [Guía de Gmail](gmail_setup.md).
 
 ## Despliegue del Backend (Render)
 
-1. **Crear cuenta**:
-   - Regístrate en [Render](https://dashboard.render.com/register)
-
-2. **Crear servicio web**:
-   - Elige "New Web Service"
-   - Conecta tu repositorio de GitHub
-   - Configura el servicio:
-     - **Name**: coopco-backend
-     - **Root Directory**: backend
-     - **Environment**: Node
-     - **Build Command**: npm install
-     - **Start Command**: npm start
-
-3. **Configurar variables de entorno**:
-   - En "Environment" añade todas las variables necesarias
-   - **IMPORTANTE**: Añade `FRONTEND_URL` y `CORS_ORIGIN` con la URL de tu frontend
-   - **JWT_SECRET**: Genera una clave segura (ej. con `openssl rand -base64 32`)
-
-4. **Configurar CORS** (crítico):
-   - Asegúrate que las variables `CORS_ORIGIN` y `FRONTEND_URL` contienen exactamente la URL de tu frontend (ej. `https://coopco.vercel.app`)
+Para la configuración detallada, consulta la [Guía de Render](render_setup.md).
 
 ## Despliegue del Frontend (Vercel)
 
-1. **Crear cuenta**:
-   - Regístrate en [Vercel](https://vercel.com/signup)
-
-2. **Importar proyecto**:
-   - Conecta tu repositorio de GitHub
-   - Configura el proyecto:
-     - **Framework Preset**: Next.js
-     - **Root Directory**: frontend
-     - **Build Command**: npm run build
-     - **Output Directory**: .next
-
-3. **Configurar variables de entorno**:
-   - Añade `NEXT_PUBLIC_API_URL` con la URL de tu backend
-   - Añade cualquier otra variable necesaria para el frontend
+Para la configuración detallada, consulta la [Guía de Vercel](vercel_frontend_setup.md).
 
 ## Variables de Entorno
 

@@ -162,7 +162,6 @@ COOPCO presenta una interfaz de usuario moderna, profesional y coherente que ref
 Para información detallada sobre el diseño y la experiencia de usuario, consulte la [documentación completa de UI/UX](docs/frontend/ui-design.md).
 
 ### **1.4. Instrucciones de instalación:**
-> Documenta de manera precisa las instrucciones para instalar y poner en marcha el proyecto en local (librerías, backend, frontend, servidor, base de datos, migraciones y semillas de datos, etc.)
 
 Para instalar y configurar el proyecto en tu entorno local, consulta nuestra [guía detallada de configuración](docs/technical/setup.md) que incluye:
 
@@ -549,36 +548,113 @@ graph TD
 *Diagrama simplificado de la interacción de componentes en el entorno de desarrollo local.*
 ![Diagrama de Infraestructura Local](docs/images/infraestructura_local.png) 
 
-#### Proceso de Despliegue (Esbozo Inicial para Producción)
+#### Infraestructura de Producción
 
-Aunque el enfoque actual es el desarrollo local, se esboza una posible estrategia de despliegue a producción:
+```mermaid
+graph TB
+    User([Usuario]) --> Frontend[Frontend Vercel]
+    Frontend --> Backend[Backend Render]
+    Backend --> Database[(Supabase PostgreSQL)]
+    Backend --> Storage{Cloudinary}
+    Backend --> EmailService[Gmail]
+    
+    subgraph "Capa de Cliente"
+        User
+    end
+    
+    subgraph "Capa de Presentación"
+        Frontend
+    end
+    
+    subgraph "Capa de Aplicación"
+        Backend
+    end
+    
+    subgraph "Capa de Persistencia"
+        Database
+        Storage
+    end
+    
+    subgraph "Servicios Externos"
+        EmailService
+    end
+    
+    style User fill:#f9f,stroke:#333
+    style Frontend fill:#bbf,stroke:#333
+    style Backend fill:#bfb,stroke:#333
+    style Database fill:#fbb,stroke:#333
+    style Storage fill:#ffd,stroke:#333
+    style EmailService fill:#ffd,stroke:#333
+```
 
-1.  **Opción 1: Servidor VPS (Virtual Private Server)**
-    *   **Infraestructura:** Contratar un VPS (ej. DigitalOcean, Linode, OVHcloud) con Linux.
-    *   **Dominio:** Comprar y configurar un dominio (ej. `coopco.com` o `app.coopco.com`).
-    *   **Despliegue:**
-        *   Instalar Node.js, PostgreSQL (o conectar a una base de datos gestionada externa), y un servidor web como Nginx en el VPS.
-        *   Configurar Nginx como proxy inverso para las aplicaciones Node.js (frontend y backend).
-        *   Clonar el repositorio en el VPS.
-        *   Configurar las variables de entorno de producción.
-        *   Construir las aplicaciones (`npm run build` para frontend y backend si es necesario).
-        *   Utilizar un gestor de procesos como `pm2` para ejecutar las aplicaciones Node.js de forma persistente.
-        *   Configurar certificados SSL (ej. con Let's Encrypt).
-        *   El despliegue podría automatizarse con scripts o herramientas como Capistrano, o manualmente mediante SSH y Git.
+![Diagrama de Arquitectura de Producción](docs/images/arquitectura_producción.png)
 
-2.  **Opción 2: Plataformas Cloud Modernas (PaaS/Serverless)**
-    *   **Frontend (Next.js):** Despliegue en plataformas optimizadas como **Vercel** o **Netlify**.
-    *   **Backend (Node.js/Express):** Despliegue en servicios como **Heroku**, **AWS Elastic Beanstalk**, **Google Cloud Run**, o utilizando contenedores **Docker** orquestados.
-    *   **Base de Datos (PostgreSQL):** Utilización de servicios de bases de datos gestionadas (**AWS RDS**, **Google Cloud SQL**, **Heroku Postgres**).
-    *   **Ventajas:** Mayor escalabilidad automática, menor gestión de la infraestructura base, CI/CD más integrado.
-    *   **Consideración:** Puede implicar una curva de aprendizaje diferente y potencialmente mayores costes a escala.
 
-3.  **Consideraciones Comunes (para ambas opciones):**
-    *   **CI/CD:** Implementar un pipeline de Integración Continua y Despliegue Continuo (GitHub Actions, GitLab CI) para automatizar pruebas, construcción y despliegue.
-    *   **Servicios Externos:** Configurar las cuentas de producción de Cloudinary/S3, SendGrid/Mailgun, etc., con claves API seguras.
-    *   **Seguridad:** Configurar firewalls, gestionar secretos de forma segura, aplicar parches de seguridad regularmente (especialmente relevante en VPS).
+##### Servicios Implementados
 
-*La elección final dependerá de factores como el presupuesto, la experiencia técnica, los requisitos de escalabilidad y el nivel de control deseado sobre la infraestructura. Esta sección se detallará más adelante.*
+| Componente | Servicio | Plan | Características |
+|------------|----------|------|-----------------|
+| **Frontend** | [Vercel](https://vercel.com) | Pro | - Despliegue continuo desde GitHub<br>- Prevista automática de PRs<br>- Dominio personalizado con SSL<br>- Analytics integrados |
+| **Backend** | [Render](https://render.com) | Web Service | - Escalado automático<br>- Logs integrados<br>- Reinicio automático<br>- Despliegue desde GitHub |
+| **Base de Datos** | [Supabase](https://supabase.com) | Pro | - PostgreSQL gestionado<br>- Backups diarios<br>- Monitorización en tiempo real<br>- 8GB de almacenamiento |
+| **Almacenamiento** | [Cloudinary](https://cloudinary.com) | Plus | - Optimización automática de imágenes<br>- Transformaciones en tiempo real<br>- URLs firmadas<br>- CDN global<br>- [Detalles técnicos](docs/technical/document-storage-service.md) |
+| **Email** | [Gmail / Google Workspace](https://workspace.google.com) | Business Starter | - Alta entregabilidad<br>- Límite diario adecuado<br>- Monitorización de entregas<br>- Plantillas HTML personalizadas |
+
+##### Despliegue a Producción
+
+El proceso de despliegue a producción sigue un flujo GitOps donde los cambios se propagan automáticamente una vez fusionados en la rama principal:
+
+1. **Preparación:**
+   - Revisión del código mediante Pull Request
+   - Ejecución de pruebas automatizadas (CI)
+   - Aprobación del PR por al menos un revisor
+
+2. **Despliegue del Backend:**
+   - Merge a `main` activa despliegue automático en Render
+   - Ejecución de migraciones de Prisma automáticas
+   - Verificación de salud del servicio
+
+3. **Despliegue del Frontend:**
+   - Merge a `main` activa build y despliegue en Vercel
+   - Previsualización automática de cada build
+   - Verificación de integridad y enlaces
+
+4. **Verificación Post-Despliegue:**
+   - Pruebas de humo automáticas
+   - Verificación de conexión entre servicios
+   - Monitorización de errores y rendimiento
+
+##### Variables de Entorno
+
+Las variables de entorno se gestionan de forma segura en cada plataforma, siguiendo el principio de mínimo privilegio. Cada servicio mantiene solo las variables relevantes para su funcionamiento.
+
+Para obtener información detallada sobre:
+- [Guía completa de despliegue](docs/deployment/deployment_guide.md)
+- [Configuración de Cloudinary](docs/deployment/cloudinary_setup.md)
+- [Configuración de Email con Gmail](docs/deployment/gmail_setup.md)
+- [Configuración del backend en Render](docs/deployment/render_setup.md)
+- [Configuración de Supabase](docs/deployment/supabase_setup.md)
+- [Configuración del frontend en Vercel](docs/deployment/vercel_frontend_setup.md)
+
+##### Consideraciones de Seguridad
+
+El entorno de producción implementa múltiples capas de seguridad:
+
+- **HTTPS obligatorio** en todos los endpoints
+- **CORS** correctamente configurado entre frontend y backend
+- **Rate limiting** para prevenir ataques de fuerza bruta
+- **Cabeceras de seguridad** HTTP como Content-Security-Policy
+- **JWT** con tokens de corta duración
+- **Backups diarios** de la base de datos con retención de 30 días
+- **Encriptación** de datos sensibles tanto en tránsito como en reposo
+
+##### Monitorización y Mantenimiento
+
+El sistema cuenta con:
+- Alertas automáticas para fallos de servicio
+- Monitorización de rendimiento y latencia
+- Logs centralizados para diagnóstico
+- Procedimientos documentados para recuperación ante desastres
 
 
 ### **2.5. Seguridad**
@@ -599,6 +675,7 @@ La seguridad del proyecto se ha planteado desde las fases iniciales del desarrol
    * Middleware de autenticación JWT (`jwtAuthMiddleware.js`)
    * Middleware de autorización por roles (`roleAuthMiddleware.js`)
    * Restricción de rutas críticas a usuarios con roles específicos (ej: solo gestores pueden enviar invitaciones)
+   * Para más detalles técnicos, consulta la [documentación del sistema de roles](docs/technical/role-middleware-guide.md)
 
 3. **Validación de datos:**
    * Validación tanto en frontend como en backend para entradas de usuario
@@ -1839,7 +1916,10 @@ Implementar un sistema que permita a los socios autenticados ver un listado y de
 **Quiero** poder indicar que deseo invertir en un proyecto y cuánto,  
 **Para** que el gestor y los demás socios conozcan mi compromiso.
 
+> Para una explicación técnica detallada de la implementación, consulta la [documentación del flujo de inversión](docs/technical/investment-flow.md).
+
 #### Descripción técnica detallada
+
 Implementar una funcionalidad que permita a los socios registrar su intención formal de invertir en un proyecto, indicando el monto específico. El sistema debe validar que el monto cumpla con los requisitos mínimos, actualizar el estado del proyecto y notificar tanto al gestor como a los demás socios.
 
 #### Campos y modelos de datos
@@ -1906,9 +1986,9 @@ Implementar una funcionalidad que permita a los socios registrar su intención f
 - Manejo de errores y transacciones
 
 #### Documentación a actualizar
-- Agregar docs/technical/investment-flow.md explicando el proceso
-- Actualizar docs/api/investments.md con los endpoints
-- Documentar el diagrama de flujo del proceso
+- ✅ [Documentación técnica del flujo de inversión](docs/technical/investment-flow.md) - Arquitectura, componentes y consideraciones de seguridad
+- ✅ [Documentación de la API de inversiones](docs/api/investments.md) - Endpoints detallados y ejemplos
+- ✅ Diagramas de flujo del proceso de inversión (incluidos en la documentación técnica)
 
 #### Requisitos no funcionales
 - **Seguridad**: Verificar permisos y validar origen de la solicitud

@@ -56,3 +56,7 @@ Para implementar buenas prácticas de seguridad OWASP:
 2. **Transformaciones automáticas**: Utiliza parámetros en la URL para optimizar imágenes (formato WebP, compresión, etc.)
 3. **Cache-Control**: Configura correctamente las cabeceras Cache-Control para mejorar el rendimiento
 4. **Evitar información sensible**: Nunca almacenes información confidencial en nombres de archivos o carpetas 
+
+## Documentación técnica adicional
+
+Para más detalles sobre la arquitectura interna, lógica de negocio y consideraciones de seguridad del servicio de almacenamiento, consulta [Servicio de Almacenamiento: Arquitectura y Seguridad](../technical/document-storage-service.md). 

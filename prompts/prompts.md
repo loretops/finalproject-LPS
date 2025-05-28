@@ -480,6 +480,15 @@ Vamos a empezar el despliegue, paso a paso. eres un senior DevOps Engineer. Nece
 Revisa la carpeta @docs . Verás que hay varios archivos que hacen referencia a despliegue (deployment). Revisa su contenido, y haz un único archivo que contenga todo lo que consideres necesario y relevante. Que esté bien estructurado y escrito en markdown. 
 ```
 
+**Prompt 9:**
+```
+estoy tratando de actualizar el @readme.md con la guia original que se me proporcionó: Ficha del proyecto, Descripción general del producto, Arquitectura del sistema, Modelo de datos, Especificación de la API, Historias de usuario, Tickets de trabajo, Pull requests. Muchos de estos apartados están completos, pero voy revisando cada cosa. Por ejemplo, ya puedo empezar a documentar el punto ### **1.3. Diseño y experiencia de usuario:**. Por favor, haz una descripción adecuada para esta docuemntación e indicame las capturas de pantalla que consideres importantes. Hay un documento que habla de esto: @ui-resources.md , pero si lo ves oportuno crear otro o mejorar el que hay, hazlo, y lo enlazas desde el @readme.md. Puedes revisar el proyecto para dar una respuesta adecuada a lo que te pido.
+```
+
+**Prompt 10:**
+```
+Vamos a por el punto 2.4 Infraestructura y despliegue del @readme.md, a la parte del entorno de produccion. ya está funcionando en produccion y tienes los datos del despliegue en @deployment_guide_unified.md. Así que documenta profesionalmente este punto del @readme.md para que quede muy completo y con los enlaces a los documentos de @docs que consideres. Detalla la infraestructura del proyecto, incluyendo un diagrama en el formato que creas conveniente, y explica el proceso de despliegue que se sigue
+```
 
 
 

@@ -1,6 +1,14 @@
-# Despliegue del Backend en Render
+# Configuración y Despliegue en Render
 
-Esta guía te ayudará a desplegar el backend de la aplicación en Render, un servicio de hosting en la nube con un generoso plan gratuito.
+Esta guía unificada te ayudará a desplegar el backend de la aplicación en Render y solucionar problemas comunes como la configuración de CORS.
+
+## Índice
+1. [Creación y configuración del servicio](#paso-1-crear-una-cuenta-en-render)
+2. [Configuración de variables de entorno](#paso-4-configurar-variables-de-entorno)
+3. [Despliegue y verificación](#paso-5-desplegar-el-servicio)
+4. [Solución de problemas de CORS](#solución-de-problemas-de-cors)
+5. [Seguridad y optimización](#configuración-adicional-de-seguridad-owasp)
+6. [Limitaciones y consideraciones](#limitaciones-del-plan-gratuito-de-render)
 
 ## Paso 1: Crear una cuenta en Render
 
@@ -52,6 +60,17 @@ Completa el formulario con la siguiente información:
    - `RATE_LIMIT_WINDOW=15`
    - `RATE_LIMIT_MAX=100`
 
+### Variables críticas para CORS
+
+Para evitar problemas de CORS entre el frontend en Vercel y el backend en Render, asegúrate de configurar correctamente estas variables:
+
+| Variable | Valor |
+|----------|-------|
+| `FRONTEND_URL` | `https://coopco.vercel.app` (o el dominio específico de tu frontend) |
+| `CORS_ORIGIN` | `https://coopco.vercel.app` (o el dominio específico de tu frontend) |
+
+> **IMPORTANTE**: El error CORS más común indica que la cabecera `Access-Control-Allow-Origin` no coincide con el dominio del frontend en Vercel. Asegúrate de que estas variables contengan exactamente la URL completa de tu frontend, incluyendo el protocolo `https://`.
+
 ## Paso 5: Desplegar el servicio
 
 1. Haz clic en "Create Web Service"
@@ -63,6 +82,20 @@ Completa el formulario con la siguiente información:
 1. Una vez completado el despliegue, haz clic en la URL proporcionada
 2. Deberías ver una respuesta del servidor o un mensaje de estado
 3. Prueba el endpoint de salud: `https://tu-servicio.onrender.com/api/health`
+
+## Solución de problemas de CORS
+
+Si encuentras errores CORS después del despliegue:
+
+1. Accede al Dashboard de Render
+2. Selecciona el servicio del backend
+3. Ve a "Environment" o "Variables de Entorno"
+4. Verifica que `FRONTEND_URL` y `CORS_ORIGIN` tienen los valores correctos
+5. Después de actualizar las variables, Render reiniciará automáticamente el servicio
+6. Revisa los logs para confirmar que el servicio se ha iniciado correctamente y busca el mensaje de depuración:
+   ```
+   DEBUG STARTUP - Reading FRONTEND_URL env var: https://coopco.vercel.app
+   ```
 
 ## Configuración adicional de seguridad (OWASP)
 

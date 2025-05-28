@@ -1,6 +1,6 @@
-# Guía de Uso: Middleware de Verificación de Roles
+# Sistema de Control de Acceso Basado en Roles: Implementación Técnica
 
-Esta guía explica cómo usar el middleware de verificación de roles en tu API para proteger rutas según los permisos del usuario.
+Esta guía técnica explica la implementación y uso del middleware de verificación de roles en la API de COOPCO para proteger rutas según los permisos del usuario. Está destinada principalmente a desarrolladores que necesitan comprender o extender el sistema de autorización.
 
 ## Conceptos Básicos
 
