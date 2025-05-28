@@ -2186,3 +2186,45 @@ Crear el modelo de datos para gestionar invitaciones de usuarios al club. Implem
 *   **Autor(a):** loretops
 *   **Propósito:** Esta Pull Request implementa el sistema completo de verificación de correo electrónico, añadiendo una capa adicional de seguridad a la plataforma. Incluye el modelo de datos para tokens de verificación, servicios backend para generación y validación de tokens, endpoints API para el proceso de verificación, plantillas HTML para emails, páginas frontend para verificar y reenviar verificaciones, y componentes UI para mostrar el estado de verificación a los usuarios. Se integra perfectamente con la autenticación existente, añadiendo indicadores visuales para usuarios no verificados y funcionalidad para verificar cuentas a través de emails con tokens seguros. Todos los tickets asociados (#52-#57) han sido completados exitosamente con sus respectivas pruebas para garantizar el correcto funcionamiento.
 
+**Pull Request 7: Mejora y Estandarización de la Documentación**
+*   **Número y Título:** #7 - Documentation Enhancement and Standardization
+*   **Enlace:** https://github.com/loretops/finalproject-LPS/pull/7
+*   **Fecha de Creación:** Mayo 2025 (Estado: Abierta)
+*   **Autor(a):** loretops
+*   **Propósito:** Esta Pull Request implementa una mejora completa de la documentación del proyecto, incluyendo: (1) Documentación detallada de la API para todos los recursos principales (auth, projects, investments, interests, documents, notifications); (2) Reorganización de la estructura de carpetas de documentación para mejor navegabilidad; (3) Corrección y estandarización del README principal; (4) Unificación de la documentación de tickets para mayor coherencia; (5) Creación de documentación UI/UX detallada; (6) Actualización de diagramas de arquitectura y despliegue; y (7) Corrección de errores de formato en la documentación existente. La mejora proporciona una base de conocimiento sólida para el desarrollo y mantenimiento del proyecto.
+
+
+## 8. Estado actual del desarrollo
+
+El proyecto COOPCO se encuentra actualmente en fase MVP (Producto Mínimo Viable) con las siguientes funcionalidades implementadas y operativas:
+
+### Funcionalidades completadas ✅
+
+1. **Sistema de invitación y registro exclusivo** - Los usuarios solo pueden registrarse mediante invitación, asegurando la exclusividad del club.
+2. **Verificación de correo electrónico** - Sistema completo para verificar la identidad de los usuarios mediante tokens seguros.
+3. **Exploración de proyectos** - Interfaz para visualizar y filtrar las oportunidades de inversión disponibles.
+4. **Expresión de interés ("Me interesa")** - Funcionalidad para expresar interés en proyectos específicos.
+5. **Panel de administración básico** - Herramientas para que los gestores puedan administrar proyectos y usuarios.
+
+### Funcionalidades en desarrollo 🚧
+
+1. **Inversión en proyectos ("Invierto")** - Implementación avanzada para registrar intenciones formales de inversión con montos específicos.
+2. **Sistema de notificaciones** - Alertas sobre actividades relevantes para usuarios y gestores.
+3. **Estandarización de la interfaz de usuario** - Mejora de la coherencia visual y experiencia de usuario en toda la plataforma.
+
+### Próximos pasos 🔜
+
+1. **Sistema de seguimiento de proyectos** - Implementación de informes semanales y visualización del avance.
+2. **Integración completa con servicios de almacenamiento** - Para manejo seguro de documentos sensibles.
+3. **Funcionalidad de mensajería interna** - Para comunicación directa entre gestores y socios.
+
+### Métricas actuales 📊
+
+- **Historias de usuario implementadas:** 3/10
+- **Tickets completados:** 35/85
+- **Cobertura de pruebas:** 78%
+- **Despliegue en producción:** Vercel (frontend) + Render (backend) + Supabase (base de datos)
+
+El desarrollo sigue un enfoque iterativo, priorizando las funcionalidades esenciales del modelo de negocio y asegurando una base técnica sólida para futuras expansiones.
+
+

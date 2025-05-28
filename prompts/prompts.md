@@ -430,6 +430,11 @@ Si hay algún punto claro de lo que se va a desarrollar en el futuro, se pueden 
 Ya está terminada esta Historia de Usuario, así que vamos a hacer una nueva PR, pero asegurate que sea a mi repositorio, no al original. Actualiza @prompts.md con esto, en la sección Pull Requests, y documenta el @readme.md en la misma sección. Vamos paso a paso
 ```
 
+**Prompt 8:**
+```
+documenta y lleva a cabo una nueva PR. No quiero que desarrolles nada nuevo, lo que quiero es hacer una Pull Request nueva de los ultimos cambiosç
+```
+
 ## 8. Despliegue y configuración de entornos
 
 **Prompt 1:**
