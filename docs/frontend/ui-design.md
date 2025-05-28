@@ -9,6 +9,7 @@ Este documento presenta el diseño y la experiencia de usuario implementada en C
 4. [Flujos principales de usuario](#flujos-principales-de-usuario)
 5. [Responsive design](#responsive-design)
 6. [Accesibilidad](#accesibilidad)
+7. [Recursos para desarrolladores](#recursos-para-desarrolladores)
 
 ## Principios de diseño
 
@@ -121,4 +122,10 @@ La plataforma implementa las siguientes prácticas de accesibilidad:
 - **Etiquetas**: Elementos de formulario correctamente etiquetados.
 - **Textos alternativos**: Imágenes con textos descriptivos para lectores de pantalla.
 - **Mensajes de error**: Feedback claro para errores de formulario.
-- **Estructura semántica**: Uso adecuado de encabezados y landmarks HTML. 
+- **Estructura semántica**: Uso adecuado de encabezados y landmarks HTML.
+
+## Recursos para desarrolladores
+
+Para desarrolladores que necesiten ampliar o mantener la interfaz de usuario, hemos preparado un documento completo con recursos, documentación de librerías utilizadas, referencias de patrones de diseño y herramientas recomendadas.
+
+👉 [Ver recursos y documentación para el frontend](ui-resources.md) 
