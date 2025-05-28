@@ -39,6 +39,11 @@ DATABASE_URL="postgresql://usuario:contraseña@localhost:5432/coopco"
 FRONTEND_PORT=3001
 BACKEND_PORT=8001
 
+# URLs (importante para el correcto funcionamiento)
+BACKEND_URL=http://localhost:8001
+FRONTEND_URL=http://localhost:3001
+NEXT_PUBLIC_API_URL=http://localhost:8001/api
+
 # Secreto para JWT
 JWT_SECRET=tu_clave_secreta_para_jwt
 
@@ -55,6 +60,10 @@ EMAIL_HOST=smtp.example.com
 EMAIL_PORT=587
 EMAIL_USER=tu_email
 EMAIL_PASSWORD=tu_password
+EMAIL_FROM=no-reply@coopco.local
+
+# CORS (para desarrollo)
+CORS_ORIGIN=*
 ```
 
 ### 3. Instalación de Dependencias
@@ -65,13 +74,18 @@ Instala las dependencias del proyecto:
 # Instalar dependencias principales
 npm install
 
-# O si prefieres instalar por separado frontend y backend
-cd frontend && npm install
-cd ../backend && npm install
+# IMPORTANTE: Asegúrate de que concurrently está instalado (necesario para el script de desarrollo)
+npm install --save-dev concurrently
 
 # Instalar cross-port-killer para gestionar puertos
 npm install --save-dev cross-port-killer
+
+# Si prefieres instalar por separado frontend y backend
+# cd frontend && npm install
+# cd ../backend && npm install
 ```
+
+> ⚠️ **Importante:** El comando `npm run dev` requiere que `concurrently` esté instalado. Si recibes un error de "command not found", instala esta dependencia con `npm install --save-dev concurrently`.
 
 ### 4. Configuración de la Base de Datos
 
@@ -85,6 +99,9 @@ brew services start postgresql
 
 # En Linux (Ubuntu/Debian)
 sudo service postgresql start
+
+# En Windows
+# Usa el "Administrador de servicios" para iniciar el servicio "postgresql-x64-xx"
 ```
 
 #### 4.2. Crear la Base de Datos
@@ -136,14 +153,16 @@ Hemos configurado los puertos en el archivo `.env` para evitar conflictos. Los s
 npm run dev
 ```
 
-Añade estos scripts a tu `package.json`:
+> ✅ **Verificación rápida:** Una vez iniciado, puedes comprobar que el backend funciona correctamente ejecutando `curl http://localhost:8001/api/health`. Debería responder con un mensaje de estado.
+
+El proyecto ya incluye estos scripts en el `package.json`:
 
 ```json
 {
   "scripts": {
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
-    "dev:frontend": "cross-port-killer -p $FRONTEND_PORT && cd frontend && next dev -p $FRONTEND_PORT",
-    "dev:backend": "cross-port-killer -p $BACKEND_PORT && cd backend && nodemon server.js"
+    "dev:frontend": "(lsof -t -i:3001 | xargs kill -9 || true) && cd frontend && next dev -p 3001",
+    "dev:backend": "(lsof -t -i:8001 | xargs kill -9 || true) && cd backend && nodemon server.js"
   }
 }
 ```
@@ -171,33 +190,40 @@ Para evitar el problema común de "puerto ya en uso", hemos implementado las sig
 
 ### Configuración de package.json
 
-Hemos modificado los scripts en `package.json` para usar el gestor de puertos `cross-port-killer`:
+Hemos modificado los scripts en `package.json` para matar procesos en los puertos antes de iniciar los servidores:
 
 ```json
 {
   "scripts": {
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
-    "dev:frontend": "cross-port-killer -p $FRONTEND_PORT && cd frontend && next dev -p $FRONTEND_PORT",
-    "dev:backend": "cross-port-killer -p $BACKEND_PORT && cd backend && nodemon server.js"
+    "dev:frontend": "(lsof -t -i:3001 | xargs kill -9 || true) && cd frontend && next dev -p 3001",
+    "dev:backend": "(lsof -t -i:8001 | xargs kill -9 || true) && cd backend && nodemon server.js"
   }
 }
 ```
 
-### Instalación de la dependencia
-
-```bash
-npm install --save-dev cross-port-killer
-```
-
 ### ¿Por qué esto funciona?
 
-- `cross-port-killer` detecta y cierra automáticamente cualquier proceso que esté usando el puerto especificado
-- Es compatible con todos los sistemas operativos
-- Evita tener que reiniciar manualmente el sistema o buscar y cerrar procesos
+- El comando `lsof -t -i:PUERTO` encuentra procesos usando ese puerto
+- `xargs kill -9` los termina antes de iniciar el nuevo servidor
+- `|| true` evita que el script falle si no hay procesos usando el puerto
+
+### Alternativa usando cross-port-killer
+
+Si prefieres una solución más robusta y multiplataforma, puedes instalar y usar `cross-port-killer`:
+
+```bash
+# Instalar la dependencia
+npm install --save-dev cross-port-killer
+
+# Modificar los scripts en package.json
+"dev:frontend": "cross-port-killer -p $FRONTEND_PORT && cd frontend && next dev -p $FRONTEND_PORT",
+"dev:backend": "cross-port-killer -p $BACKEND_PORT && cd backend && nodemon server.js"
+```
 
 ### Alternativa Manual
 
-Si prefieres no usar `cross-port-killer`, puedes matar manualmente los procesos:
+Si necesitas liberar puertos manualmente:
 
 ```bash
 # En macOS/Linux
@@ -219,6 +245,15 @@ Tu instalación está completa si:
 4. ✅ Los tests pasan sin errores
 
 ## 🛠️ Resolución de Problemas
+
+### Error "concurrently: command not found"
+
+Si al ejecutar `npm run dev` recibes este error, significa que falta la dependencia `concurrently`:
+
+```bash
+# Instalar concurrently como dependencia de desarrollo
+npm install --save-dev concurrently
+```
 
 ### Error de conexión a la base de datos
 
@@ -272,8 +307,22 @@ Si encuentras errores al ejecutar `prisma migrate dev`, asegúrate de que:
 
 ### Errores de CORS en desarrollo
 
-- Verifica la configuración de CORS en el backend
+- Verifica la configuración de CORS en el backend (archivo `server.js`)
 - Asegúrate de que las URLs de frontend y backend son correctas en `.env`
+- Confirma que las siguientes variables están configuradas:
+  ```
+  FRONTEND_URL=http://localhost:3001
+  BACKEND_URL=http://localhost:8001
+  CORS_ORIGIN=*  # Para desarrollo
+  ```
+
+### Problemas de compatibilidad entre entornos (local/nube)
+
+Si el proyecto funciona en producción (Render/Vercel) pero no localmente o viceversa:
+
+1. Compara las variables de entorno entre ambos entornos
+2. Verifica que el archivo `server.js` carga correctamente las variables de entorno
+3. Confirma que las URLs están correctamente configuradas para cada entorno
 
 ## ⚠️ Nota Importante
 
