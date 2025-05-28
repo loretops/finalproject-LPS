@@ -2151,47 +2151,69 @@ Crear el modelo de datos para gestionar invitaciones de usuarios al club. Implem
 
 ## 7. Pull Requests
 
-**Pull Request 1: Configuración Inicial del Proyecto, HU1 y Documentación Base**
+**Pull Request #1: Configuración Inicial del Proyecto y HU1**
 *   **Número y Título:** #1 - initial project setup AND HU1
 *   **Enlace:** [https://github.com/loretops/finalproject-LPS/pull/1](https://github.com/loretops/finalproject-LPS/pull/1)
-*   **Fecha de Creación:** 6 de Mayo de 2024 (Estado: Abierta)
+*   **Fecha:** Mayo 2025 (Estado: Merged)
 *   **Autor(a):** loretops
 *   **Propósito:** Esta Pull Request integra los primeros 11 commits del proyecto, que incluyen la configuración inicial del backend y frontend, la estructura de directorios, la implementación de la Historia de Usuario 1 (Registro mediante invitación), y la documentación base (README, tickets, prompts). También incluye correcciones como la de ignorar el directorio `.next` de frontend. Representa el primer gran avance funcional y estructural del proyecto.
 
-**Pull Request 3: Estandarización de la Interfaz de Usuario**
-*   **Número y Título:** #2 - UI Standardization
-*   **Enlace:** [https://github.com/loretops/finalproject-LPS/pull/3](https://github.com/loretops/finalproject-LPS/pull/3)
-*   **Fecha de Creación:** Mayo 2024 (Estado: Abierta)
+**Pull Request #2: Oportunidades de Inversión**
+*   **Número y Título:** #2 - Feature/oportunidades inversion
+*   **Enlace:** [https://github.com/loretops/finalproject-LPS/pull/2](https://github.com/loretops/finalproject-LPS/pull/2)
+*   **Fecha:** Mayo 2025 (Estado: Merged)
 *   **Autor(a):** loretops
 *   **Propósito:** Esta Pull Request implementa la estandarización completa de la interfaz de usuario en toda la aplicación. Incluye la creación de componentes UI reutilizables (Button, Input, Card), actualización de páginas existentes para usar estos componentes, mejora de la estructura de las páginas de administración para evitar duplicación de elementos, y documentación de los cambios. El objetivo principal es proporcionar una experiencia de usuario coherente y profesional en toda la plataforma.
 
-**Pull Request 4**
-*   **Número y Título:** #3 - Fix "Me Interesa" button functionality (HU9)
-*   **Enlace:** https://github.com/loretops/finalproject-LPS/pull/4
-*   **Fecha de Creación:** Mayo 2024 (Estado: Abierta)
+**Pull Request #3: Ver oportunidades de inversión (HU2)**
+*   **Número y Título:** #3 - Feature/hu2 view investment opportunities
+*   **Enlace:** [https://github.com/loretops/finalproject-LPS/pull/3](https://github.com/loretops/finalproject-LPS/pull/3)
+*   **Fecha:** Mayo 2025 (Estado: Merged)
+*   **Autor(a):** loretops
+*   **Propósito:** Esta Pull Request implementa la Historia de Usuario 2, permitiendo a los socios ver y explorar las oportunidades de inversión disponibles. Incluye la implementación del listado de proyectos, filtros, visualización detallada, y la infraestructura necesaria para mostrar documentos asociados a cada proyecto. Esta funcionalidad es fundamental para que los socios puedan evaluar y seleccionar oportunidades de inversión adecuadas a sus intereses y objetivos financieros.
+
+**Pull Request #4: Marcar "Me interesa" (HU9)**
+*   **Número y Título:** #4 - Feature/hu9 marcar me interesa
+*   **Enlace:** [https://github.com/loretops/finalproject-LPS/pull/4](https://github.com/loretops/finalproject-LPS/pull/4)
+*   **Fecha:** Mayo 2025 (Estado: Merged)
 *   **Autor(a):** loretops
 *   **Propósito:** Esta Pull Request resuelve los problemas de la Historia de Usuario 9 relacionados con la funcionalidad del botón "Me Interesa" en las tarjetas de proyectos. Corrige varios problemas de propagación de eventos que impedían que el botón fuera clickable debido a que el enlace de la tarjeta capturaba el evento. Incluye mejoras en los componentes ProjectCard e InterestButton para asegurar que los eventos de clic se capturen correctamente, se detengan y no se propaguen al contenedor padre. También mejora el mensaje de paginación en la lista de proyectos para evitar problemas con valores NaN. Esta corrección permite a los usuarios expresar adecuadamente su interés en los proyectos directamente desde la vista de lista.
 
-**Pull Request 5: Implementación de la funcionalidad "Invierto" (HU3)**
-*   **Número y Título:** #4 - Implement "Invierto" functionality (HU3)
-*   **Enlace:** https://github.com/loretops/finalproject-LPS/pull/5
-*   **Fecha de Creación:** Mayo 2024 (Estado: Abierta)
+**Pull Request #5: Marcar "Invierto" (HU3)**
+*   **Número y Título:** #5 - Feature/hu3 marcar invierto
+*   **Enlace:** [https://github.com/loretops/finalproject-LPS/pull/5](https://github.com/loretops/finalproject-LPS/pull/5)
+*   **Fecha:** Mayo 2025 (Estado: Merged)
 *   **Autor(a):** loretops
 *   **Propósito:** Esta Pull Request implementa la Historia de Usuario 3, permitiendo a los socios registrar su intención formal de invertir en un proyecto indicando el monto específico. Incluye la creación del modelo de Investment con todos sus campos, endpoints de API para registrar inversiones, listar inversiones por proyecto y por usuario, interfaz de usuario para el formulario de inversión con validación de montos mínimos, actualización automática del monto total comprometido en cada proyecto, y sistema de notificaciones para gestores y otros socios. También implementa las pruebas unitarias y de integración necesarias para garantizar el correcto funcionamiento de esta funcionalidad crítica para el modelo de negocio de la plataforma.
 
-**Pull Request 6: Implementación de confirmación de correo electrónico (HU7)**
-*   **Número y Título:** #5 - Implementación de confirmación de correo electrónico (HU7)
-*   **Enlace:** https://github.com/loretops/finalproject-LPS/pull/6
-*   **Fecha de Creación:** Mayo 2024 (Estado: Abierta)
+**Pull Request #6: Verificación de correo electrónico (HU7)**
+*   **Número y Título:** #6 - Feature/hu7 email verification
+*   **Enlace:** [https://github.com/loretops/finalproject-LPS/pull/6](https://github.com/loretops/finalproject-LPS/pull/6)
+*   **Fecha:** Mayo 2025 (Estado: Merged)
 *   **Autor(a):** loretops
 *   **Propósito:** Esta Pull Request implementa el sistema completo de verificación de correo electrónico, añadiendo una capa adicional de seguridad a la plataforma. Incluye el modelo de datos para tokens de verificación, servicios backend para generación y validación de tokens, endpoints API para el proceso de verificación, plantillas HTML para emails, páginas frontend para verificar y reenviar verificaciones, y componentes UI para mostrar el estado de verificación a los usuarios. Se integra perfectamente con la autenticación existente, añadiendo indicadores visuales para usuarios no verificados y funcionalidad para verificar cuentas a través de emails con tokens seguros. Todos los tickets asociados (#52-#57) han sido completados exitosamente con sus respectivas pruebas para garantizar el correcto funcionamiento.
 
-**Pull Request 7: Mejora y Estandarización de la Documentación**
-*   **Número y Título:** #7 - Documentation Enhancement and Standardization
-*   **Enlace:** https://github.com/loretops/finalproject-LPS/pull/7
-*   **Fecha de Creación:** Mayo 2025 (Estado: Abierta)
+**Pull Request #7: Despliegue en la nube**
+*   **Número y Título:** #7 - Deploy cloud
+*   **Enlace:** [https://github.com/loretops/finalproject-LPS/pull/7](https://github.com/loretops/finalproject-LPS/pull/7)
+*   **Fecha:** Mayo 2025 (Estado: Merged)
+*   **Autor(a):** loretops
+*   **Propósito:** Esta Pull Request implementa la configuración necesaria para el despliegue del proyecto en servicios cloud. Incluye la configuración de variables de entorno, ajustes en los archivos de configuración para producción, y documentación detallada del proceso de despliegue. Esta PR es fundamental para preparar el proyecto para su puesta en producción y garantizar que todos los servicios (frontend, backend, base de datos y almacenamiento) funcionen correctamente en un entorno cloud.
+
+**Pull Request #8: Paso 2 del despliegue**
+*   **Número y Título:** #8 - Deploy step 2
+*   **Enlace:** [https://github.com/loretops/finalproject-LPS/pull/8](https://github.com/loretops/finalproject-LPS/pull/8)
+*   **Fecha:** Mayo 2025 (Estado: Merged)
+*   **Autor(a):** loretops
+*   **Propósito:** Esta Pull Request completa el segundo paso del proceso de despliegue, abordando aspectos avanzados como la configuración de seguridad, optimización de rendimiento y monitorización. Incluye mejoras en la configuración de CORS, implementación de cabeceras de seguridad adicionales, optimización de carga de recursos estáticos, y configuración de logs estructurados para un mejor seguimiento del sistema en producción.
+
+**Pull Request #9: Revisión de documentación**
+*   **Número y Título:** #9 - Doc review
+*   **Enlace:** [https://github.com/loretops/finalproject-LPS/pull/9](https://github.com/loretops/finalproject-LPS/pull/9)
+*   **Fecha:** Mayo 2025 (Estado: Merged)
 *   **Autor(a):** loretops
 *   **Propósito:** Esta Pull Request implementa una mejora completa de la documentación del proyecto, incluyendo: (1) Documentación detallada de la API para todos los recursos principales (auth, projects, investments, interests, documents, notifications); (2) Reorganización de la estructura de carpetas de documentación para mejor navegabilidad; (3) Corrección y estandarización del README principal; (4) Unificación de la documentación de tickets para mayor coherencia; (5) Creación de documentación UI/UX detallada; (6) Actualización de diagramas de arquitectura y despliegue; y (7) Corrección de errores de formato en la documentación existente. La mejora proporciona una base de conocimiento sólida para el desarrollo y mantenimiento del proyecto.
+
 
 
 ## 8. Estado actual del desarrollo
