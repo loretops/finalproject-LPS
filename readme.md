@@ -28,6 +28,9 @@ https://coopco.vercel.app
 ### **0.5. URL o archivo comprimido del repositorio**
 https://github.com/loretops/finalproject-LPS
 
+### **0.6. Fecha de última actualización:**
+28 de mayo de 2025
+
 
 ---
 
@@ -1738,6 +1741,46 @@ Content-Type: application/json
 }
 ```
 
+
+### Documentación de la API
+
+Esta sección proporciona una documentación detallada de los endpoints disponibles en la API de COOPCO. La documentación está organizada por recursos para facilitar su consulta.
+
+#### Índice de la documentación de API
+
+- [API de Autenticación y Registro](docs/api/auth.md) - Endpoints para login, registro y gestión de invitaciones
+- [API de Proyectos](docs/api/projects.md) - Endpoints para crear, listar y gestionar proyectos
+- [API de Inversiones](docs/api/investments.md) - Endpoints para realizar y gestionar inversiones en proyectos
+- [API de Intereses](docs/api/interests.md) - Endpoints para gestionar expresiones de interés en proyectos
+- [API de Documentos](docs/api/documents.md) - Endpoints para la gestión de documentos asociados a proyectos
+- [API de Notificaciones](docs/api/notifications.md) - Endpoints para gestionar notificaciones de usuarios
+
+Cada documento de API incluye información detallada sobre:
+- Parámetros de entrada requeridos y opcionales
+- Formatos de respuesta
+- Códigos de estado HTTP
+- Ejemplos de solicitud y respuesta
+- Manejo de errores
+
+#### Base URL
+
+Todos los endpoints de la API están disponibles en la siguiente URL base:
+
+```
+/api
+```
+
+#### Autenticación
+
+La mayoría de los endpoints requieren autenticación mediante token JWT. Los tokens se obtienen a través del endpoint de login y deben incluirse en el encabezado `Authorization` de las solicitudes:
+
+```
+Authorization: Bearer {token}
+```
+
+Para más detalles sobre la autenticación y gestión de tokens, consulta la [documentación de la API de Autenticación](docs/api/auth.md).
+
+
 ---
 
 ## 5. Historias de Usuario
@@ -2142,42 +2185,4 @@ Crear el modelo de datos para gestionar invitaciones de usuarios al club. Implem
 *   **Fecha de Creación:** Mayo 2024 (Estado: Abierta)
 *   **Autor(a):** loretops
 *   **Propósito:** Esta Pull Request implementa el sistema completo de verificación de correo electrónico, añadiendo una capa adicional de seguridad a la plataforma. Incluye el modelo de datos para tokens de verificación, servicios backend para generación y validación de tokens, endpoints API para el proceso de verificación, plantillas HTML para emails, páginas frontend para verificar y reenviar verificaciones, y componentes UI para mostrar el estado de verificación a los usuarios. Se integra perfectamente con la autenticación existente, añadiendo indicadores visuales para usuarios no verificados y funcionalidad para verificar cuentas a través de emails con tokens seguros. Todos los tickets asociados (#52-#57) han sido completados exitosamente con sus respectivas pruebas para garantizar el correcto funcionamiento.
-
-# Documentación de la API
-
-Esta sección proporciona una documentación detallada de los endpoints disponibles en la API de COOPCO. La documentación está organizada por recursos para facilitar su consulta.
-
-## Índice de la documentación de API
-
-- [API de Autenticación y Registro](docs/api/auth.md) - Endpoints para login, registro y gestión de invitaciones
-- [API de Proyectos](docs/api/projects.md) - Endpoints para crear, listar y gestionar proyectos
-- [API de Inversiones](docs/api/investments.md) - Endpoints para realizar y gestionar inversiones en proyectos
-- [API de Intereses](docs/api/interests.md) - Endpoints para gestionar expresiones de interés en proyectos
-- [API de Documentos](docs/api/documents.md) - Endpoints para la gestión de documentos asociados a proyectos
-- [API de Notificaciones](docs/api/notifications.md) - Endpoints para gestionar notificaciones de usuarios
-
-Cada documento de API incluye información detallada sobre:
-- Parámetros de entrada requeridos y opcionales
-- Formatos de respuesta
-- Códigos de estado HTTP
-- Ejemplos de solicitud y respuesta
-- Manejo de errores
-
-## Base URL
-
-Todos los endpoints de la API están disponibles en la siguiente URL base:
-
-```
-/api
-```
-
-## Autenticación
-
-La mayoría de los endpoints requieren autenticación mediante token JWT. Los tokens se obtienen a través del endpoint de login y deben incluirse en el encabezado `Authorization` de las solicitudes:
-
-```
-Authorization: Bearer {token}
-```
-
-Para más detalles sobre la autenticación y gestión de tokens, consulta la [documentación de la API de Autenticación](docs/api/auth.md).
 
