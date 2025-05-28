@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
-import Layout from '../../components/common/Layout';
+import Layout from '../../components/layout/Layout';
 import Button from '../../components/ui/Button';
 import { handleClientError } from '../../utils/errorHandler';
 import errorMonitor from '../../utils/errorMonitor';
