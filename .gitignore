@@ -35,8 +35,8 @@ yarn-error.log*
 *.swo
 
 ## Excepciones
-# Pero incluir las imágenes de documentación
-!docs/images/ 
-.env.cloud
+# Incluir las imágenes de documentación
+!docs/images/**
+!docs/images/ui/**
 .env.cloud
 .env
