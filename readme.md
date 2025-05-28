@@ -2232,7 +2232,7 @@ El proyecto COOPCO se encuentra actualmente en fase MVP (Producto Mínimo Viable
 
 1. **Inversión en proyectos ("Invierto")** - Implementación avanzada para registrar intenciones formales de inversión con montos específicos.
 2. **Sistema de notificaciones** - Alertas sobre actividades relevantes para usuarios y gestores.
-3. **Estandarización de la interfaz de usuario** - Mejora de la coherencia visual y experiencia de usuario en toda la plataforma.
+3. **Estandarización de la interfaz de usuario** - Mejora de la coherencia visual y experiencia de usuario en toda la plataforma
 
 ### Próximos pasos 🔜
 
