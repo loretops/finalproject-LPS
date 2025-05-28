@@ -490,5 +490,35 @@ estoy tratando de actualizar el @readme.md con la guia original que se me propor
 Vamos a por el punto 2.4 Infraestructura y despliegue del @readme.md, a la parte del entorno de produccion. ya está funcionando en produccion y tienes los datos del despliegue en @deployment_guide_unified.md. Así que documenta profesionalmente este punto del @readme.md para que quede muy completo y con los enlaces a los documentos de @docs que consideres. Detalla la infraestructura del proyecto, incluyendo un diagrama en el formato que creas conveniente, y explica el proceso de despliegue que se sigue
 ```
 
+## 9. Documentación
+
+**Prompt 1:**
+```
+Necesito mejorar la documentación para la sección 1.3 del readme.md (Diseño y experiencia de usuario) creando un documento más detallado para el diseño UI/UX del proyecto COOPCO. Actualmente la sección existe pero es bastante básica y necesito documentar mejor todos los aspectos de diseño.
+```
+
+**Prompt 2:**
+```
+Vamos a reorganizar toda la carpeta @docs . Necesito que lo organices todo bien, en las subcarpetas oportunas. La única documentación accesible va a estar en @readme.md , así que toda la documentación que haya en @docs debe estar accesible mediante algún enlace principal o secundario. El único documento que no necesito que esté accesible, porque lo uso yo para mi desarrollo, es @development_status.md . Los documentos de @render_backend_setup.md  y @render_environment_variables.md unificalos.
+```
+
+**Prompt 3:**
+```
+Revisa el archivo @investments.md . Como buen Business analyst y product Manager, dime si te parece normal tener ese documento aislado: ¿añadirías más de ese mismo tipo que completen la documentación del proyecto? ¿O quitarías ese archivo? ¿O no harías nada?
+```
+
+**Prompt 4:**
+```
+Crea archivos similares manteniendo el formato y el nivel de detalle de @investments.md para:
+docs/api/auth.md (autenticación y registro)
+docs/api/projects.md (proyectos)
+docs/api/interests.md (intereses)
+docs/api/documents.md (gestión de documentos)
+docs/api/notifications.md (notificaciones)
+
+Desde el readme enlazalos, mediante un índice o como te parezca bien. Revisa todo el código del proyecto relacionado con el documento que vayas a desarrollar. Revisa bien el código, para no inventarte nada, sino que sea sobre el desarrollo actual.
+```
+
+
 
 
