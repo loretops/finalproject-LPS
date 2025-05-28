@@ -110,6 +110,39 @@ Tengo más consultas:
 - No estás haciendo caso de cómo actualizar el archivo @prompts.md ya que debes añadir lo que yo te pido, tal y como lo escribo, sin modificarlo. Y te has dejado atrás varios prompts de la conversación. No me interesan tus respuestas, ni tus interpretaciones, sino el texto de mi solicitud
 ```
 
+**Prompt 7:**
+```
+Todo bien. Ahora quiero que como experto desarrollador full-stack, preparado para trabajar con el equipo de frontend, revises la estructura, arquitectura y finalidad del proyecto @readme.md , @architecture , y las dependencias que ya hay, y me propongas libreraias y/o documentacion adecuada para que cada pantalla del forntend que vaya desarrollando tenga un estilo profesional, limpio, intuitivo, estetico y moderno. ¿Qué propones?
+```
+
+**Prompt 8:**
+```
+Empieza por el punto Configura Tailwind CSS como base, y Añade componentes básicos (shadcn/ui o HeadlessUI) para navegación y layouts. Además, añade a Cursor la documentación que me propones en el punto 7. Recursos y documentación recomendada
+```
+
+**Prompt 9:**
+```
+Los últimos desarrollos los hemos hecho con una interfaz adecuada, mucho mejor que al princpio. me gustaría igualar todo lo que llevamos desarrollado por ahora del frontend para que todo tenga una imagen coherente. Guiame paso a paso. recuerda que hemos instalado alguans deopendencias y librerias para mejorar el interfaz
+```
+
+**Prompt 10:**
+```
+Revisa la primera pantalla de adminstracion de proyectos 
+Ahora revisa las egunda pantalla de gestion de invitados 
+Ahora unifica un mismo estilo: el que cumpla mejor las buenas practicas, y sea más estetico y funcional
+```
+
+**Prompt 11:**
+```
+no creo que haya quedado estandarizado. Pero bueno, ya lo afrontaremos. Mira http://localhost:3001/admin/projects, y revisa el encabezado de la tabla de proyectos, que aparentemente permiten ordenar cada columna de forma ascendente y descendente, epro en la realidad no lo hace
+```
+
+**Prompt 12:**
+```
+He pinchado en las flechas para ordenar asecndentemente la columna TITULO y no lo hace
+```
+
+
 ## 3. Modelo de Datos
 
 **Prompt 1:**
@@ -232,6 +265,23 @@ Me parece bien el enfoque 1, secuencial. Hay algún punto de la documentación d
 Revisa todas las historias de usuario, y haz una tabla priorizada según el orden lógco de desarrollo y dependencias.
 ```
 
+### Historias de Usuario específicas
+#### Historia de Usuario 2: Ver oportunidades de inversión
+[Ver prompts completos](prompts/prompts_HU2.md)
+
+#### Historia de Usuario 3: Marcar Invierto
+[Ver prompts completos](prompts/prompts_HU3.md)
+
+#### Historia de Usuario 9: Marcar "Me Interesa"
+[Ver prompts completos](prompts/prompts_HU9.md)
+
+#### Historia de Usuario 7: Confirmación de correo electrónico
+[Ver prompts completos](prompts/prompts_HU7.md)
+
+#### Análisis del producto
+[Ver análisis completo](prompts/prompts_analisis_product_3.md)
+
+
 ## 6. Tickets de Trabajo
 
 **Prompt 1:**
@@ -323,6 +373,23 @@ vamos con el ticket#22. Estoy pendando que , para no perder todos mis prompts de
 - Acuerdate también de actualizar siempre el archivo @production_deployment.md
 ```
 
+**Prompt 10:**
+```
+@Cliudinary Assets Management 
+Revisa bien como acceder a los documentos almacenados en Cloudinary, e incluso com poder descargarlos. Revisa la gestion completa de los documentos en nuestro proyecto, porque es una parte básica y fundamental. De hecho, si quieres, puedes desarrollar primero este punto en todos sus casos de uso. ¿Dónde quieres ampliar este tema, en el documento @tickets.md ? Es importante revisar cada caso de uso, y con la documentacion de cloudinary asegurarnos que funciona bien, aunque siempre debemos dejar todo preparado, en la medida que se pueda, para poder usar en el futuro otro gestor de documentación
+```
+
+**Prompt 11:**
+```
+quiero que desarrolles todos los tickets en un nuevo documento en markdown, en la carpeta@product , y de forma completa con todos los casos de uso, y todos los escenarios según los tipos de documentos qe se pueden subir, los niveles de acceso, y los niveles de seguridad. Que cada actor tenga los accesos adecuados para cada caso de uso. Revisa toda la documentación que necesites: @tickets.md , @user-stories.md , @readme.md . Y apoyate en la documentacion de cloudinary @Cliudinary Assets Management 
+```
+
+**Prompt 12:**
+```
+Las pruebas de implementación actual me parecería bien hacerlas si lo ves importante para un desarrollo consistente, teniendo en cuenta que es un MVP, y que a veces hay que tener cuidado de no excederse en los tests si no son necesarios. Pero bajo tu experiencia como desarrollador full-stack, toma la decisión.
+```
+
+
 ## 7. Pull requests
 
 **Prompt 1:**
@@ -348,10 +415,9 @@ prepara esta inforamción pero en un texto en formato markdown que yo pueda copi
 **Prompt 5:**
 ```
 Crea la documentación adecuada para la PR, tanto la que he de añadir en la propia PR, como la que debe ir en la documentación: @prompts.md y @readme.md 
+```
 
-## 8. Seguridad
-
-**Prompt 1:**
+**Prompt 6:**
 ```
 @readme.md 
 Tengo que seguir documentando el proyecto. Revisa todos los archivos para poder aportar este punto: Enumera y describe las prácticas de seguridad principales que se han implementado en el proyecto, añadiendo ejemplos si procede, pero solo para lo que se ha desarrollado por ahora. De hecho se debe indicar que es lo que hay en este punto del proyecto, y más adelante se mejorará este punto. 
@@ -359,96 +425,12 @@ Si hay algún punto claro de lo que se va a desarrollar en el futuro, se pueden 
 @rules.mdc 
 ```
 
-## 9. Configuración del proyecto
-
-**Prompt 1:**
-```
-Todo bien. Ahora quiero que como experto desarrollador full-stack, preparado para trabajar con el equipo de frontend, revises la estructura, arquitectura y finalidad del proyecto @readme.md , @architecture , y las dependencias que ya hay, y me propongas libreraias y/o documentacion adecuada para que cada pantalla del forntend que vaya desarrollando tenga un estilo profesional, limpio, intuitivo, estetico y moderno. ¿Qué propones?
-```
-
-**Prompt 2:**
-```
-Empieza por el punto Configura Tailwind CSS como base, y Añade componentes básicos (shadcn/ui o HeadlessUI) para navegación y layouts. Además, añade a Cursor la documentación que me propones en el punto 7. Recursos y documentación recomendada
-```
-
-## 10. Estandarización de la interfaz
-
-**Prompt 1:**
-```
-Los últimos desarrollos los hemos hecho con una interfaz adecuada, mucho mejor que al princpio. me gustaría igualar todo lo que llevamos desarrollado por ahora del frontend para que todo tenga una imagen coherente. Guiame paso a paso. recuerda que hemos instalado alguans deopendencias y librerias para mejorar el interfaz
-```
-
-**Prompt 2:**
-```
-Revisa la primera pantalla de adminstracion de proyectos 
-Ahora revisa las egunda pantalla de gestion de invitados 
-Ahora unifica un mismo estilo: el que cumpla mejor las buenas practicas, y sea más estetico y funcional
-```
-
-**Prompt 3:**
-```
-no creo que haya quedado estandarizado. Pero bueno, ya lo afrontaremos. Mira http://localhost:3001/admin/projects, y revisa el encabezado de la tabla de proyectos, que aparentemente permiten ordenar cada columna de forma ascendente y descendente, epro en la realidad no lo hace
-```
-
-**Prompt 4:**
-```
-He pinchado en las flechas para ordenar asecndentemente la columna TITULO y no lo hace
-```
-
-**Prompt 5:**
+**Prompt 7:**
 ```
 Ya está terminada esta Historia de Usuario, así que vamos a hacer una nueva PR, pero asegurate que sea a mi repositorio, no al original. Actualiza @prompts.md con esto, en la sección Pull Requests, y documenta el @readme.md en la misma sección. Vamos paso a paso
 ```
 
-**Prompt 6:**
-```
-has probado los tests?
-```
-
-## 11. Historias de Usuario específicas
-
-### Historia de Usuario 2: Ver oportunidades de inversión
-[Ver prompts completos](prompts/prompts_HU2.md)
-
-### Historia de Usuario 3: Marcar Invierto
-[Ver prompts completos](prompts/prompts_HU3.md)
-
-### Historia de Usuario 9: Marcar "Me Interesa"
-[Ver prompts completos](prompts/prompts_HU9.md)
-
-### Historia de Usuario 7: Confirmación de correo electrónico
-[Ver prompts completos](prompts/prompts_HU7.md)
-
-### Análisis del producto
-[Ver análisis completo](prompts/prompts_analisis_product_3.md)
-
-## Implementación de tickets de Historia de Usuario 3
-
-- [Ver prompts para el desarrollo de HU3](prompts_HU3.md)
-
-## Historia de Usuario 3: Marcar "Invierto"
-
-### Implementación completa de la funcionalidad "Marcar Invierto"
-
-Se ha implementado toda la funcionalidad para que los socios puedan indicar su intención formal de invertir en un proyecto y especificar el monto. Ver todos los prompts y detalles en [prompts_HU3.md](prompts_HU3.md).
-
-### Implementación de Tickets #47 y #48
-
-```
-Las pruebas de implementación actual me parecería bien hacerlas si lo ves importante para un desarrollo consistente, teniendo en cuenta que es un MVP, y que a veces hay que tener cuidado de no excederse en los tests si no son necesarios. Pero bajo tu experiencia como desarrollador full-stack, toma la decisión.
-Una vez decidido si vas a hacer más pruebas, dime qué pasos vas a seguir
-```
-
-Se implementaron la página "Mis Inversiones" y el componente de resumen de inversiones para proyectos. Ver todos los detalles en [prompts_HU3.md](prompts_HU3.md).
-
-Prompt para desarrollar la funcionalidad de "Marcar Invierto" que permite a los socios indicar su intención formal de invertir en un proyecto, incluyendo la creación de modelos de datos, servicios backend y componentes frontend. 
-
-
-## Sistema de errores y logging
-
-- "Por ahora atcualiza si es necesario @investment-flow.md  y @development_status.md. Y vete haciendo uno por uno los siguientes puntos: * Manejo de errores en cliente: El frontend muestra mensajes de error genéricos. Sería bueno mejorar la claridad de estos mensajes para que los usuarios entiendan exactamente qué ocurrió. * Monitoreo de errores 500: Sería bueno implementar algún sistema de alerta o logging más detallado para errores 500, ya que son críticos y pueden indicar problemas graves en la aplicación."
-
-## 12. Despliegue y configuración de entornos
+## 8. Despliegue y configuración de entornos
 
 **Prompt 1:**
 ```
@@ -493,17 +475,11 @@ Bueno, todas tus respuetsas me han parecido muy interesantes, pero respecto a la
 Vamos a empezar el despliegue, paso a paso. eres un senior DevOps Engineer. Necesito que me guies en el proceso de despliegue que hemos definido en entornos gratuitod. necesito que sean entornos a los que el Product Owner pueda acceder para testearlo. Has creado un archivo @deployment_free.md : revisalo primero, si quieres, y cuando te parezca adecuado comenzamos po rel primer paso. Revisa si es posible que en vez de Resend usemos GMAIL. Necesito además que uses buenas practicas según el codigo OWASP. Y como siempre que te acuerdes de las @rules.mdc , y por tanto actualices los archivos indicados.
 ```
 
-## 11. Mejora de componentes y servicios
-
-### 11.1 Cloudinary y gestión de documentos
-
-**Prompt:**
+**Prompt 8:**
 ```
-@Cliudinary Assets Management 
-Revisa bien como acceder a los documentos almacenados en Cloudinary, e incluso com opoder descargarlos. Revisa la gestion completa de los documentos en nuestro proyecto, porque es una parte básica y fundamental. De hecho, si quieres, puedes desarrollar primero este punto en todos sus casos de uso. ¿Dónde quieres ampliar este tema, en el documento @tickets.md ? Es importante revisar cada caso de uso, y con la documentacion de cloudinary asegurarnos que funciona bien, aunque siempre debemos dejar todo preparado, en la medida que se pueda, para poder usar en el futuro otro gestor de documentación
+Revisa la carpeta @docs . Verás que hay varios archivos que hacen referencia a despliegue (deployment). Revisa su contenido, y haz un único archivo que contenga todo lo que consideres necesario y relevante. Que esté bien estructurado y escrito en markdown. 
 ```
 
-**Prompt:**
-```
-quiero que desarrolles todos los tickets en un nuevo documento en markdown, en la carpeta@product , y de forma completa con todos los casos de uso, y todos los escenarios según los tipos de documentos qe se pueden subir, los niveles de acceso, y los niveles de seguridad. Que cada actor tenga los accesos adecuados para cada caso de uso. Revisa toda la documentación que necesites: @tickets.md , @user-stories.md , @readme.md . Y apoyate en la documentacion de cloudinary @Cliudinary Assets Management 
-```
+
+
+

@@ -23,10 +23,9 @@ COOPCO
 Plataforma digital exclusiva para un club privado de inversores inmobiliarios que permite acceder a oportunidades cuidadosamente seleccionadas, con toda la información relevante para evaluar el potencial de rentabilidad, expresar interés, invertir mediante préstamos participativos y seguir el desarrollo del proyecto en tiempo real. Diseñada para garantizar transparencia, seguridad y eficiencia, está orientada a personas que buscan invertir en proyectos inmobiliarios con confianza y control.
 
 ### **0.4. URL del proyecto:**
+https://coopco.vercel.app
 
-> Puede ser pública o privada, en cuyo caso deberás compartir los accesos de manera segura. Puedes enviarlos a [alvaro@lidr.co](mailto:alvaro@lidr.co) usando algún servicio como [onetimesecret](https://onetimesecret.com/).
-
-### 0.5. URL o archivo comprimido del repositorio
+### **0.5. URL o archivo comprimido del repositorio**
 https://github.com/loretops/finalproject-LPS
 
 
@@ -70,7 +69,7 @@ Crear una plataforma exclusiva que conecte a un club privado de inversores con o
 * Personas con cierto capital disponibles para coinvertir en proyectos reales
 * Perfiles que valoran la exclusividad y la información detallada antes de invertir
 
-### 2.2. Características y funcionalidades principales
+### **1.2. Características y funcionalidades principales**
 
 | Módulo | Funcionalidad principal |
 |--------|------------------------|
@@ -131,7 +130,36 @@ Crear una plataforma exclusiva que conecte a un club privado de inversores con o
 
 ### **1.3. Diseño y experiencia de usuario:**
 
-> Proporciona imágenes y/o videotutorial mostrando la experiencia del usuario desde que aterriza en la aplicación, pasando por todas las funcionalidades principales.
+COOPCO presenta una interfaz de usuario moderna, profesional y coherente que refleja los valores del club exclusivo de inversores inmobiliarios. El diseño se ha desarrollado siguiendo principios de simplicidad, profesionalidad y usabilidad, implementando un sistema de componentes reutilizables que garantiza una experiencia consistente en toda la plataforma.
+
+#### Características principales del diseño
+
+- **Sistema de diseño coherente** basado en Tailwind CSS y HeadlessUI para componentes accesibles
+- **Paleta de colores** profesional con azules como color principal y variantes para diferentes estados
+- **Tipografía** clara y legible con Inter como familia principal
+- **Componentes reutilizables** que mantienen consistencia visual y funcional
+- **Responsive design** con enfoque mobile-first para garantizar usabilidad en todos los dispositivos
+- **Accesibilidad** implementada siguiendo pautas WCAG nivel AA
+
+#### Flujos principales de usuario
+
+1. **Registro por invitación** - Proceso seguro y exclusivo para nuevos socios
+2. **Exploración de proyectos** - Visualización, filtrado y acceso a información detallada
+3. **Expresión de interés e inversión** - Funcionalidades "Me interesa" e "Invierto"
+4. **Panel de administración** - Herramientas de gestión para administradores y gestores
+
+#### Capturas de pantalla principales
+
+![Dashboard de proyectos](docs/images/ui/dashboard.png)
+*Dashboard principal de socio con proyectos disponibles*
+
+![Detalle de proyecto](docs/images/ui/project-detail.png)
+*Vista detallada de un proyecto de inversión con pestañas informativas*
+
+![Panel de administración](docs/images/ui/admin-panel.png)
+*Panel de administración para gestores*
+
+Para información detallada sobre el diseño y la experiencia de usuario, consulte la [documentación completa de UI/UX](docs/frontend/ui-design.md).
 
 ### **1.4. Instrucciones de instalación:**
 > Documenta de manera precisa las instrucciones para instalar y poner en marcha el proyecto en local (librerías, backend, frontend, servidor, base de datos, migraciones y semillas de datos, etc.)
