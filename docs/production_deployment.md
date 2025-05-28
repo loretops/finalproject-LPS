@@ -222,6 +222,8 @@ server {
 - Configurar CORS adecuadamente:
   - Restringir orígenes permitidos al dominio de producción
   - Limitar métodos y encabezados permitidos
+  - **Importante**: En el backend, configurar las variables de entorno `FRONTEND_URL` y `CORS_ORIGIN` con el dominio exacto del frontend (ej. `https://coopco.vercel.app`)
+  - Verificar que la cabecera 'Access-Control-Allow-Origin' se establezca correctamente para permitir peticiones desde el frontend
 
 ### Protección de Datos
 - Bloquear acceso directo a `.env` y otros archivos sensibles
