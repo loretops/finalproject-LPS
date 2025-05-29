@@ -86,6 +86,43 @@ async function main() {
   }
   console.log(`✅ Usuario Manager (${managerFirstName} ${managerLastName} - ${managerEmail}) creado/asegurado.`);
 
+  // --- Crear Usuario Socio de prueba ---
+  console.log('🌱 Sembrando usuario Socio (Partner) de prueba...');
+
+  const partnerEmail = 'partner@example.com';
+  const partnerPassword = 'password123';
+  const partnerFirstName = 'Socio';
+  const partnerLastName = 'Prueba';
+
+  // Obtener el rol 'partner'
+  const partnerRole = await prisma.role.findUnique({
+    where: { name: 'partner' },
+  });
+
+  if (!partnerRole) {
+    console.error('❌ No se encontró el rol "partner". Asegúrate de que se cree primero.');
+    throw new Error('Rol "partner" no encontrado durante el seeding.');
+  }
+
+  await prisma.user.upsert({
+    where: { email: partnerEmail },
+    update: {
+      firstName: partnerFirstName,
+      lastName: partnerLastName,
+    },
+    create: {
+      email: partnerEmail,
+      passwordHash: bcrypt.hashSync(partnerPassword, saltRounds),
+      firstName: partnerFirstName,
+      lastName: partnerLastName,
+      roleId: partnerRole.id,
+      status: 'active',
+      emailVerified: true,
+    },
+  });
+
+  console.log(`✅ Usuario Socio (${partnerFirstName} ${partnerLastName} - ${partnerEmail}) creado/asegurado.`);
+
   // --- Crear Invitación de Prueba --- 
   console.log('🌱 Creando invitación de prueba...');
   const testInviteeEmail = 'test.invitee@example.com';
