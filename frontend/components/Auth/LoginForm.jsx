@@ -20,6 +20,15 @@ const LoginForm = () => {
     await login(email, password);
   };
 
+  // Funciones para el acceso rápido
+  const loginAsManager = async () => {
+    await login('manager@example.com', 'password123');
+  };
+
+  const loginAsPartner = async () => {
+    await login('lpardo@trucco.es', 'password123');
+  };
+
   return (
     <Card className="max-w-md w-full mx-auto">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Iniciar Sesión</h2>
@@ -83,12 +92,37 @@ const LoginForm = () => {
         Sólo usuarios autorizados. El acceso a esta plataforma está restringido.
       </p>
       
+      {/* Botones de acceso rápido para testing - Solo visible en desarrollo */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-md">
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3">Acceso rápido para testing</h3>
+          <div className="grid grid-cols-2 gap-3">
+            <Button 
+              onClick={loginAsManager} 
+              variant="secondary" 
+              size="sm"
+              disabled={loading}
+            >
+              Acceder como Manager
+            </Button>
+            <Button 
+              onClick={loginAsPartner} 
+              variant="secondary" 
+              size="sm"
+              disabled={loading}
+            >
+              Acceder como Socio
+            </Button>
+          </div>
+        </div>
+      )}
+      
       {/* Credenciales de demostración - Solo para desarrollo */}
       {process.env.NODE_ENV === 'development' && (
         <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-md">
           <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Credenciales de demostración</h3>
-          <p className="text-xs text-gray-600">Email: <span className="font-mono">manager@example.com</span></p>
-          <p className="text-xs text-gray-600">Contraseña: <span className="font-mono">password123</span></p>
+          <p className="text-xs text-gray-600 mb-1"><span className="font-semibold">Manager:</span> <span className="font-mono">manager@example.com</span> / <span className="font-mono">password123</span></p>
+          <p className="text-xs text-gray-600"><span className="font-semibold">Socio:</span> <span className="font-mono">lpardo@trucco.es</span> / <span className="font-mono">password123</span></p>
         </div>
       )}
     </Card>
