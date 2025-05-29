@@ -435,6 +435,11 @@ Ya está terminada esta Historia de Usuario, así que vamos a hacer una nueva PR
 documenta y lleva a cabo una nueva PR. No quiero que desarrolles nada nuevo, lo que quiero es hacer una Pull Request nueva de los ultimos cambiosç
 ```
 
+**Prompt 9:**
+```
+Vamos a implementar unos botones en la página de login, para que las personas que tienen que entrar a testearlo no pierdan tiempo: habra un botón para entrar como manager, y otro botón para entrar como socio. Al pinchar debe ingresar directamente en la apliación con el rol correspondiente, como si hubiera hecho un login normal. Antes de empezar a desarrollar, crea una rama para hacerlo
+```
+
 ## 8. Despliegue y configuración de entornos
 
 **Prompt 1:**
