@@ -563,6 +563,7 @@ Pues venga, vamos a por la fase 1. Puedes fijarte en @https://openspace-home.com
 - Revisar cada link de la home para que tenga consistencia. No puede haber links falsos. Si hace falta crear las páginas que faltan.
 - Crear todas las páginas faltantes excepto los enlaces a redes sociales.
 - Asegurar que el menú de navegación sea visible en todas las páginas, incluyendo la página de login.
+- Implementar la funcionalidad de recuperación de contraseña en la página de login.
 
 
 

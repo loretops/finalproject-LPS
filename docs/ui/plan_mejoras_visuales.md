@@ -22,6 +22,7 @@ Este documento detalla las mejoras visuales prioritarias para hacer más atracti
 - [x] Mejorar el estilo de los formularios para reflejar exclusividad
 - [x] Incluir mensajes sobre la propuesta de valor (coinversión, exclusividad, etc.)
 - [x] Implementar botones de acceso rápido para testing en entornos de desarrollo
+- [x] Implementar funcionalidad de recuperación de contraseña
 
 ### Perfil de Usuario
 - [ ] Rediseñar dashboard con resumen visual de inversiones
