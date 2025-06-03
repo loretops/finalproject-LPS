@@ -19,7 +19,7 @@ const LoginPage = () => {
   // No mostrar contenido si está cargando o ya autenticado
   if (loading || isAuthenticated) {
     return (
-      <Layout hideNav={true}>
+      <Layout>
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-700 mx-auto"></div>
@@ -32,7 +32,7 @@ const LoginPage = () => {
 
   // Render the login form if not authenticated and done loading
   return (
-    <Layout hideNav={true}>
+    <Layout>
       <div className="relative flex min-h-screen">
         {/* Left side - Image */}
         <div className="hidden lg:block lg:w-1/2 relative">

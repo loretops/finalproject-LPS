@@ -43,6 +43,7 @@ Este documento detalla las mejoras visuales prioritarias para hacer más atracti
 
 ### Navegación y UX
 - [ ] Mejorar el menú principal con categorías claras
+- [x] Asegurar que la barra de navegación sea visible en todas las páginas, incluida la de login
 - [ ] Optimizar el flujo "Me interesa" → "Invierto" con indicadores visuales
 - [ ] Rediseñar formularios para hacerlos más atractivos y fáciles de usar
 - [ ] Añadir microinteracciones para mejorar la experiencia
