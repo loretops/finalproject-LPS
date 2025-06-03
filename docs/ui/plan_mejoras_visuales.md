@@ -5,10 +5,10 @@ Este documento detalla las mejoras visuales prioritarias para hacer más atracti
 ## Mejoras de Alto Impacto Visual
 
 ### Página de Inicio
-- [ ] Rediseñar hero section con imagen de fondo de alta calidad relacionada con inversiones inmobiliarias
-- [ ] Añadir propuesta de valor clara y concisa en la parte superior
-- [ ] Incluir estadísticas visuales atractivas (ej. número de inversores, rentabilidad media, etc.)
-- [ ] Añadir sección "Cómo funciona" con iconos y pasos numerados
+- [x] Rediseñar hero section con imagen de fondo de alta calidad relacionada con inversiones inmobiliarias
+- [x] Añadir propuesta de valor clara y concisa en la parte superior
+- [x] Incluir estadísticas visuales atractivas (ej. número de inversores, rentabilidad media, etc.)
+- [x] Añadir sección "Cómo funciona" con iconos y pasos numerados
 
 ### Proyectos de Inversión
 - [ ] Rediseñar tarjetas de proyectos con imágenes de mayor calidad
@@ -54,15 +54,15 @@ Este documento detalla las mejoras visuales prioritarias para hacer más atracti
 - [x] Rediseñar página de login/registro
 - [x] Actualizar paleta de colores en todo el sistema para reflejar un estilo más lujoso
 
-### Fase 2: Mejoras en Proyectos y Dashboard
+### Fase 2: Mejoras en Página de Inicio (COMPLETADA)
+- [x] Implementar nuevo hero section con imagen de fondo
+- [x] Mejorar visualización de características principales con imágenes
+- [x] Añadir sección CTA (Call to Action) más atractiva
+
+### Fase 3: Mejoras en Proyectos y Dashboard
 - [ ] Rediseñar tarjetas de proyectos
 - [ ] Implementar indicadores visuales de estado y rentabilidad
 - [ ] Mejorar dashboard de usuario con resumen visual
-
-### Fase 3: Mejoras en Página de Inicio
-- [ ] Implementar nuevo hero section con imagen de fondo
-- [ ] Añadir sección "Cómo funciona"
-- [ ] Incluir testimonios y estadísticas
 
 ### Fase 4: Refinamiento y Detalles
 - [ ] Revisar coherencia visual en toda la plataforma
