@@ -12,9 +12,22 @@ Este documento detalla las mejoras visuales prioritarias para hacer más atracti
 
 ### Proyectos de Inversión
 - [ ] Rediseñar tarjetas de proyectos con imágenes de mayor calidad
-- [ ] Añadir indicadores visuales de rentabilidad esperada
-- [ ] Incluir barra de progreso de financiación
-- [ ] Mejorar visualización de detalles clave (ubicación, plazo, mínimo de inversión)
+- [ ] Añadir indicadores visuales de estado del proyecto (porcentaje completado, fase, etc.)
+- [ ] Incluir gráficos de rentabilidad estimada y comparativas
+- [ ] Mejorar la presentación de detalles del proyecto con iconos y mejor organización visual
+
+### Página de Login/Registro
+- [x] Rediseñar la página de login con un enfoque más lujoso y profesional
+- [x] Añadir imagen lateral de alta calidad relacionada con inversiones inmobiliarias
+- [x] Mejorar el estilo de los formularios para reflejar exclusividad
+- [x] Incluir mensajes sobre la propuesta de valor (coinversión, exclusividad, etc.)
+- [x] Implementar botones de acceso rápido para testing en entornos de desarrollo
+
+### Perfil de Usuario
+- [ ] Rediseñar dashboard con resumen visual de inversiones
+- [ ] Añadir gráficos de rendimiento de la cartera
+- [ ] Mejorar la visualización de notificaciones y actualizaciones
+- [ ] Crear una sección de "Próximos eventos" con diseño de calendario visual
 
 ### Área de Socio
 - [ ] Mejorar dashboard con gráficos visuales de inversiones
@@ -34,29 +47,30 @@ Este documento detalla las mejoras visuales prioritarias para hacer más atracti
 - [ ] Rediseñar formularios para hacerlos más atractivos y fáciles de usar
 - [ ] Añadir microinteracciones para mejorar la experiencia
 
-## Implementación Priorizada
+## Plan de Implementación
 
-### Fase 1: Correcciones Inmediatas
+### Fase 1: Mejoras Básicas y de Autenticación (COMPLETADA)
 - [x] Habilitar botones de acceso rápido en entorno Vercel para testing
-- [ ] Corregir inconsistencias visuales en la página de login
-- [ ] Unificar estilos de botones y elementos interactivos
+- [x] Rediseñar página de login/registro
+- [x] Actualizar paleta de colores en todo el sistema para reflejar un estilo más lujoso
 
-### Fase 2: Mejoras de Página de Inicio y Branding
-- [ ] Implementar nueva paleta de colores y tipografía
-- [ ] Rediseñar hero section de la página principal
-- [ ] Añadir sección "Nuestros Pilares" con iconos atractivos
+### Fase 2: Mejoras en Proyectos y Dashboard
+- [ ] Rediseñar tarjetas de proyectos
+- [ ] Implementar indicadores visuales de estado y rentabilidad
+- [ ] Mejorar dashboard de usuario con resumen visual
 
-### Fase 3: Proyectos y Flujo de Inversión
-- [ ] Mejorar diseño de tarjetas de proyectos
-- [ ] Optimizar visualmente el proceso "Me interesa" → "Invierto"
-- [ ] Añadir visualizaciones para rentabilidad y proyecciones
+### Fase 3: Mejoras en Página de Inicio
+- [ ] Implementar nuevo hero section con imagen de fondo
+- [ ] Añadir sección "Cómo funciona"
+- [ ] Incluir testimonios y estadísticas
 
-### Fase 4: Área de Socio y Experiencia Final
-- [ ] Implementar dashboard mejorado para socios
-- [ ] Añadir timeline visual de proyectos
-- [ ] Mejorar visor de documentos e informes
+### Fase 4: Refinamiento y Detalles
+- [ ] Revisar coherencia visual en toda la plataforma
+- [ ] Optimizar experiencia móvil
+- [ ] Añadir microinteracciones y animaciones sutiles
 
 ## Notas Adicionales
-- Todas las mejoras deben mantener la funcionalidad existente
-- Priorizar cambios visibles sobre reestructuraciones profundas de código
-- Mantener un enfoque en transmitir profesionalidad, exclusividad y confianza 
+- Mantener el enfoque en transmitir exclusividad, confianza y profesionalismo
+- Usar la paleta de colores actualizada de forma consistente
+- Optimizar todas las imágenes para carga rápida
+- Asegurar que las mejoras visuales no afecten negativamente al rendimiento 
