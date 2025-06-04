@@ -118,6 +118,75 @@ export const validateInvitationToken = async (token) => {
 };
 
 /**
+ * Solicita un restablecimiento de contraseña enviando un correo con instrucciones
+ * @param {string} email - El correo electrónico del usuario
+ * @returns {Promise<object>} Respuesta del servidor
+ */
+export const requestPasswordReset = async (email) => {
+  if (!email) {
+    throw new Error('Email is required');
+  }
+  
+  try {
+    const response = await apiClient.post('/auth/password-reset', { email });
+    return response.data;
+  } catch (error) {
+    console.error('Error requesting password reset:', error.response?.data?.message || error.message);
+    
+    // Extraer el mensaje de error del servidor si está disponible
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error('Failed to request password reset');
+    }
+  }
+};
+
+/**
+ * Valida un token de restablecimiento de contraseña
+ * @param {string} token - Token de restablecimiento
+ * @returns {Promise<object>} Respuesta del servidor indicando si el token es válido
+ */
+export const validatePasswordResetToken = async (token) => {
+  if (!token) {
+    throw new Error('Token is required');
+  }
+  
+  try {
+    const response = await apiClient.get(`/auth/password-reset/${token}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error validating reset token:', error.response?.data?.message || error.message);
+    
+    if (error.response?.data) {
+      return error.response.data;
+    } else {
+      throw new Error('Failed to validate reset token');
+    }
+  }
+};
+
+/**
+ * Restablece la contraseña de un usuario utilizando un token válido
+ * @param {string} token - Token de restablecimiento
+ * @param {string} password - Nueva contraseña
+ * @returns {Promise<object>} Respuesta del servidor
+ */
+export const resetPassword = async (token, password) => {
+  if (!token || !password) {
+    throw new Error('Token and password are required');
+  }
+  
+  try {
+    const response = await apiClient.post('/auth/password-reset/reset', { token, password });
+    return response.data;
+  } catch (error) {
+    console.error('Error resetting password:', error.response?.data?.message || error.message);
+    throw new Error(error.response?.data?.message || 'Failed to reset password');
+  }
+};
+
+/**
  * Logout the current user by removing the token
  */
 export const logout = () => {

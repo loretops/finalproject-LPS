@@ -529,6 +529,42 @@ docs/api/notifications.md (notificaciones)
 Desde el readme enlazalos, mediante un índice o como te parezca bien. Revisa todo el código del proyecto relacionado con el documento que vayas a desarrollar. Revisa bien el código, para no inventarte nada, sino que sea sobre el desarrollo actual.
 ```
 
+# Plan de Mejoras Visuales para COOPCO
+
+## 10. Estandarización de la interfaz
+
+**Prompt 1:**
+```
+Vamos a implementar unos botones en la página de login, para que las personas que tienen que entrar a testearlo no pierdan tiempo: habra un botón para entrar como manager, y otro botón para entrar como socio. Al pinchar debe ingresar directamente en la apliación con el rol correspondiente, como si hubiera hecho un login normal. Antes de empezar a desarrollar, crea una rama para hacerlo
+```
+
+**Prompt 2:**
+```
+Vamos a mejorar la base que hay en nuestro proyecto, proque pronto hay que presentarlo al Product Owner, y ahora mismo se ve muy pobre y con muchos fallos en el contenido y/o lógica del negocio.
+Te voy a dar una web: @https://openspace-home.com/club-inversor/ Navega por todos sus enlaces: ¿sabes hacer eso? Revisa como es, y toma nota d aquellas cosas que veas para mejora nuestra web. Debemos mejorar tanto la imagen, como la navegación, como cerrar bien la lógica de uso. vamos a hacer juntos un plan. ¿Qué propones?
+```
+
+**Prompt 3:**
+```
+Vamos a centrarnos por ahora en lo que visualmente atraiga más al product Owner. 
+Crea un documento con este plan de mejoras, y haz check en los puntos que estén hecho. 
+Antes de empezar a desarrollar o escrinir nada, crea una nueva rama para estas primeras mejoras visuales. 
+Vamos paso a paso, no te aceleres. despacio. Que luego surgen errores y no sabemos de donde vienen
+```
+
+**Prompt 4:**
+```
+@plan_mejoras_visuales.md 
+Pues venga, vamos a por la fase 1. Puedes fijarte en @https://openspace-home.com/club-inversor/
+```
+
+## Mejoras visuales y de navegación
+
+- Revisar cada link de la home para que tenga consistencia. No puede haber links falsos. Si hace falta crear las páginas que faltan.
+- Crear todas las páginas faltantes excepto los enlaces a redes sociales.
+- Asegurar que el menú de navegación sea visible en todas las páginas, incluyendo la página de login.
+- Implementar la funcionalidad de recuperación de contraseña en la página de login.
+
 
 
 
