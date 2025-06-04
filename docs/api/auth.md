@@ -394,4 +394,215 @@ Authorization: Bearer {token}
 {
   "message": "Failed to fetch invitations."
 }
+```
+
+---
+
+### Solicitar recuperación de contraseña
+
+Permite a un usuario solicitar un enlace para restablecer su contraseña.
+
+```
+POST /auth/password-reset
+```
+
+#### Parámetros de cuerpo (JSON)
+
+| Parámetro  | Tipo   | Requerido | Descripción                                |
+|------------|--------|-----------|-------------------------------------------|
+| email      | string | Sí        | Correo electrónico del usuario            |
+
+#### Cabeceras requeridas
+
+```
+Content-Type: application/json
+```
+
+#### Respuesta exitosa (200 OK)
+
+```json
+{
+  "success": true,
+  "message": "Si el correo existe, se ha enviado un enlace de recuperación"
+}
+```
+
+#### Respuestas de error
+
+**400 Bad Request**
+
+```json
+{
+  "success": false,
+  "message": "El email es obligatorio"
+}
+```
+
+**500 Internal Server Error**
+
+```json
+{
+  "success": false,
+  "message": "Error interno del servidor"
+}
+```
+
+---
+
+### Validar token de recuperación de contraseña
+
+Verifica si un token de recuperación de contraseña es válido.
+
+```
+GET /auth/password-reset/:token
+```
+
+#### Parámetros de URL
+
+| Parámetro  | Descripción                     |
+|------------|---------------------------------|
+| token      | Token de recuperación           |
+
+#### Respuesta exitosa (200 OK)
+
+```json
+{
+  "valid": true,
+  "email": "usuario@ejemplo.com"
+}
+```
+
+#### Respuestas de error
+
+**400 Bad Request**
+
+```json
+{
+  "valid": false,
+  "message": "El token es obligatorio"
+}
+```
+
+**404 Not Found**
+
+```json
+{
+  "valid": false,
+  "message": "Token no encontrado"
+}
+```
+
+**410 Gone**
+
+```json
+{
+  "valid": false,
+  "message": "El token ya ha sido utilizado"
+}
+```
+
+**410 Gone**
+
+```json
+{
+  "valid": false,
+  "message": "El token ha expirado"
+}
+```
+
+**500 Internal Server Error**
+
+```json
+{
+  "valid": false,
+  "message": "Error interno del servidor"
+}
+```
+
+---
+
+### Restablecer contraseña
+
+Permite a un usuario establecer una nueva contraseña utilizando un token de recuperación válido.
+
+```
+POST /auth/password-reset/reset
+```
+
+#### Parámetros de cuerpo (JSON)
+
+| Parámetro  | Tipo   | Requerido | Descripción                                |
+|------------|--------|-----------|-------------------------------------------|
+| token      | string | Sí        | Token de recuperación                      |
+| password   | string | Sí        | Nueva contraseña                          |
+
+#### Cabeceras requeridas
+
+```
+Content-Type: application/json
+```
+
+#### Respuesta exitosa (200 OK)
+
+```json
+{
+  "success": true,
+  "message": "Contraseña restablecida correctamente"
+}
+```
+
+#### Respuestas de error
+
+**400 Bad Request**
+
+```json
+{
+  "success": false,
+  "message": "El token y la nueva contraseña son obligatorios"
+}
+```
+
+**400 Bad Request**
+
+```json
+{
+  "success": false,
+  "message": "La contraseña debe tener al menos 8 caracteres"
+}
+```
+
+**404 Not Found**
+
+```json
+{
+  "success": false,
+  "message": "Token no encontrado"
+}
+```
+
+**410 Gone**
+
+```json
+{
+  "success": false,
+  "message": "El token ya ha sido utilizado"
+}
+```
+
+**410 Gone**
+
+```json
+{
+  "success": false,
+  "message": "El token ha expirado"
+}
+```
+
+**500 Internal Server Error**
+
+```json
+{
+  "success": false,
+  "message": "Error interno del servidor"
+}
 ``` 

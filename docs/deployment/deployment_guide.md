@@ -231,6 +231,7 @@ Una vez completado el despliegue, verifica:
 - **CORS**: Restringe a solo los dominios necesarios
 - **Cookies**: Configura con `Secure`, `HttpOnly` y `SameSite=strict`
 - **Acceso a Base de Datos**: Usa credenciales con permisos mínimos necesarios
+- **Recuperación de contraseña**: Verifica que la configuración de email funcione correctamente y que los tokens tengan una expiración adecuada (valor predeterminado: 24 horas)
 
 ### CORS
 - **IMPORTANTE**: En el backend, configura las variables de entorno `FRONTEND_URL` y `CORS_ORIGIN` con el dominio exacto del frontend (ej. `https://coopco.vercel.app`)
