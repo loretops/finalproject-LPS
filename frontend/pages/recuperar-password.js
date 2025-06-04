@@ -6,6 +6,7 @@ import { EnvelopeIcon } from '@heroicons/react/24/outline';
 import Card from '../components/ui/Card';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
+import { requestPasswordReset } from '../services/authService';
 
 const RecuperarPassword = () => {
   const [email, setEmail] = useState('');
@@ -20,14 +21,20 @@ const RecuperarPassword = () => {
     setError('');
 
     try {
-      // En un caso real, aquí llamaríamos a una API para iniciar el proceso de recuperación
-      // Por ahora, simularemos un éxito después de un pequeño retraso
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Enviar solicitud usando el servicio de autenticación
+      await requestPasswordReset(email);
       
       // Mostrar mensaje de éxito
       setSuccess(true);
     } catch (err) {
-      setError('Error al procesar la solicitud. Por favor, intenta de nuevo.');
+      console.error('Error al solicitar restablecimiento de contraseña:', err);
+      
+      // Mostrar mensaje de error específico si el servidor lo proporciona
+      if (err.message) {
+        setError(err.message);
+      } else {
+        setError('Ha ocurrido un error al procesar la solicitud. Por favor, intenta de nuevo.');
+      }
     } finally {
       setLoading(false);
     }
@@ -56,7 +63,7 @@ const RecuperarPassword = () => {
                 </div>
                 <h3 className="mt-3 text-lg font-medium text-gray-900">Correo enviado</h3>
                 <p className="mt-2 text-sm text-gray-500">
-                  Hemos enviado instrucciones para restablecer tu contraseña al correo electrónico proporcionado.
+                  Si existe una cuenta con ese correo electrónico, hemos enviado instrucciones para restablecer tu contraseña.
                 </p>
                 <div className="mt-6">
                   <Link href="/login" className="text-primary-600 hover:text-primary-500 font-medium">

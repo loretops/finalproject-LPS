@@ -65,7 +65,11 @@ export const AuthProvider = ({ children }) => {
         const loggedInUser = decodeTokenAndSetUser(data.token, setToken, setUser);
         if (loggedInUser) { // Solo guardar y redirigir si el token es válido
           localStorage.setItem('authToken', data.token);
-          router.push('/dashboard');
+          
+          // Esperar a que se complete la actualización del estado antes de redirigir
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 100);
         } else {
           throw new Error('Received invalid token from server.');
         }

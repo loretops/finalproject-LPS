@@ -38,6 +38,7 @@ model User {
   invitationsSent     Invitation[]
   messagesSent        Message[]
   notifications       Notification[]
+  passwordResetTokens PasswordResetToken[]
   projectUpdates      ProjectUpdate[]
   createdProjects     Project[]                 @relation("ProjectCreator")
   publishedProjects   Project[]                 @relation("ProjectPublisher")
@@ -256,6 +257,20 @@ model Message {
   @@index([read])
   @@index([createdAt])
   @@map("messages")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  token     String   @unique
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  expiresAt DateTime @map("expires_at")
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([token])
+  @@map("password_reset_tokens")
 }
 
 enum InvitationStatus {

@@ -22,11 +22,31 @@ const LoginForm = () => {
 
   // Funciones para el acceso rápido
   const loginAsManager = async () => {
-    await login('manager@example.com', 'password123');
+    try {
+      // Establecer directamente los valores en los campos para una mejor experiencia de usuario
+      setEmail('manager@example.com');
+      setPassword('password123');
+      // Esperar un momento para que los estados se actualicen
+      setTimeout(async () => {
+        await login('manager@example.com', 'password123');
+      }, 50);
+    } catch (error) {
+      console.error('Error al iniciar sesión como manager:', error);
+    }
   };
 
   const loginAsPartner = async () => {
-    await login('lpardo@trucco.es', 'password123');
+    try {
+      // Establecer directamente los valores en los campos para una mejor experiencia de usuario
+      setEmail('lpardo@trucco.es');
+      setPassword('password123');
+      // Esperar un momento para que los estados se actualicen
+      setTimeout(async () => {
+        await login('lpardo@trucco.es', 'password123');
+      }, 50);
+    } catch (error) {
+      console.error('Error al iniciar sesión como socio:', error);
+    }
   };
 
   // Comprobar si estamos en un entorno de testing (desarrollo local o Vercel)

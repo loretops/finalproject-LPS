@@ -6,27 +6,50 @@ import { LockClosedIcon } from '@heroicons/react/24/outline';
 import Card from '../components/ui/Card';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
+import { validatePasswordResetToken, resetPassword } from '../services/authService';
 
 const ResetearPassword = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [validating, setValidating] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [tokenValid, setTokenValid] = useState(true);
+  const [tokenValid, setTokenValid] = useState(false);
   const router = useRouter();
   const { token } = router.query;
 
   // Verificar token cuando el componente se monta
   useEffect(() => {
-    // En un caso real, validaríamos el token contra el backend
-    // Para esta demo, simplemente comprobamos que existe un token
-    if (router.isReady) {
-      if (!token) {
+    const validateToken = async () => {
+      if (router.isReady && token) {
+        setValidating(true);
+        try {
+          // Validar token usando el servicio de autenticación
+          const result = await validatePasswordResetToken(token);
+          
+          if (result.valid) {
+            setTokenValid(true);
+          } else {
+            setTokenValid(false);
+            setError(result.message || 'El enlace de restablecimiento no es válido o ha expirado.');
+          }
+        } catch (err) {
+          console.error('Error validando token:', err);
+          setTokenValid(false);
+          setError('El enlace de restablecimiento no es válido o ha expirado.');
+        } finally {
+          setValidating(false);
+        }
+      } else if (router.isReady) {
+        // No hay token en la URL
         setTokenValid(false);
         setError('El enlace de restablecimiento no es válido o ha expirado.');
+        setValidating(false);
       }
-    }
+    };
+
+    validateToken();
   }, [router.isReady, token]);
 
   const handleSubmit = async (e) => {
@@ -47,18 +70,36 @@ const ResetearPassword = () => {
     setError('');
 
     try {
-      // En un caso real, aquí llamaríamos a una API para cambiar la contraseña
-      // Por ahora, simularemos un éxito después de un pequeño retraso
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Cambiar contraseña usando el servicio de autenticación
+      const result = await resetPassword(token, password);
       
-      // Mostrar mensaje de éxito
-      setSuccess(true);
+      if (result.success) {
+        // Mostrar mensaje de éxito
+        setSuccess(true);
+      } else {
+        setError(result.message || 'Error al cambiar la contraseña. Por favor, intenta de nuevo.');
+      }
     } catch (err) {
-      setError('Error al cambiar la contraseña. Por favor, intenta de nuevo.');
+      console.error('Error al cambiar contraseña:', err);
+      setError(err.message || 'Error al cambiar la contraseña. Por favor, intenta de nuevo.');
     } finally {
       setLoading(false);
     }
   };
+
+  // Mostrar cargando mientras se valida el token
+  if (validating) {
+    return (
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-700 mx-auto"></div>
+            <p className="mt-3 text-gray-600">Verificando enlace...</p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
