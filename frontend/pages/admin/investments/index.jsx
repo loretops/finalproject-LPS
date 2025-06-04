@@ -41,7 +41,7 @@ const InvestmentDashboard = () => {
         setProjects(projectsList);
         
         // Luego cargar todas las inversiones
-        await fetchInvestments();
+        await fetchInvestments(false); // Pasar false para no cambiar loading otra vez
       } catch (error) {
         console.error('Error cargando datos iniciales:', error);
         toast.error('Error al cargar los datos. Inténtalo de nuevo más tarde.');
@@ -51,16 +51,21 @@ const InvestmentDashboard = () => {
     };
     
     fetchData();
-  }, []);
+  }, []); // Sin dependencias para evitar ejecuciones múltiples
 
-  // Cargar inversiones cuando cambian los filtros
+  // Cargar inversiones cuando cambian los filtros (pero solo después de la carga inicial)
   useEffect(() => {
-    fetchInvestments();
-  }, [filters]);
+    // Solo ejecutar si ya hay proyectos cargados (es decir, después de la carga inicial)
+    if (projects.length > 0) {
+      fetchInvestments();
+    }
+  }, [filters, projects.length > 0]);
 
   // Función para cargar inversiones según los filtros actuales
-  const fetchInvestments = async () => {
-    setIsLoading(true);
+  const fetchInvestments = async (setLoadingState = true) => {
+    if (setLoadingState) {
+      setIsLoading(true);
+    }
     try {
       // Construir query params
       const params = new URLSearchParams();
@@ -83,7 +88,9 @@ const InvestmentDashboard = () => {
       console.error('Error cargando inversiones:', error);
       toast.error('Error al cargar las inversiones');
     } finally {
-      setIsLoading(false);
+      if (setLoadingState) {
+        setIsLoading(false);
+      }
     }
   };
 

@@ -37,10 +37,18 @@ app.use(helmet());
 // Configurar rate limiting
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW || 15) * 60 * 1000, // 15 minutos por defecto
-  max: parseInt(process.env.RATE_LIMIT_MAX || 100), // límite de 100 solicitudes por ventana
+  max: parseInt(process.env.RATE_LIMIT_MAX || 1000), // límite de 1000 solicitudes por ventana (mucho más permisivo para desarrollo)
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: 'Demasiadas solicitudes, por favor intente más tarde' }
+  message: { error: 'Demasiadas solicitudes, por favor intente más tarde' },
+  // Función personalizada para manejar el rate limiting
+  handler: (req, res) => {
+    console.log(`Rate limit exceeded for ${req.ip} on ${req.originalUrl}`);
+    res.status(429).json({ 
+      error: 'Demasiadas solicitudes, por favor intente más tarde',
+      retryAfter: Math.round(req.rateLimit.msBeforeNext / 1000) // tiempo en segundos
+    });
+  }
 });
 
 // Aplicar límite de tasa a todas las solicitudes
