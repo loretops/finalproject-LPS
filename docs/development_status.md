@@ -271,6 +271,15 @@ Para la Historia de Usuario 2, el orden recomendado de desarrollo es:
   - Estandarizada la terminología "canceled" vs "cancelled" manteniendo compatibilidad hacia atrás
   - Realizadas pruebas unitarias para verificar funcionamiento correcto
 
+- **Implementación de funcionalidad de recuperación de contraseña:** Se ha implementado un sistema completo para permitir a los usuarios restablecer sus contraseñas.
+  - Creada nueva tabla `password_reset_tokens` mediante migración en Prisma
+  - Desarrollado servicio `passwordResetService.js` con métodos para generar, validar y utilizar tokens
+  - Implementados endpoints API en `auth.routes.js` para solicitar, validar y restablecer contraseñas
+  - Desarrollado componente frontend para flujo completo de recuperación de contraseña
+  - Implementada plantilla de email personalizada para envío de enlaces de recuperación
+  - Aplicadas prácticas de seguridad: tokens de un solo uso, expiración de 24 horas, validación de contraseñas
+  - Documentada la API en `docs/api/auth.md` para referencia de desarrolladores
+
 - **Ticket #30 completado:** Se han implementado con éxito los tests end-to-end para el flujo de visualización de proyectos.
   - Configurado Cypress como framework de testing e2e
   - Implementados 7 tests que comprueban todo el flujo desde el listado hasta el detalle de proyecto

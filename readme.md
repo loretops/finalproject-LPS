@@ -909,6 +909,7 @@ Esta estrategia de pruebas en múltiples niveles ayuda a detectar problemas temp
     users ||--o{ interests : expresses
     users ||--o{ messages : sends
     users ||--o{ document_views : views
+    users ||--o{ password_reset_tokens : has
 
     roles {
         UUID id PK
@@ -931,6 +932,15 @@ Esta estrategia de pruebas en múltiples niveles ayuda a detectar problemas temp
         UUID id PK
         UUID user_id FK
         VARCHAR token
+        BOOLEAN used
+        TIMESTAMP created_at
+        TIMESTAMP expires_at
+    }
+
+    password_reset_tokens {
+        UUID id PK
+        UUID user_id FK
+        VARCHAR token "UNIQUE"
         BOOLEAN used
         TIMESTAMP created_at
         TIMESTAMP expires_at
@@ -1120,6 +1130,7 @@ Representa a los usuarios del sistema, incluyendo visitantes registrados, socios
 - 🔑 id → interests.user_id
 - 🔑 id → messages.sender_id
 - 🔑 id → document_views.user_id
+- 🔑 id → password_reset_tokens.user_id
 
 #### 3. projects
 Oportunidades de inversión inmobiliaria publicadas por los gestores.
@@ -1236,7 +1247,29 @@ Tokens para verificación de email al registrarse.
 - INDEX en `user_id`
 - INDEX en `expires_at` (para expirar tokens)
 
-#### 8. interests
+#### 8. password_reset_tokens
+Tokens para la recuperación de contraseña.
+
+| Campo | Tipo de Dato | Descripción | Restricciones |
+|-------|-------------|-------------|---------------|
+| id | UUID | Identificador único | PK, NOT NULL |
+| user_id | UUID | Usuario al que pertenece | FK → users.id, NOT NULL |
+| token | VARCHAR | Token único de recuperación | NOT NULL, UNIQUE |
+| used | BOOLEAN | Indica si ya fue utilizado | NOT NULL, DEFAULT: false |
+| created_at | TIMESTAMP | Fecha de creación | NOT NULL, DEFAULT: now() |
+| expires_at | TIMESTAMP | Fecha de expiración | NOT NULL |
+
+##### Índices
+- PRIMARY KEY en `id`
+- UNIQUE en `token`
+- INDEX en `user_id`
+- INDEX en `token` (para búsquedas rápidas)
+- INDEX en `expires_at` (para expirar tokens)
+
+##### Relaciones
+- 🔑 user_id → users.id
+
+#### 9. interests
 Expresiones de interés en proyectos sin compromiso de inversión.
 
 | Campo | Tipo de Dato | Descripción | Restricciones |
@@ -1255,7 +1288,7 @@ Expresiones de interés en proyectos sin compromiso de inversión.
 - INDEX en `project_id` (para consultar intereses en un proyecto)
 - INDEX en `status` (para filtrar por estado)
 
-#### 9. conversations
+#### 10. conversations
 Conversaciones entre usuarios, por ejemplo entre gestores y socios interesados.
 
 | Campo | Tipo de Dato | Descripción | Restricciones |
@@ -1269,7 +1302,7 @@ Conversaciones entre usuarios, por ejemplo entre gestores y socios interesados.
 - PRIMARY KEY en `id`
 - INDEX en `project_id` (para consultar conversaciones sobre un proyecto)
 
-#### 10. conversation_participants
+#### 11. conversation_participants
 Participantes en una conversación.
 
 | Campo | Tipo de Dato | Descripción | Restricciones |
@@ -1285,7 +1318,7 @@ Participantes en una conversación.
 - INDEX en `conversation_id` (para consultar participantes)
 - INDEX en `user_id` (para consultar conversaciones de un usuario)
 
-#### 11. messages
+#### 12. messages
 Mensajes intercambiados en las conversaciones.
 
 | Campo | Tipo de Dato | Descripción | Restricciones |
@@ -1304,7 +1337,7 @@ Mensajes intercambiados en las conversaciones.
 - INDEX en `read` (para filtrar mensajes no leídos)
 - INDEX en `created_at` (para ordenar cronológicamente)
 
-#### 12. project_updates
+#### 13. project_updates
 Actualizaciones periódicas sobre el progreso de los proyectos.
 
 | Campo | Tipo de Dato | Descripción | Restricciones |
@@ -1323,7 +1356,7 @@ Actualizaciones periódicas sobre el progreso de los proyectos.
 - INDEX en `project_id` (para consultar actualizaciones de un proyecto)
 - INDEX en `update_date` (para ordenar cronológicamente)
 
-#### 13. notifications
+#### 14. notifications
 Notificaciones para los usuarios sobre eventos relevantes.
 
 | Campo | Tipo de Dato | Descripción | Restricciones |
@@ -1343,7 +1376,7 @@ Notificaciones para los usuarios sobre eventos relevantes.
 - INDEX en `type` (para filtrar por tipo)
 - INDEX en `created_at` (para ordenar cronológicamente)
 
-#### 14. document_views
+#### 15. document_views
 Registros de visualizaciones de documentos para auditoría.
 
 | Campo | Tipo de Dato | Descripción | Restricciones |
