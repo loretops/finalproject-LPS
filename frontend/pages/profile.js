@@ -1,16 +1,16 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../components/layout/Layout';
 import Card from '../components/ui/Card';
 import VerificationStatus from '../components/ui/VerificationStatus';
 import Button from '../components/ui/Button';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import VerificationService from '../services/verificationService';
 import { withAuth } from '../utils/withAuth';
 import { FaUser, FaEnvelope, FaCalendarAlt, FaSignOutAlt } from 'react-icons/fa';
 
 const ProfilePage = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout } = useAuth();
   const router = useRouter();
   
   const [verificationState, setVerificationState] = useState({

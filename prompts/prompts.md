@@ -565,6 +565,66 @@ Pues venga, vamos a por la fase 1. Puedes fijarte en @https://openspace-home.com
 - Asegurar que el menú de navegación sea visible en todas las páginas, incluyendo la página de login.
 - Implementar la funcionalidad de recuperación de contraseña en la página de login.
 
+**Prompt 5:**
+```
+Genial! Como lueho hubo problemas y volví a una versión anterior del proyecto, esta perte que comentas "Además, habías hecho cambios en el menú de navegación desde la perspectiva del gerente, eliminando la opción "Inicio" y "Sobre Nosotros" para los gerentes, y haciendo que "Dashboard" sea la primera opción." se ha deshecho. Me gustaría aplicar un menú lógico para los manager, teniendo el dashboard como primera opción. Pero antes de nada crea una rama. No seolo voy a hacer esto, sino que estamos en una fase de mejora estetica y logica de todo el proyecto, paar tener algo funcional, sin errores, y con una lógica fuerte, antes de afrontar el tema de almacenamiento de documentos, que no funciona bien
+```
+
+**Prompt 6:**
+```
+Tengo varias cuestiones a afrontar. A ver que tal lo haces:
+1. Revisa si el menú te parece bien así: por que pones AdminProyectos, y por ejemplo no hay acceso al adminde invitaciones? Porque hay areas nás relevantes que otras? No te estoy pidiendo que lo cambies, solo que revises la lógica de los accesos del menú
+2. Las alertas de Socios activos, proyectos activos, y capital invertido muestran datos ficticios. Quiero qu etodo lo que hagas sea real, no me muestres datos hardcodeados
+3. Quiero que todos los accesos que haya desde el dashboard lleven a una página real y que funcione. Por ejemplo: Mi Perfil, da error: 
+Next.js (14.2.28) is outdated (learn more)
+Unhandled Runtime Error
+
+TypeError: Context is undefined
+Source
+React
+
+pages/profile.js (13:39) @ AuthContext
+
+  11 |
+  12 | const ProfilePage = () => {
+> 13 |   const { user, logout } = useContext(AuthContext);
+     |                                       ^
+  14 |   const router = useRouter();
+  15 |   
+  16 |   const [verificationState, setVerificationState] = useState({
+
+Call Stack
+React
+renderWithHooks
+../node_modules/react-dom/cjs/react-dom.development.js (15486:1)
+mountIndeterminateComponent
+../node_modules/react-dom/cjs/react-dom.development.js (20103:1)
+beginWork
+../node_modules/react-dom/cjs/react-dom.development.js (21626:1)
+callCallback
+../node_modules/react-dom/cjs/react-dom.development.js (4164:1)
+invokeGuardedCallbackDev
+../node_modules/react-dom/cjs/react-dom.development.js (4213:1)
+invokeGuardedCallback
+../node_modules/react-dom/cjs/react-dom.development.js (4277:1)
+beginWork$1
+../node_modules/react-dom/cjs/react-dom.development.js (27490:1)
+performUnitOfWork
+../node_modules/react-dom/cjs/react-dom.development.js (26596:1)
+workLoopSync
+../node_modules/react-dom/cjs/react-dom.development.js (26505:1)
+renderRootSync
+../node_modules/react-dom/cjs/react-dom.development.js (26473:1)
+performConcurrentWorkOnRoot
+../node_modules/react-dom/cjs/react-dom.development.js (25777:1)
+workLoop
+../node_modules/scheduler/cjs/scheduler.development.js (266:1)
+flushWork
+../node_modules/scheduler/cjs/scheduler.development.js (239:1)
+performWorkUntilDeadline
+../node_modules/scheduler/cjs/scheduler.development.js (533:1)
+```
+
 
 
 

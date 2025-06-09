@@ -29,7 +29,19 @@ const hasRole = (user, roleToCheck) => {
 const getNavigationItems = (user) => {
   console.log('Navbar - Usuario actual:', user);
   
-  // Navegación básica
+  // Navegación específica para managers y admins
+  if (user && (hasRole(user, 'manager') || hasRole(user, 'admin'))) {
+    console.log('Navbar - Configurando menú para manager/admin');
+    return [
+      { name: 'Dashboard', href: '/dashboard', public: false },
+      { name: 'Proyectos', href: '/projects', public: true },
+      { name: 'Admin Proyectos', href: '/admin/projects', public: false },
+      { name: 'Admin Inversiones', href: '/admin/investments', public: false },
+      { name: 'Admin Invitaciones', href: '/admin/invitations', public: false },
+    ];
+  }
+  
+  // Navegación básica para usuarios no autenticados y otros roles
   const items = [
     { name: 'Inicio', href: '/', public: true },
     { name: 'Proyectos', href: '/projects', public: true },
@@ -37,20 +49,12 @@ const getNavigationItems = (user) => {
   ];
   
   if (user) {
-    // Dashboard para todos los usuarios autenticados
+    // Dashboard para usuarios autenticados que no son managers
     items.push({ name: 'Dashboard', href: '/dashboard', public: false });
     
-    // Opciones específicas según rol
-    if (hasRole(user, 'manager') || hasRole(user, 'admin')) {
-      // Menú para gestores y administradores
-      items.push({ name: 'Admin Proyectos', href: '/admin/projects', public: false });
-      items.push({ name: 'Admin Inversiones', href: '/admin/investments', public: false });
-      console.log('Navbar - Agregando elementos de administración para rol manager/admin');
-    } else {
-      // Menú para socios e inversores
-      items.push({ name: 'Mis Intereses', href: '/interests', public: false });
-      items.push({ name: 'Mis Inversiones', href: '/investments', public: false });
-    }
+    // Menú para socios e inversores
+    items.push({ name: 'Mis Intereses', href: '/interests', public: false });
+    items.push({ name: 'Mis Inversiones', href: '/investments', public: false });
   }
   
   return items;
