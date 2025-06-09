@@ -1,3 +1,17 @@
+# 🏢 COOPCO - Plataforma de Inversión Inmobiliaria
+
+## 🚀 Demo Rápida
+
+> **¿Quieres ver el proyecto funcionando?** Revisa el [DEMO-README.md](./DEMO-README.md) para una configuración rápida con datos de demostración.
+
+**Credenciales de demo:**
+- Manager: `manager@example.com` / `password123`
+- Socio: `partner@example.com` / `password123`
+
+---
+
+# Documentación del Proyecto
+
 ## Índice
 
 0. [Ficha del proyecto](#0-ficha-del-proyecto)
