@@ -1,4 +1,4 @@
-require('dotenv').config({ path: __dirname + '/../.env' });
+require('dotenv').config({ path: __dirname + '/../../.env' });
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcrypt');
 
@@ -17,8 +17,7 @@ const DEMO_PROJECTS = [
     expectedRoi: 14.5,
     status: 'published',
     draft: false,
-    publishedAt: new Date('2024-01-15'),
-    imageUrl: '/images/luxury-real-estate.jpg'
+    publishedAt: new Date('2024-01-15')
   },
   {
     title: 'Torre Oficinas Business Center',
@@ -31,8 +30,7 @@ const DEMO_PROJECTS = [
     expectedRoi: 11.2,
     status: 'published',
     draft: false,
-    publishedAt: new Date('2024-02-20'),
-    imageUrl: '/images/analytics.jpg'
+    publishedAt: new Date('2024-02-20')
   },
   {
     title: 'Resort Marina Premium',
@@ -45,8 +43,7 @@ const DEMO_PROJECTS = [
     expectedRoi: 16.8,
     status: 'published',
     draft: false,
-    publishedAt: new Date('2024-03-10'),
-    imageUrl: '/images/luxury-interior.jpg'
+    publishedAt: new Date('2024-03-10')
   },
   {
     title: 'Centro Logístico Inteligente',
@@ -59,8 +56,7 @@ const DEMO_PROJECTS = [
     expectedRoi: 9.5,
     status: 'published',
     draft: false,
-    publishedAt: new Date('2024-01-28'),
-    imageUrl: '/images/transparency.jpg'
+    publishedAt: new Date('2024-01-28')
   },
   {
     title: 'Apartamentos Exclusivos Marina',
@@ -73,8 +69,7 @@ const DEMO_PROJECTS = [
     expectedRoi: 13.7,
     status: 'published',
     draft: false,
-    publishedAt: new Date('2024-02-05'),
-    imageUrl: '/images/exclusivity.jpg'
+    publishedAt: new Date('2024-02-05')
   }
 ];
 
@@ -102,13 +97,82 @@ async function createDemoProjects() {
           ...projectData,
           createdBy: manager.id,
           publishedBy: manager.id,
-          createdAt: new Date(),
-          updatedAt: new Date()
+          createdAt: new Date()
         }
       });
       console.log(`✅ Proyecto creado: ${projectData.title}`);
     } else {
       console.log(`⚠️ Proyecto ya existe: ${projectData.title}`);
+    }
+  }
+}
+
+async function createDemoProjectDocuments() {
+  console.log('🌱 Creando documentos e imágenes para proyectos...');
+
+  // Obtener todos los proyectos creados
+  const projects = await prisma.project.findMany({
+    where: { status: 'published' }
+  });
+
+  const imageUrls = [
+    '/images/luxury-real-estate.jpg',
+    '/images/analytics.jpg', 
+    '/images/luxury-interior.jpg',
+    '/images/transparency.jpg',
+    '/images/exclusivity.jpg'
+  ];
+
+  for (let i = 0; i < projects.length; i++) {
+    const project = projects[i];
+    const imageUrl = imageUrls[i % imageUrls.length]; // Usamos módulo para no salir del rango
+
+    // Verificar si ya existe un documento de imagen para este proyecto
+    const existingImage = await prisma.projectDocument.findFirst({
+      where: {
+        projectId: project.id,
+        documentType: 'image'
+      }
+    });
+
+    if (!existingImage) {
+      await prisma.projectDocument.create({
+        data: {
+          projectId: project.id,
+          fileUrl: imageUrl,
+          fileType: 'image/jpeg',
+          documentType: 'image',
+          accessLevel: 'public',
+          title: `Imagen principal de ${project.title}`,
+          securityLevel: 'view_only'
+        }
+      });
+      console.log(`✅ Imagen añadida para proyecto: ${project.title}`);
+    } else {
+      console.log(`⚠️ Ya existe una imagen para: ${project.title}`);
+    }
+
+    // También añadir un documento de ejemplo (PDF)
+    const existingDoc = await prisma.projectDocument.findFirst({
+      where: {
+        projectId: project.id,
+        documentType: 'legal'
+      }
+    });
+
+    if (!existingDoc) {
+      await prisma.projectDocument.create({
+        data: {
+          projectId: project.id,
+          fileUrl: '/docs/sample-document.pdf', // URL ejemplo
+          fileType: 'application/pdf',
+          documentType: 'legal',
+          accessLevel: 'registered',
+          title: 'Documento legal',
+          securityLevel: 'view_only'
+        }
+      });
+      console.log(`✅ Documento legal añadido para proyecto: ${project.title}`);
     }
   }
 }
@@ -212,6 +276,7 @@ async function createDemoInvestments() {
 async function main() {
   try {
     await createDemoProjects();
+    await createDemoProjectDocuments();
     await createDemoInterests(); 
     await createDemoInvestments();
     console.log('🎉 Datos de demostración creados exitosamente');

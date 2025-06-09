@@ -241,6 +241,47 @@ class ProjectController {
       });
     }
   }
+
+  /**
+   * Maneja la petición GET /api/projects/public/:id para obtener un proyecto publicado
+   * @param {Object} req - Objeto de petición Express
+   * @param {Object} res - Objeto de respuesta Express
+   */
+  async getPublishedProject(req, res) {
+    try {
+      const { id } = req.params;
+      const userRole = req.user?.role || 'partner';
+
+      console.log(`Solicitando proyecto publicado con ID ${id} por usuario con rol ${userRole}`);
+      
+      // Obtener el proyecto con sus documentos, pasando el rol del usuario
+      const project = await projectService.getProjectById(id, { 
+        userRole,
+        includeDocuments: true 
+      });
+
+      if (!project) {
+        return res.status(404).json({
+          message: 'Proyecto no encontrado'
+        });
+      }
+
+      // Verificar que el proyecto esté publicado
+      if (project.status !== 'published' && userRole !== 'manager' && userRole !== 'admin') {
+        return res.status(403).json({
+          message: 'Este proyecto no está disponible para visualización'
+        });
+      }
+
+      res.status(200).json(project);
+    } catch (error) {
+      console.error('Error en ProjectController.getPublishedProject:', error);
+      res.status(500).json({
+        message: 'Error al obtener el proyecto publicado',
+        error: error.message
+      });
+    }
+  }
 }
 
 module.exports = new ProjectController(); 

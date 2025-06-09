@@ -122,6 +122,7 @@ class ProjectService {
       const publicOptions = {
         ...options,
         status: 'published',
+        includeDocuments: true  // Siempre incluir documentos para proyectos públicos
       };
 
       const result = await projectRepository.findAll(publicOptions);

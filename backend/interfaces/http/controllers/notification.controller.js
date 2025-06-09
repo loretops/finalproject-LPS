@@ -1,6 +1,4 @@
-const NotificationService = require('../../../application/services/notificationService');
-
-const notificationService = new NotificationService();
+const notificationService = require('../../../application/services/notificationService');
 
 class NotificationController {
   /**

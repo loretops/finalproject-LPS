@@ -1,7 +1,9 @@
+// Cargar variables de entorno
+require('dotenv').config({ path: __dirname + '/../../../.env' });
+
 const { PrismaClient } = require('@prisma/client');
 const ProjectRepository = require('../../domain/repositories/ProjectRepository');
-
-const prisma = new PrismaClient();
+const prisma = require('../../utils/prismaClient');
 
 /**
  * Implementación de ProjectRepository usando Prisma ORM
@@ -57,7 +59,8 @@ class PrismaProjectRepository extends ProjectRepository {
         page = 1,
         limit = 10,
         sortField = 'createdAt',
-        sortDirection = 'desc'
+        sortDirection = 'desc',
+        includeDocuments = false
       } = options;
 
       // Construir filtros
@@ -110,18 +113,31 @@ class PrismaProjectRepository extends ProjectRepository {
       
       console.log('Ordenando por:', orderBy);
       
+      // Configurar inclusiones
+      const include = {
+        creator: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true
+          }
+        }
+      };
+      
+      // Incluir documentos si se solicita
+      if (includeDocuments) {
+        include.documents = {
+          where: {
+            documentType: 'image',
+            accessLevel: 'public'
+          }
+        };
+      }
+      
       // Obtener proyectos paginados
       const projects = await prisma.project.findMany({
         where,
-        include: {
-          creator: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true
-            }
-          }
-        },
+        include: include,
         skip,
         take: limit,
         orderBy

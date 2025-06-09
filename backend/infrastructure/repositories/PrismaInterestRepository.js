@@ -45,12 +45,10 @@ class PrismaInterestRepository extends InterestRepository {
    */
   async findByUserAndProject(userId, projectId) {
     try {
-      return await prisma.interest.findUnique({
+      return await prisma.interest.findFirst({
         where: {
-          userId_projectId: {
-            userId,
-            projectId
-          }
+          userId: userId,
+          projectId: projectId
         }
       });
     } catch (error) {

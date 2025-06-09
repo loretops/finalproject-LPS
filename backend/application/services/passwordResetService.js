@@ -1,7 +1,6 @@
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../../utils/prismaClient');
 const { EmailService } = require('./emailService');
 const { generateSecureToken } = require('../../utils/tokenUtils');
 

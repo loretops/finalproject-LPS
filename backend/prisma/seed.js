@@ -1,4 +1,4 @@
-require('dotenv').config({ path: __dirname + '/../.env' });
+require('dotenv').config({ path: __dirname + '/../../.env' });
 const { PrismaClient, InvitationStatus } = require('@prisma/client');
 const bcrypt = require('bcrypt'); // Importar bcrypt
 const invitationService = require('../application/services/invitationService');

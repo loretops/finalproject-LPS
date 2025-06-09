@@ -625,6 +625,15 @@ performWorkUntilDeadline
 ../node_modules/scheduler/cjs/scheduler.development.js (533:1)
 ```
 
+**Prompt 7:**
+```
+Está tod muy bien. Haz commit
+Voy a enseñar el proyecto:
+1. Quiero que las imagenes que estén usandose suban al repositorio para poder verlo tod en la nube, 
+2. Quiero tener algun proyecto de demo para enseñar
+¿Qué mas se te ocurre?
+```
+
 
 
 

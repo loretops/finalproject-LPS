@@ -1,6 +1,7 @@
+const nodemailer = require('nodemailer');
+// Importar la instancia compartida de PrismaClient
+const prisma = require('../../utils/prismaClient');
 const crypto = require('crypto');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
 const VerificationToken = require('../../domain/entities/VerificationToken');
 const PrismaVerificationTokenRepository = require('../../infrastructure/repositories/PrismaVerificationTokenRepository');
 const { EmailService } = require('./emailService');

@@ -32,11 +32,14 @@ const NotificationBell = () => {
     loadNotifications();
     
     // Recargar notificaciones cada 30 segundos
+    // Deshabilitando temporalmente para evitar errores de timeout
+    /* 
     const interval = setInterval(() => {
       loadNotifications();
     }, 30000);
     
     return () => clearInterval(interval);
+    */
   }, []);
 
   // Cerrar el dropdown al hacer clic fuera

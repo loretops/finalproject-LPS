@@ -14,24 +14,24 @@ const router = express.Router();
 /**
  * POST /api/interests
  * Registrar interés en un proyecto.
- * Accesible para: socios ('partner')
+ * Accesible para: socios ('partner') y gestores ('manager')
  */
 router.post(
   '/',
   jwtAuthMiddleware,
-  roleAuthMiddleware('partner'),
+  roleAuthMiddleware(['partner', 'manager']),
   interestController.registerInterest
 );
 
 /**
  * GET /api/interests/user
  * Obtener todos los intereses del usuario autenticado.
- * Accesible para: socios ('partner')
+ * Accesible para: socios ('partner') y gestores ('manager')
  */
 router.get(
   '/user',
   jwtAuthMiddleware,
-  roleAuthMiddleware('partner'),
+  roleAuthMiddleware(['partner', 'manager']),
   interestController.getUserInterests
 );
 
@@ -50,13 +50,13 @@ router.get(
 /**
  * DELETE /api/interests/:id
  * Eliminar un interés.
- * Accesible para: socios ('partner')
+ * Accesible para: socios ('partner') y gestores ('manager')
  * Nota: solo se puede eliminar interés propio (validado en el controlador)
  */
 router.delete(
   '/:id',
   jwtAuthMiddleware,
-  roleAuthMiddleware('partner'),
+  roleAuthMiddleware(['partner', 'manager']),
   interestController.removeInterest
 );
 

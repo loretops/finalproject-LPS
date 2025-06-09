@@ -1,7 +1,7 @@
-const { PrismaClient } = require('@prisma/client');
-const NotificationService = require('./notificationService');
+const notificationService = require('./notificationService');
 
-const prisma = new PrismaClient();
+// Importar la instancia compartida de PrismaClient
+const prisma = require('../../utils/prismaClient');
 const Investment = require('../../domain/entities/investment');
 const Project = require('../../domain/entities/project');
 
@@ -10,7 +10,8 @@ const Project = require('../../domain/entities/project');
  */
 class InvestmentService {
   constructor() {
-    this.notificationService = new NotificationService();
+    // No necesitamos instanciar de nuevo, ya importamos la instancia
+    // this.notificationService = new NotificationService();
   }
 
   /**
@@ -101,7 +102,7 @@ class InvestmentService {
       try {
         // Crear notificación para el gestor del proyecto
         if (newInvestment.project && newInvestment.project.createdBy) {
-          await this.notificationService.createNotification({
+          await notificationService.createNotification({
             userId: newInvestment.project.createdBy,
             type: 'investment_new',
             content: `${newInvestment.user.firstName} ${newInvestment.user.lastName} ha invertido ${amount}€ en tu proyecto "${newInvestment.project.title || 'Sin título'}"`,
@@ -110,7 +111,7 @@ class InvestmentService {
         }
 
         // Crear notificación para el usuario que invierte
-        await this.notificationService.createNotification({
+        await notificationService.createNotification({
           userId: investmentData.userId,
           type: 'investment_created',
           content: `Has invertido ${amount}€ en el proyecto "${newInvestment.project && newInvestment.project.title ? newInvestment.project.title : 'Sin título'}". Tu inversión está pendiente de confirmación.`,
@@ -462,7 +463,7 @@ class InvestmentService {
       // Enviar notificaciones (con manejo de errores para evitar que falle la transacción)
       try {
         // Crear notificación para el usuario
-        await this.notificationService.createNotification({
+        await notificationService.createNotification({
           userId: updatedInvestment.userId,
           type: 'investment_status_change',
           content: `El estado de tu inversión en ${updatedInvestment.project.title} ha cambiado a ${status}`,
@@ -471,7 +472,7 @@ class InvestmentService {
 
         // Si hay cambio de estado, notificar también al gestor del proyecto
         if (updatedInvestment.project.createdBy) {
-          await this.notificationService.createNotification({
+          await notificationService.createNotification({
             userId: updatedInvestment.project.createdBy,
             type: 'investment_status_change',
             content: `El estado de la inversión de ${updatedInvestment.user.firstName} ${updatedInvestment.user.lastName} en ${updatedInvestment.project.title} ha cambiado a ${status}`,
@@ -545,7 +546,7 @@ class InvestmentService {
       // Enviar notificaciones sin bloquear la operación principal
       try {
         // Notificar al usuario
-        await this.notificationService.createNotification({
+        await notificationService.createNotification({
           userId: updatedInvestment.userId,
           type: 'investment_status_change',
           content: `Has cancelado tu inversión en ${updatedInvestment.project && updatedInvestment.project.title ? updatedInvestment.project.title : 'Sin título'}`,
@@ -554,7 +555,7 @@ class InvestmentService {
         
         // Notificar al gestor del proyecto
         if (updatedInvestment.project && updatedInvestment.project.createdBy) {
-          await this.notificationService.createNotification({
+          await notificationService.createNotification({
             userId: updatedInvestment.project.createdBy,
             type: 'investment_status_change',
             content: `${updatedInvestment.user.firstName} ${updatedInvestment.user.lastName} ha cancelado su inversión en ${updatedInvestment.project.title || 'Sin título'}`,

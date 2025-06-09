@@ -3,9 +3,11 @@ const notificationService = require('./notificationService');
 const projectService = require('./projectService');
 const { PrismaClient } = require('@prisma/client');
 
+// Importar la instancia compartida de PrismaClient
+const prisma = require('../../utils/prismaClient');
+
 // Instanciar el repositorio y cliente Prisma
 const interestRepository = new PrismaInterestRepository();
-const prisma = new PrismaClient();
 
 /**
  * Clase que implementa el servicio de gestión de intereses en proyectos.

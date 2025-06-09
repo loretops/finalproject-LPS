@@ -45,6 +45,21 @@ const normalizeProject = (project) => {
   // Asegurarnos de que el ID sea un string
   const projectId = project.id ? String(project.id).trim() : '';
   
+  // Extraer la primera imagen del proyecto si existe
+  let image_url = '';
+  if (project.documents && Array.isArray(project.documents)) {
+    // Buscar documentos de tipo imagen
+    const imageDoc = project.documents.find(doc => 
+      doc.document_type === 'image' || 
+      (doc.file_type && doc.file_type.startsWith('image/')) ||
+      (doc.file_url && /\.(jpe?g|png|gif|webp|svg)$/i.test(doc.file_url))
+    );
+    
+    if (imageDoc && imageDoc.file_url) {
+      image_url = imageDoc.file_url;
+    }
+  }
+  
   return {
     id: projectId,
     title: project.title || '',
@@ -57,7 +72,8 @@ const normalizeProject = (project) => {
     published_at: project.published_at || null,
     property_type: project.property_type || 'residential',
     location: project.location || '',
-    documents: project.documents || []
+    documents: project.documents || [],
+    image_url: image_url
   };
 };
 

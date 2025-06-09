@@ -1,13 +1,16 @@
 // Cargar variables de entorno
-require('dotenv').config({ path: '.env' }); // Primero intenta cargar el .env del backend
-require('dotenv').config({ path: '../.env' }); // Luego carga el .env de la raíz
+require('dotenv').config({ path: '../.env' }); // Primero carga el .env de la raíz 
+require('dotenv').config({ path: '.env' }); // Luego intenta cargar el .env del backend si existe
 
 // Importaciones
 const express = require('express');
 const path = require('path'); // Agregar path para manejar rutas de archivos
-const { PrismaClient } = require('@prisma/client');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const cors = require('cors');
+
+// Importar la instancia compartida de PrismaClient
+const prisma = require('./utils/prismaClient');
 
 // Rutas API 
 const authRoutes = require('./interfaces/http/routes/auth.routes');
@@ -28,7 +31,6 @@ console.log('DEBUG STARTUP - Reading FRONTEND_URL env var:', process.env.FRONTEN
 
 // Inicialización
 const app = express();
-const prisma = new PrismaClient();
 const port = process.env.BACKEND_PORT || process.env.PORT || 8001;
 const baseUrl = process.env.BASE_URL || `http://localhost:${port}`;
 
@@ -54,46 +56,33 @@ app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 // Servir archivos estáticos desde el directorio 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Habilitar CORS
-app.use((req, res, next) => {
-  // Usar la variable de entorno CORS_ORIGIN si está definida
-  const corsOrigin = process.env.CORS_ORIGIN || '*';
-  
-  // Usar frontendUrl para CORS si está disponible
-  const frontendUrl = process.env.FRONTEND_URL;
-  
-  if (corsOrigin === '*') {
-    // En desarrollo, aceptar orígenes configurados o cualquiera
-    const allowedOrigins = frontendUrl 
-      ? [frontendUrl, 'http://localhost:3001', 'http://localhost:3000'] 
-      : ['http://localhost:3001', 'http://localhost:3000'];
+// Configuración CORS
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Permitir solicitudes sin origen (como las aplicaciones móviles o curl)
+    if (!origin) return callback(null, true);
     
-    const origin = req.headers.origin;
+    // Lista de orígenes permitidos
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      process.env.FRONTEND_URL
+    ].filter(Boolean); // Eliminar valores nulos o indefinidos
     
-    if (allowedOrigins.includes(origin)) {
-      res.header('Access-Control-Allow-Origin', origin);
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
     } else {
-      res.header('Access-Control-Allow-Origin', '*');
+      console.log('Origen bloqueado por CORS:', origin);
+      callback(new Error('Not allowed by CORS'));
     }
-  } else {
-    // En producción, usar el origen específico configurado
-    res.header('Access-Control-Allow-Origin', corsOrigin);
-  }
-  
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  
-  // Cabeceras de seguridad recomendadas por OWASP
-  res.header('X-Content-Type-Options', 'nosniff');
-  res.header('X-Frame-Options', 'DENY');
-  res.header('Content-Security-Policy', "default-src 'self'");
-  
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-  next();
-});
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
+};
+
+// Aplicar configuración CORS
+app.use(cors(corsOptions));
 
 // Ruta para verificar que la API está funcionando
 app.get('/api/health', (req, res) => {
