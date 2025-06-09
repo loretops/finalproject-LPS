@@ -61,12 +61,7 @@ const ProjectDetailPage = () => {
   
   // Procesar los documentos en las categorías adecuadas
   const processDocuments = (projectData) => {
-    if (!projectData || !projectData.documents) {
-      console.log('No hay documentos para procesar:', projectData);
-      return;
-    }
-    
-    console.log('Procesando documentos:', projectData.documents);
+    if (!projectData || !projectData.documents) return;
     
     const projectImages = [];
     const projectDocs = {
@@ -79,8 +74,6 @@ const ProjectDetailPage = () => {
     
     // Recorrer todos los documentos
     projectData.documents.forEach(doc => {
-      console.log('Procesando documento:', doc);
-      
       // Verificar si es una imagen
       const isImage = 
         doc.documentType === 'image' || 
@@ -89,7 +82,6 @@ const ProjectDetailPage = () => {
       
       if (isImage) {
         // Es una imagen para la galería
-        console.log('Añadiendo imagen a la galería:', doc.fileUrl);
         projectImages.push({
           url: doc.fileUrl,
           title: doc.title || 'Imagen del proyecto',
@@ -105,8 +97,6 @@ const ProjectDetailPage = () => {
         }
       }
     });
-    
-    console.log(`Imágenes procesadas: ${projectImages.length}`, projectImages);
     
     setImages(projectImages);
     setDocuments(projectDocs);
@@ -169,7 +159,7 @@ const ProjectDetailPage = () => {
   const [showInvestmentForm, setShowInvestmentForm] = useState(false);
   
   // Manejar apertura del formulario de inversión
-  const handleInvestClick = () => {
+  const handleOpenInvestForm = () => {
     setShowInvestmentForm(true);
   };
   

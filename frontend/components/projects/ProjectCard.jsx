@@ -101,18 +101,8 @@ const ProjectCard = ({
   // Calcular el porcentaje de financiación
   const calculateFundingPercentage = () => {
     if (!target_amount || target_amount <= 0) return 0;
-    // Convertir a números y usar valores por defecto
-    const targetAmount = parseFloat(target_amount) || 0;
-    const currentAmount = parseFloat(current_amount) || 0;
-    
-    // Prevenir divisiones por cero
-    if (targetAmount === 0) return 0;
-    
-    const percentage = (currentAmount / targetAmount) * 100;
-    
-    // Verificar si el resultado es NaN y devolver 0 en ese caso
-    if (isNaN(percentage)) return 0;
-    
+    const currentAmount = current_amount || 0; // Asignar 0 por defecto si es undefined o null
+    const percentage = (currentAmount / target_amount) * 100;
     return Math.min(Math.round(percentage), 100); // No permitir valores mayores a 100%
   };
 
@@ -166,13 +156,8 @@ const ProjectCard = ({
             {image_url ? (
               <img
                 src={image_url}
-                alt={title || 'Proyecto inmobiliario'}
+                alt={title}
                 className="h-full w-full object-cover object-center transition-transform duration-300 hover:scale-105"
-                onError={(e) => {
-                  console.error("Error loading image:", image_url);
-                  e.target.onerror = null;
-                  e.target.src = '/images/luxury-real-estate.jpg'; // Imagen de respaldo
-                }}
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center bg-gray-200">

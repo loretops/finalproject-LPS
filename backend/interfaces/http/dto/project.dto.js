@@ -112,18 +112,6 @@
  * @returns {ProjectResponseDto} Objeto DTO para respuesta
  */
 function toProjectResponse(projectModel) {
-  // Preparar una lista de documentos formateados si están presentes
-  const documents = projectModel.documents ? projectModel.documents.map(doc => ({
-    id: doc.id,
-    documentType: doc.documentType,
-    fileUrl: doc.fileUrl,
-    fileType: doc.fileType,
-    accessLevel: doc.accessLevel,
-    securityLevel: doc.securityLevel,
-    title: doc.title,
-    createdAt: doc.createdAt.toISOString()
-  })) : [];
-  
   return {
     id: projectModel.id,
     title: projectModel.title,
@@ -142,7 +130,7 @@ function toProjectResponse(projectModel) {
       id: projectModel.creator.id,
       name: `${projectModel.creator.firstName} ${projectModel.creator.lastName}`
     } : null,
-    documents: documents
+    documents: []
   };
 }
 

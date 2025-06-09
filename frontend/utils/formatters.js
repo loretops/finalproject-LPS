@@ -6,19 +6,6 @@
  * @returns {string} - Cantidad formateada con símbolo de moneda
  */
 export const formatCurrency = (amount, currency = 'EUR', locale = 'es-ES') => {
-  // Convertir a número si es string y manejar valores no numéricos
-  const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
-  
-  // Si es NaN o indefinido, devolver 0 formateado
-  if (isNaN(numAmount) || numAmount === undefined || numAmount === null) {
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(0);
-  }
-  
   const formatter = new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
@@ -26,7 +13,7 @@ export const formatCurrency = (amount, currency = 'EUR', locale = 'es-ES') => {
     maximumFractionDigits: 0
   });
   
-  return formatter.format(numAmount);
+  return formatter.format(amount);
 };
 
 /**

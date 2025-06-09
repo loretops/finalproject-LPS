@@ -19,11 +19,11 @@ async function addImagesToProjects() {
 
   // URLs de imágenes disponibles
   const imageUrls = [
-    'http://localhost:3000/images/luxury-real-estate.jpg',
-    'http://localhost:3000/images/analytics.jpg', 
-    'http://localhost:3000/images/luxury-interior.jpg',
-    'http://localhost:3000/images/transparency.jpg',
-    'http://localhost:3000/images/exclusivity.jpg'
+    '/images/luxury-real-estate.jpg',
+    '/images/analytics.jpg', 
+    '/images/luxury-interior.jpg',
+    '/images/transparency.jpg',
+    '/images/exclusivity.jpg'
   ];
 
   for (let i = 0; i < projects.length; i++) {

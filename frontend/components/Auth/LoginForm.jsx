@@ -38,11 +38,11 @@ const LoginForm = () => {
   const loginAsPartner = async () => {
     try {
       // Establecer directamente los valores en los campos para una mejor experiencia de usuario
-      setEmail('partner@example.com');
+      setEmail('lpardo@trucco.es');
       setPassword('password123');
       // Esperar un momento para que los estados se actualicen
       setTimeout(async () => {
-        await login('partner@example.com', 'password123');
+        await login('lpardo@trucco.es', 'password123');
       }, 50);
     } catch (error) {
       console.error('Error al iniciar sesión como socio:', error);
@@ -161,7 +161,7 @@ const LoginForm = () => {
         <div className="mx-8 mb-6 p-3 bg-gray-50 border border-gray-200 rounded-md">
           <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">Credenciales de demostración</h3>
           <p className="text-xs text-gray-600 mb-1"><span className="font-semibold">Manager:</span> <span className="font-mono">manager@example.com</span> / <span className="font-mono">password123</span></p>
-          <p className="text-xs text-gray-600"><span className="font-semibold">Socio:</span> <span className="font-mono">partner@example.com</span> / <span className="font-mono">password123</span></p>
+          <p className="text-xs text-gray-600"><span className="font-semibold">Socio:</span> <span className="font-mono">lpardo@trucco.es</span> / <span className="font-mono">password123</span></p>
         </div>
       )}
     </Card>
