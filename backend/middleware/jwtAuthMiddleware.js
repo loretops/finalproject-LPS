@@ -42,7 +42,8 @@ async function jwtAuthMiddleware(req, res, next) {
     req.user = {
       id: user.id,
       email: user.email,
-      role: user.role?.name, // Extract role name
+      role: { name: user.role?.name }, // Keep role as object for compatibility
+      isActiveInvestor: user.isActiveInvestor, // Add the new field
       // Add other relevant user fields if needed
     };
 

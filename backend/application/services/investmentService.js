@@ -3,7 +3,6 @@ const prisma = new PrismaClient();
 const NotificationService = require('./notificationService');
 const { Investment, InvestmentStatus } = require('../../domain/entities/Investment');
 const Project = require('../../domain/entities/project');
-const { AppError } = require('../../utils/AppError');
 
 /**
  * Actualiza el estado de un usuario a "inversor activo" si tiene inversiones confirmadas.
@@ -411,12 +410,12 @@ class InvestmentService {
     // Obtener la inversión original para validaciones
     const existingInvestment = await this.getInvestmentById(id);
     if (!existingInvestment) {
-      throw new AppError('Inversión no encontrada', 404);
+      throw new Error('Inversión no encontrada');
     }
 
     // Validar si el estado es válido
     if (status && !Object.values(InvestmentStatus).includes(status)) {
-      throw new AppError(`Estado de inversión inválido: ${status}`, 400);
+      throw new Error(`Estado de inversión inválido: ${status}`);
     }
     
     // Si se cancela una inversión que estaba confirmada, se debe ajustar el monto del proyecto

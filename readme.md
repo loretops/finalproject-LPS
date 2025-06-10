@@ -974,6 +974,7 @@ Esta estrategia de pruebas en múltiples niveles ayuda a detectar problemas temp
         TIMESTAMP locked_until
         TIMESTAMP created_at
         TIMESTAMP updated_at
+        BOOLEAN is_active_investor "Indica si el socio tiene inversiones activas"
     }
 
     projects ||--o{ project_documents : has
@@ -1126,6 +1127,7 @@ Representa a los usuarios del sistema, incluyendo visitantes registrados, socios
 | email_verified_at | TIMESTAMP | Fecha de verificación del email | NULLABLE |
 | failed_login_attempts | INTEGER | Número de intentos fallidos de login | NOT NULL, DEFAULT: 0 |
 | locked_until | TIMESTAMP | Fecha hasta la que la cuenta está bloqueada | NULLABLE |
+| is_active_investor | BOOLEAN | Indica si el socio tiene inversiones activas | NOT NULL, DEFAULT: false |
 | created_at | TIMESTAMP | Fecha de creación de la cuenta | NOT NULL, DEFAULT: now() |
 | updated_at | TIMESTAMP | Fecha de última actualización del perfil | NOT NULL, DEFAULT: now() |
 

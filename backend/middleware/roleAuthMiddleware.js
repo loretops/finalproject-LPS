@@ -4,6 +4,13 @@
  * @returns {function} Express middleware function.
  */
 const roleAuthMiddleware = (requiredRoles) => {
+  // Ensure requiredRoles is always an array
+  const roles = Array.isArray(requiredRoles) ? requiredRoles : [requiredRoles];
+
+  if (roles.length === 0) {
+    throw new Error('roleAuthMiddleware requires at least one role.');
+  }
+
   return (req, res, next) => {
     const user = req.user;
 
@@ -18,11 +25,11 @@ const roleAuthMiddleware = (requiredRoles) => {
       userRoles.push('investor');
     }
 
-    const hasRequiredRole = requiredRoles.some(role => userRoles.includes(role));
+    const hasRequiredRole = roles.some(role => userRoles.includes(role));
 
     if (!hasRequiredRole) {
       return res.status(403).json({
-        message: `Acceso denegado. Se requiere uno de los siguientes roles: ${requiredRoles.join(', ')}`,
+        message: `Acceso denegado. Se requiere uno de los siguientes roles: ${roles.join(', ')}`,
       });
     }
 

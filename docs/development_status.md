@@ -10,6 +10,7 @@
 | HU #9: Marcar "Me Interesa" | 8 | 8 | 0 | 0 | 0 |
 | HU #3: Marcar "Invierto" | 12 | 7 | 0 | 5 | 0 |
 | HU #7: Confirmación de correo electrónico | 6 | 6 | 0 | 0 | 0 |
+| HU #4: Lógica de negocio y Roles | 1 | 0 | 0 | 1 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -154,6 +155,14 @@ gantt
 | #49 | Sistema de notificaciones para inversiones | ✅ | 7/7 | 0/0 | Implementado sistema completo de notificaciones en tiempo real con soporte para múltiples tipos de notificaciones de inversión |
 | #50 | Tests e2e para flujo de inversión | ✅ | 7/7 | 8/8 | Implementados tests end-to-end completos para el flujo de inversión con Cypress |
 | #51 | Dashboard para gestores con resumen de inversiones | ✅ | 8/8 | 0/0 | Implementado dashboard con estadísticas, filtros y gestión completa de inversiones para gestores |
+
+### HU #4: Lógica de negocio y Roles
+
+**Objetivo:** Mejorar la granularidad y la lógica de negocio en la gestión de roles y permisos de la plataforma.
+
+| ID | Descripción | Estado | Criterios cumplidos | Tests pasados | Observaciones |
+|---|---|---|---|---|---|
+| #58 | Diferenciación entre Socio e Inversor Activo | ✅ | 5/5 | 0/0 | Se implementó un flag `isActiveInvestor` en el modelo `User` para diferenciar a los socios que tienen inversiones activas. El estado se actualiza automáticamente al crear, confirmar o cancelar una inversión. El middleware de roles fue actualizado para considerar este flag, otorgando permisos de inversor a los socios activos. |
 
 ### HU #7: Confirmación de correo electrónico
 
@@ -455,6 +464,10 @@ Las mejoras aplicadas incluyen:
 - [x] Ticket #49: Sistema de notificaciones para inversiones
 - [x] Ticket #50: Tests e2e para flujo de inversión
 - [x] Ticket #51: Dashboard para gestores con resumen de inversiones
+
+### Historia de Usuario 4: Lógica de negocio y Roles
+
+- [x] Ticket #58: Diferenciación entre Socio e Inversor Activo
 
 ### Historia de Usuario 7: Confirmación de correo electrónico
 

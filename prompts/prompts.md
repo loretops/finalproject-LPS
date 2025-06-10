@@ -634,6 +634,25 @@ Voy a enseñar el proyecto:
 ¿Qué mas se te ocurre?
 ```
 
+## 11. Historias de Usuario específicas
+
+### HU #3 – Marcar "Invierto"
+
+**Prompt 1:**
+```
+me parece bien esa solución. Quizá sea más lógica. Vamos a darle otra vuelta. Lee todo el proyecto y su documentación. Entiendo bien lo que sinifica ser socio, y que ocurre cuando un socio decide invertir. YT propón cómo deberías marcar que ese socio es inversor. 
+```
+
+**Prompt 2:**
+```
+haz commit de este cambio. Y vamos a por esta mejora. No te olvides las @rules.mdc
+```
+
+**Prompt 3:**
+```
+estoy de acuerdo, pero no olvideo que debes actualizar toda la documentaci´n que afecte a este cambio, sobretodo lo relativo a bases de datos, pero tambien el resto
+```
+
 
 
 
