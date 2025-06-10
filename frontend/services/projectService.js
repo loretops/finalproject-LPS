@@ -48,6 +48,12 @@ const camelToSnake = (data) => {
     
     // Aplicar recursivamente a objetos anidados
     result[snakeKey] = camelToSnake(data[key]);
+    
+    // Debug para ver la conversión de currentAmount
+    if (key === 'currentAmount') {
+      console.log(`🔄 Convirtiendo currentAmount: ${data[key]} -> ${result[snakeKey]}`);
+    }
+    
     return result;
   }, {});
 };
@@ -81,6 +87,7 @@ const normalizeProject = (project) => {
       description: '',
       minimum_investment: 0,
       target_amount: 0,
+      current_amount: 0,
       expected_roi: 0,
       status: 'draft',
       created_at: new Date().toISOString(),
@@ -92,12 +99,30 @@ const normalizeProject = (project) => {
   try {
     console.log('🔄 Normalizando proyecto:', typeof project, project.id || 'sin ID');
     
+    // Debug para los valores monetarios
+    console.log('💰 Valores monetarios recibidos:');
+    console.log('- minimum_investment:', project.minimum_investment);
+    console.log('- target_amount:', project.target_amount);
+    console.log('- current_amount:', project.current_amount);
+    
+    // Asegurarse de que current_amount sea tratado correctamente
+    let currentAmount = 0;
+    if (project.current_amount !== undefined) {
+      // Intentar convertir a número si es string
+      currentAmount = typeof project.current_amount === 'string' 
+        ? parseFloat(project.current_amount) 
+        : project.current_amount;
+      
+      console.log(`🔢 Procesando current_amount en normalizeProject: ${project.current_amount} -> ${currentAmount}`);
+    }
+    
     const normalized = {
       id: project.id || '',
       title: project.title || '',
       description: project.description || '',
       minimum_investment: parseFloat(project.minimum_investment || 0),
       target_amount: parseFloat(project.target_amount || 0),
+      current_amount: currentAmount,
       expected_roi: parseFloat(project.expected_roi || 0),
       status: project.status || 'draft',
       created_at: project.created_at || new Date().toISOString(),

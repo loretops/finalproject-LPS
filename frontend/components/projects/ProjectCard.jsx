@@ -110,6 +110,13 @@ const ProjectCard = ({
     const targetAmount = parseFloat(target_amount || 0);
     const currentAmount = parseFloat(current_amount || 0);
     
+    console.log(`ProjectCard - ${title} - Funding calculation:`, {
+      target_amount,
+      current_amount,
+      targetAmount,
+      currentAmount
+    });
+    
     if (!targetAmount || targetAmount <= 0) return 0;
     const percentage = (currentAmount / targetAmount) * 100;
     return Math.min(Math.round(percentage), 100); // No permitir valores mayores a 100%

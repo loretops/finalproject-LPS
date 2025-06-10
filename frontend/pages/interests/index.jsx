@@ -35,11 +35,36 @@ const MyInterestsPage = () => {
         // Obtener lista de intereses
         const userInterests = await interestService.getUserInterests();
         
+        // Debug de los datos recibidos
+        console.log('Intereses recibidos:', userInterests);
+        
         // Transformar los datos para añadir la URL de imagen si falta
         const processedInterests = userInterests.map(interest => {
           if (interest.project) {
+            // Debug de los datos del proyecto antes de la transformación
+            console.log('Proyecto original:', interest.project);
+            
             // Asegurarse de que el proyecto tenga una URL de imagen
             const imageUrl = interest.project.imageUrl || '/images/placeholder-image.png';
+            
+            // Asegurarse de que los valores monetarios sean números
+            const targetAmount = typeof interest.project.targetAmount === 'string' 
+              ? parseFloat(interest.project.targetAmount) 
+              : (interest.project.targetAmount || 0);
+              
+            const currentAmount = typeof interest.project.currentAmount === 'string'
+              ? parseFloat(interest.project.currentAmount)
+              : (interest.project.currentAmount || 0);
+              
+            const minimumInvestment = typeof interest.project.minimumInvestment === 'string'
+              ? parseFloat(interest.project.minimumInvestment)
+              : (interest.project.minimumInvestment || 0);
+            
+            console.log('Valores monetarios procesados:', {
+              targetAmount,
+              currentAmount,
+              minimumInvestment
+            });
             
             // Crear una copia del proyecto con los campos correctos para ProjectCard
             return {
@@ -48,15 +73,18 @@ const MyInterestsPage = () => {
                 ...interest.project,
                 image_url: imageUrl,
                 property_type: interest.project.propertyType,
-                minimum_investment: interest.project.minimumInvestment,
+                minimum_investment: minimumInvestment,
                 expected_roi: interest.project.expectedRoi,
-                target_amount: interest.project.targetAmount,
-                current_amount: interest.project.currentAmount
+                target_amount: targetAmount,
+                current_amount: currentAmount
               }
             };
           }
           return interest;
         });
+        
+        // Debug de los intereses procesados
+        console.log('Intereses procesados:', processedInterests);
         
         setInterests(processedInterests);
       } catch (err) {

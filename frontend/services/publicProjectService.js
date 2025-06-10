@@ -30,6 +30,12 @@ const camelToSnake = (data) => {
     
     // Aplicar recursivamente a objetos anidados
     result[snakeKey] = camelToSnake(data[key]);
+    
+    // Debug para ver la conversión de currentAmount
+    if (key === 'currentAmount') {
+      console.log(`🔄 Convirtiendo currentAmount: ${data[key]} -> ${result[snakeKey]}`);
+    }
+    
     return result;
   }, {});
 };
@@ -60,12 +66,24 @@ const normalizeProject = (project) => {
     }
   }
   
+  // Asegurarse de que current_amount sea tratado correctamente
+  let current_amount = 0;
+  if (project.current_amount !== undefined) {
+    // Intentar convertir a número si es string
+    current_amount = typeof project.current_amount === 'string' 
+      ? parseFloat(project.current_amount) 
+      : project.current_amount;
+    
+    console.log(`🔢 Procesando current_amount en normalizeProject: ${project.current_amount} -> ${current_amount}`);
+  }
+  
   return {
     id: projectId,
     title: project.title || '',
     description: project.description || '',
     minimum_investment: project.minimum_investment || 0,
     target_amount: project.target_amount || 0,
+    current_amount: current_amount,
     expected_roi: project.expected_roi || 0,
     status: project.status || 'published',
     created_at: project.created_at || new Date().toISOString(),

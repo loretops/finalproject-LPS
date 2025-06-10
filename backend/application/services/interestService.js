@@ -162,6 +162,8 @@ class InterestService {
               status: true,
               expectedRoi: true,
               minimumInvestment: true,
+              targetAmount: true,
+              currentAmount: true,
               location: true,
               propertyType: true,
               documents: {
@@ -192,6 +194,8 @@ class InterestService {
           status: interest.project.status,
           expectedRoi: interest.project.expectedRoi,
           minimumInvestment: interest.project.minimumInvestment,
+          targetAmount: interest.project.targetAmount,
+          currentAmount: interest.project.currentAmount,
           location: interest.project.location,
           propertyType: interest.project.propertyType,
           imageUrl: interest.project.documents && interest.project.documents.length > 0 

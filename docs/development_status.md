@@ -552,3 +552,12 @@ Esta estandarización proporciona varias ventajas:
 ### Bugs Conocidos
 
 ### Mejoras Pendientes
+
+## Problemas Conocidos y Soluciones
+
+### Inversiones
+- ✅ Se ha corregido un problema donde los proyectos mostraban 0€ de inversión. Se ha implementado una solución que consulta todas las inversiones relevantes para un conjunto de proyectos en una sola consulta, agrupándolas manualmente por projectId para mayor eficiencia.
+- ✅ Se ha agregado un test de integración (PrismaProjectRepository.test.js) para verificar que el cálculo de inversiones funciona correctamente, tanto en el método findById como en findAll.
+
+### Frontend
+// ... existing code ...
