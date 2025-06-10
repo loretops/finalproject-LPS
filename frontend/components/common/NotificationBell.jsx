@@ -8,13 +8,15 @@ const NotificationBell = () => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const dropdownRef = useRef(null);
   const router = useRouter();
   const { user } = useAuth();
 
   // Función para cargar notificaciones
   const loadNotifications = async () => {
+    if (!isDropdownOpen) return;
+    
     try {
       setIsLoading(true);
       const fetchedNotifications = await notificationService.getNotifications({ limit: 5 });
@@ -27,17 +29,12 @@ const NotificationBell = () => {
     }
   };
 
-  // Cargar notificaciones al montar el componente
+  // Cargar notificaciones solo cuando se abre el dropdown
   useEffect(() => {
-    loadNotifications();
-    
-    // Recargar notificaciones cada 30 segundos
-    const interval = setInterval(() => {
+    if (isDropdownOpen) {
       loadNotifications();
-    }, 30000);
-    
-    return () => clearInterval(interval);
-  }, []);
+    }
+  }, [isDropdownOpen]);
 
   // Cerrar el dropdown al hacer clic fuera
   useEffect(() => {

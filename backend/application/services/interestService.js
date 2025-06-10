@@ -142,7 +142,42 @@ class InterestService {
     }
     
     try {
-      const interests = await interestRepository.findByUser(userId, options);
+      // Usar consulta simplificada para reducir la carga
+      const interests = await prisma.interest.findMany({
+        where: {
+          userId: userId,
+          ...(options.status ? { status: options.status } : {})
+        },
+        orderBy: {
+          createdAt: 'desc'
+        },
+        skip: options.offset || 0,
+        take: options.limit || 10,
+        include: {
+          project: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              status: true,
+              expectedRoi: true,
+              minimumInvestment: true,
+              location: true,
+              propertyType: true,
+              documents: {
+                where: {
+                  documentType: 'image',
+                  accessLevel: 'public'
+                },
+                take: 1,
+                select: {
+                  fileUrl: true
+                }
+              }
+            }
+          }
+        }
+      });
       
       // Transformar los resultados para un formato adecuado para el frontend
       return interests.map(interest => ({

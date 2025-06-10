@@ -534,3 +534,18 @@ Esta estandarización proporciona varias ventajas:
 - [x] Corregido error de compilación por importación duplicada de React en ProjectCard.jsx.
 - [x] Solucionado problema de pantalla en blanco al publicar proyectos mediante implementación de fetch directo en lugar de servicios complejos.
 - [x] Corregido error 500 al cancelar inversiones pendientes.
+
+## Estado de Desarrollo
+
+### Componentes desactivados temporalmente
+- **Banner de verificación de email**: Desactivado para reducir carga en el API y evitar errores de CORS. El componente `VerificationBanner.jsx` ha sido modificado para no realizar llamadas al servidor.
+- **Notificaciones automáticas**: Se ha desactivado la recarga automática de notificaciones que ocurría cada 30 segundos. Ahora solo se cargan cuando el usuario abre el menú de notificaciones.
+- **Servicio de intereses optimizado**: Se ha simplificado el método `getUserInterests` para acceder directamente a Prisma, evitando errores 500 y reduciendo la carga en el servidor.
+
+### Criterios de Aceptación Validados
+
+### Pendiente por Verificar
+
+### Bugs Conocidos
+
+### Mejoras Pendientes
