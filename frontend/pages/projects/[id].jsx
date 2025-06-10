@@ -168,6 +168,11 @@ const ProjectDetailPage = () => {
     setShowInvestmentForm(false);
   };
   
+  // Manejar el clic en el botón de inversión
+  const handleInvestClick = () => {
+    handleOpenInvestForm();
+  };
+  
   // Manejar el clic en el botón de interés
   const handleInterestClick = async () => {
     if (!project || !project.id) return;
