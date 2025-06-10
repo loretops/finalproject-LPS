@@ -1,9 +1,32 @@
-const notificationService = require('./notificationService');
-
-// Importar la instancia compartida de PrismaClient
-const prisma = require('../../utils/prismaClient');
-const Investment = require('../../domain/entities/investment');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+const NotificationService = require('./notificationService');
+const { Investment, InvestmentStatus } = require('../../domain/entities/Investment');
 const Project = require('../../domain/entities/project');
+const { AppError } = require('../../utils/AppError');
+
+/**
+ * Actualiza el estado de un usuario a "inversor activo" si tiene inversiones confirmadas.
+ * @param {string} userId - El ID del usuario.
+ */
+async function updateUserInvestorStatus(userId) {
+  try {
+    const activeInvestmentsCount = await prisma.investment.count({
+      where: {
+        userId: userId,
+        status: { in: [InvestmentStatus.CONFIRMED, InvestmentStatus.COMPLETED] }
+      }
+    });
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: { isActiveInvestor: activeInvestmentsCount > 0 }
+    });
+  } catch (error) {
+    console.error(`Error al actualizar el estado de inversor para el usuario ${userId}:`, error);
+    // No lanzamos un error aquí para no detener el flujo principal de la inversión
+  }
+}
 
 /**
  * Servicio para la gestión de inversiones en proyectos.
@@ -102,7 +125,7 @@ class InvestmentService {
       try {
         // Crear notificación para el gestor del proyecto
         if (newInvestment.project && newInvestment.project.createdBy) {
-          await notificationService.createNotification({
+          await NotificationService.createNotification({
             userId: newInvestment.project.createdBy,
             type: 'investment_new',
             content: `${newInvestment.user.firstName} ${newInvestment.user.lastName} ha invertido ${amount}€ en tu proyecto "${newInvestment.project.title || 'Sin título'}"`,
@@ -111,7 +134,7 @@ class InvestmentService {
         }
 
         // Crear notificación para el usuario que invierte
-        await notificationService.createNotification({
+        await NotificationService.createNotification({
           userId: investmentData.userId,
           type: 'investment_created',
           content: `Has invertido ${amount}€ en el proyecto "${newInvestment.project && newInvestment.project.title ? newInvestment.project.title : 'Sin título'}". Tu inversión está pendiente de confirmación.`,
@@ -122,6 +145,9 @@ class InvestmentService {
         console.error('Error al enviar notificaciones de nueva inversión:', notificationError);
         // Aquí se podría implementar un sistema de reintentos o un log más detallado
       }
+
+      // Actualizar el estado del inversor
+      await updateUserInvestorStatus(userId);
 
       return newInvestment;
     });
@@ -380,113 +406,76 @@ class InvestmentService {
       throw new Error('ID de inversión y nuevo estado son requeridos');
     }
 
-    const status = updateData.status;
-    const contractReference = updateData.contractReference;
-    const notes = updateData.notes;
+    const { status, contractReference, notes } = updateData;
     
-    const validStatuses = ['pending', 'confirmed', 'rejected', 'canceled'];
-    if (!validStatuses.includes(status)) {
-      throw new Error('Estado de inversión no válido');
+    // Obtener la inversión original para validaciones
+    const existingInvestment = await this.getInvestmentById(id);
+    if (!existingInvestment) {
+      throw new AppError('Inversión no encontrada', 404);
     }
 
-    // Obtener la inversión actual
-    const currentInvestment = await prisma.investment.findUnique({
-      where: { id },
-      include: { project: true }
-    });
-
-    if (!currentInvestment) {
-      throw new Error('Inversión no encontrada');
+    // Validar si el estado es válido
+    if (status && !Object.values(InvestmentStatus).includes(status)) {
+      throw new AppError(`Estado de inversión inválido: ${status}`, 400);
     }
-
-    // Crear instancias de dominio
-    const investment = new Investment(currentInvestment);
-    const project = new Project(currentInvestment.project);
-
-    // Verificar que el cambio de estado es válido
-    if (investment.status === status) {
-      return currentInvestment; // No hay cambio
-    }
-
-    // Usar transacción para mantener consistencia
-    return await prisma.$transaction(async (prismaClient) => {
-      // Actualizar la inversión
-      const updateDataDB = { status };
-      
-      // Añadir referencia de contrato si es necesario
-      if (status === 'confirmed' && contractReference) {
-        updateDataDB.contractReference = contractReference;
-      }
-      
-      // Añadir notas si se proporcionan
-      if (notes) {
-        updateDataDB.notes = notes;
-      }
-
-      // Si se cancela una inversión que estaba confirmada, ajustar monto del proyecto
-      if (status === 'canceled' && investment.status === 'confirmed') {
-        await prismaClient.project.update({
-          where: { id: currentInvestment.projectId },
-          data: {
-            currentAmount: {
-              decrement: parseFloat(currentInvestment.amount)
-            }
-          }
-        });
-      }
-
-      // Actualizar inversión en la base de datos
-      const updatedInvestment = await prismaClient.investment.update({
-        where: { id },
-        data: updateDataDB,
-        include: {
-          user: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true
-            }
-          },
-          project: {
-            select: {
-              id: true,
-              title: true,
-              expectedRoi: true,
-              status: true,
-              createdBy: true
-            }
+    
+    // Si se cancela una inversión que estaba confirmada, se debe ajustar el monto del proyecto
+    if (status === InvestmentStatus.CANCELLED && existingInvestment.status === InvestmentStatus.CONFIRMED) {
+      await prisma.project.update({
+        where: { id: existingInvestment.projectId },
+        data: {
+          currentAmount: {
+            decrement: parseFloat(existingInvestment.amount)
           }
         }
       });
+    }
 
-      // Enviar notificaciones (con manejo de errores para evitar que falle la transacción)
-      try {
-        // Crear notificación para el usuario
-        await notificationService.createNotification({
-          userId: updatedInvestment.userId,
+    // Actualizar la inversión
+    const updatedInvestmentData = await prisma.investment.update({
+      where: { id },
+      data: {
+        status: status || existingInvestment.status,
+        contractReference: contractReference || existingInvestment.contractReference,
+        notes: notes || existingInvestment.notes,
+      },
+      include: {
+        user: { select: { id: true, firstName: true, lastName: true, email: true } },
+        project: { select: { id: true, title: true, createdBy: true } }
+      }
+    });
+
+    const updatedInvestment = new Investment(updatedInvestmentData);
+
+    // Actualizar el estado del inversor si el estado de la inversión cambia
+    if (status) {
+        await updateUserInvestorStatus(updatedInvestment.userId);
+    }
+
+    // Enviar notificación de cambio de estado
+    try {
+      // Crear notificación para el usuario
+      await NotificationService.createNotification({
+        userId: updatedInvestment.userId,
+        type: 'investment_status_change',
+        content: `El estado de tu inversión en ${updatedInvestment.project.title} ha cambiado a ${status}`,
+        relatedId: id
+      });
+
+      // Si hay cambio de estado, notificar también al gestor del proyecto
+      if (updatedInvestment.project.createdBy) {
+        await NotificationService.createNotification({
+          userId: updatedInvestment.project.createdBy,
           type: 'investment_status_change',
-          content: `El estado de tu inversión en ${updatedInvestment.project.title} ha cambiado a ${status}`,
+          content: `El estado de la inversión de ${updatedInvestment.user.firstName} ${updatedInvestment.user.lastName} en ${updatedInvestment.project.title} ha cambiado a ${status}`,
           relatedId: id
         });
-
-        // Si hay cambio de estado, notificar también al gestor del proyecto
-        if (updatedInvestment.project.createdBy) {
-          await notificationService.createNotification({
-            userId: updatedInvestment.project.createdBy,
-            type: 'investment_status_change',
-            content: `El estado de la inversión de ${updatedInvestment.user.firstName} ${updatedInvestment.user.lastName} en ${updatedInvestment.project.title} ha cambiado a ${status}`,
-            relatedId: id
-          });
-        }
-      } catch (notificationError) {
-        // Registrar el error pero permitir que la transacción continúe
-        console.error('Error al enviar notificaciones de cambio de estado:', notificationError);
-        // Aquí se podría implementar un sistema de reintentos o un log más detallado
       }
+    } catch (notificationError) {
+      console.error('Error al enviar notificaciones de cambio de estado:', notificationError);
+    }
 
-      return updatedInvestment;
-    });
+    return updatedInvestment;
   }
 
   /**
@@ -546,7 +535,7 @@ class InvestmentService {
       // Enviar notificaciones sin bloquear la operación principal
       try {
         // Notificar al usuario
-        await notificationService.createNotification({
+        await NotificationService.createNotification({
           userId: updatedInvestment.userId,
           type: 'investment_status_change',
           content: `Has cancelado tu inversión en ${updatedInvestment.project && updatedInvestment.project.title ? updatedInvestment.project.title : 'Sin título'}`,
@@ -555,7 +544,7 @@ class InvestmentService {
         
         // Notificar al gestor del proyecto
         if (updatedInvestment.project && updatedInvestment.project.createdBy) {
-          await notificationService.createNotification({
+          await NotificationService.createNotification({
             userId: updatedInvestment.project.createdBy,
             type: 'investment_status_change',
             content: `${updatedInvestment.user.firstName} ${updatedInvestment.user.lastName} ha cancelado su inversión en ${updatedInvestment.project.title || 'Sin título'}`,
@@ -566,6 +555,9 @@ class InvestmentService {
         console.error('Error al enviar notificaciones de cancelación:', notificationError);
       }
       
+      // Actualizar el estado del inversor
+      await updateUserInvestorStatus(updatedInvestment.userId);
+
       return updatedInvestment;
     } catch (error) {
       console.error('Error al cancelar inversión:', error);

@@ -20,4 +20,5 @@ alwaysApply: true
 - **Haz pruebas en cada entorno** antes de pasar a producción.
 - **Documenta las URLs de cada servicio** para que el equipo las tenga localizadas.
 - No t einventes ningún dato. Siempre han de venir de la base de datos. Ahora mismo, siempre se conulta ala base de datos de supabase, tanto en local como en la nube. El proyecto está en una fase en la nube para demo, ppero no son los datos definitivos, pero nunca uses datos ficticios, siempre consulta a la base de datos
+- La conexión a la base de datos está perfecta con el archivo .env, no busques errores por ahi, sino busca como usar dotoenv para acceder bien a los valores
 
