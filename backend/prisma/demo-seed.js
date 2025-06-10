@@ -52,7 +52,7 @@ const DEMO_PROJECTS = [
     propertyType: 'industrial',
     minimumInvestment: 85000,
     targetAmount: 6800000,
-    currentAmount: 6120000,
+    currentAmount: 6245000,
     expectedRoi: 9.5,
     status: 'published',
     draft: false,
@@ -65,7 +65,7 @@ const DEMO_PROJECTS = [
     propertyType: 'residential',
     minimumInvestment: 55000,
     targetAmount: 4200000,
-    currentAmount: 2940000,
+    currentAmount: 3035000,
     expectedRoi: 13.7,
     status: 'published',
     draft: false,
@@ -219,70 +219,102 @@ async function createDemoInterests() {
 async function createDemoInvestments() {
   console.log('🌱 Creando inversiones de demostración...');
 
-  // Obtener el usuario partner
+  // Obtener los usuarios para asignar como inversores
   const partner = await prisma.user.findUnique({
     where: { email: 'partner@example.com' }
   });
+  
+  // Si no existe el usuario investor, usaremos solo el partner
+  const investor = await prisma.user.findUnique({
+    where: { email: 'investor@example.com' }
+  }) || partner;
 
-  // Obtener algunos proyectos
+  // Obtener los proyectos
   const projects = await prisma.project.findMany({
-    take: 2,
     where: { status: 'published' }
   });
 
-  if (partner && projects.length > 0) {
-    const investmentAmounts = [125000, 95000];
-    
-    for (let i = 0; i < projects.length; i++) {
-      const project = projects[i];
-      const amount = investmentAmounts[i];
+  // Definir las inversiones para cada proyecto
+  const projectInvestments = {
+    'Apartamentos Exclusivos Marina': [
+      { amount: 1500000, userId: partner.id, status: 'confirmed' },
+      { amount: 1535000, userId: partner.id, status: 'confirmed' }
+    ],
+    'Torre Oficinas Business Center': [
+      { amount: 2600000, userId: partner.id, status: 'confirmed' },
+      { amount: 2500000, userId: partner.id, status: 'confirmed' }
+    ],
+    'Centro Logístico Inteligente': [
+      { amount: 3245000, userId: partner.id, status: 'confirmed' },
+      { amount: 3000000, userId: partner.id, status: 'confirmed' }
+    ]
+  };
 
-      const existingInvestment = await prisma.investment.findFirst({
-        where: {
-          userId: partner.id,
-          projectId: project.id
+  if (partner && projects.length > 0) {
+    for (const project of projects) {
+      // Buscar inversiones predefinidas para este proyecto
+      const investments = projectInvestments[project.title] || [];
+      
+      for (const investment of investments) {
+        // Verificar si ya existe una inversión similar
+        const existingInvestment = await prisma.investment.findFirst({
+          where: {
+            userId: investment.userId,
+            projectId: project.id,
+            amount: investment.amount
+          }
+        });
+
+        if (!existingInvestment) {
+          await prisma.investment.create({
+            data: {
+              userId: investment.userId,
+              projectId: project.id,
+              amount: investment.amount.toString(),
+              status: investment.status,
+              investedAt: new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000), // Random fecha en el último mes
+              notes: `Inversión demo en ${project.title}`
+            }
+          });
+          console.log(`✅ Inversión creada: ${investment.amount}€ en ${project.title}`);
+        } else {
+          console.log(`⚠️ Ya existe una inversión similar en: ${project.title}`);
+        }
+      }
+      
+      // Actualizar currentAmount del proyecto con la suma de las inversiones confirmadas
+      const totalInvested = investments
+        .filter(inv => inv.status === 'confirmed' || inv.status === 'completed')
+        .reduce((sum, inv) => sum + inv.amount, 0);
+      
+      await prisma.project.update({
+        where: { id: project.id },
+        data: {
+          currentAmount: {
+            set: totalInvested.toString()
+          }
         }
       });
-
-      if (!existingInvestment) {
-        await prisma.investment.create({
-          data: {
-            userId: partner.id,
-            projectId: project.id,
-            amount: amount,
-            status: 'confirmed',
-            investedAt: new Date(),
-            notes: `Inversión de ${amount}€ en el proyecto ${project.title}`,
-            contractReference: `CONTRACT-${project.id.substring(0, 8).toUpperCase()}-${Date.now()}`
-          }
-        });
-
-        // Actualizar el current_amount del proyecto
-        await prisma.project.update({
-          where: { id: project.id },
-          data: {
-            currentAmount: {
-              increment: amount
-            }
-          }
-        });
-
-        console.log(`✅ Inversión creada: ${amount}€ en ${project.title}`);
-      }
+      
+      console.log(`✅ Actualizado currentAmount para ${project.title}: ${totalInvested}€`);
     }
   }
 }
 
 async function main() {
   try {
+    console.log('🌱 Iniciando seed de datos de demostración...');
+    
     await createDemoProjects();
     await createDemoProjectDocuments();
-    await createDemoInterests(); 
+    await createDemoInterests();
     await createDemoInvestments();
-    console.log('🎉 Datos de demostración creados exitosamente');
+    
+    console.log('✅ Seed de datos de demostración completado.');
   } catch (error) {
-    console.error('❌ Error creando datos de demo:', error);
-    throw error;
+    console.error('❌ Error durante el seed:', error);
+  } finally {
+    await prisma.$disconnect();
   }
 }
 

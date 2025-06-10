@@ -19,4 +19,5 @@ alwaysApply: true
 - **Protege las variables sensibles**: nunca las subas al repositorio.
 - **Haz pruebas en cada entorno** antes de pasar a producción.
 - **Documenta las URLs de cada servicio** para que el equipo las tenga localizadas.
+- No t einventes ningún dato. Siempre han de venir de la base de datos. Ahora mismo, siempre se conulta ala base de datos de supabase, tanto en local como en la nube. El proyecto está en una fase en la nube para demo, ppero no son los datos definitivos, pero nunca uses datos ficticios, siempre consulta a la base de datos
 

@@ -48,22 +48,24 @@ const MyInterestsPage = () => {
             const imageUrl = interest.project.imageUrl || '/images/placeholder-image.png';
             
             // Asegurarse de que los valores monetarios sean números
-            const targetAmount = typeof interest.project.targetAmount === 'string' 
-              ? parseFloat(interest.project.targetAmount) 
-              : (interest.project.targetAmount || 0);
-              
-            const currentAmount = typeof interest.project.currentAmount === 'string'
-              ? parseFloat(interest.project.currentAmount)
-              : (interest.project.currentAmount || 0);
-              
-            const minimumInvestment = typeof interest.project.minimumInvestment === 'string'
-              ? parseFloat(interest.project.minimumInvestment)
-              : (interest.project.minimumInvestment || 0);
+            // Usar parseFloat para convertir correctamente strings y manejar valores indefinidos
+            const targetAmount = parseFloat(interest.project.targetAmount || 0);
+            const currentAmount = parseFloat(interest.project.currentAmount || 0);
+            const minimumInvestment = parseFloat(interest.project.minimumInvestment || 0);
             
-            console.log('Valores monetarios procesados:', {
-              targetAmount,
-              currentAmount,
-              minimumInvestment
+            console.log('Valores monetarios originales y procesados:', {
+              targetAmount: {
+                original: interest.project.targetAmount,
+                processed: targetAmount
+              },
+              currentAmount: {
+                original: interest.project.currentAmount,
+                processed: currentAmount
+              },
+              minimumInvestment: {
+                original: interest.project.minimumInvestment,
+                processed: minimumInvestment
+              }
             });
             
             // Crear una copia del proyecto con los campos correctos para ProjectCard

@@ -56,20 +56,25 @@ const ProjectCard = ({
   // Verificar el tipo de dato del ID para debugging
   console.log(`ProjectCard - ${title} - ID type:`, typeof projectId, 'Value:', projectId);
 
-  // Formatear moneda en euros
+  // Formatear valores monetarios
   const formatCurrency = (amount) => {
-    // Asegurarse de que amount sea un número
-    const numAmount = typeof amount === 'number' ? amount : parseFloat(amount || 0);
+    // Convertir a número si es string y asegurar valor válido
+    const numericAmount = typeof amount === 'string' 
+      ? parseFloat(amount) 
+      : (typeof amount === 'number' ? amount : 0);
     
-    // Verificar que es un número válido
-    if (isNaN(numAmount)) return '0 €';
+    console.log(`ProjectCard - ${title} - Formatting currency:`, {
+      original: amount,
+      converted: numericAmount
+    });
     
+    // Formatear con locale español y símbolo de euro
     return new Intl.NumberFormat('es-ES', {
       style: 'currency',
       currency: 'EUR',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
-    }).format(numAmount);
+    }).format(numericAmount);
   };
 
   // Color de fondo según el estado
@@ -114,11 +119,13 @@ const ProjectCard = ({
       target_amount,
       current_amount,
       targetAmount,
-      currentAmount
+      currentAmount,
+      title
     });
     
     if (!targetAmount || targetAmount <= 0) return 0;
     const percentage = (currentAmount / targetAmount) * 100;
+    console.log(`ProjectCard - ${title} - Calculated percentage:`, percentage);
     return Math.min(Math.round(percentage), 100); // No permitir valores mayores a 100%
   };
 
@@ -218,7 +225,9 @@ const ProjectCard = ({
           <div className="mt-4">
             <div className="flex justify-between items-center text-xs text-gray-500 mb-1">
               <span>Inversión: {calculateFundingPercentage()}%</span>
-              <span>{formatCurrency(current_amount || 0)} / {formatCurrency(target_amount)}</span>
+              <span>
+                {formatCurrency(current_amount || 0)} / {formatCurrency(target_amount || 0)}
+              </span>
             </div>
             <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
               <div 
