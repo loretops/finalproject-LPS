@@ -34,7 +34,34 @@ class PrismaProjectRepository extends ProjectRepository {
         include
       });
       
-      return project;
+      if (!project) {
+        return null;
+      }
+      
+      // Obtener todas las inversiones confirmadas para este proyecto
+      const investments = await prisma.investment.findMany({
+        where: {
+          projectId: id,
+          status: {
+            in: ['confirmed', 'completed']
+          }
+        },
+        select: {
+          amount: true
+        }
+      });
+      
+      // Calcular la suma total
+      const totalInvested = investments.reduce(
+        (total, inv) => total + parseFloat(inv.amount), 
+        0
+      ).toString();
+      
+      // Actualizar el currentAmount con el valor calculado
+      return {
+        ...project,
+        currentAmount: totalInvested || "0"
+      };
     } catch (error) {
       console.error('Error en PrismaProjectRepository.findById:', error);
       throw error;
@@ -140,11 +167,42 @@ class PrismaProjectRepository extends ProjectRepository {
         orderBy
       });
       
+      // Obtener todas las inversiones confirmadas
+      const investments = await prisma.investment.findMany({
+        where: {
+          projectId: {
+            in: projects.map(p => p.id)
+          },
+          status: {
+            in: ['confirmed', 'completed']
+          }
+        },
+        select: {
+          projectId: true,
+          amount: true
+        }
+      });
+      
+      // Agrupar inversiones por projectId
+      const investmentsByProject = {};
+      investments.forEach(inv => {
+        if (!investmentsByProject[inv.projectId]) {
+          investmentsByProject[inv.projectId] = 0;
+        }
+        investmentsByProject[inv.projectId] += parseFloat(inv.amount);
+      });
+      
+      // Añadir el monto invertido a cada proyecto
+      const projectsWithInvestments = projects.map(project => ({
+        ...project,
+        currentAmount: investmentsByProject[project.id]?.toString() || "0"
+      }));
+      
       // Calcular total de páginas
       const totalPages = Math.ceil(total / limit);
       
       return {
-        data: projects,
+        data: projectsWithInvestments,
         pagination: {
           total,
           page,
