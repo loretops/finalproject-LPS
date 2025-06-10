@@ -58,12 +58,18 @@ const ProjectCard = ({
 
   // Formatear moneda en euros
   const formatCurrency = (amount) => {
+    // Asegurarse de que amount sea un número
+    const numAmount = typeof amount === 'number' ? amount : parseFloat(amount || 0);
+    
+    // Verificar que es un número válido
+    if (isNaN(numAmount)) return '0 €';
+    
     return new Intl.NumberFormat('es-ES', {
       style: 'currency',
       currency: 'EUR',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
-    }).format(amount);
+    }).format(numAmount);
   };
 
   // Color de fondo según el estado
@@ -100,9 +106,12 @@ const ProjectCard = ({
 
   // Calcular el porcentaje de financiación
   const calculateFundingPercentage = () => {
-    if (!target_amount || target_amount <= 0) return 0;
-    const currentAmount = current_amount || 0; // Asignar 0 por defecto si es undefined o null
-    const percentage = (currentAmount / target_amount) * 100;
+    // Convertir a números y usar valores por defecto
+    const targetAmount = parseFloat(target_amount || 0);
+    const currentAmount = parseFloat(current_amount || 0);
+    
+    if (!targetAmount || targetAmount <= 0) return 0;
+    const percentage = (currentAmount / targetAmount) * 100;
     return Math.min(Math.round(percentage), 100); // No permitir valores mayores a 100%
   };
 

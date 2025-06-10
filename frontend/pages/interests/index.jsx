@@ -34,7 +34,31 @@ const MyInterestsPage = () => {
       try {
         // Obtener lista de intereses
         const userInterests = await interestService.getUserInterests();
-        setInterests(userInterests);
+        
+        // Transformar los datos para añadir la URL de imagen si falta
+        const processedInterests = userInterests.map(interest => {
+          if (interest.project) {
+            // Asegurarse de que el proyecto tenga una URL de imagen
+            const imageUrl = interest.project.imageUrl || '/images/placeholder-image.png';
+            
+            // Crear una copia del proyecto con los campos correctos para ProjectCard
+            return {
+              ...interest,
+              project: {
+                ...interest.project,
+                image_url: imageUrl,
+                property_type: interest.project.propertyType,
+                minimum_investment: interest.project.minimumInvestment,
+                expected_roi: interest.project.expectedRoi,
+                target_amount: interest.project.targetAmount,
+                current_amount: interest.project.currentAmount
+              }
+            };
+          }
+          return interest;
+        });
+        
+        setInterests(processedInterests);
       } catch (err) {
         console.error('Error al cargar intereses:', err);
         setError('No se pudieron cargar tus intereses. Por favor, inténtalo de nuevo más tarde.');

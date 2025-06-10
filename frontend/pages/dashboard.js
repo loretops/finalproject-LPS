@@ -11,7 +11,8 @@ import {
   BuildingLibraryIcon,
   KeyIcon,
   DocumentTextIcon,
-  UserGroupIcon
+  UserGroupIcon,
+  CurrencyDollarIcon
 } from '@heroicons/react/24/outline';
 
 const DashboardPage = () => {
@@ -23,6 +24,9 @@ const DashboardPage = () => {
     activePartners: 0,
     activeProjects: 0,
     totalInvested: 0,
+    userStats: {
+      totalInvested: 0
+    },
     loading: true,
     error: false
   });
@@ -51,6 +55,7 @@ const DashboardPage = () => {
         activePartners: dashboardStats.activePartners || 0,
         activeProjects: dashboardStats.activeProjects || 0,
         totalInvested: dashboardStats.totalInvested || 0,
+        userStats: dashboardStats.userStats || { totalInvested: 0 },
         loading: false,
         error: false
       });
@@ -88,7 +93,7 @@ const DashboardPage = () => {
         </div>
 
         {/* Tarjetas de estadísticas */}
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
           <div className="bg-white overflow-hidden shadow rounded-lg">
             <div className="p-5">
               <div className="flex items-center">
@@ -154,7 +159,7 @@ const DashboardPage = () => {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">
-                      Capital Invertido
+                      Capital Invertido (Total)
                     </dt>
                     <dd>
                       <div className="text-lg font-medium text-gray-900">
@@ -164,6 +169,34 @@ const DashboardPage = () => {
                           <span className="text-red-500">Error</span>
                         ) : (
                           formatCurrency(stats.totalInvested)
+                        )}
+                      </div>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="p-5">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <CurrencyDollarIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />
+                </div>
+                <div className="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt className="text-sm font-medium text-gray-500 truncate">
+                      Tu Inversión
+                    </dt>
+                    <dd>
+                      <div className="text-lg font-medium text-green-600">
+                        {stats.loading ? (
+                          <div className="animate-pulse bg-gray-200 h-6 w-16 rounded"></div>
+                        ) : stats.error ? (
+                          <span className="text-red-500">Error</span>
+                        ) : (
+                          formatCurrency(stats.userStats.totalInvested)
                         )}
                       </div>
                     </dd>

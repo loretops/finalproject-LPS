@@ -53,10 +53,31 @@ const ProjectDetailPage = () => {
     other: []
   });
   
+  // Formatear moneda
+  const formatCurrency = (amount) => {
+    // Asegurarse de que amount sea un número
+    const numAmount = typeof amount === 'number' ? amount : parseFloat(amount || 0);
+    
+    // Verificar que es un número válido
+    if (isNaN(numAmount)) return '0 €';
+    
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(numAmount);
+  };
+  
   // Calcular porcentaje de financiación
   const getFundingPercentage = () => {
-    if (!project || !project.target_amount || !project.current_amount) return 0;
-    return Math.min(100, Math.round((project.current_amount / project.target_amount) * 100));
+    // Convertir a números y usar valores por defecto
+    const targetAmount = parseFloat(project.target_amount || 0);
+    const currentAmount = parseFloat(project.current_amount || 0);
+    
+    if (targetAmount === 0) return 0;
+    const percentage = (currentAmount / targetAmount) * 100;
+    return Math.min(Math.round(percentage), 100);
   };
   
   // Procesar los documentos en las categorías adecuadas

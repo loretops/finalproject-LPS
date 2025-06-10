@@ -9,11 +9,14 @@ class DashboardController {
    */
   async getStats(req, res) {
     try {
+      const userId = req.user?.id;
+
       const [
         activePartners,
         activeProjects,
-        totalInvested,
-        totalInvestments
+        totalInvestedGlobal,
+        totalInvestments,
+        userInvestments
       ] = await Promise.all([
         // Contar socios activos (usuarios con rol 'partner' o 'investor' verificados)
         prisma.user.count({
@@ -36,7 +39,7 @@ class DashboardController {
           }
         }),
 
-        // Sumar el total invertido
+        // Sumar el total invertido global
         prisma.investment.aggregate({
           where: {
             status: {
@@ -55,14 +58,31 @@ class DashboardController {
               in: ['confirmed', 'completed']
             }
           }
-        })
+        }),
+        
+        // Total invertido por el usuario actual (si está autenticado)
+        userId ? prisma.investment.aggregate({
+          where: {
+            userId: userId,
+            status: {
+              in: ['confirmed', 'completed']
+            }
+          },
+          _sum: {
+            amount: true
+          }
+        }) : { _sum: { amount: 0 } }
       ]);
 
       const stats = {
         activePartners: activePartners || 0,
         activeProjects: activeProjects || 0,
-        totalInvested: totalInvested._sum.amount || 0,
-        totalInvestments: totalInvestments || 0
+        totalInvested: totalInvestedGlobal._sum.amount || 0,
+        totalInvestments: totalInvestments || 0,
+        // Añadir inversiones del usuario actual
+        userStats: {
+          totalInvested: userInvestments._sum.amount || 0
+        }
       };
 
       res.status(200).json(stats);
