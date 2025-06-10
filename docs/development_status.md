@@ -542,6 +542,9 @@ Esta estandarización proporciona varias ventajas:
 - **Notificaciones automáticas**: Se ha desactivado la recarga automática de notificaciones que ocurría cada 30 segundos. Ahora solo se cargan cuando el usuario abre el menú de notificaciones.
 - **Servicio de intereses optimizado**: Se ha simplificado el método `getUserInterests` para acceder directamente a Prisma, evitando errores 500 y reduciendo la carga en el servidor.
 
+### Problemas conocidos
+- **Dashboard muestra capital invertido pero no hay inversiones visibles**: El controlador `dashboard.controller.js` muestra estadísticas globales para todos los usuarios (incluido el total invertido de 220.000€), mientras que en la página de inversiones del usuario solo se muestran las inversiones propias. Se debería ajustar para mostrar datos más coherentes o clarificar que son datos globales de toda la plataforma.
+
 ### Criterios de Aceptación Validados
 
 ### Pendiente por Verificar
