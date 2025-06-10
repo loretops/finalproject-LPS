@@ -1,6 +1,3 @@
-// Cargar variables de entorno
-require('dotenv').config({ path: __dirname + '/../../../.env' });
-
 const { PrismaClient } = require('@prisma/client');
 const ProjectRepository = require('../../domain/repositories/ProjectRepository');
 const prisma = require('../../utils/prismaClient');

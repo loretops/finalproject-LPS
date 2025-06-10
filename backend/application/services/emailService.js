@@ -1,9 +1,5 @@
 const nodemailer = require('nodemailer');
 const path = require('path');
-const dotenv = require('dotenv');
-
-// Cargar variables de entorno del backend primero
-dotenv.config({ path: path.join(__dirname, '../../../.env') });
 
 // Configuración del transporte SMTP desde variables de entorno
 const transporter = nodemailer.createTransport({

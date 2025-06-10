@@ -1,6 +1,4 @@
-// Cargar variables de entorno al inicio
-require('dotenv').config({ path: __dirname + '/../../.env' });
-
+// Crear una instancia única de PrismaClient para toda la aplicación
 const { PrismaClient } = require('@prisma/client');
 
 // Crear una instancia única de PrismaClient para toda la aplicación
