@@ -639,3 +639,14 @@ Esta estandarización proporciona varias ventajas:
   - ✅ Página "Mis Inversiones" (`/investments`)
   - ✅ Página "Mis Intereses" (`/interests`) - Añadida compatibilidad con ambos formatos
   - ✅ Dashboard - Los datos se muestran correctamente
+
+### Problema: Listado de invitaciones fallando en Admin
+- **Descripción**: El componente `InvitationList` en la página de administración de invitaciones no manejaba correctamente errores de datos
+- **Causa**: Falta de validación robusta de datos y manejo de formatos de fecha inconsistentes
+- **Solución Implementada**:
+  1. **Manejo robusto de fechas**: Añadida validación y manejo de errores en `formatDate()`
+  2. **Compatibilidad de formatos**: Soporte para tanto camelCase como snake_case en fechas (`createdAt`/`created_at`, `expiresAt`/`expires_at`)
+  3. **Validación de datos**: Verificación de que los datos recibidos sean un array válido
+  4. **Logging mejorado**: Añadidos logs para debugging y mejor identificación de problemas
+  5. **Fallbacks seguros**: Valores por defecto para campos faltantes
+- **Estado**: ✅ **RESUELTO** - Componente más robusto y resistente a errores de datos

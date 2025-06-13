@@ -217,6 +217,11 @@ Arreglaste antes muy bien lo de las inversiones, pero te falta arreglarlo para l
 
 **Prompt 3:**
 ```
+Ahora está fallando el listado de invitaciones desde Admin INvitaciones
+```
+
+**Prompt 3:**
+```
 Te dije que la descripcion de los endpoints principales, com maximo podían ser 3. No has añadido más? Elige los 3 principales
 ```
 
