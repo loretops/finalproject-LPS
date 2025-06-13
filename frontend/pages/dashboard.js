@@ -1,20 +1,35 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext'; // Importar el hook de autenticación
 import { useRouter } from 'next/router'; // Importar el router para redirigir
 import Link from 'next/link'; // Importar Link para navegación
 import Layout from '../components/layout/Layout';
+import dashboardService from '../services/dashboardService';
+import { formatCurrency } from '../utils/formatters';
 import { 
   UserIcon, 
   EnvelopeIcon, 
   BuildingLibraryIcon,
   KeyIcon,
   DocumentTextIcon,
-  UserGroupIcon
+  UserGroupIcon,
+  CurrencyDollarIcon
 } from '@heroicons/react/24/outline';
 
 const DashboardPage = () => {
   const { isAuthenticated, loading, user, logout } = useAuth(); // Obtener estado de autenticación y la función logout
   const router = useRouter();
+  
+  // Estado para las estadísticas del dashboard
+  const [stats, setStats] = useState({
+    activePartners: 0,
+    activeProjects: 0,
+    totalInvested: 0,
+    userStats: {
+      totalInvested: 0
+    },
+    loading: true,
+    error: false
+  });
 
   useEffect(() => {
     // Solo actuar después de que el estado de autenticación se haya cargado
@@ -23,6 +38,32 @@ const DashboardPage = () => {
       router.push('/login'); // Redirigir a la página de login
     }
   }, [isAuthenticated, loading, router]); // Dependencias del efecto
+  
+  // Cargar estadísticas cuando el usuario esté autenticado
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      loadDashboardStats();
+    }
+  }, [isAuthenticated, user]);
+
+  const loadDashboardStats = async () => {
+    try {
+      setStats(prev => ({ ...prev, loading: true, error: false }));
+      const dashboardStats = await dashboardService.getDashboardStats();
+      
+      setStats({
+        activePartners: dashboardStats.activePartners || 0,
+        activeProjects: dashboardStats.activeProjects || 0,
+        totalInvested: dashboardStats.totalInvested || 0,
+        userStats: dashboardStats.userStats || { totalInvested: 0 },
+        loading: false,
+        error: false
+      });
+    } catch (error) {
+      console.error('Error cargando estadísticas del dashboard:', error);
+      setStats(prev => ({ ...prev, loading: false, error: true }));
+    }
+  };
 
   // Mostrar un estado de carga mientras se verifica la autenticación
   // o si todavía no está autenticado pero aún no se ha redirigido.
@@ -52,7 +93,7 @@ const DashboardPage = () => {
         </div>
 
         {/* Tarjetas de estadísticas */}
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
           <div className="bg-white overflow-hidden shadow rounded-lg">
             <div className="p-5">
               <div className="flex items-center">
@@ -65,7 +106,15 @@ const DashboardPage = () => {
                       Socios Activos
                     </dt>
                     <dd>
-                      <div className="text-lg font-medium text-gray-900">15</div>
+                      <div className="text-lg font-medium text-gray-900">
+                        {stats.loading ? (
+                          <div className="animate-pulse bg-gray-200 h-6 w-8 rounded"></div>
+                        ) : stats.error ? (
+                          <span className="text-red-500">Error</span>
+                        ) : (
+                          stats.activePartners
+                        )}
+                      </div>
                     </dd>
                   </dl>
                 </div>
@@ -85,7 +134,15 @@ const DashboardPage = () => {
                       Proyectos Activos
                     </dt>
                     <dd>
-                      <div className="text-lg font-medium text-gray-900">3</div>
+                      <div className="text-lg font-medium text-gray-900">
+                        {stats.loading ? (
+                          <div className="animate-pulse bg-gray-200 h-6 w-8 rounded"></div>
+                        ) : stats.error ? (
+                          <span className="text-red-500">Error</span>
+                        ) : (
+                          stats.activeProjects
+                        )}
+                      </div>
                     </dd>
                   </dl>
                 </div>
@@ -102,10 +159,46 @@ const DashboardPage = () => {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">
-                      Capital Invertido
+                      Capital Invertido (Total)
                     </dt>
                     <dd>
-                      <div className="text-lg font-medium text-gray-900">€1.2M</div>
+                      <div className="text-lg font-medium text-gray-900">
+                        {stats.loading ? (
+                          <div className="animate-pulse bg-gray-200 h-6 w-16 rounded"></div>
+                        ) : stats.error ? (
+                          <span className="text-red-500">Error</span>
+                        ) : (
+                          formatCurrency(stats.totalInvested)
+                        )}
+                      </div>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="p-5">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <CurrencyDollarIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />
+                </div>
+                <div className="ml-5 w-0 flex-1">
+                  <dl>
+                    <dt className="text-sm font-medium text-gray-500 truncate">
+                      Tu Inversión
+                    </dt>
+                    <dd>
+                      <div className="text-lg font-medium text-green-600">
+                        {stats.loading ? (
+                          <div className="animate-pulse bg-gray-200 h-6 w-16 rounded"></div>
+                        ) : stats.error ? (
+                          <span className="text-red-500">Error</span>
+                        ) : (
+                          formatCurrency(stats.userStats.totalInvested)
+                        )}
+                      </div>
                     </dd>
                   </dl>
                 </div>

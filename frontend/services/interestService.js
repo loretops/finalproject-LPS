@@ -63,6 +63,43 @@ const interestService = {
       queryParams.append('limit', limit);
       
       const response = await apiClient.get(`/interests/user?${queryParams.toString()}`);
+      
+      // Log para depuración
+      console.log('DATOS DE INTERESES SIN PROCESAR:', JSON.stringify(response.data, null, 2));
+      
+      // Procesar y normalizar los datos antes de devolverlos
+      if (Array.isArray(response.data)) {
+        return response.data.map(interest => {
+          // Si el interés tiene un proyecto asociado, normalizar sus valores monetarios
+          if (interest.project) {
+            // Normalizar los valores monetarios asegurando que sean números
+            const project = {
+              ...interest.project,
+              targetAmount: parseFloat(interest.project.targetAmount || 0),
+              currentAmount: parseFloat(interest.project.currentAmount || 0),
+              minimumInvestment: parseFloat(interest.project.minimumInvestment || 0),
+              expectedRoi: parseFloat(interest.project.expectedRoi || 0)
+            };
+            
+            console.log('Interés normalizado:', {
+              id: interest.id,
+              projectId: project.id,
+              monetaryValues: {
+                targetAmount: project.targetAmount,
+                currentAmount: project.currentAmount,
+                minimumInvestment: project.minimumInvestment
+              }
+            });
+            
+            return {
+              ...interest,
+              project
+            };
+          }
+          return interest;
+        });
+      }
+      
       return response.data;
     } catch (error) {
       console.error('Error al obtener intereses del usuario:', error);

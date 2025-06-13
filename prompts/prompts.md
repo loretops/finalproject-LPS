@@ -16,6 +16,7 @@ Puedes añadir adicionalmente la conversación completa como link o archivo adju
 10. [Estandarización de la interfaz](#10-estandarización-de-la-interfaz)
 11. [Historias de Usuario específicas](#11-historias-de-usuario-específicas)
 12. [Despliegue y configuración de entornos](#12-despliegue-y-configuración-de-entornos)
+13. [Resolución de errores y debugging](#13-resolución-de-errores-y-debugging)
 
 ---
 
@@ -196,6 +197,27 @@ Te estás olvidando de nuevo de las @rules.mdc
 ```
 Has hecho bien la definición de los endpoints, porque has buscado solo los que ya están desarrollados, pero quizá, para la documentación, valga la pena añadir como endpoints princpales, alguno que aun no esté desarrollado. Puedes verlos definidos en el punto 5. Historias de Usuario del @readme.md 
 Analiza lo que te propongo y luego me dices qué opinas
+```
+
+## 13. Resolución de errores y debugging
+
+**Prompt 1:**
+```
+Has hecho muy bien lo de las imagenes, y has hecho muy mal lo de las inversiones. 
+No cambies nada de las imagenes, que ahora funciona, y vamos a volver a correhirinversiones:
+1. Asegurate de comprobar qué hay en la base de datos
+2. Revisa que cuando consultes los datos siempre muestres datos reales, tanto en el dashboard, como en el listado de proyectos, como en el listado de mis onversiones, como en el listado de mis intereses, y por ultimo en la ficha del proyecto, que se vea el total del proyecto y el total invertido
+3. Si necesitas vete haciendo test para cada punto
+```
+
+**Prompt 2:**
+```
+Arreglaste antes muy bien lo de las inversiones, pero te falta arreglarlo para la opción del menú Mis INversiones
+```
+
+**Prompt 3:**
+```
+Ahora está fallando el listado de invitaciones desde Admin INvitaciones
 ```
 
 **Prompt 3:**
@@ -564,6 +586,242 @@ Pues venga, vamos a por la fase 1. Puedes fijarte en @https://openspace-home.com
 - Crear todas las páginas faltantes excepto los enlaces a redes sociales.
 - Asegurar que el menú de navegación sea visible en todas las páginas, incluyendo la página de login.
 - Implementar la funcionalidad de recuperación de contraseña en la página de login.
+
+**Prompt 5:**
+```
+Genial! Como lueho hubo problemas y volví a una versión anterior del proyecto, esta perte que comentas "Además, habías hecho cambios en el menú de navegación desde la perspectiva del gerente, eliminando la opción "Inicio" y "Sobre Nosotros" para los gerentes, y haciendo que "Dashboard" sea la primera opción." se ha deshecho. Me gustaría aplicar un menú lógico para los manager, teniendo el dashboard como primera opción. Pero antes de nada crea una rama. No seolo voy a hacer esto, sino que estamos en una fase de mejora estetica y logica de todo el proyecto, paar tener algo funcional, sin errores, y con una lógica fuerte, antes de afrontar el tema de almacenamiento de documentos, que no funciona bien
+```
+
+**Prompt 6:**
+```
+Tengo varias cuestiones a afrontar. A ver que tal lo haces:
+1. Revisa si el menú te parece bien así: por que pones AdminProyectos, y por ejemplo no hay acceso al adminde invitaciones? Porque hay areas nás relevantes que otras? No te estoy pidiendo que lo cambies, solo que revises la lógica de los accesos del menú
+2. Las alertas de Socios activos, proyectos activos, y capital invertido muestran datos ficticios. Quiero qu etodo lo que hagas sea real, no me muestres datos hardcodeados
+3. Quiero que todos los accesos que haya desde el dashboard lleven a una página real y que funcione. Por ejemplo: Mi Perfil, da error: 
+Next.js (14.2.28) is outdated (learn more)
+Unhandled Runtime Error
+
+TypeError: Context is undefined
+Source
+React
+
+pages/profile.js (13:39) @ AuthContext
+
+  11 |
+  12 | const ProfilePage = () => {
+> 13 |   const { user, logout } = useContext(AuthContext);
+     |                                       ^
+  14 |   const router = useRouter();
+  15 |   
+  16 |   const [verificationState, setVerificationState] = useState({
+
+Call Stack
+React
+renderWithHooks
+../node_modules/react-dom/cjs/react-dom.development.js (15486:1)
+mountIndeterminateComponent
+../node_modules/react-dom/cjs/react-dom.development.js (20103:1)
+beginWork
+../node_modules/react-dom/cjs/react-dom.development.js (21626:1)
+callCallback
+../node_modules/react-dom/cjs/react-dom.development.js (4164:1)
+invokeGuardedCallbackDev
+../node_modules/react-dom/cjs/react-dom.development.js (4213:1)
+invokeGuardedCallback
+../node_modules/react-dom/cjs/react-dom.development.js (4277:1)
+beginWork$1
+../node_modules/react-dom/cjs/react-dom.development.js (27490:1)
+performUnitOfWork
+../node_modules/react-dom/cjs/react-dom.development.js (26596:1)
+workLoopSync
+../node_modules/react-dom/cjs/react-dom.development.js (26505:1)
+renderRootSync
+../node_modules/react-dom/cjs/react-dom.development.js (26473:1)
+performConcurrentWorkOnRoot
+../node_modules/react-dom/cjs/react-dom.development.js (25777:1)
+workLoop
+../node_modules/scheduler/cjs/scheduler.development.js (266:1)
+flushWork
+../node_modules/scheduler/cjs/scheduler.development.js (239:1)
+performWorkUntilDeadline
+../node_modules/scheduler/cjs/scheduler.development.js (533:1)
+```
+
+**Prompt 7:**
+```
+Está tod muy bien. Haz commit
+Voy a enseñar el proyecto:
+1. Quiero que las imagenes que estén usandose suban al repositorio para poder verlo tod en la nube, 
+2. Quiero tener algun proyecto de demo para enseñar
+¿Qué mas se te ocurre?
+```
+
+## 11. Historias de Usuario específicas
+
+### HU #3 – Marcar "Invierto"
+
+**Prompt 1:**
+```
+me parece bien esa solución. Quizá sea más lógica. Vamos a darle otra vuelta. Lee todo el proyecto y su documentación. Entiendo bien lo que sinifica ser socio, y que ocurre cuando un socio decide invertir. YT propón cómo deberías marcar que ese socio es inversor. 
+```
+
+**Prompt 2:**
+```
+haz commit de este cambio. Y vamos a por esta mejora. No te olvides las @rules.mdc
+```
+
+**Prompt 3:**
+```
+estoy de acuerdo, pero no olvideo que debes actualizar toda la documentaci´n que afecte a este cambio, sobretodo lo relativo a bases de datos, pero tambien el resto
+```
+
+
+## 13. Resolución de errores y debugging
+
+**Prompt 1:**
+```
+En mis iversiones:
+GET
+http://localhost:8001/api/dashboard/stats
+[HTTP/1.1 500 Internal Server Error 5181ms]
+
+	
+GET
+	http://localhost:8001/api/dashboard/stats
+Estado
+500
+Internal Server Error
+VersiónHTTP/1.1
+Transferido1,77 KB (tamaño 508 B)
+Política de referenciastrict-origin-when-cross-origin
+Resolución DNSSistema
+
+	
+Access-Control-Allow-Credentials
+	true
+Access-Control-Allow-Headers
+	Origin, X-Requested-With, Content-Type, Accept, Authorization
+Access-Control-Allow-Methods
+	GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS
+Access-Control-Allow-Origin
+	http://localhost:3001
+Connection
+	keep-alive
+Content-Length
+	508
+Content-Security-Policy
+	default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+Content-Type
+	application/json; charset=utf-8
+Cross-Origin-Opener-Policy
+	same-origin
+Cross-Origin-Resource-Policy
+	same-origin
+Date
+	Tue, 10 Jun 2025 13:29:32 GMT
+ETag
+	W/"1fc-GXR4H1e4nuXW4cdrT9QCrqrKGcI"
+Keep-Alive
+	timeout=5
+Origin-Agent-Cluster
+	?1
+RateLimit-Limit
+	500
+RateLimit-Policy
+	500;w=900
+RateLimit-Remaining
+	389
+RateLimit-Reset
+	844
+Referrer-Policy
+	no-referrer
+Strict-Transport-Security
+	max-age=31536000; includeSubDomains
+Vary
+	Origin
+X-Content-Type-Options
+	nosniff
+X-DNS-Prefetch-Control
+	off
+X-Download-Options
+	noopen
+X-Frame-Options
+	SAMEORIGIN
+X-Permitted-Cross-Domain-Policies
+	none
+X-XSS-Protection
+	0
+	
+Accept
+	application/json, text/plain, */*
+Accept-Encoding
+	gzip, deflate, br, zstd
+Accept-Language
+	es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3
+Authorization
+	Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzM2FlMjYwMy1iNzZlLTRiOGQtYjRkZi04N2VhY2Y5NmMyN2IiLCJlbWFpbCI6InBhcnRuZXJAZXhhbXBsZS5jb20iLCJyb2xlIjoicGFydG5lciIsImlhdCI6MTc0OTU2MTYxOCwiZXhwIjoxNzUwMTY2NDE4fQ.pm7TWrw9BgEPx7DFFLDoJ0JsOZfBXNv4oa6qcphfW7A
+Connection
+	keep-alive
+Host
+	localhost:8001
+Origin
+	http://localhost:3001
+Referer
+	http://localhost:3001/
+Sec-Fetch-Dest
+	empty
+Sec-Fetch-Mode
+	cors
+Sec-Fetch-Site
+	same-site
+User-Agent
+	Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:139.0) Gecko/20100101 Firefox/139.0
+Error al obtener estadísticas del dashboard: 
+Object { message: "Request failed with status code 500", name: "AxiosError", code: "ERR_BAD_RESPONSE", config: {…}, request: XMLHttpRequest, response: {…}, status: 500, stack: "", … }
+hydration-error-info.ts:72:9
+
+​
+
+Cuiadado no estriopees otras cosas, que ahora está funcionando bastante bien Procura que el programa sea solido, rocusto. NO hags cambios a lo loco
+```
+
+**Prompt 2:**
+```
+Quiero corregir, pero a la primera, sin hacer pruebas en falso, que al entrar en un proyecto se vean las imagenes. Ten en cuenta que todo esto es una dema, así que busca imagenes para ello. Las imagenes de la lista de proyectos se ven, ahora falta verlas en la ficha de proyecto, y habría que incluir alguna más para la ficha. Pienso que quizá pueda ser bueno hacer lo siguiente:
+1. Hacer tests para que el desarrollo posterior sea correcto
+2. Asegurate de tener imagenes preparadas
+3. Sabiendo que las imagenes del listado de proyectos funcionan, prepara el código para que se vean tambien las imagenes de la ficha del proyecto
+
+Cuiadado no estriopees otras cosas, que ahora está funcionando bastante bien Procura que el programa sea solido, robusto. NO hagas cambios a lo loco
+```
+
+**Resumen de la resolución:**
+- Se identificó que el problema estaba en el backend: el endpoint de detalle del proyecto no devolvía las URLs de las imágenes
+- Se corrigieron dos problemas principales:
+  1. En `getProjectById` se mapeaba incorrectamente `url` en lugar de `fileUrl` y `fileType`
+  2. El `userRole` no se estaba pasando correctamente desde el controlador
+- Se añadieron imágenes de demo adicionales (4 por proyecto) para tener una galería completa
+- Se crearon tests específicos para verificar la funcionalidad de la galería de imágenes
+- Resultado: El endpoint ahora devuelve correctamente todas las imágenes con sus URLs y tipos de archivo
+
+**Prompt 3:**
+```
+Ahora que esto está bien, hay dos cosas a corregir:
+1. Hay fotos que se repiten en varios proyectos, y eso no tiene sentido
+2. En la ficha de proyecto sale a 0€ el importe invertido (aunque existan inversiones) y a 0€ el total a invertir, que está definido. Antes funcionaba
+```
+
+**Resumen de la resolución:**
+- **Problema 1 - Imágenes duplicadas:** Se creó un script que eliminó todas las imágenes duplicadas y asignó imágenes únicas de Unsplash a cada proyecto (20 imágenes totales, todas únicas)
+- **Problema 2 - Importes en 0€:** Se identificó que los campos Decimal de Prisma se devolvían como objetos especiales, no como strings/números
+- Se corrigió el repositorio para convertir todos los campos Decimal a strings:
+  - `currentAmount`: Calculado dinámicamente desde inversiones confirmadas
+  - `targetAmount`: Convertido de objeto Decimal a string
+  - `minimumInvestment`: Convertido de objeto Decimal a string  
+  - `expectedRoi`: Convertido de objeto Decimal a string
+- Se añadió una inversión de prueba (875,000€) para verificar el cálculo correcto del `currentAmount`
+- Resultado: Todos los importes se muestran correctamente en la ficha de proyecto
+```
 
 
 

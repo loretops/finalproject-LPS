@@ -78,7 +78,7 @@ class PublicProjectController {
       
       // Pasar el rol del usuario como opción
       const options = {
-        userRole: req.user.role
+        userRole: req.user.role?.name || req.user.role || 'partner'
       };
       
       const project = await projectService.getProjectById(id, options);

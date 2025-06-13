@@ -1,7 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-
-// Instanciar el cliente de Prisma
-const prisma = new PrismaClient();
+// Importar la instancia compartida de PrismaClient
+const prisma = require('../../utils/prismaClient');
 
 /**
  * Servicio para la gestión de notificaciones en el sistema.
@@ -180,4 +178,5 @@ class NotificationService {
   }
 }
 
-module.exports = NotificationService; 
+// Exportar una instancia de la clase en lugar de la clase
+module.exports = new NotificationService(); 

@@ -1,3 +1,17 @@
+# 🏢 COOPCO - Plataforma de Inversión Inmobiliaria
+
+## 🚀 Demo Rápida
+
+> **¿Quieres ver el proyecto funcionando?** Revisa el [DEMO-README.md](./DEMO-README.md) para una configuración rápida con datos de demostración.
+
+**Credenciales de demo:**
+- Manager: `manager@example.com` / `password123`
+- Socio: `partner@example.com` / `password123`
+
+---
+
+# Documentación del Proyecto
+
 ## Índice
 
 0. [Ficha del proyecto](#0-ficha-del-proyecto)
@@ -960,6 +974,7 @@ Esta estrategia de pruebas en múltiples niveles ayuda a detectar problemas temp
         TIMESTAMP locked_until
         TIMESTAMP created_at
         TIMESTAMP updated_at
+        BOOLEAN is_active_investor "Indica si el socio tiene inversiones activas"
     }
 
     projects ||--o{ project_documents : has
@@ -1112,6 +1127,7 @@ Representa a los usuarios del sistema, incluyendo visitantes registrados, socios
 | email_verified_at | TIMESTAMP | Fecha de verificación del email | NULLABLE |
 | failed_login_attempts | INTEGER | Número de intentos fallidos de login | NOT NULL, DEFAULT: 0 |
 | locked_until | TIMESTAMP | Fecha hasta la que la cuenta está bloqueada | NULLABLE |
+| is_active_investor | BOOLEAN | Indica si el socio tiene inversiones activas | NOT NULL, DEFAULT: false |
 | created_at | TIMESTAMP | Fecha de creación de la cuenta | NOT NULL, DEFAULT: now() |
 | updated_at | TIMESTAMP | Fecha de última actualización del perfil | NOT NULL, DEFAULT: now() |
 

@@ -10,6 +10,7 @@
 | HU #9: Marcar "Me Interesa" | 8 | 8 | 0 | 0 | 0 |
 | HU #3: Marcar "Invierto" | 12 | 7 | 0 | 5 | 0 |
 | HU #7: Confirmación de correo electrónico | 6 | 6 | 0 | 0 | 0 |
+| HU #4: Lógica de negocio y Roles | 1 | 0 | 0 | 1 | 0 |
 
 ## 🚀 Último Sprint: Progreso
 
@@ -33,6 +34,35 @@ gantt
 ```
 
 ## 🚦 Tickets Activos
+
+### ✅ Resueltos recientemente
+
+- **Imágenes duplicadas y importes incorrectos:** Solucionados problemas críticos en ficha de proyecto
+  - **Problema 1:** Imágenes duplicadas entre diferentes proyectos
+  - **Problema 2:** Importes aparecían como 0€ (currentAmount, targetAmount, minimumInvestment)
+  - **Solución:** 
+    - Eliminadas imágenes duplicadas y asignadas imágenes únicas a cada proyecto
+    - Corregida conversión de campos Decimal de Prisma a strings en repositorio
+    - Añadida inversión de prueba para verificar cálculo de currentAmount
+    - Verificado que todos los importes se muestran correctamente
+  - **Estado:** ✅ Completado
+  - **Fecha:** 2025-06-13
+
+- **Imágenes en ficha de proyecto:** Solucionado problema de visualización de imágenes en páginas de detalle
+  - **Problema:** Las imágenes no se mostraban en la ficha de proyecto individual (solo en listado)
+  - **Solución:** 
+    - Corregido mapeo de documentos en `getProjectById` (usar `fileUrl` en lugar de `url`)
+    - Corregido pase de `userRole` en controlador público
+    - Añadidas imágenes de demo adicionales para galería completa
+    - Creados tests para funcionalidad de galería
+  - **Estado:** ✅ Completado
+  - **Fecha:** 2025-06-13
+
+- **Error 500 en Dashboard Stats:** Resuelto error intermitente en endpoint `/api/dashboard/stats`
+  - **Problema:** Error 500 intermitente al obtener estadísticas del dashboard
+  - **Solución:** Mejorado manejo de errores, añadido logging adicional y validación robusta de datos
+  - **Estado:** ✅ Completado
+  - **Fecha:** 2025-06-10
 
 ### ⏳ En progreso (2)
 
@@ -154,6 +184,14 @@ gantt
 | #49 | Sistema de notificaciones para inversiones | ✅ | 7/7 | 0/0 | Implementado sistema completo de notificaciones en tiempo real con soporte para múltiples tipos de notificaciones de inversión |
 | #50 | Tests e2e para flujo de inversión | ✅ | 7/7 | 8/8 | Implementados tests end-to-end completos para el flujo de inversión con Cypress |
 | #51 | Dashboard para gestores con resumen de inversiones | ✅ | 8/8 | 0/0 | Implementado dashboard con estadísticas, filtros y gestión completa de inversiones para gestores |
+
+### HU #4: Lógica de negocio y Roles
+
+**Objetivo:** Mejorar la granularidad y la lógica de negocio en la gestión de roles y permisos de la plataforma.
+
+| ID | Descripción | Estado | Criterios cumplidos | Tests pasados | Observaciones |
+|---|---|---|---|---|---|
+| #58 | Diferenciación entre Socio e Inversor Activo | ✅ | 5/5 | 0/0 | Se implementó un flag `isActiveInvestor` en el modelo `User` para diferenciar a los socios que tienen inversiones activas. El estado se actualiza automáticamente al crear, confirmar o cancelar una inversión. El middleware de roles fue actualizado para considerar este flag, otorgando permisos de inversor a los socios activos. |
 
 ### HU #7: Confirmación de correo electrónico
 
@@ -456,6 +494,10 @@ Las mejoras aplicadas incluyen:
 - [x] Ticket #50: Tests e2e para flujo de inversión
 - [x] Ticket #51: Dashboard para gestores con resumen de inversiones
 
+### Historia de Usuario 4: Lógica de negocio y Roles
+
+- [x] Ticket #58: Diferenciación entre Socio e Inversor Activo
+
 ### Historia de Usuario 7: Confirmación de correo electrónico
 
 - [x] Ticket #52: Modelo de datos para tokens de verificación
@@ -534,3 +576,77 @@ Esta estandarización proporciona varias ventajas:
 - [x] Corregido error de compilación por importación duplicada de React en ProjectCard.jsx.
 - [x] Solucionado problema de pantalla en blanco al publicar proyectos mediante implementación de fetch directo en lugar de servicios complejos.
 - [x] Corregido error 500 al cancelar inversiones pendientes.
+
+## Estado de Desarrollo
+
+### Componentes desactivados temporalmente
+- **Banner de verificación de email**: Desactivado para reducir carga en el API y evitar errores de CORS. El componente `VerificationBanner.jsx` ha sido modificado para no realizar llamadas al servidor.
+- **Notificaciones automáticas**: Se ha desactivado la recarga automática de notificaciones que ocurría cada 30 segundos. Ahora solo se cargan cuando el usuario abre el menú de notificaciones.
+- **Servicio de intereses optimizado**: Se ha simplificado el método `getUserInterests` para acceder directamente a Prisma, evitando errores 500 y reduciendo la carga en el servidor.
+
+### Problemas conocidos
+- **Dashboard muestra capital invertido pero no hay inversiones visibles**: El controlador `dashboard.controller.js` muestra estadísticas globales para todos los usuarios (incluido el total invertido de 220.000€), mientras que en la página de inversiones del usuario solo se muestran las inversiones propias. Se debería ajustar para mostrar datos más coherentes o clarificar que son datos globales de toda la plataforma.
+
+### Criterios de Aceptación Validados
+
+### Pendiente por Verificar
+
+### Bugs Conocidos
+
+### Mejoras Pendientes
+
+## Problemas Conocidos y Soluciones
+
+### Inversiones
+- ✅ Se ha corregido un problema donde los proyectos mostraban 0€ de inversión. Se ha implementado una solución que consulta todas las inversiones relevantes para un conjunto de proyectos en una sola consulta, agrupándolas manualmente por projectId para mayor eficiencia.
+- ✅ Se ha agregado un test de integración (PrismaProjectRepository.test.js) para verificar que el cálculo de inversiones funciona correctamente, tanto en el método findById como en findAll.
+
+### Frontend
+// ... existing code ...
+
+## ✅ Problemas Resueltos
+
+### Problema: Imágenes duplicadas entre proyectos
+- **Descripción**: Múltiples proyectos compartían las mismas URLs de imágenes de Unsplash
+- **Causa**: Script de demo asignaba imágenes aleatoriamente sin verificar duplicados
+- **Solución**: Creado script `fix-duplicate-images.cjs` que:
+  - Eliminó todas las imágenes duplicadas de Unsplash
+  - Asignó imágenes únicas de un pool curado de 25 imágenes inmobiliarias
+  - Mantuvo las imágenes originales del proyecto (que empiezan con /images/)
+  - Resultado: 20 imágenes totales, todas únicas (4 por proyecto)
+- **Estado**: ✅ **RESUELTO** - Verificado que no hay duplicados
+
+### Problema: Importes mostrando 0€ en páginas de detalle
+- **Descripción**: Los campos currentAmount, targetAmount y minimumInvestment aparecían como 0€ en las páginas de detalle de proyectos
+- **Causa Raíz**: Inconsistencia entre formatos de datos (camelCase vs snake_case) entre backend y frontend
+- **Problemas identificados**:
+  1. Repositorio devuelve datos en camelCase: `currentAmount`, `targetAmount`, `minimumInvestment`
+  2. Servicio `publicProjectService` convierte algunos datos a snake_case: `current_amount`, `target_amount`
+  3. Componentes frontend usaban formatos mixtos inconsistentes
+- **Solución Implementada**:
+  1. **Backend**: Corregido `PrismaProjectRepository.js` para convertir campos Decimal a strings
+  2. **Frontend**: Modificado `normalizeProject()` en `publicProjectService.js` para manejar ambos formatos
+  3. **Componentes**: Actualizados todos los componentes para usar formato snake_case consistente:
+     - `InvestmentSummary.jsx`
+     - `InvestmentForm.jsx` 
+     - `InvestButton.jsx`
+     - Páginas de detalle de proyectos
+- **Verificación**: Todos los importes ahora se procesan y muestran correctamente
+- **Estado**: ✅ **RESUELTO** - Formato de datos consistente en toda la aplicación
+- **Páginas corregidas**: 
+  - ✅ Detalle de proyecto (`/projects/[id]`)
+  - ✅ Componentes de inversión (`InvestmentSummary`, `InvestmentForm`, `InvestButton`)
+  - ✅ Página "Mis Inversiones" (`/investments`)
+  - ✅ Página "Mis Intereses" (`/interests`) - Añadida compatibilidad con ambos formatos
+  - ✅ Dashboard - Los datos se muestran correctamente
+
+### Problema: Listado de invitaciones fallando en Admin
+- **Descripción**: El componente `InvitationList` en la página de administración de invitaciones no manejaba correctamente errores de datos
+- **Causa**: Falta de validación robusta de datos y manejo de formatos de fecha inconsistentes
+- **Solución Implementada**:
+  1. **Manejo robusto de fechas**: Añadida validación y manejo de errores en `formatDate()`
+  2. **Compatibilidad de formatos**: Soporte para tanto camelCase como snake_case en fechas (`createdAt`/`created_at`, `expiresAt`/`expires_at`)
+  3. **Validación de datos**: Verificación de que los datos recibidos sean un array válido
+  4. **Logging mejorado**: Añadidos logs para debugging y mejor identificación de problemas
+  5. **Fallbacks seguros**: Valores por defecto para campos faltantes
+- **Estado**: ✅ **RESUELTO** - Componente más robusto y resistente a errores de datos

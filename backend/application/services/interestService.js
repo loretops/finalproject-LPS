@@ -3,9 +3,11 @@ const notificationService = require('./notificationService');
 const projectService = require('./projectService');
 const { PrismaClient } = require('@prisma/client');
 
+// Importar la instancia compartida de PrismaClient
+const prisma = require('../../utils/prismaClient');
+
 // Instanciar el repositorio y cliente Prisma
 const interestRepository = new PrismaInterestRepository();
-const prisma = new PrismaClient();
 
 /**
  * Clase que implementa el servicio de gestión de intereses en proyectos.
@@ -140,7 +142,44 @@ class InterestService {
     }
     
     try {
-      const interests = await interestRepository.findByUser(userId, options);
+      // Usar consulta simplificada para reducir la carga
+      const interests = await prisma.interest.findMany({
+        where: {
+          userId: userId,
+          ...(options.status ? { status: options.status } : {})
+        },
+        orderBy: {
+          createdAt: 'desc'
+        },
+        skip: options.offset || 0,
+        take: options.limit || 10,
+        include: {
+          project: {
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              status: true,
+              expectedRoi: true,
+              minimumInvestment: true,
+              targetAmount: true,
+              currentAmount: true,
+              location: true,
+              propertyType: true,
+              documents: {
+                where: {
+                  documentType: 'image',
+                  accessLevel: 'public'
+                },
+                take: 1,
+                select: {
+                  fileUrl: true
+                }
+              }
+            }
+          }
+        }
+      });
       
       // Transformar los resultados para un formato adecuado para el frontend
       return interests.map(interest => ({
@@ -155,6 +194,8 @@ class InterestService {
           status: interest.project.status,
           expectedRoi: interest.project.expectedRoi,
           minimumInvestment: interest.project.minimumInvestment,
+          targetAmount: interest.project.targetAmount,
+          currentAmount: interest.project.currentAmount,
           location: interest.project.location,
           propertyType: interest.project.propertyType,
           imageUrl: interest.project.documents && interest.project.documents.length > 0 

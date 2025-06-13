@@ -72,11 +72,12 @@ class ProjectService {
           .filter(doc => allowedAccessLevels.includes(doc.accessLevel))
           .map(doc => ({
             id: doc.id,
-            name: doc.name,
+            title: doc.title,
             documentType: doc.documentType,
+            fileUrl: doc.fileUrl,
+            fileType: doc.fileType,
             accessLevel: doc.accessLevel,
             securityLevel: doc.securityLevel,
-            url: doc.url,
             createdAt: doc.createdAt.toISOString()
           }));
       }
@@ -122,6 +123,7 @@ class ProjectService {
       const publicOptions = {
         ...options,
         status: 'published',
+        includeDocuments: true  // Siempre incluir documentos para proyectos públicos
       };
 
       const result = await projectRepository.findAll(publicOptions);

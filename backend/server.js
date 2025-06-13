@@ -1,13 +1,22 @@
 // Cargar variables de entorno
-require('dotenv').config({ path: '.env' }); // Primero intenta cargar el .env del backend
-require('dotenv').config({ path: '../.env' }); // Luego carga el .env de la raíz
-
-// Importaciones
-const express = require('express');
 const path = require('path'); // Agregar path para manejar rutas de archivos
-const { PrismaClient } = require('@prisma/client');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
+
+// <<< AÑADIR ESTE LOG AL INICIO PARA DEPURACIÓN >>>
+console.log('DEBUG STARTUP - Reading FRONTEND_URL env var:', process.env.FRONTEND_URL);
+console.log('DEBUG STARTUP - Reading DATABASE_URL env var:', process.env.DATABASE_URL ? 'URL existe' : 'URL no encontrada');
+console.log('DEBUG STARTUP - DATABASE_URL:', process.env.DATABASE_URL);
+// <<< FIN DEL LOG >>>
+
+// Importaciones de dependencias
+const express = require('express');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const cors = require('cors');
+
+// Importar la instancia compartida de PrismaClient
+const prisma = require('./utils/prismaClient');
 
 // Rutas API 
 const authRoutes = require('./interfaces/http/routes/auth.routes');
@@ -20,14 +29,10 @@ const investmentRoutes = require('./interfaces/http/routes/investment.routes');
 const notificationRoutes = require('./interfaces/http/routes/notification.routes');
 const logRoutes = require('./interfaces/http/routes/log.routes');
 const verificationRoutes = require('./interfaces/http/routes/verification.routes');
-
-// <<< AÑADIR ESTE LOG AL INICIO >>>
-console.log('DEBUG STARTUP - Reading FRONTEND_URL env var:', process.env.FRONTEND_URL);
-// <<< FIN DEL LOG >>>
+const dashboardRoutes = require('./interfaces/http/routes/dashboard.routes');
 
 // Inicialización
 const app = express();
-const prisma = new PrismaClient();
 const port = process.env.BACKEND_PORT || process.env.PORT || 8001;
 const baseUrl = process.env.BASE_URL || `http://localhost:${port}`;
 
@@ -37,60 +42,76 @@ app.use(helmet());
 // Configurar rate limiting
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW || 15) * 60 * 1000, // 15 minutos por defecto
-  max: parseInt(process.env.RATE_LIMIT_MAX || 100), // límite de 100 solicitudes por ventana
+  max: parseInt(process.env.RATE_LIMIT_MAX || 500), // aumentamos el límite a 500 solicitudes por ventana
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: 'Demasiadas solicitudes, por favor intente más tarde' }
 });
 
-// Aplicar límite de tasa a todas las solicitudes
-app.use(limiter);
+// Aplicar límite de tasa a todas las solicitudes excepto a las rutas de verificación
+app.use((req, res, next) => {
+  if (req.path.includes('/api/verification') || req.path.includes('/api/notifications')) {
+    return next(); // No aplicar rate limit a estas rutas
+  }
+  limiter(req, res, next);
+});
 
 // Middleware estándar
 app.use(express.json({ limit: '1mb' })); // Limitar tamaño de payload
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 // Servir archivos estáticos desde el directorio 'public'
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.resolve(__dirname, 'public')));
+// Servir archivos estáticos de uploads
+app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
 
-// Habilitar CORS
-app.use((req, res, next) => {
-  // Usar la variable de entorno CORS_ORIGIN si está definida
-  const corsOrigin = process.env.CORS_ORIGIN || '*';
-  
-  // Usar frontendUrl para CORS si está disponible
-  const frontendUrl = process.env.FRONTEND_URL;
-  
-  if (corsOrigin === '*') {
-    // En desarrollo, aceptar orígenes configurados o cualquiera
-    const allowedOrigins = frontendUrl 
-      ? [frontendUrl, 'http://localhost:3001', 'http://localhost:3000'] 
-      : ['http://localhost:3001', 'http://localhost:3000'];
+// Configuración CORS
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Permitir solicitudes sin origen (como las aplicaciones móviles o curl)
+    if (!origin) return callback(null, true);
     
-    const origin = req.headers.origin;
+    // Lista de orígenes permitidos
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      process.env.FRONTEND_URL
+    ].filter(Boolean); // Eliminar valores nulos o indefinidos
     
-    if (allowedOrigins.includes(origin)) {
-      res.header('Access-Control-Allow-Origin', origin);
+    // Log para depuración
+    console.log(`CORS request from origin: ${origin}, allowed origins: ${JSON.stringify(allowedOrigins)}`);
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
     } else {
-      res.header('Access-Control-Allow-Origin', '*');
+      console.log('Origen bloqueado por CORS:', origin);
+      callback(new Error('Not allowed by CORS'));
     }
-  } else {
-    // En producción, usar el origen específico configurado
-    res.header('Access-Control-Allow-Origin', corsOrigin);
-  }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
+};
+
+// Aplicar configuración CORS
+app.use(cors(corsOptions));
+
+// Middleware adicional para asegurar cabeceras CORS en todas las respuestas
+app.use((req, res, next) => {
+  // Obtener el origen de la solicitud o usar localhost por defecto
+  const origin = req.headers.origin || 'http://localhost:3001';
   
+  // Configurar cabeceras CORS explícitamente
+  res.header('Access-Control-Allow-Origin', origin);
+  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
   res.header('Access-Control-Allow-Credentials', 'true');
   
-  // Cabeceras de seguridad recomendadas por OWASP
-  res.header('X-Content-Type-Options', 'nosniff');
-  res.header('X-Frame-Options', 'DENY');
-  res.header('Content-Security-Policy', "default-src 'self'");
-  
+  // Manejar solicitudes preflight OPTIONS de forma especial
   if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
+    return res.status(200).end();
   }
+  
   next();
 });
 
@@ -112,6 +133,7 @@ app.use('/api', projectDocumentRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/logs', logRoutes);
 app.use('/api/verification', verificationRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Ruta de ejemplo usando Prisma
 app.get('/api/roles', async (req, res) => {
@@ -127,6 +149,26 @@ app.get('/api/roles', async (req, res) => {
 // Middleware para manejo de errores
 app.use((err, req, res, next) => {
   console.error('Error en la aplicación:', err.stack);
+
+  // Manejar errores específicos de Prisma
+  if (err.code === 'P1001') {
+    return res.status(500).json({ 
+      error: 'Error de conexión a la base de datos',
+      message: 'No se pudo conectar a la base de datos. Por favor, inténtelo de nuevo más tarde.',
+      details: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+  }
+  
+  // Manejar errores de CORS
+  if (err.message && err.message.includes('CORS')) {
+    return res.status(403).json({ 
+      error: 'Error de CORS',
+      message: 'La solicitud fue bloqueada por política de CORS',
+      details: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+  }
+  
+  // Respuesta genérica para otros errores
   res.status(500).json({ 
     error: 'Error interno del servidor',
     message: process.env.NODE_ENV === 'development' ? err.message : 'Ocurrió un error inesperado'

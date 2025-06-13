@@ -34,16 +34,25 @@ const InvitationList = () => {
     }
   };
 
-  // Función para formatear fechas
+  // Función para formatear fechas de forma segura
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', { 
-      day: '2-digit', 
-      month: '2-digit', 
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    if (!dateString) return 'N/A';
+    
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'Fecha inválida';
+      
+      return date.toLocaleDateString('es-ES', { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (error) {
+      console.error('Error formateando fecha:', error);
+      return 'Error en fecha';
+    }
   };
 
   // Obtener invitaciones
@@ -52,9 +61,19 @@ const InvitationList = () => {
       setLoading(true);
       setError('');
       try {
+        console.log('🔍 Cargando invitaciones...');
         const data = await getInvitations();
-        setInvitations(data);
+        console.log('📋 Datos de invitaciones recibidos:', data);
+        
+        // Verificar que data sea un array
+        if (Array.isArray(data)) {
+          setInvitations(data);
+        } else {
+          console.warn('⚠️ Los datos recibidos no son un array:', data);
+          setInvitations([]);
+        }
       } catch (err) {
+        console.error('❌ Error al cargar invitaciones:', err);
         setError('Error al cargar las invitaciones: ' + err.message);
       } finally {
         setLoading(false);
@@ -128,9 +147,9 @@ const InvitationList = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {invitations.map((invitation) => (
-                <tr key={invitation.id} className={invitation.status === 'EXPIRED' ? 'bg-gray-50' : ''}>
+                <tr key={invitation.id || invitation.email} className={invitation.status === 'EXPIRED' ? 'bg-gray-50' : ''}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {invitation.email}
+                    {invitation.email || 'Email no disponible'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusClasses(invitation.status)}`}>
@@ -138,10 +157,10 @@ const InvitationList = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {formatDate(invitation.createdAt)}
+                    {formatDate(invitation.createdAt || invitation.created_at)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {formatDate(invitation.expiresAt)}
+                    {formatDate(invitation.expiresAt || invitation.expires_at)}
                   </td>
                 </tr>
               ))}

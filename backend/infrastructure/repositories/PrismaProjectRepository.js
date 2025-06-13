@@ -1,7 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const ProjectRepository = require('../../domain/repositories/ProjectRepository');
-
-const prisma = new PrismaClient();
+const prisma = require('../../utils/prismaClient');
 
 /**
  * Implementación de ProjectRepository usando Prisma ORM
@@ -35,7 +34,39 @@ class PrismaProjectRepository extends ProjectRepository {
         include
       });
       
-      return project;
+      if (!project) {
+        return null;
+      }
+      
+      // Obtener todas las inversiones confirmadas para este proyecto
+      const investments = await prisma.investment.findMany({
+        where: {
+          projectId: id,
+          status: {
+            in: ['confirmed', 'completed']
+          }
+        },
+        select: {
+          amount: true
+        }
+      });
+      
+      // Calcular la suma total
+      const totalInvested = investments.reduce(
+        (total, inv) => total + parseFloat(inv.amount), 
+        0
+      ).toString();
+      
+      // Convertir campos Decimal a strings para evitar problemas de serialización
+      const projectWithStringAmounts = {
+        ...project,
+        currentAmount: totalInvested || "0",
+        targetAmount: project.targetAmount?.toString() || "0",
+        minimumInvestment: project.minimumInvestment?.toString() || "0",
+        expectedRoi: project.expectedRoi?.toString() || "0"
+      };
+      
+      return projectWithStringAmounts;
     } catch (error) {
       console.error('Error en PrismaProjectRepository.findById:', error);
       throw error;
@@ -57,7 +88,8 @@ class PrismaProjectRepository extends ProjectRepository {
         page = 1,
         limit = 10,
         sortField = 'createdAt',
-        sortDirection = 'desc'
+        sortDirection = 'desc',
+        includeDocuments = false
       } = options;
 
       // Construir filtros
@@ -110,28 +142,75 @@ class PrismaProjectRepository extends ProjectRepository {
       
       console.log('Ordenando por:', orderBy);
       
+      // Configurar inclusiones
+      const include = {
+        creator: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true
+          }
+        }
+      };
+      
+      // Incluir documentos si se solicita
+      if (includeDocuments) {
+        include.documents = {
+          where: {
+            documentType: 'image',
+            accessLevel: 'public'
+          }
+        };
+      }
+      
       // Obtener proyectos paginados
       const projects = await prisma.project.findMany({
         where,
-        include: {
-          creator: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true
-            }
-          }
-        },
+        include: include,
         skip,
         take: limit,
         orderBy
       });
       
+      // Obtener todas las inversiones confirmadas
+      const investments = await prisma.investment.findMany({
+        where: {
+          projectId: {
+            in: projects.map(p => p.id)
+          },
+          status: {
+            in: ['confirmed', 'completed']
+          }
+        },
+        select: {
+          projectId: true,
+          amount: true
+        }
+      });
+      
+      // Agrupar inversiones por projectId
+      const investmentsByProject = {};
+      investments.forEach(inv => {
+        if (!investmentsByProject[inv.projectId]) {
+          investmentsByProject[inv.projectId] = 0;
+        }
+        investmentsByProject[inv.projectId] += parseFloat(inv.amount);
+      });
+      
+      // Añadir el monto invertido a cada proyecto y convertir campos Decimal a strings
+      const projectsWithInvestments = projects.map(project => ({
+        ...project,
+        currentAmount: investmentsByProject[project.id]?.toString() || "0",
+        targetAmount: project.targetAmount?.toString() || "0",
+        minimumInvestment: project.minimumInvestment?.toString() || "0",
+        expectedRoi: project.expectedRoi?.toString() || "0"
+      }));
+      
       // Calcular total de páginas
       const totalPages = Math.ceil(total / limit);
       
       return {
-        data: projects,
+        data: projectsWithInvestments,
         pagination: {
           total,
           page,

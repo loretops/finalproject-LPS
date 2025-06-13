@@ -140,6 +140,18 @@ function toProjectResponse(projectModel) {
  * @returns {ProjectListItemDto} Objeto DTO para listado
  */
 function toProjectListItem(projectModel) {
+  // Preparar una lista de documentos formateados si están presentes
+  const documents = projectModel.documents ? projectModel.documents.map(doc => ({
+    id: doc.id,
+    documentType: doc.documentType,
+    fileUrl: doc.fileUrl,
+    fileType: doc.fileType,
+    accessLevel: doc.accessLevel,
+    securityLevel: doc.securityLevel,
+    title: doc.title,
+    createdAt: doc.createdAt.toISOString()
+  })) : [];
+  
   return {
     id: projectModel.id,
     title: projectModel.title,
@@ -151,7 +163,8 @@ function toProjectListItem(projectModel) {
     location: projectModel.location,
     propertyType: projectModel.propertyType,
     createdAt: projectModel.createdAt.toISOString(),
-    publishedAt: projectModel.publishedAt ? projectModel.publishedAt.toISOString() : null
+    publishedAt: projectModel.publishedAt ? projectModel.publishedAt.toISOString() : null,
+    documents: documents
   };
 }
 

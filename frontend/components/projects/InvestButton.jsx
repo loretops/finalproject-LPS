@@ -23,10 +23,10 @@ const InvestButton = ({ project, initialOpen = false, onClose, onInvestmentSucce
     Object.keys(projectDetails).length > 0;
 
   // Verificar estado del proyecto (con comprobaciones de seguridad)
-  const currentAmount = projectDataAvailable && projectDetails.currentAmount ? 
-    parseFloat(projectDetails.currentAmount) : 0;
-  const targetAmount = projectDataAvailable && projectDetails.targetAmount ? 
-    parseFloat(projectDetails.targetAmount) : 0;
+  const currentAmount = projectDataAvailable && projectDetails.current_amount ? 
+    parseFloat(projectDetails.current_amount) : 0;
+  const targetAmount = projectDataAvailable && projectDetails.target_amount ? 
+    parseFloat(projectDetails.target_amount) : 0;
   
   const isProjectFull = currentAmount >= targetAmount && targetAmount > 0;
   const isUnavailable = !projectDataAvailable || 
@@ -82,7 +82,7 @@ const InvestButton = ({ project, initialOpen = false, onClose, onInvestmentSucce
     if (projectDataAvailable) {
       setProjectDetails(prev => ({
         ...prev,
-        currentAmount: (parseFloat(prev.currentAmount) || 0) + parseFloat(investmentData.amount)
+        current_amount: (parseFloat(prev.current_amount) || 0) + parseFloat(investmentData.amount)
       }));
     }
     
@@ -117,7 +117,7 @@ const InvestButton = ({ project, initialOpen = false, onClose, onInvestmentSucce
         </button>
         {isProjectFull && projectDataAvailable && (
           <div className="mt-2 text-center text-green-600 font-medium">
-            ¡Este proyecto ha alcanzado su objetivo de {formatCurrency(projectDetails.targetAmount)}!
+            ¡Este proyecto ha alcanzado su objetivo de {formatCurrency(projectDetails.target_amount)}!
           </div>
         )}
       </div>
@@ -158,9 +158,9 @@ InvestButton.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     status: PropTypes.string.isRequired,
-    minimumInvestment: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    targetAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    currentAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    minimum_investment: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    target_amount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    current_amount: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
   }).isRequired,
   /** Indica si el modal debe abrirse al montar el componente */
   initialOpen: PropTypes.bool,

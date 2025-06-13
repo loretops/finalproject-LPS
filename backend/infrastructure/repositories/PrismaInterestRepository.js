@@ -1,7 +1,8 @@
-const { PrismaClient } = require('@prisma/client');
+// const { PrismaClient } = require('@prisma/client');
 const InterestRepository = require('../../domain/repositories/InterestRepository');
 
-const prisma = new PrismaClient();
+const prisma = require('../../utils/prismaClient');
+// const prisma = new PrismaClient();
 
 /**
  * Prisma-based implementation of the InterestRepository interface.

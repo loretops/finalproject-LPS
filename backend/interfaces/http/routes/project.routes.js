@@ -16,20 +16,20 @@ router.post(
 );
 
 // GET /api/projects - Listar todos los proyectos
-// Protegido: Requiere autenticación (JWT) y rol 'partner' o superior
+// Protegido: Requiere autenticación (JWT) y rol 'partner', 'investor' o 'manager'
 router.get(
   '/',
   jwtAuthMiddleware,
-  roleAuthMiddleware(['partner', 'manager']),
+  roleAuthMiddleware(['partner', 'investor', 'manager']),
   projectController.list
 );
 
 // GET /api/projects/:id - Obtener un proyecto específico
-// Protegido: Requiere autenticación (JWT) y rol 'partner' o superior
+// Protegido: Requiere autenticación (JWT) y rol 'partner', 'investor' o 'manager'
 router.get(
   '/:id',
   jwtAuthMiddleware,
-  roleAuthMiddleware(['partner', 'manager']),
+  roleAuthMiddleware(['partner', 'investor', 'manager']),
   projectController.getById
 );
 

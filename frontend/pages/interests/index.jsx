@@ -34,7 +34,62 @@ const MyInterestsPage = () => {
       try {
         // Obtener lista de intereses
         const userInterests = await interestService.getUserInterests();
-        setInterests(userInterests);
+        
+        // Debug de los datos recibidos
+        console.log('Intereses recibidos:', userInterests);
+        
+        // Transformar los datos para añadir la URL de imagen si falta
+        const processedInterests = userInterests.map(interest => {
+          if (interest.project) {
+            // Debug de los datos del proyecto antes de la transformación
+            console.log('Proyecto original:', interest.project);
+            
+            // Asegurarse de que el proyecto tenga una URL de imagen
+            const imageUrl = interest.project.imageUrl || '/images/placeholder-image.png';
+            
+            // Asegurarse de que los valores monetarios sean números
+            // Usar parseFloat para convertir correctamente strings y manejar valores indefinidos
+            // Usar tanto camelCase como snake_case para compatibilidad
+            const targetAmount = parseFloat(interest.project.targetAmount || interest.project.target_amount || 0);
+            const currentAmount = parseFloat(interest.project.currentAmount || interest.project.current_amount || 0);
+            const minimumInvestment = parseFloat(interest.project.minimumInvestment || interest.project.minimum_investment || 0);
+            
+            console.log('Valores monetarios originales y procesados:', {
+              targetAmount: {
+                original: interest.project.targetAmount || interest.project.target_amount,
+                processed: targetAmount
+              },
+              currentAmount: {
+                original: interest.project.currentAmount || interest.project.current_amount,
+                processed: currentAmount
+              },
+              minimumInvestment: {
+                original: interest.project.minimumInvestment || interest.project.minimum_investment,
+                processed: minimumInvestment
+              }
+            });
+            
+            // Crear una copia del proyecto con los campos correctos para ProjectCard
+            return {
+              ...interest,
+              project: {
+                ...interest.project,
+                image_url: imageUrl,
+                property_type: interest.project.propertyType,
+                minimum_investment: minimumInvestment,
+                expected_roi: interest.project.expectedRoi || interest.project.expected_roi,
+                target_amount: targetAmount,
+                current_amount: currentAmount
+              }
+            };
+          }
+          return interest;
+        });
+        
+        // Debug de los intereses procesados
+        console.log('Intereses procesados:', processedInterests);
+        
+        setInterests(processedInterests);
       } catch (err) {
         console.error('Error al cargar intereses:', err);
         setError('No se pudieron cargar tus intereses. Por favor, inténtalo de nuevo más tarde.');
