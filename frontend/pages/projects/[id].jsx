@@ -82,7 +82,12 @@ const ProjectDetailPage = () => {
   
   // Procesar los documentos en las categorías adecuadas
   const processDocuments = (projectData) => {
-    if (!projectData || !projectData.documents) return;
+    if (!projectData || !projectData.documents) {
+      console.log('❌ ProcessDocuments - No hay datos o documentos');
+      return;
+    }
+    
+    console.log('📄 ProcessDocuments - Documentos encontrados:', projectData.documents.length);
     
     const projectImages = [];
     const projectDocs = {
@@ -94,7 +99,7 @@ const ProjectDetailPage = () => {
     };
     
     // Recorrer todos los documentos
-    projectData.documents.forEach(doc => {
+    projectData.documents.forEach((doc, index) => {
       // Verificar si es una imagen
       const isImage = 
         doc.documentType === 'image' || 
@@ -103,11 +108,14 @@ const ProjectDetailPage = () => {
       
       if (isImage) {
         // Es una imagen para la galería
-        projectImages.push({
+        const imageObj = {
           url: doc.fileUrl,
           title: doc.title || 'Imagen del proyecto',
           description: doc.description || ''
-        });
+        };
+        
+        console.log('✅ ProcessDocuments - Añadiendo imagen:', imageObj);
+        projectImages.push(imageObj);
       } else {
         // Es un documento para categorizar
         const category = doc.documentType || 'other';
@@ -118,6 +126,8 @@ const ProjectDetailPage = () => {
         }
       }
     });
+    
+    console.log('🎯 ProcessDocuments - Resultado final: ', projectImages.length, 'imágenes encontradas');
     
     setImages(projectImages);
     setDocuments(projectDocs);

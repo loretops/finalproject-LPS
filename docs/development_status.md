@@ -37,6 +37,16 @@ gantt
 
 ### ✅ Resueltos recientemente
 
+- **Imágenes en ficha de proyecto:** Solucionado problema de visualización de imágenes en páginas de detalle
+  - **Problema:** Las imágenes no se mostraban en la ficha de proyecto individual (solo en listado)
+  - **Solución:** 
+    - Corregido mapeo de documentos en `getProjectById` (usar `fileUrl` en lugar de `url`)
+    - Corregido pase de `userRole` en controlador público
+    - Añadidas imágenes de demo adicionales para galería completa
+    - Creados tests para funcionalidad de galería
+  - **Estado:** ✅ Completado
+  - **Fecha:** 2025-06-13
+
 - **Error 500 en Dashboard Stats:** Resuelto error intermitente en endpoint `/api/dashboard/stats`
   - **Problema:** Error 500 intermitente al obtener estadísticas del dashboard
   - **Solución:** Mejorado manejo de errores, añadido logging adicional y validación robusta de datos

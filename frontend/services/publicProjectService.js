@@ -54,15 +54,17 @@ const normalizeProject = (project) => {
   // Extraer la primera imagen del proyecto si existe
   let image_url = '';
   if (project.documents && Array.isArray(project.documents)) {
-    // Buscar documentos de tipo imagen
+    // Buscar documentos de tipo imagen (usar nombres tanto en camelCase como snake_case)
     const imageDoc = project.documents.find(doc => 
-      doc.document_type === 'image' || 
+      doc.documentType === 'image' || doc.document_type === 'image' || 
+      (doc.fileType && doc.fileType.startsWith('image/')) ||
       (doc.file_type && doc.file_type.startsWith('image/')) ||
+      (doc.fileUrl && /\.(jpe?g|png|gif|webp|svg)$/i.test(doc.fileUrl)) ||
       (doc.file_url && /\.(jpe?g|png|gif|webp|svg)$/i.test(doc.file_url))
     );
     
-    if (imageDoc && imageDoc.file_url) {
-      image_url = imageDoc.file_url;
+    if (imageDoc && (imageDoc.fileUrl || imageDoc.file_url)) {
+      image_url = imageDoc.fileUrl || imageDoc.file_url;
     }
   }
   
@@ -240,9 +242,10 @@ const publicProjectService = {
         response.data.id = String(response.data.id);
       }
       
-      // Normalizar el proyecto antes de devolverlo
-      const normalizedProject = normalizeProject(camelToSnake(response.data));
-      console.log('publicProjectService - Normalized project:', normalizedProject);
+      // No aplicar camelToSnake para el detalle del proyecto ya que viene en el formato correcto
+      // Normalizar el proyecto directamente sin conversión de nombres
+      const normalizedProject = normalizeProject(response.data);
+      console.log('🔍 publicProjectService - Documentos procesados:', normalizedProject.documents?.length || 0);
       return normalizedProject;
     } catch (error) {
       console.error(`Error al obtener proyecto público con ID ${sanitizedId}:`, error);

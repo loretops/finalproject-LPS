@@ -764,6 +764,26 @@ hydration-error-info.ts:72:9
 Cuiadado no estriopees otras cosas, que ahora está funcionando bastante bien Procura que el programa sea solido, rocusto. NO hags cambios a lo loco
 ```
 
+**Prompt 2:**
+```
+Quiero corregir, pero a la primera, sin hacer pruebas en falso, que al entrar en un proyecto se vean las imagenes. Ten en cuenta que todo esto es una dema, así que busca imagenes para ello. Las imagenes de la lista de proyectos se ven, ahora falta verlas en la ficha de proyecto, y habría que incluir alguna más para la ficha. Pienso que quizá pueda ser bueno hacer lo siguiente:
+1. Hacer tests para que el desarrollo posterior sea correcto
+2. Asegurate de tener imagenes preparadas
+3. Sabiendo que las imagenes del listado de proyectos funcionan, prepara el código para que se vean tambien las imagenes de la ficha del proyecto
+
+Cuiadado no estriopees otras cosas, que ahora está funcionando bastante bien Procura que el programa sea solido, rocusto. NO hags cambios a lo loco
+```
+
+**Resumen de la resolución:**
+- Se identificó que el problema estaba en el backend: el endpoint de detalle del proyecto no devolvía las URLs de las imágenes
+- Se corrigieron dos problemas principales:
+  1. En `getProjectById` se mapeaba incorrectamente `url` en lugar de `fileUrl` y `fileType`
+  2. El `userRole` no se estaba pasando correctamente desde el controlador
+- Se añadieron imágenes de demo adicionales (4 por proyecto) para tener una galería completa
+- Se crearon tests específicos para verificar la funcionalidad de la galería de imágenes
+- Resultado: El endpoint ahora devuelve correctamente todas las imágenes con sus URLs y tipos de archivo
+```
+
 
 
 
