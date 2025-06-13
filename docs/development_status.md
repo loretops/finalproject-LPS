@@ -650,3 +650,22 @@ Esta estandarización proporciona varias ventajas:
   4. **Logging mejorado**: Añadidos logs para debugging y mejor identificación de problemas
   5. **Fallbacks seguros**: Valores por defecto para campos faltantes
 - **Estado**: ✅ **RESUELTO** - Componente más robusto y resistente a errores de datos
+
+### Problema: Errores de deployment en Render - Módulos no encontrados
+- **Descripción**: Error `MODULE_NOT_FOUND` para entidades de dominio en Render deployment
+- **Causa**: Importaciones incorrectas con nombres en minúscula para archivos con nombres en PascalCase
+- **Error específico**: `Cannot find module '../../domain/entities/Investment'` en producción
+- **Archivos afectados**:
+  - `backend/application/services/investmentService.js`
+  - `backend/application/services/projectService.js`
+  - `backend/tests/services/investmentService.test.js`
+  - `backend/tests/domain/investment.test.js`
+- **Solución Implementada**:
+  1. **Corrección de importaciones**: Cambiadas todas las importaciones a nombres correctos:
+     - `'../../domain/entities/investment'` → `'../../domain/entities/Investment'`
+     - `'../../domain/entities/project'` → `'../../domain/entities/Project'`
+  2. **Verificación local**: Comprobado que el servidor arranca sin errores de módulos
+  3. **Tests actualizados**: Corregidas importaciones en archivos de test
+- **Rama**: `hotfix/render-deploy-fixes`
+- **Estado**: ✅ **RESUELTO** - Deployment en Render funcionando correctamente
+- **Commit**: `db2c079a` - fix(imports): Correct case-sensitive module imports for domain entities

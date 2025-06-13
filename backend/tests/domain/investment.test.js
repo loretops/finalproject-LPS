@@ -1,4 +1,4 @@
-const Investment = require('../../domain/entities/investment');
+const Investment = require('../../domain/entities/Investment');
 
 describe('Investment Entity', () => {
   let validInvestmentData;

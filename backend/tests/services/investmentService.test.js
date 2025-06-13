@@ -1,7 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const InvestmentService = require('../../application/services/investmentService');
-const Investment = require('../../domain/entities/investment');
-const Project = require('../../domain/entities/project');
+const Investment = require('../../domain/entities/Investment');
+const Project = require('../../domain/entities/Project');
 
 // Mock PrismaClient
 jest.mock('@prisma/client', () => {
