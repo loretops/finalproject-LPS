@@ -271,14 +271,14 @@ Authorization: Bearer {token}
 Devuelve la información detallada de una inversión específica.
 
 ```
-GET /investments/:id
+GET /investments/:investmentId
 ```
 
 #### Parámetros de URL
 
-| Parámetro  | Descripción         |
-|------------|---------------------|
-| id         | ID UUID de la inversión |
+| Parámetro    | Descripción         |
+|--------------|---------------------|
+| investmentId | ID UUID de la inversión |
 
 #### Cabeceras requeridas
 
@@ -357,14 +357,14 @@ Authorization: Bearer {token}
 Permite a un socio cancelar una inversión que ha realizado si todavía está en estado "pending".
 
 ```
-DELETE /investments/:id
+DELETE /investments/:investmentId
 ```
 
 #### Parámetros de URL
 
-| Parámetro  | Descripción         |
-|------------|---------------------|
-| id         | ID UUID de la inversión |
+| Parámetro    | Descripción         |
+|--------------|---------------------|
+| investmentId | ID UUID de la inversión |
 
 #### Cabeceras requeridas
 
@@ -432,14 +432,14 @@ Authorization: Bearer {token}
 Permite a un gestor actualizar el estado de una inversión.
 
 ```
-PATCH /investments/:id/status
+PATCH /investments/:investmentId/status
 ```
 
 #### Parámetros de URL
 
-| Parámetro  | Descripción         |
-|------------|---------------------|
-| id         | ID UUID de la inversión |
+| Parámetro    | Descripción         |
+|--------------|---------------------|
+| investmentId | ID UUID de la inversión |
 
 #### Parámetros de cuerpo (JSON)
 
