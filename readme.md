@@ -45,6 +45,34 @@ https://github.com/loretops/finalproject-LPS
 ### **0.6. Fecha de última actualización:**
 13 de junio de 2025
 
+### **0.7. Videos de demostración:**
+
+🎥 **Demos funcionales del proyecto:**
+
+- [**Demo - Acceso como Manager**](docs/videos/acceso_manager.mov) - Navegación completa desde el punto de vista del gestor/administrador
+- [**Demo - Acceso como Socio**](docs/videos/acceso%20socio.mov) - Experiencia del usuario socio/inversor
+
+### **0.8. Accesos para probar el proyecto:**
+
+#### 🔐 **Credenciales de demo disponibles:**
+
+**🔧 Acceso como Manager/Gestor:**
+- **Email:** `manager@example.com`
+- **Contraseña:** `password123`
+- **Funcionalidades:** Panel de administración, gestión de proyectos, gestión de usuarios, vista de todas las inversiones e intereses
+
+**👤 Acceso como Socio/Inversor:**
+- **Email:** `partner@example.com` 
+- **Contraseña:** `password123`
+- **Funcionalidades:** Vista de proyectos, expresión de interés, realizar inversiones, panel personal
+
+#### 🚀 **Acceso rápido desde login:**
+Para facilitar las pruebas, la página de login incluye botones de **"Acceso rápido"** que permiten ingresar directamente con cada rol sin necesidad de introducir credenciales manualmente.
+
+#### 🌐 **URLs del proyecto:**
+- **Frontend:** https://coopco.vercel.app
+- **Backend API:** https://finalproject-lps-backend.onrender.com
+
 
 ---
 
