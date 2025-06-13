@@ -15,9 +15,9 @@ import { ChartBarIcon, UsersIcon, BanknotesIcon, CheckCircleIcon, ClockIcon } fr
 const InvestmentSummary = ({ project, onInvest, showInvestButton = true }) => {
   if (!project) return null;
   
-  // Asegurar que currentAmount tenga un valor
-  const currentAmount = project.currentAmount || 0;
-  const targetAmount = project.targetAmount || 0;
+  // Asegurar que currentAmount tenga un valor (usar formato snake_case del servicio)
+  const currentAmount = project.current_amount || 0;
+  const targetAmount = project.target_amount || 0;
   
   // Calcular porcentaje de inversión
   const fundingPercentage = targetAmount > 0 
@@ -83,7 +83,7 @@ const InvestmentSummary = ({ project, onInvest, showInvestButton = true }) => {
               Inversión mínima
             </p>
             <p className="text-base font-medium">
-              {formatCurrency(project.minimumInvestment)}
+              {formatCurrency(project.minimum_investment)}
             </p>
           </div>
           
@@ -141,7 +141,7 @@ const InvestmentSummary = ({ project, onInvest, showInvestButton = true }) => {
             
             {project.active && !isFullyFunded && (
               <p className="text-sm text-gray-500 mt-2 text-center">
-                Mínimo de {formatCurrency(project.minimumInvestment)} por inversión
+                Mínimo de {formatCurrency(project.minimum_investment)} por inversión
               </p>
             )}
           </div>

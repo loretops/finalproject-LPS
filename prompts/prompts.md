@@ -199,6 +199,17 @@ Has hecho bien la definición de los endpoints, porque has buscado solo los que 
 Analiza lo que te propongo y luego me dices qué opinas
 ```
 
+## 13. Resolución de errores y debugging
+
+**Prompt 1:**
+```
+Has hecho muy bien lo de las imagenes, y has hecho muy mal lo de las inversiones. 
+No cambies nada de las imagenes, que ahora funciona, y vamos a volver a correhirinversiones:
+1. Asegurate de comprobar qué hay en la base de datos
+2. Revisa que cuando consultes los datos siempre muestres datos reales, tanto en el dashboard, como en el listado de proyectos, como en el listado de mis onversiones, como en el listado de mis intereses, y por ultimo en la ficha del proyecto, que se vea el total del proyecto y el total invertido
+3. Si necesitas vete haciendo test para cada punto
+```
+
 **Prompt 3:**
 ```
 Te dije que la descripcion de los endpoints principales, com maximo podían ser 3. No has añadido más? Elige los 3 principales
@@ -771,7 +782,7 @@ Quiero corregir, pero a la primera, sin hacer pruebas en falso, que al entrar en
 2. Asegurate de tener imagenes preparadas
 3. Sabiendo que las imagenes del listado de proyectos funcionan, prepara el código para que se vean tambien las imagenes de la ficha del proyecto
 
-Cuiadado no estriopees otras cosas, que ahora está funcionando bastante bien Procura que el programa sea solido, rocusto. NO hags cambios a lo loco
+Cuiadado no estriopees otras cosas, que ahora está funcionando bastante bien Procura que el programa sea solido, robusto. NO hagas cambios a lo loco
 ```
 
 **Resumen de la resolución:**
@@ -782,6 +793,24 @@ Cuiadado no estriopees otras cosas, que ahora está funcionando bastante bien Pr
 - Se añadieron imágenes de demo adicionales (4 por proyecto) para tener una galería completa
 - Se crearon tests específicos para verificar la funcionalidad de la galería de imágenes
 - Resultado: El endpoint ahora devuelve correctamente todas las imágenes con sus URLs y tipos de archivo
+
+**Prompt 3:**
+```
+Ahora que esto está bien, hay dos cosas a corregir:
+1. Hay fotos que se repiten en varios proyectos, y eso no tiene sentido
+2. En la ficha de proyecto sale a 0€ el importe invertido (aunque existan inversiones) y a 0€ el total a invertir, que está definido. Antes funcionaba
+```
+
+**Resumen de la resolución:**
+- **Problema 1 - Imágenes duplicadas:** Se creó un script que eliminó todas las imágenes duplicadas y asignó imágenes únicas de Unsplash a cada proyecto (20 imágenes totales, todas únicas)
+- **Problema 2 - Importes en 0€:** Se identificó que los campos Decimal de Prisma se devolvían como objetos especiales, no como strings/números
+- Se corrigió el repositorio para convertir todos los campos Decimal a strings:
+  - `currentAmount`: Calculado dinámicamente desde inversiones confirmadas
+  - `targetAmount`: Convertido de objeto Decimal a string
+  - `minimumInvestment`: Convertido de objeto Decimal a string  
+  - `expectedRoi`: Convertido de objeto Decimal a string
+- Se añadió una inversión de prueba (875,000€) para verificar el cálculo correcto del `currentAmount`
+- Resultado: Todos los importes se muestran correctamente en la ficha de proyecto
 ```
 
 

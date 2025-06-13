@@ -57,11 +57,16 @@ class PrismaProjectRepository extends ProjectRepository {
         0
       ).toString();
       
-      // Actualizar el currentAmount con el valor calculado
-      return {
+      // Convertir campos Decimal a strings para evitar problemas de serialización
+      const projectWithStringAmounts = {
         ...project,
-        currentAmount: totalInvested || "0"
+        currentAmount: totalInvested || "0",
+        targetAmount: project.targetAmount?.toString() || "0",
+        minimumInvestment: project.minimumInvestment?.toString() || "0",
+        expectedRoi: project.expectedRoi?.toString() || "0"
       };
+      
+      return projectWithStringAmounts;
     } catch (error) {
       console.error('Error en PrismaProjectRepository.findById:', error);
       throw error;
@@ -192,10 +197,13 @@ class PrismaProjectRepository extends ProjectRepository {
         investmentsByProject[inv.projectId] += parseFloat(inv.amount);
       });
       
-      // Añadir el monto invertido a cada proyecto
+      // Añadir el monto invertido a cada proyecto y convertir campos Decimal a strings
       const projectsWithInvestments = projects.map(project => ({
         ...project,
-        currentAmount: investmentsByProject[project.id]?.toString() || "0"
+        currentAmount: investmentsByProject[project.id]?.toString() || "0",
+        targetAmount: project.targetAmount?.toString() || "0",
+        minimumInvestment: project.minimumInvestment?.toString() || "0",
+        expectedRoi: project.expectedRoi?.toString() || "0"
       }));
       
       // Calcular total de páginas

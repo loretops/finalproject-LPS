@@ -14,8 +14,8 @@ const InvestmentForm = ({ project, onSuccess }) => {
   const [error, setError] = useState(null);
 
   // Calcular sugerencias de inversión basadas en el mínimo y el objetivo
-  const minInvestment = parseFloat(project.minimumInvestment);
-  const remainingAmount = parseFloat(project.targetAmount) - parseFloat(project.currentAmount);
+  const minInvestment = parseFloat(project.minimum_investment);
+  const remainingAmount = parseFloat(project.target_amount) - parseFloat(project.current_amount);
   
   // Definir sugerencias de inversión
   const investmentSuggestions = [
@@ -105,7 +105,7 @@ const InvestmentForm = ({ project, onSuccess }) => {
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="bg-blue-50 p-3 rounded">
             <p className="text-sm text-gray-600">Inversión mínima</p>
-            <p className="text-lg font-bold text-blue-800">{formatCurrency(project.minimumInvestment)}</p>
+            <p className="text-lg font-bold text-blue-800">{formatCurrency(project.minimum_investment)}</p>
           </div>
           <div className="bg-green-50 p-3 rounded">
             <p className="text-sm text-gray-600">Disponible para inversión</p>
@@ -197,9 +197,9 @@ InvestmentForm.propTypes = {
   project: PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    minimumInvestment: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    targetAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    currentAmount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired
+    minimum_investment: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    target_amount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    current_amount: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired
   }).isRequired,
   /** Función a llamar después de una inversión exitosa */
   onSuccess: PropTypes.func

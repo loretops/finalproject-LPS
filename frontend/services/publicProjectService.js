@@ -1,3 +1,5 @@
+
+
 import axios from 'axios';
 import { apiClient } from './authService';
 import interestService from './interestService';
@@ -68,29 +70,47 @@ const normalizeProject = (project) => {
     }
   }
   
-  // Asegurarse de que current_amount sea tratado correctamente
-  let current_amount = 0;
-  if (project.current_amount !== undefined) {
-    // Intentar convertir a número si es string
-    current_amount = typeof project.current_amount === 'string' 
-      ? parseFloat(project.current_amount) 
-      : project.current_amount;
+  // Función helper para obtener valor en ambos formatos (camelCase y snake_case)
+  const getValue = (obj, camelKey, snakeKey, defaultValue = 0) => {
+    let value = obj[camelKey] !== undefined ? obj[camelKey] : obj[snakeKey];
+    if (value === undefined) return defaultValue;
     
-    console.log(`🔢 Procesando current_amount en normalizeProject: ${project.current_amount} -> ${current_amount}`);
-  }
+    // Convertir a número si es string
+    if (typeof value === 'string') {
+      const parsed = parseFloat(value);
+      return isNaN(parsed) ? defaultValue : parsed;
+    }
+    
+    return value || defaultValue;
+  };
+
+  // Obtener valores usando ambos formatos
+  const current_amount = getValue(project, 'currentAmount', 'current_amount', 0);
+  const target_amount = getValue(project, 'targetAmount', 'target_amount', 0);
+  const minimum_investment = getValue(project, 'minimumInvestment', 'minimum_investment', 0);
+  const expected_roi = getValue(project, 'expectedRoi', 'expected_roi', 0);
+  
+  console.log(`🔢 Procesando amounts en normalizeProject:`, {
+    currentAmount: project.currentAmount,
+    current_amount: project.current_amount,
+    resultado: current_amount,
+    targetAmount: project.targetAmount,
+    target_amount: project.target_amount,
+    resultado_target: target_amount
+  });
   
   return {
     id: projectId,
     title: project.title || '',
     description: project.description || '',
-    minimum_investment: project.minimum_investment || 0,
-    target_amount: project.target_amount || 0,
+    minimum_investment: minimum_investment,
+    target_amount: target_amount,
     current_amount: current_amount,
-    expected_roi: project.expected_roi || 0,
+    expected_roi: expected_roi,
     status: project.status || 'published',
-    created_at: project.created_at || new Date().toISOString(),
-    published_at: project.published_at || null,
-    property_type: project.property_type || 'residential',
+    created_at: project.created_at || project.createdAt || new Date().toISOString(),
+    published_at: project.published_at || project.publishedAt || null,
+    property_type: project.property_type || project.propertyType || 'residential',
     location: project.location || '',
     documents: project.documents || [],
     image_url: image_url

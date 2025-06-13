@@ -37,6 +37,17 @@ gantt
 
 ### ✅ Resueltos recientemente
 
+- **Imágenes duplicadas y importes incorrectos:** Solucionados problemas críticos en ficha de proyecto
+  - **Problema 1:** Imágenes duplicadas entre diferentes proyectos
+  - **Problema 2:** Importes aparecían como 0€ (currentAmount, targetAmount, minimumInvestment)
+  - **Solución:** 
+    - Eliminadas imágenes duplicadas y asignadas imágenes únicas a cada proyecto
+    - Corregida conversión de campos Decimal de Prisma a strings en repositorio
+    - Añadida inversión de prueba para verificar cálculo de currentAmount
+    - Verificado que todos los importes se muestran correctamente
+  - **Estado:** ✅ Completado
+  - **Fecha:** 2025-06-13
+
 - **Imágenes en ficha de proyecto:** Solucionado problema de visualización de imágenes en páginas de detalle
   - **Problema:** Las imágenes no se mostraban en la ficha de proyecto individual (solo en listado)
   - **Solución:** 
@@ -592,3 +603,33 @@ Esta estandarización proporciona varias ventajas:
 
 ### Frontend
 // ... existing code ...
+
+## ✅ Problemas Resueltos
+
+### Problema: Imágenes duplicadas entre proyectos
+- **Descripción**: Múltiples proyectos compartían las mismas URLs de imágenes de Unsplash
+- **Causa**: Script de demo asignaba imágenes aleatoriamente sin verificar duplicados
+- **Solución**: Creado script `fix-duplicate-images.cjs` que:
+  - Eliminó todas las imágenes duplicadas de Unsplash
+  - Asignó imágenes únicas de un pool curado de 25 imágenes inmobiliarias
+  - Mantuvo las imágenes originales del proyecto (que empiezan con /images/)
+  - Resultado: 20 imágenes totales, todas únicas (4 por proyecto)
+- **Estado**: ✅ **RESUELTO** - Verificado que no hay duplicados
+
+### Problema: Importes mostrando 0€ en páginas de detalle
+- **Descripción**: Los campos currentAmount, targetAmount y minimumInvestment aparecían como 0€ en las páginas de detalle de proyectos
+- **Causa Raíz**: Inconsistencia entre formatos de datos (camelCase vs snake_case) entre backend y frontend
+- **Problemas identificados**:
+  1. Repositorio devuelve datos en camelCase: `currentAmount`, `targetAmount`, `minimumInvestment`
+  2. Servicio `publicProjectService` convierte algunos datos a snake_case: `current_amount`, `target_amount`
+  3. Componentes frontend usaban formatos mixtos inconsistentes
+- **Solución Implementada**:
+  1. **Backend**: Corregido `PrismaProjectRepository.js` para convertir campos Decimal a strings
+  2. **Frontend**: Modificado `normalizeProject()` en `publicProjectService.js` para manejar ambos formatos
+  3. **Componentes**: Actualizados todos los componentes para usar formato snake_case consistente:
+     - `InvestmentSummary.jsx`
+     - `InvestmentForm.jsx` 
+     - `InvestButton.jsx`
+     - Páginas de detalle de proyectos
+- **Verificación**: Todos los importes ahora se procesan y muestran correctamente
+- **Estado**: ✅ **RESUELTO** - Formato de datos consistente en toda la aplicación
