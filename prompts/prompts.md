@@ -25,7 +25,7 @@ Puedes añadir adicionalmente la conversación completa como link o archivo adju
 
 **Prompt 1:**
 ```
-Eres un experto product manager y desarrollador full-satck. Además tienes mucha experiencia en el mundo inmobiliario y en inversiones. Quiero desarrollar un producto de software para inversores inmobiliarios. Se trataría de una plataforma donde pueden acceder los que son "socios" de un determinado "club" inmobiliario. Ahí se van publicando las diferentes posibles inversiones y los socios pueden tratar de invertir en esas ofertas. ¿Conoces algo parecido? ¿Hay algo así en el mercado?
+Eres un experto product manager y desarrollador full-stack. Además tienes mucha experiencia en el mundo inmobiliario y en inversiones. Quiero desarrollar un producto de software para inversores inmobiliarios. Se trataría de una plataforma donde pueden acceder los que son "socios" de un determinado "club" inmobiliario. Ahí se van publicando las diferentes posibles inversiones y los socios pueden tratar de invertir en esas ofertas. ¿Conoces algo parecido? ¿Hay algo así en el mercado?
 ```
 
 **Prompt 2:**
@@ -66,7 +66,7 @@ Con toda esta nueva información que te aporto, quiero que hasg lo siguiente:
 
 **Prompt 1:**
 ```
-Ya sabes mucho de mi producto. Sabes que quiero que sea un MVP. Quiero que sea algo sencillo de desarrollar y mantener para una progaramdor poco experto. 
+Ya sabes mucho de mi producto. Sabes que quiero que sea un MVP. Quiero que sea algo sencillo de desarrollar y mantener para un programador poco experto. 
 Eres un arquitecto experto en desarrollo de software. Además, basándote en la experiencia del repositorio que te indico, y usando buenas prácticas, hazme una propuesta para el diseño del sistema, ¿qué arquitectura usarías? https://github.com/donnemartin/system-design-primer
 ```
 
@@ -77,7 +77,7 @@ Podrías hacer un único diagrama de arquitectura para representar los component
 
 **Prompt 3:**
 ```
-Bien, en base a esta arquitectura enfocada a un programador junior, haz una dexripción de alto nivel del proyecto y la estructura de los ficheros. Quiero que representes la estructura del proyecto, y que expliques brevemente el propósito de las carpetas principales, así como si obedece a algún patrón o arquitectra específica
+Bien, en base a esta arquitectura enfocada a un programador junior, haz una descripción de alto nivel del proyecto y la estructura de los ficheros. Quiero que representes la estructura del proyecto, y que expliques brevemente el propósito de las carpetas principales, así como si obedece a algún patrón o arquitectura específica
 ```
 
 **Prompt 4:**
@@ -92,14 +92,14 @@ Quiero que hagas lo siguientes pasos:
 7. valora si es bueno usar JsDoc para ayudar al autocompletado en la documentación
 8. Valora este punto: Monitorización y logging: Implementa logging estructurado, prepara el sistema para monitorización básica
 
-Para todo ten en cuenta mi posición como programadora junior, y que no quiero un proyecto complejo, sino quiero que sea sencillo, fácil de mantener, aunque si quiero que en el futuro sea escalable.
+Para todo ten en cuenta mi posición como programador junior, y que no quiero un proyecto complejo, sino quiero que sea sencillo, fácil de mantener, aunque si quiero que en el futuro sea escalable.
 ```
 
 **Prompt 5:**
 ```
 Tengo más consultas: 
-1. Para la estrcutura de carpetas, incluirías prisma dentro del backend?, o mejor lo mantenemos fuera?
-2. Revisa el archivo propuesto de @monitoring-logging.md , y dime si para desarrollar el proyecto con CURSOS y Claude, verdaderamente me aporta un valor añadido y me va a facilitar el desarrollo, o si por el contrario me va a comoplicar todo
+1. Para la estructura de carpetas, incluirías prisma dentro del backend?, o mejor lo mantenemos fuera?
+2. Revisa el archivo propuesto de @monitoring-logging.md , y dime si para desarrollar el proyecto con CURSOS y Claude, verdaderamente me aporta un valor añadido y me va a facilitar el desarrollo, o si por el contrario me va a complicar todo
 3. Qué me recomiendas mas para reiniciar servidores al hacer pruebas: usar cross-port-killer, o crear un script que haga todo "manualmente"?
 ```
 
@@ -397,8 +397,8 @@ vamos con el ticket#22. Estoy pendando que , para no perder todos mis prompts de
 
 **Prompt 10:**
 ```
-@Cliudinary Assets Management 
-Revisa bien como acceder a los documentos almacenados en Cloudinary, e incluso com poder descargarlos. Revisa la gestion completa de los documentos en nuestro proyecto, porque es una parte básica y fundamental. De hecho, si quieres, puedes desarrollar primero este punto en todos sus casos de uso. ¿Dónde quieres ampliar este tema, en el documento @tickets.md ? Es importante revisar cada caso de uso, y con la documentacion de cloudinary asegurarnos que funciona bien, aunque siempre debemos dejar todo preparado, en la medida que se pueda, para poder usar en el futuro otro gestor de documentación
+@Cloudinary Assets Management 
+Revisa bien como acceder a los documentos almacenados en Cloudinary, e incluso cómo poder descargarlos. Revisa la gestión completa de los documentos en nuestro proyecto, porque es una parte básica y fundamental. De hecho, si quieres, puedes desarrollar primero este punto en todos sus casos de uso. ¿Dónde quieres ampliar este tema, en el documento @tickets.md ? Es importante revisar cada caso de uso, y con la documentación de cloudinary asegurarnos que funciona bien, aunque siempre debemos dejar todo preparado, en la medida que se pueda, para poder usar en el futuro otro gestor de documentación
 ```
 
 **Prompt 11:**
@@ -589,7 +589,7 @@ Pues venga, vamos a por la fase 1. Puedes fijarte en @https://openspace-home.com
 
 **Prompt 5:**
 ```
-Genial! Como lueho hubo problemas y volví a una versión anterior del proyecto, esta perte que comentas "Además, habías hecho cambios en el menú de navegación desde la perspectiva del gerente, eliminando la opción "Inicio" y "Sobre Nosotros" para los gerentes, y haciendo que "Dashboard" sea la primera opción." se ha deshecho. Me gustaría aplicar un menú lógico para los manager, teniendo el dashboard como primera opción. Pero antes de nada crea una rama. No seolo voy a hacer esto, sino que estamos en una fase de mejora estetica y logica de todo el proyecto, paar tener algo funcional, sin errores, y con una lógica fuerte, antes de afrontar el tema de almacenamiento de documentos, que no funciona bien
+Genial! Como luego hubo problemas y volví a una versión anterior del proyecto, esta parte que comentas "Además, habías hecho cambios en el menú de navegación desde la perspectiva del gerente, eliminando la opción "Inicio" y "Sobre Nosotros" para los gerentes, y haciendo que "Dashboard" sea la primera opción." se ha deshecho. Me gustaría aplicar un menú lógico para los manager, teniendo el dashboard como primera opción. Pero antes de nada crea una rama. No solo voy a hacer esto, sino que estamos en una fase de mejora estética y lógica de todo el proyecto, para tener algo funcional, sin errores, y con una lógica fuerte, antes de afrontar el tema de almacenamiento de documentos, que no funciona bien
 ```
 
 **Prompt 6:**
@@ -600,51 +600,7 @@ Tengo varias cuestiones a afrontar. A ver que tal lo haces:
 3. Quiero que todos los accesos que haya desde el dashboard lleven a una página real y que funcione. Por ejemplo: Mi Perfil, da error: 
 Next.js (14.2.28) is outdated (learn more)
 Unhandled Runtime Error
-
-TypeError: Context is undefined
-Source
-React
-
-pages/profile.js (13:39) @ AuthContext
-
-  11 |
-  12 | const ProfilePage = () => {
-> 13 |   const { user, logout } = useContext(AuthContext);
-     |                                       ^
-  14 |   const router = useRouter();
-  15 |   
-  16 |   const [verificationState, setVerificationState] = useState({
-
-Call Stack
-React
-renderWithHooks
-../node_modules/react-dom/cjs/react-dom.development.js (15486:1)
-mountIndeterminateComponent
-../node_modules/react-dom/cjs/react-dom.development.js (20103:1)
-beginWork
-../node_modules/react-dom/cjs/react-dom.development.js (21626:1)
-callCallback
-../node_modules/react-dom/cjs/react-dom.development.js (4164:1)
-invokeGuardedCallbackDev
-../node_modules/react-dom/cjs/react-dom.development.js (4213:1)
-invokeGuardedCallback
-../node_modules/react-dom/cjs/react-dom.development.js (4277:1)
-beginWork$1
-../node_modules/react-dom/cjs/react-dom.development.js (27490:1)
-performUnitOfWork
-../node_modules/react-dom/cjs/react-dom.development.js (26596:1)
-workLoopSync
-../node_modules/react-dom/cjs/react-dom.development.js (26505:1)
-renderRootSync
-../node_modules/react-dom/cjs/react-dom.development.js (26473:1)
-performConcurrentWorkOnRoot
-../node_modules/react-dom/cjs/react-dom.development.js (25777:1)
-workLoop
-../node_modules/scheduler/cjs/scheduler.development.js (266:1)
-flushWork
-../node_modules/scheduler/cjs/scheduler.development.js (239:1)
-performWorkUntilDeadline
-../node_modules/scheduler/cjs/scheduler.development.js (533:1)
+etc.
 ```
 
 **Prompt 7:**
@@ -782,27 +738,18 @@ hydration-error-info.ts:72:9
 
 ​
 
-Cuiadado no estriopees otras cosas, que ahora está funcionando bastante bien Procura que el programa sea solido, rocusto. NO hags cambios a lo loco
+Cuidado no estropees otras cosas, que ahora está funcionando bastante bien. Procura que el programa sea sólido, robusto. NO hagas cambios a lo loco
 ```
 
 **Prompt 2:**
 ```
-Quiero corregir, pero a la primera, sin hacer pruebas en falso, que al entrar en un proyecto se vean las imagenes. Ten en cuenta que todo esto es una dema, así que busca imagenes para ello. Las imagenes de la lista de proyectos se ven, ahora falta verlas en la ficha de proyecto, y habría que incluir alguna más para la ficha. Pienso que quizá pueda ser bueno hacer lo siguiente:
+Quiero corregir, pero a la primera, sin hacer pruebas en falso, que al entrar en un proyecto se vean las imágenes. Ten en cuenta que todo esto es una dema, así que busca imágenes para ello. Las imágenes de la lista de proyectos se ven, ahora falta verlas en la ficha de proyecto, y habría que incluir alguna más para la ficha. Pienso que quizá pueda ser bueno hacer lo siguiente:
 1. Hacer tests para que el desarrollo posterior sea correcto
-2. Asegurate de tener imagenes preparadas
-3. Sabiendo que las imagenes del listado de proyectos funcionan, prepara el código para que se vean tambien las imagenes de la ficha del proyecto
+2. Asegúrate de tener imágenes preparadas
+3. Sabiendo que las imágenes del listado de proyectos funcionan, prepara el código para que se vean también las imágenes de la ficha del proyecto
 
-Cuiadado no estriopees otras cosas, que ahora está funcionando bastante bien Procura que el programa sea solido, robusto. NO hagas cambios a lo loco
+Cuidado no estropees otras cosas, que ahora está funcionando bastante bien. Procura que el programa sea sólido, robusto. NO hagas cambios a lo loco
 ```
-
-**Resumen de la resolución:**
-- Se identificó que el problema estaba en el backend: el endpoint de detalle del proyecto no devolvía las URLs de las imágenes
-- Se corrigieron dos problemas principales:
-  1. En `getProjectById` se mapeaba incorrectamente `url` en lugar de `fileUrl` y `fileType`
-  2. El `userRole` no se estaba pasando correctamente desde el controlador
-- Se añadieron imágenes de demo adicionales (4 por proyecto) para tener una galería completa
-- Se crearon tests específicos para verificar la funcionalidad de la galería de imágenes
-- Resultado: El endpoint ahora devuelve correctamente todas las imágenes con sus URLs y tipos de archivo
 
 **Prompt 3:**
 ```
@@ -811,39 +758,12 @@ Ahora que esto está bien, hay dos cosas a corregir:
 2. En la ficha de proyecto sale a 0€ el importe invertido (aunque existan inversiones) y a 0€ el total a invertir, que está definido. Antes funcionaba
 ```
 
-**Resumen de la resolución:**
-- **Problema 1 - Imágenes duplicadas:** Se creó un script que eliminó todas las imágenes duplicadas y asignó imágenes únicas de Unsplash a cada proyecto (20 imágenes totales, todas únicas)
-- **Problema 2 - Importes en 0€:** Se identificó que los campos Decimal de Prisma se devolvían como objetos especiales, no como strings/números
-- Se corrigió el repositorio para convertir todos los campos Decimal a strings:
-  - `currentAmount`: Calculado dinámicamente desde inversiones confirmadas
-  - `targetAmount`: Convertido de objeto Decimal a string
-  - `minimumInvestment`: Convertido de objeto Decimal a string  
-  - `expectedRoi`: Convertido de objeto Decimal a string
-- Se añadió una inversión de prueba (875,000€) para verificar el cálculo correcto del `currentAmount`
-- Resultado: Todos los importes se muestran correctamente en la ficha de proyecto
-
-## 15. Hotfix: Deployment en Render
-
-### 🚨 Corrección urgente: Módulos no encontrados en producción
-**Fecha**: 2025-06-13  
-**Prompt**: "crea una rama para corregir los fallos de deploy en render"  
-**Problema**: Error `MODULE_NOT_FOUND` para entidades de dominio en Render deployment  
-**Error específico**: `Cannot find module '../../domain/entities/Investment'`  
-**Causa**: Importaciones incorrectas con nombres en minúscula para archivos PascalCase  
-**Solución**: 
-- ✅ **Rama creada**: `hotfix/render-deploy-fixes`
-- ✅ **Importaciones corregidas** en 4 archivos críticos:
-  - `backend/application/services/investmentService.js`
-  - `backend/application/services/projectService.js` 
-  - `backend/tests/services/investmentService.test.js`
-  - `backend/tests/domain/investment.test.js`
-- ✅ **Verificación local**: Server loads successfully - no import errors
-- ✅ **Commit realizado**: `db2c079a` - fix(imports): Correct case-sensitive module imports
-- ✅ **Push completado**: Rama disponible para deployment automático
-- **Estado**: ✅ **RESUELTO** - Ready for production deployment
-- **Impacto**: Deployment en Render ahora funciona correctamente sin errores de módulos
+**Prompt 4:**
+```
+Revisa en la documentación los diagramas existentes a ver si son coherentes con el proyecto.
 ```
 
-
-
-
+**Prompt 5:**
+```
+Revisa la documentación de @/api a ver si es coherente y si falta o sobra algo
+```

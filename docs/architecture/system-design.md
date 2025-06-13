@@ -37,7 +37,8 @@
 | Autenticación | JWT con roles | Implementado con jsonwebtoken, middleware por roles |
 | Almacenamiento de ficheros | Cloudinary | Para documentos, imágenes y videos con control de acceso |
 | Hosting Frontend | Vercel | Configurado para despliegue continuo |
-| Backend + DB | Railway | Configurado para la API y base de datos |
+| Backend | Render | Configurado para la API con despliegue automático |
+| Base de datos | Supabase | PostgreSQL gestionado con backups y monitorización |
 
 ## 🔐 Seguridad implementada
 
@@ -138,7 +139,7 @@ graph TB
     subgraph External["🔗 Servicios Externos"]
         direction TB
         E1[Cloudinary]
-        E3[Email Service]
+        E3[Gmail/Google Workspace]
     end
 
     %% Conexiones

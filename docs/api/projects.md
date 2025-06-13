@@ -495,6 +495,124 @@ Authorization: Bearer {token}
 
 ---
 
+### Listar proyectos públicos
+
+Obtiene un listado de proyectos publicados accesible para usuarios autenticados.
+
+```
+GET /projects/public
+```
+
+#### Parámetros de consulta
+
+| Parámetro     | Tipo   | Requerido | Descripción                                    |
+|---------------|--------|-----------|------------------------------------------------|
+| propertyType  | string | No        | Filtrar por tipo de propiedad                  |
+| minRoi        | number | No        | Filtrar por ROI mínimo                         |
+| location      | string | No        | Filtrar por ubicación                          |
+| page          | number | No        | Número de página (por defecto: 1)              |
+| limit         | number | No        | Elementos por página (por defecto: 10)         |
+
+#### Cabeceras requeridas
+
+```
+Authorization: Bearer {token}
+```
+
+#### Respuesta exitosa (200 OK)
+
+```json
+{
+  "data": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "title": "Residencial Las Palmas",
+      "description": "Desarrollo residencial de 20 unidades en zona premium...",
+      "propertyType": "residential",
+      "location": "Madrid, España",
+      "expectedRoi": 12.5,
+      "targetAmount": 500000,
+      "minimumInvestment": 10000,
+      "currentAmount": 250000,
+      "status": "published",
+      "publishedAt": "2025-05-01T16:00:00.000Z",
+      "images": ["https://example.com/images/project1.jpg"],
+      "userRole": "partner",
+      "hasUserInvested": false,
+      "hasUserInterest": true
+    }
+  ],
+  "pagination": {
+    "total": 1,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 1
+  }
+}
+```
+
+---
+
+### Obtener proyecto público específico
+
+Devuelve información detallada de un proyecto publicado específico.
+
+```
+GET /projects/public/:id
+```
+
+#### Parámetros de URL
+
+| Parámetro  | Descripción            |
+|------------|------------------------|
+| id         | ID UUID del proyecto   |
+
+#### Cabeceras requeridas
+
+```
+Authorization: Bearer {token}
+```
+
+#### Respuesta exitosa (200 OK)
+
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "title": "Residencial Las Palmas",
+  "description": "Desarrollo residencial de 20 unidades en zona premium...",
+  "propertyType": "residential",
+  "location": "Madrid, España",
+  "expectedRoi": 12.5,
+  "targetAmount": 500000,
+  "minimumInvestment": 10000,
+  "currentAmount": 250000,
+  "status": "published",
+  "publishedAt": "2025-05-01T16:00:00.000Z",
+  "images": [
+    {
+      "fileUrl": "https://example.com/images/project1.jpg",
+      "fileType": "image"
+    }
+  ],
+  "documents": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440010",
+      "title": "Brochure comercial",
+      "documentType": "brochure",
+      "accessLevel": "public"
+    }
+  ],
+  "userRole": "partner",
+  "hasUserInvested": false,
+  "hasUserInterest": true,
+  "userInvestmentAmount": 0,
+  "interestCount": 5,
+  "investmentCount": 3
+}
+```
+
+---
+
 ### Añadir documento a un proyecto (solo gestores)
 
 Permite añadir un documento a un proyecto existente.

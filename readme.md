@@ -500,10 +500,9 @@ La infraestructura para el desarrollo local de COOPCO está diseñada para ser s
 2.  **Base de Datos:**
     *   **PostgreSQL:** Se utiliza un servidor PostgreSQL que puede ser instalado directamente en el sistema operativo del desarrollador o, preferiblemente, ejecutado dentro de un contenedor Docker para asegurar la consistencia entre entornos y simplificar la configuración inicial. Prisma ORM gestiona las conexiones, migraciones y el esquema.
 
-3.  **Servicios Externos (Simulación Local):**
-    *   **Almacenamiento (Cloudinary/S3):** Durante el desarrollo local, se utilizan cuentas de desarrollo gratuitas o se simulan las subidas/bajadas de archivos para evitar costes y complejidades. Las credenciales se gestionan mediante variables de entorno.
-    *   **Servicio de Email (SendGrid/Mailgun):** Se emplean servicios como `Mailtrap` o `Ethereal` para capturar los emails enviados en desarrollo sin enviarlos realmente, o se usan las API keys de desarrollo de los proveedores reales con precaución.
-    *   **Servicio de Vídeo (YouTube/Vimeo):** Se utilizan enlaces de prueba o vídeos de muestra durante el desarrollo.
+3.  **Servicios Externos:**
+    *   **Almacenamiento (Cloudinary):** Para gestión de imágenes y documentos con transformaciones automáticas y CDN global. Las credenciales se gestionan mediante variables de entorno.
+    *   **Servicio de Email (Gmail/Google Workspace):** Para envío de invitaciones y notificaciones con alta entregabilidad. En desarrollo se pueden usar servicios como `Mailtrap` para testing.
 
 4.  **Variables de Entorno:**
     *   Un archivo `.env` en la raíz de los proyectos `frontend` y `backend` almacena toda la configuración sensible y específica del entorno (cadenas de conexión a la BD, claves API de servicios externos, secretos JWT, etc.). Se proporciona un archivo `.env.example` como plantilla.
@@ -526,12 +525,10 @@ graph TD
         end
 
         subgraph "Servicios Externos"
-            ExtStorage[Almacenamiento]
-            ExtEmail[Email Service]
-            ExtVideo[Video Service]
+            ExtStorage[Cloudinary]
+            ExtEmail[Gmail/Google Workspace]
             BackendApp --> ExtStorage
             BackendApp --> ExtEmail
-            BackendApp --> ExtVideo
         end
 
         subgraph "Herramientas"
@@ -555,7 +552,6 @@ graph TD
     style DB fill:#fbb,stroke:#333
     style ExtStorage fill:#ffd,stroke:#333
     style ExtEmail fill:#ffd,stroke:#333
-    style ExtVideo fill:#ffd,stroke:#333
     style NodeJS fill:#eee,stroke:#333
     style NPM fill:#eee,stroke:#333
     style Docker fill:#eee,stroke:#333
@@ -935,9 +931,9 @@ Esta estrategia de pruebas en múltiples niveles ayuda a detectar problemas temp
     invitations {
         UUID id PK
         VARCHAR email
-        VARCHAR token
+        VARCHAR token "UNIQUE"
         UUID invited_by FK
-        InvitationStatus status // <-- Cambiado a Enum
+        InvitationStatus status
         TIMESTAMP created_at
         TIMESTAMP expires_at
     }
@@ -945,7 +941,7 @@ Esta estrategia de pruebas en múltiples niveles ayuda a detectar problemas temp
     verification_tokens {
         UUID id PK
         UUID user_id FK
-        VARCHAR token
+        VARCHAR token "UNIQUE"
         BOOLEAN used
         TIMESTAMP created_at
         TIMESTAMP expires_at
@@ -962,11 +958,11 @@ Esta estrategia de pruebas en múltiples niveles ayuda a detectar problemas temp
 
     users {
         UUID id PK
-        VARCHAR firstName
-        VARCHAR lastName
-        VARCHAR email "UNIQUE, idx"
+        VARCHAR first_name
+        VARCHAR last_name
+        VARCHAR email "UNIQUE"
         TEXT password_hash
-        UUID role_id FK "idx"
+        UUID role_id FK
         VARCHAR status
         BOOLEAN email_verified
         TIMESTAMP email_verified_at
@@ -985,31 +981,31 @@ Esta estrategia de pruebas en múltiples niveles ayuda a detectar problemas temp
 
     projects {
         UUID id PK
-        VARCHAR title "idx"
+        VARCHAR title
         TEXT description
-        VARCHAR status "idx"
+        VARCHAR status
         DECIMAL minimum_investment
         DECIMAL target_amount     
         DECIMAL current_amount    
         DECIMAL expected_roi      
-        VARCHAR location "idx"       
-        VARCHAR property_type "idx"    
+        VARCHAR location       
+        VARCHAR property_type    
         BOOLEAN draft
         TIMESTAMP published_at
         UUID created_by FK
         UUID published_by FK
-        TIMESTAMP created_at "idx"
+        TIMESTAMP created_at
     }
 
     project_documents {
         UUID id PK
-        UUID project_id FK "idx"
+        UUID project_id FK
         TEXT file_url
-        VARCHAR file_type "idx"
+        VARCHAR file_type
+        VARCHAR document_type
         VARCHAR access_level
-        VARCHAR document_type "idx"
-        VARCHAR title "Nombre del documento"
         VARCHAR security_level
+        VARCHAR title
         TIMESTAMP created_at
     }
 
@@ -1018,25 +1014,24 @@ Esta estrategia de pruebas en múltiples niveles ayuda a detectar problemas temp
         UUID document_id FK
         UUID user_id FK
         VARCHAR ip_address
-        TIMESTAMP viewed_at "idx"
+        TIMESTAMP viewed_at
     }
 
     interests {
         UUID id PK
-        UUID user_id FK "idx"
-        UUID project_id FK "idx"
+        UUID user_id FK
+        UUID project_id FK
         VARCHAR status
         TEXT notes
         TIMESTAMP created_at
-        VARCHAR user_project_unique "virtual"
     }
 
     investments {
         UUID id PK
-        UUID user_id FK "idx"
-        UUID project_id FK "idx"
+        UUID user_id FK
+        UUID project_id FK
         DECIMAL amount
-        TIMESTAMP invested_at "idx"
+        TIMESTAMP invested_at
         VARCHAR status          
         TEXT notes
         TEXT contract_reference 
@@ -1044,23 +1039,23 @@ Esta estrategia de pruebas en múltiples niveles ayuda a detectar problemas temp
 
     project_updates {
         UUID id PK
-        UUID project_id FK "idx"
+        UUID project_id FK
         VARCHAR title
         TEXT content
         TEXT video_url
-        DATE update_date "idx"
+        TIMESTAMP update_date
         UUID created_by FK
         TIMESTAMP created_at
     }
 
     notifications {
         UUID id PK
-        UUID user_id FK "idx"
-        VARCHAR type "idx"
+        UUID user_id FK
+        VARCHAR type
         TEXT content
         UUID related_id
-        BOOLEAN read "idx"
-        TIMESTAMP created_at "idx"
+        BOOLEAN read
+        TIMESTAMP created_at
     }
 
     conversations ||--o{ messages : contains
@@ -1068,26 +1063,25 @@ Esta estrategia de pruebas en múltiples niveles ayuda a detectar problemas temp
 
     conversations {
         UUID id PK
-        UUID project_id FK "idx"
+        UUID project_id FK
         VARCHAR title
         TIMESTAMP created_at
     }
 
     conversation_participants {
         UUID id PK
-        UUID conversation_id FK "idx"
-        UUID user_id FK "idx"
+        UUID conversation_id FK
+        UUID user_id FK
         TIMESTAMP joined_at
-        VARCHAR unique_participant "virtual"
     }
 
     messages {
         UUID id PK
-        UUID conversation_id FK "idx"
-        UUID sender_id FK "idx"
+        UUID conversation_id FK
+        UUID sender_id FK
         TEXT content
-        BOOLEAN read "idx"
-        TIMESTAMP created_at "idx"
+        BOOLEAN read
+        TIMESTAMP created_at
     }
 ```
 
@@ -1117,19 +1111,19 @@ Representa a los usuarios del sistema, incluyendo visitantes registrados, socios
 | Campo | Tipo de Dato | Descripción | Restricciones |
 |-------|-------------|-------------|---------------|
 | id | UUID | Identificador único del usuario | PK, NOT NULL, UNIQUE |
-| firstName | VARCHAR | Nombre del usuario | NOT NULL |
-| lastName | VARCHAR | Apellidos del usuario | NOT NULL |
+| first_name | VARCHAR | Nombre del usuario | NOT NULL |
+| last_name | VARCHAR | Apellidos del usuario | NOT NULL |
 | email | VARCHAR | Email del usuario | NOT NULL, UNIQUE |
 | password_hash | TEXT | Hash de la contraseña | NOT NULL |
 | role_id | UUID | Rol del usuario | FK → roles.id, NOT NULL |
 | status | VARCHAR | Estado del usuario (pending, active, inactive, banned) | NOT NULL, DEFAULT: 'pending' |
 | email_verified | BOOLEAN | Indica si el email ha sido verificado | NOT NULL, DEFAULT: false |
-| email_verified_at | TIMESTAMP | Fecha de verificación del email | NULLABLE |
+| email_verified_at | TIMESTAMP | Fecha de verificación del email | NULL |
 | failed_login_attempts | INTEGER | Número de intentos fallidos de login | NOT NULL, DEFAULT: 0 |
-| locked_until | TIMESTAMP | Fecha hasta la que la cuenta está bloqueada | NULLABLE |
+| locked_until | TIMESTAMP | Fecha hasta la cual la cuenta está bloqueada | NULL |
+| created_at | TIMESTAMP | Fecha de creación | NOT NULL, DEFAULT: now() |
+| updated_at | TIMESTAMP | Fecha de última actualización | NOT NULL, AUTO UPDATE |
 | is_active_investor | BOOLEAN | Indica si el socio tiene inversiones activas | NOT NULL, DEFAULT: false |
-| created_at | TIMESTAMP | Fecha de creación de la cuenta | NOT NULL, DEFAULT: now() |
-| updated_at | TIMESTAMP | Fecha de última actualización del perfil | NOT NULL, DEFAULT: now() |
 
 ##### Índices
 - PRIMARY KEY en `id`
