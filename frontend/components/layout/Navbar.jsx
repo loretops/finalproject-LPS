@@ -41,23 +41,22 @@ const getNavigationItems = (user) => {
     ];
   }
   
-  // Navegación básica para usuarios no autenticados y otros roles
-  const items = [
+  // Navegación para usuarios autenticados (socios)
+  if (user) {
+    return [
+      { name: 'Dashboard', href: '/dashboard', public: false },
+      { name: 'Proyectos', href: '/projects', public: true },
+      { name: 'Mis Intereses', href: '/interests', public: false },
+      { name: 'Mis Inversiones', href: '/investments', public: false },
+    ];
+  }
+  
+  // Navegación básica para usuarios no autenticados
+  return [
     { name: 'Inicio', href: '/', public: true },
     { name: 'Proyectos', href: '/projects', public: true },
     { name: 'Sobre Nosotros', href: '/sobre-nosotros', public: true },
   ];
-  
-  if (user) {
-    // Dashboard para usuarios autenticados que no son managers
-    items.push({ name: 'Dashboard', href: '/dashboard', public: false });
-    
-    // Menú para socios e inversores
-    items.push({ name: 'Mis Intereses', href: '/interests', public: false });
-    items.push({ name: 'Mis Inversiones', href: '/investments', public: false });
-  }
-  
-  return items;
 };
 
 /**
