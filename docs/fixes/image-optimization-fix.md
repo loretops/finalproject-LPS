@@ -135,6 +135,6 @@ cd backend && node prisma/update-image-urls.js
 
 ---
 
-**Fecha de implementación**: Enero 2025  
+**Fecha de implementación**: 13 de junio de 2025  
 **Responsable**: Equipo de desarrollo  
 **Estado**: ✅ Completado 
