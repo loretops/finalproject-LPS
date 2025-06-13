@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const InvestmentService = require('../../application/services/investmentService');
-const Investment = require('../../domain/entities/Investment');
+const { Investment } = require('../../domain/entities/Investment');
 const Project = require('../../domain/entities/Project');
 
 // Mock PrismaClient
