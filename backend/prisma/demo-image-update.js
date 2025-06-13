@@ -17,13 +17,13 @@ async function addImagesToProjects() {
 
   console.log(`Encontrados ${projects.length} proyectos para actualizar`);
 
-  // URLs de imágenes disponibles
+  // URLs de imágenes disponibles (optimizadas)
   const imageUrls = [
-    '/images/luxury-real-estate.jpg',
-    '/images/analytics.jpg', 
-    '/images/luxury-interior.jpg',
-    '/images/transparency.jpg',
-    '/images/exclusivity.jpg'
+    '/images/optimized/luxury-real-estate.webp',
+    '/images/optimized/analytics.webp', 
+    '/images/optimized/luxury-interior.webp',
+    '/images/optimized/transparency.webp',
+    '/images/optimized/exclusivity.webp'
   ];
 
   for (let i = 0; i < projects.length; i++) {

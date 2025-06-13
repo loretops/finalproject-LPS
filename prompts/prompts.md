@@ -462,6 +462,14 @@ documenta y lleva a cabo una nueva PR. No quiero que desarrolles nada nuevo, lo 
 Vamos a implementar unos botones en la página de login, para que las personas que tienen que entrar a testearlo no pierdan tiempo: habra un botón para entrar como manager, y otro botón para entrar como socio. Al pinchar debe ingresar directamente en la apliación con el rol correspondiente, como si hubiera hecho un login normal. Antes de empezar a desarrollar, crea una rama para hacerlo
 ```
 
+**Prompt 10:**
+```
+Vamos a crear una rama para corregir errores de imágenes en la nube, y para añadir imágenes ala documentación;
+Mira como hay imagenes que fallan en la nube @https://coopco.vercel.app/projects?sort=publishedAt&direction=desc 
+Y tambien en el login: @https://coopco.vercel.app/login 
+Yo voy a ir haciendo capturas para documentar el proyecto
+```
+
 ## 8. Despliegue y configuración de entornos
 
 **Prompt 1:**
