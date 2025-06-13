@@ -11,9 +11,11 @@ async function jwtAuthMiddleware(req, res, next) {
   // 1. Get token from Authorization header
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    console.log('JWT Auth: No token provided');
     return res.status(401).json({ message: 'Authentication required: No token provided.' });
   }
   const token = authHeader.split(' ')[1];
+  console.log('JWT Auth: Token received, length:', token.length);
 
   // 2. Verify token
   if (!JWT_SECRET) {
@@ -47,6 +49,7 @@ async function jwtAuthMiddleware(req, res, next) {
       // Add other relevant user fields if needed
     };
 
+    console.log('JWT Auth: User authenticated successfully:', user.email);
     next(); // Proceed to the next middleware or route handler
 
   } catch (error) {

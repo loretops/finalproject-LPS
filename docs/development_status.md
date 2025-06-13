@@ -35,6 +35,14 @@ gantt
 
 ## 🚦 Tickets Activos
 
+### ✅ Resueltos recientemente
+
+- **Error 500 en Dashboard Stats:** Resuelto error intermitente en endpoint `/api/dashboard/stats`
+  - **Problema:** Error 500 intermitente al obtener estadísticas del dashboard
+  - **Solución:** Mejorado manejo de errores, añadido logging adicional y validación robusta de datos
+  - **Estado:** ✅ Completado
+  - **Fecha:** 2025-06-10
+
 ### ⏳ En progreso (2)
 
 - **#9:** Página Validar Invitación (FE) - HU #1

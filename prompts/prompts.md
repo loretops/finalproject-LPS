@@ -16,6 +16,7 @@ Puedes añadir adicionalmente la conversación completa como link o archivo adju
 10. [Estandarización de la interfaz](#10-estandarización-de-la-interfaz)
 11. [Historias de Usuario específicas](#11-historias-de-usuario-específicas)
 12. [Despliegue y configuración de entornos](#12-despliegue-y-configuración-de-entornos)
+13. [Resolución de errores y debugging](#13-resolución-de-errores-y-debugging)
 
 ---
 
@@ -651,6 +652,116 @@ haz commit de este cambio. Y vamos a por esta mejora. No te olvides las @rules.m
 **Prompt 3:**
 ```
 estoy de acuerdo, pero no olvideo que debes actualizar toda la documentaci´n que afecte a este cambio, sobretodo lo relativo a bases de datos, pero tambien el resto
+```
+
+
+## 13. Resolución de errores y debugging
+
+**Prompt 1:**
+```
+En mis iversiones:
+GET
+http://localhost:8001/api/dashboard/stats
+[HTTP/1.1 500 Internal Server Error 5181ms]
+
+	
+GET
+	http://localhost:8001/api/dashboard/stats
+Estado
+500
+Internal Server Error
+VersiónHTTP/1.1
+Transferido1,77 KB (tamaño 508 B)
+Política de referenciastrict-origin-when-cross-origin
+Resolución DNSSistema
+
+	
+Access-Control-Allow-Credentials
+	true
+Access-Control-Allow-Headers
+	Origin, X-Requested-With, Content-Type, Accept, Authorization
+Access-Control-Allow-Methods
+	GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS
+Access-Control-Allow-Origin
+	http://localhost:3001
+Connection
+	keep-alive
+Content-Length
+	508
+Content-Security-Policy
+	default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+Content-Type
+	application/json; charset=utf-8
+Cross-Origin-Opener-Policy
+	same-origin
+Cross-Origin-Resource-Policy
+	same-origin
+Date
+	Tue, 10 Jun 2025 13:29:32 GMT
+ETag
+	W/"1fc-GXR4H1e4nuXW4cdrT9QCrqrKGcI"
+Keep-Alive
+	timeout=5
+Origin-Agent-Cluster
+	?1
+RateLimit-Limit
+	500
+RateLimit-Policy
+	500;w=900
+RateLimit-Remaining
+	389
+RateLimit-Reset
+	844
+Referrer-Policy
+	no-referrer
+Strict-Transport-Security
+	max-age=31536000; includeSubDomains
+Vary
+	Origin
+X-Content-Type-Options
+	nosniff
+X-DNS-Prefetch-Control
+	off
+X-Download-Options
+	noopen
+X-Frame-Options
+	SAMEORIGIN
+X-Permitted-Cross-Domain-Policies
+	none
+X-XSS-Protection
+	0
+	
+Accept
+	application/json, text/plain, */*
+Accept-Encoding
+	gzip, deflate, br, zstd
+Accept-Language
+	es-ES,es;q=0.8,en-US;q=0.5,en;q=0.3
+Authorization
+	Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzM2FlMjYwMy1iNzZlLTRiOGQtYjRkZi04N2VhY2Y5NmMyN2IiLCJlbWFpbCI6InBhcnRuZXJAZXhhbXBsZS5jb20iLCJyb2xlIjoicGFydG5lciIsImlhdCI6MTc0OTU2MTYxOCwiZXhwIjoxNzUwMTY2NDE4fQ.pm7TWrw9BgEPx7DFFLDoJ0JsOZfBXNv4oa6qcphfW7A
+Connection
+	keep-alive
+Host
+	localhost:8001
+Origin
+	http://localhost:3001
+Referer
+	http://localhost:3001/
+Sec-Fetch-Dest
+	empty
+Sec-Fetch-Mode
+	cors
+Sec-Fetch-Site
+	same-site
+User-Agent
+	Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:139.0) Gecko/20100101 Firefox/139.0
+Error al obtener estadísticas del dashboard: 
+Object { message: "Request failed with status code 500", name: "AxiosError", code: "ERR_BAD_RESPONSE", config: {…}, request: XMLHttpRequest, response: {…}, status: 500, stack: "", … }
+hydration-error-info.ts:72:9
+
+​
+
+Cuiadado no estriopees otras cosas, que ahora está funcionando bastante bien Procura que el programa sea solido, rocusto. NO hags cambios a lo loco
 ```
 
 

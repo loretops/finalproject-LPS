@@ -10,6 +10,7 @@ class DashboardController {
   async getStats(req, res) {
     try {
       const userId = req.user?.id;
+      console.log('Dashboard getStats called for user:', userId);
 
       const [
         activePartners,
@@ -71,26 +72,29 @@ class DashboardController {
           _sum: {
             amount: true
           }
-        }) : { _sum: { amount: 0 } }
+        }) : Promise.resolve({ _sum: { amount: 0 } })
       ]);
 
       const stats = {
-        activePartners: activePartners || 0,
-        activeProjects: activeProjects || 0,
-        totalInvested: totalInvestedGlobal._sum.amount || 0,
-        totalInvestments: totalInvestments || 0,
+        activePartners: Number(activePartners) || 0,
+        activeProjects: Number(activeProjects) || 0,
+        totalInvested: Number(totalInvestedGlobal?._sum?.amount) || 0,
+        totalInvestments: Number(totalInvestments) || 0,
         // Añadir inversiones del usuario actual
         userStats: {
-          totalInvested: userInvestments._sum.amount || 0
+          totalInvested: Number(userInvestments?._sum?.amount) || 0
         }
       };
 
+      console.log('Dashboard stats calculated successfully:', stats);
       res.status(200).json(stats);
     } catch (error) {
       console.error('Error al obtener estadísticas del dashboard:', error);
+      console.error('Error stack:', error.stack);
       res.status(500).json({
         message: 'Error al obtener estadísticas',
-        error: error.message
+        error: error.message,
+        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
       });
     }
   }
