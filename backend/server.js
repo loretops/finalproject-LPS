@@ -7,6 +7,13 @@ require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 console.log('DEBUG STARTUP - Reading FRONTEND_URL env var:', process.env.FRONTEND_URL);
 console.log('DEBUG STARTUP - Reading DATABASE_URL env var:', process.env.DATABASE_URL ? 'URL existe' : 'URL no encontrada');
 console.log('DEBUG STARTUP - DATABASE_URL:', process.env.DATABASE_URL);
+
+// <<< EJECUTAR DIAGNÓSTICO DE RENDER >>>
+try {
+  require('./render-debug.js');
+} catch (debugError) {
+  console.error('Error en diagnóstico de Render:', debugError.message);
+}
 // <<< FIN DEL LOG >>>
 
 // Importaciones de dependencias
