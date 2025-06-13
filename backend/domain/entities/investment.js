@@ -81,4 +81,13 @@ class Investment {
   }
 }
 
-module.exports = Investment; 
+// Estados válidos para las inversiones
+const InvestmentStatus = {
+  PENDING: 'pending',
+  CONFIRMED: 'confirmed',
+  REJECTED: 'rejected',
+  CANCELLED: 'canceled',
+  COMPLETED: 'completed'
+};
+
+module.exports = { Investment, InvestmentStatus }; 
