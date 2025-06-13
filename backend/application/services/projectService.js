@@ -1,10 +1,7 @@
-const path = require('path');
-
-// Determinar la ruta base del backend
-const backendRoot = path.resolve(__dirname, '../..');
-const PrismaProjectRepository = require(path.join(backendRoot, 'infrastructure/repositories/PrismaProjectRepository'));
-const { toProjectResponse, toProjectListItem } = require(path.join(backendRoot, 'interfaces/http/dto/project.dto'));
-const Project = require(path.join(backendRoot, 'domain/entities/Project'));
+// Usar rutas relativas simples que funcionen desde cualquier directorio
+const PrismaProjectRepository = require('../../infrastructure/repositories/PrismaProjectRepository');
+const { toProjectResponse, toProjectListItem } = require('../../interfaces/http/dto/project.dto');
+const Project = require('../../domain/entities/Project');
 
 // Instanciar el repositorio (podría usar Inyección de Dependencias para mejor testabilidad)
 const projectRepository = new PrismaProjectRepository();
