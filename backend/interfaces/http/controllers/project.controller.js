@@ -1,5 +1,8 @@
 const path = require('path');
-const projectService = require(path.join(__dirname, '../../../application/services/projectService'));
+
+// Determinar la ruta base del backend
+const backendRoot = path.resolve(__dirname, '../../..');
+const projectService = require(path.join(backendRoot, 'application/services/projectService'));
 
 class ProjectController {
   /**

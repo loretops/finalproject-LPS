@@ -2,8 +2,11 @@ const path = require('path');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const NotificationService = require('./notificationService');
-const { Investment, InvestmentStatus } = require(path.join(__dirname, '../../domain/entities/Investment'));
-const Project = require(path.join(__dirname, '../../domain/entities/Project'));
+
+// Determinar la ruta base del backend
+const backendRoot = path.resolve(__dirname, '../..');
+const { Investment, InvestmentStatus } = require(path.join(backendRoot, 'domain/entities/Investment'));
+const Project = require(path.join(backendRoot, 'domain/entities/Project'));
 
 /**
  * Actualiza el estado de un usuario a "inversor activo" si tiene inversiones confirmadas.
