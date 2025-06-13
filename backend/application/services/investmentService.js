@@ -1,8 +1,9 @@
+const path = require('path');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const NotificationService = require('./notificationService');
-const { Investment, InvestmentStatus } = require('../../domain/entities/Investment');
-const Project = require('../../domain/entities/Project');
+const { Investment, InvestmentStatus } = require(path.join(__dirname, '../../domain/entities/Investment'));
+const Project = require(path.join(__dirname, '../../domain/entities/Project'));
 
 /**
  * Actualiza el estado de un usuario a "inversor activo" si tiene inversiones confirmadas.
