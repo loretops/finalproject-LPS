@@ -1,6 +1,7 @@
-const PrismaProjectRepository = require('../../infrastructure/repositories/PrismaProjectRepository');
-const { toProjectResponse, toProjectListItem } = require('../../interfaces/http/dto/project.dto');
-const Project = require('../../domain/entities/Project');
+const path = require('path');
+const PrismaProjectRepository = require(path.join(__dirname, '../../infrastructure/repositories/PrismaProjectRepository'));
+const { toProjectResponse, toProjectListItem } = require(path.join(__dirname, '../../interfaces/http/dto/project.dto'));
+const Project = require(path.join(__dirname, '../../domain/entities/Project'));
 
 // Instanciar el repositorio (podría usar Inyección de Dependencias para mejor testabilidad)
 const projectRepository = new PrismaProjectRepository();

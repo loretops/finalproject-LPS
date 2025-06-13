@@ -1,4 +1,5 @@
-const projectService = require('../../../application/services/projectService');
+const path = require('path');
+const projectService = require(path.join(__dirname, '../../../application/services/projectService'));
 
 class ProjectController {
   /**

@@ -1,8 +1,9 @@
 const express = require('express');
-const jwtAuthMiddleware = require('../../../middleware/jwtAuthMiddleware');
-const roleAuthMiddleware = require('../../../middleware/roleAuthMiddleware');
+const path = require('path');
+const jwtAuthMiddleware = require(path.join(__dirname, '../../../middleware/jwtAuthMiddleware'));
+const roleAuthMiddleware = require(path.join(__dirname, '../../../middleware/roleAuthMiddleware'));
 // Este controlador lo implementaremos después
-const projectController = require('../controllers/project.controller');
+const projectController = require(path.join(__dirname, '../controllers/project.controller'));
 
 const router = express.Router();
 
