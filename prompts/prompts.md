@@ -210,6 +210,11 @@ No cambies nada de las imagenes, que ahora funciona, y vamos a volver a correhir
 3. Si necesitas vete haciendo test para cada punto
 ```
 
+**Prompt 2:**
+```
+Arreglaste antes muy bien lo de las inversiones, pero te falta arreglarlo para la opción del menú Mis INversiones
+```
+
 **Prompt 3:**
 ```
 Te dije que la descripcion de los endpoints principales, com maximo podían ser 3. No has añadido más? Elige los 3 principales

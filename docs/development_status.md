@@ -633,3 +633,9 @@ Esta estandarización proporciona varias ventajas:
      - Páginas de detalle de proyectos
 - **Verificación**: Todos los importes ahora se procesan y muestran correctamente
 - **Estado**: ✅ **RESUELTO** - Formato de datos consistente en toda la aplicación
+- **Páginas corregidas**: 
+  - ✅ Detalle de proyecto (`/projects/[id]`)
+  - ✅ Componentes de inversión (`InvestmentSummary`, `InvestmentForm`, `InvestButton`)
+  - ✅ Página "Mis Inversiones" (`/investments`)
+  - ✅ Página "Mis Intereses" (`/interests`) - Añadida compatibilidad con ambos formatos
+  - ✅ Dashboard - Los datos se muestran correctamente
