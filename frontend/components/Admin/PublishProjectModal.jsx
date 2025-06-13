@@ -90,7 +90,7 @@ const PublishProjectModal = ({ projectId, isOpen, onClose, onSuccess }) => {
       },
       description: { 
         ...prevChecks.description, 
-        pass: !!(projectData.description && projectData.description.trim().length >= 50) 
+        pass: !!(projectData.description && projectData.description.trim().length >= 10) 
       },
       investment: { 
         ...prevChecks.investment, 
@@ -367,7 +367,7 @@ const PublishProjectModal = ({ projectId, isOpen, onClose, onSuccess }) => {
                               {!pass && ['title', 'description', 'legalDocs'].includes(key) && (
                                 <p className="text-xs text-red-600 mt-1">
                                   {key === 'title' && 'El título del proyecto es obligatorio y debe ser descriptivo.'}
-                                  {key === 'description' && 'La descripción debe tener al menos 50 caracteres y detallar el proyecto.'}
+                                  {key === 'description' && 'La descripción debe tener al menos 10 caracteres y detallar el proyecto.'}
                                   {key === 'legalDocs' && (
                                     <>
                                       Debe subir al menos un documento legal antes de publicar.

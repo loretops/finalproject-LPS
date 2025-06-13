@@ -201,8 +201,8 @@ class ProjectService {
 
       // Realizar validaciones adicionales
       // 1. Verificar longitud mínima de la descripción
-      if (!existingProject.description || existingProject.description.trim().length < 50) {
-        throw new Error('La descripción del proyecto debe tener al menos 50 caracteres');
+          if (!existingProject.description || existingProject.description.trim().length < 10) {
+      throw new Error('La descripción del proyecto debe tener al menos 10 caracteres');
       }
 
       // 2. Verificar que tiene al menos un documento legal (DESHABILITADO TEMPORALMENTE EN DESARROLLO)

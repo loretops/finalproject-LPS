@@ -48,7 +48,7 @@ module.exports = {
         },
       },
       backgroundImage: {
-        'hero-pattern': "url('/images/luxury-real-estate.jpg')",
+        'hero-pattern': "url('/images/optimized/luxury-real-estate.webp')",
       },
     },
   },

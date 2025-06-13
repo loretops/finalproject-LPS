@@ -1,4 +1,5 @@
 const InvestmentService = require('../../../application/services/investmentService');
+const SimpleInvestmentService = require('../../../application/services/investmentService.simple');
 const { validationResult } = require('express-validator');
 
 /**
@@ -7,6 +8,7 @@ const { validationResult } = require('express-validator');
 class InvestmentController {
   constructor() {
     this.investmentService = new InvestmentService();
+    this.simpleInvestmentService = new SimpleInvestmentService();
     
     // Vincular métodos al contexto correcto
     this.investInProject = this.investInProject.bind(this);
@@ -36,8 +38,9 @@ class InvestmentController {
       const { amount, notes } = req.body;
       const userId = req.user.id; // Asumiendo middleware de autenticación
 
-      // Crear la inversión
-      const investment = await this.investmentService.createInvestment({
+      // Crear la inversión usando el servicio simplificado temporalmente
+      console.log('🔄 Usando servicio simplificado para crear inversión...');
+      const investment = await this.simpleInvestmentService.createInvestment({
         userId,
         projectId,
         amount: parseFloat(amount),

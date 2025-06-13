@@ -38,7 +38,7 @@ export default function SobreNosotros() {
                     <div className="aspect-w-12 aspect-h-7 lg:aspect-none">
                       <div className="h-80 overflow-hidden rounded-lg shadow-lg relative">
                         <Image
-                          src="/images/luxury-interior.jpg"
+                          src="/images/optimized/luxury-interior.webp"
                           alt="Equipo de COOPCO"
                           layout="fill"
                           objectFit="cover"

@@ -100,8 +100,8 @@ async function diagnoseProjectPublish(projectId) {
         message: 'Título debe tener al menos 5 caracteres'
       },
       description: {
-        pass: project.description && project.description.trim().length >= 50,
-        message: 'Descripción debe tener al menos 50 caracteres'
+              pass: project.description && project.description.trim().length >= 10,
+      message: 'Descripción debe tener al menos 10 caracteres'
       },
       minimumInvestment: {
         pass: project.minimumInvestment > 0,

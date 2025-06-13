@@ -11,7 +11,7 @@ export default function Home() {
         <section className="relative h-[80vh] flex items-center">
           <div className="absolute inset-0 z-0">
             <Image 
-              src="/images/hero-background.jpg" 
+              src="/images/optimized/hero-background.webp" 
               alt="Inversión inmobiliaria" 
               layout="fill"
               objectFit="cover"
@@ -60,7 +60,7 @@ export default function Home() {
               <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
                 <div className="relative h-56 w-full">
                   <Image 
-                    src="/images/exclusivity.jpg" 
+                    src="/images/optimized/exclusivity.webp" 
                     alt="Exclusividad" 
                     layout="fill"
                     objectFit="cover"
@@ -80,7 +80,7 @@ export default function Home() {
               <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
                 <div className="relative h-56 w-full">
                   <Image 
-                    src="/images/analytics.jpg" 
+                    src="/images/optimized/analytics.webp" 
                     alt="Análisis" 
                     layout="fill"
                     objectFit="cover"
@@ -100,7 +100,7 @@ export default function Home() {
               <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow">
                 <div className="relative h-56 w-full">
                   <Image 
-                    src="/images/transparency.jpg" 
+                    src="/images/optimized/transparency.webp" 
                     alt="Transparencia" 
                     layout="fill"
                     objectFit="cover"

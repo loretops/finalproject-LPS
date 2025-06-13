@@ -38,7 +38,7 @@ const LoginPage = () => {
         <div className="hidden lg:block lg:w-1/2 relative">
           <div className="absolute inset-0">
             <Image 
-              src="/images/luxury-real-estate.jpg" 
+              src="/images/optimized/luxury-real-estate.webp" 
               alt="Inversión inmobiliaria" 
               layout="fill"
               objectFit="cover"

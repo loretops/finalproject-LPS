@@ -43,7 +43,7 @@ https://coopco.vercel.app
 https://github.com/loretops/finalproject-LPS
 
 ### **0.6. Fecha de última actualización:**
-28 de mayo de 2025
+13 de junio de 2025
 
 
 ---

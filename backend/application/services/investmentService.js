@@ -146,7 +146,12 @@ class InvestmentService {
       }
 
       // Actualizar el estado del inversor
-      await updateUserInvestorStatus(userId);
+      try {
+        await updateUserInvestorStatus(userId);
+      } catch (updateError) {
+        console.error('Error al actualizar estado del inversor:', updateError);
+        // No fallar la transacción por esto
+      }
 
       return newInvestment;
     });

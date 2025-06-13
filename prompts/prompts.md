@@ -462,6 +462,26 @@ documenta y lleva a cabo una nueva PR. No quiero que desarrolles nada nuevo, lo 
 Vamos a implementar unos botones en la página de login, para que las personas que tienen que entrar a testearlo no pierdan tiempo: habra un botón para entrar como manager, y otro botón para entrar como socio. Al pinchar debe ingresar directamente en la apliación con el rol correspondiente, como si hubiera hecho un login normal. Antes de empezar a desarrollar, crea una rama para hacerlo
 ```
 
+**Prompt 10:**
+```
+Vamos a crear una rama para corregir errores de imágenes en la nube, y para añadir imágenes ala documentación;
+Mira como hay imagenes que fallan en la nube @https://coopco.vercel.app/projects?sort=publishedAt&direction=desc 
+Y tambien en el login: @https://coopco.vercel.app/login 
+Yo voy a ir haciendo capturas para documentar el proyecto
+```
+
+**Prompt 11:**
+```
+He detectado otro error: al dar a invertir ahora me salen los datos a 0€ , y al dar a confirmar invesrion da un error:
+Error al crear inversión: 
+Object { message: "Request failed with status code 500", name: "AxiosError", code: "ERR_BAD_RESPONSE", config: {…}, request: XMLHttpRequest, response: {…}, status: 500, stack: "", … }
+```
+
+**Prompt 12:**
+```
+Cambia la depuracion de la publicacion del proyecto para que admita descripciones cortas: ahora mismo como miniimo son 50 caracteres. Con 10 es suficiente
+```
+
 ## 8. Despliegue y configuración de entornos
 
 **Prompt 1:**
@@ -766,4 +786,14 @@ Revisa en la documentación los diagramas existentes a ver si son coherentes con
 **Prompt 5:**
 ```
 Revisa la documentación de @/api a ver si es coherente y si falta o sobra algo
+```
+
+## Corrección de Modal de Inversión - Datos en 0€
+
+### Prompt: Diagnóstico Final de Problemas de Inversión
+```
+Sigue sin estar arreglado:
+1. Haz test de recuperacion de los datos de inversion miniima y disponible para inversion
+2. Revisa como se recvupera en otras partes del proyecto como en la propia ficha del proyecto
+3. Implementalo de forma sencila para que funcione
 ```

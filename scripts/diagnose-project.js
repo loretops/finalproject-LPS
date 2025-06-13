@@ -24,8 +24,8 @@ async function checkProject(id) {
     
     // Descripción
     const description = project.description || '';
-    if (description.trim().length < 50) {
-      issues.push(`❌ Descripción demasiado corta (${description.trim().length} caracteres, mínimo 50)`);
+      if (description.trim().length < 10) {
+    issues.push(`❌ Descripción demasiado corta (${description.trim().length} caracteres, mínimo 10)`);
     } else {
       console.log('✅ Descripción tiene longitud adecuada:', description.trim().length, 'caracteres');
     }

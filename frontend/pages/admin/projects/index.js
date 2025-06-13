@@ -523,7 +523,7 @@ const ProjectsPage = () => {
                             <ul className="list-disc ml-5 mt-1">
                               {error.includes('descripción') && (
                                 <li className="mt-1">
-                                  <a href={`/admin/projects/${selectedProject?.id}/edit`} className="text-blue-700 underline hover:text-blue-900">Editar la descripción</a> para que tenga al menos 50 caracteres
+                                  <a href={`/admin/projects/${selectedProject?.id}/edit`} className="text-blue-700 underline hover:text-blue-900">Editar la descripción</a> para que tenga al menos 10 caracteres
                                 </li>
                               )}
                               {error.includes('documento legal') && (
