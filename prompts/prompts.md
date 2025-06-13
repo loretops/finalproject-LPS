@@ -821,6 +821,27 @@ Ahora que esto está bien, hay dos cosas a corregir:
   - `expectedRoi`: Convertido de objeto Decimal a string
 - Se añadió una inversión de prueba (875,000€) para verificar el cálculo correcto del `currentAmount`
 - Resultado: Todos los importes se muestran correctamente en la ficha de proyecto
+
+## 15. Hotfix: Deployment en Render
+
+### 🚨 Corrección urgente: Módulos no encontrados en producción
+**Fecha**: 2025-06-13  
+**Prompt**: "crea una rama para corregir los fallos de deploy en render"  
+**Problema**: Error `MODULE_NOT_FOUND` para entidades de dominio en Render deployment  
+**Error específico**: `Cannot find module '../../domain/entities/Investment'`  
+**Causa**: Importaciones incorrectas con nombres en minúscula para archivos PascalCase  
+**Solución**: 
+- ✅ **Rama creada**: `hotfix/render-deploy-fixes`
+- ✅ **Importaciones corregidas** en 4 archivos críticos:
+  - `backend/application/services/investmentService.js`
+  - `backend/application/services/projectService.js` 
+  - `backend/tests/services/investmentService.test.js`
+  - `backend/tests/domain/investment.test.js`
+- ✅ **Verificación local**: Server loads successfully - no import errors
+- ✅ **Commit realizado**: `db2c079a` - fix(imports): Correct case-sensitive module imports
+- ✅ **Push completado**: Rama disponible para deployment automático
+- **Estado**: ✅ **RESUELTO** - Ready for production deployment
+- **Impacto**: Deployment en Render ahora funciona correctamente sin errores de módulos
 ```
 
 
