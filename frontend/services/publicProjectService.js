@@ -84,19 +84,31 @@ const normalizeProject = (project) => {
     return value || defaultValue;
   };
 
-  // Obtener valores usando ambos formatos
+  // Obtener valores usando ambos formatos (priorizar camelCase que viene del backend)
   const current_amount = getValue(project, 'currentAmount', 'current_amount', 0);
   const target_amount = getValue(project, 'targetAmount', 'target_amount', 0);
   const minimum_investment = getValue(project, 'minimumInvestment', 'minimum_investment', 0);
   const expected_roi = getValue(project, 'expectedRoi', 'expected_roi', 0);
   
   console.log(`🔢 Procesando amounts en normalizeProject:`, {
-    currentAmount: project.currentAmount,
-    current_amount: project.current_amount,
-    resultado: current_amount,
-    targetAmount: project.targetAmount,
-    target_amount: project.target_amount,
-    resultado_target: target_amount
+    'Backend camelCase': {
+      currentAmount: project.currentAmount,
+      targetAmount: project.targetAmount,
+      minimumInvestment: project.minimumInvestment,
+      expectedRoi: project.expectedRoi
+    },
+    'Frontend snake_case': {
+      current_amount: project.current_amount,
+      target_amount: project.target_amount,
+      minimum_investment: project.minimum_investment,
+      expected_roi: project.expected_roi
+    },
+    'Valores finales': {
+      current_amount,
+      target_amount,
+      minimum_investment,
+      expected_roi
+    }
   });
   
   return {

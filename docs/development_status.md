@@ -166,6 +166,7 @@
   - ❌ Datos de inversión mostrando 0€ en el frontend
   - ❌ Error 500 al crear nuevas inversiones
   - ❌ Desincronización entre currentAmount en BD y inversiones reales
+  - ❌ Modal de inversión mostrando 0€ para inversión mínima y disponible
 - **Cambios realizados:**
   - ✅ Sincronización de currentAmount de todos los proyectos con inversiones reales
   - ✅ Creado script de diagnóstico de conexión a BD (`backend/test-db-connection.js`)
@@ -174,6 +175,20 @@
   - ✅ Reducción de validación de descripción de proyectos de 50 a 10 caracteres
   - ✅ Corrección de consultas de usuarios con relaciones de roles
   - ✅ Manejo mejorado de errores en transacciones
+  - ✅ **Corrección de inconsistencia de formatos de datos:**
+    - ✅ Actualizada función `normalizeProject` en `frontend/services/publicProjectService.js`
+    - ✅ Actualizada función `normalizeProject` en `frontend/services/projectService.js`
+    - ✅ Soporte para ambos formatos: camelCase (backend) y snake_case (frontend)
+    - ✅ **Verificación de conversión correcta de tipos de datos numéricos:**
+      - ✅ **CRÍTICO: Corrección de tipos Decimal en entidad Project**
+      - ✅ **Problema identificado**: Objetos Decimal de Prisma causaban comparaciones incorrectas
+      - ✅ **Solución implementada**: Conversión automática de Decimal a Number en constructor
+      - ✅ **Corrección**: `isFullyFunded()` ahora evalúa correctamente 875,000 < 3,500,000
+      - ✅ **Resultado**: Proyecto "Residencial Villa Exclusiva" disponible para inversiones
+      - ✅ **Método**: Detección de objetos con método `toNumber()` y conversión automática
+- **Estado:** ✅ COMPLETADO
+- **Impacto:** Modal de inversión ahora muestra correctamente 75,000€ mínimo y 2,625,000€ disponible + Las inversiones ahora funcionan correctamente sin error "proyecto no disponible"
+- **Corrección adicional**: Añadida verificación de carga completa del proyecto antes de renderizar modal
 
 ### ✅ **Optimización de Imágenes y Corrección de Errores (13/06/2025)**
 - **Ticket:** Corregir problemas de imágenes en producción y optimizar rendimiento

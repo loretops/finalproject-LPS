@@ -31,8 +31,24 @@ class SimpleInvestmentService {
 
       console.log(`✅ Proyecto encontrado: ${projectData.title}`);
 
+      // Convertir Decimal a Number para evitar problemas de comparación
+      const normalizedProjectData = {
+        ...projectData,
+        currentAmount: projectData.currentAmount?.toNumber ? projectData.currentAmount.toNumber() : Number(projectData.currentAmount || 0),
+        targetAmount: projectData.targetAmount?.toNumber ? projectData.targetAmount.toNumber() : Number(projectData.targetAmount || 0),
+        minimumInvestment: projectData.minimumInvestment?.toNumber ? projectData.minimumInvestment.toNumber() : Number(projectData.minimumInvestment || 0),
+        expectedRoi: projectData.expectedRoi?.toNumber ? projectData.expectedRoi.toNumber() : Number(projectData.expectedRoi || 0)
+      };
+
+      console.log('🔧 Conversión aplicada:', {
+        currentAmount: normalizedProjectData.currentAmount,
+        targetAmount: normalizedProjectData.targetAmount,
+        currentAmountType: typeof normalizedProjectData.currentAmount,
+        targetAmountType: typeof normalizedProjectData.targetAmount
+      });
+
       // Crear instancia de la entidad proyecto
-      const project = new Project(projectData);
+      const project = new Project(normalizedProjectData);
 
       // Verificar que el proyecto está disponible para inversión
       if (!project.isAvailableForInvestment()) {

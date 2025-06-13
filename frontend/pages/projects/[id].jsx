@@ -599,16 +599,16 @@ const ProjectDetailPage = () => {
       </Layout>
       
       {/* Modal de inversión */}
-      {showInvestmentForm && (
+      {showInvestmentForm && project && project.minimum_investment !== undefined && (
         <InvestButton 
           project={{
             id: project.id,
             title: project.title,
             status: project.status,
-            minimumInvestment: project.minimum_investment,
-            targetAmount: project.target_amount,
-            currentAmount: project.current_amount || 0,
-            expectedRoi: project.expected_roi,
+            minimum_investment: project.minimum_investment,
+            target_amount: project.target_amount,
+            current_amount: project.current_amount || 0,
+            expected_roi: project.expected_roi,
             draft: project.draft || false,
             active: project.status === 'published' && !(project.draft === true)
           }}
