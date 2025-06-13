@@ -160,6 +160,21 @@
 - **Estado:** ✅ COMPLETADO
 - **Impacto:** Documentación 100% fiable, actualizada y sincronizada con el código actual
 
+### ✅ **Corrección de Problemas de Inversión y Datos (13/06/2025)**
+- **Ticket:** Corregir errores de inversión y datos mostrando 0€
+- **Problemas identificados:**
+  - ❌ Datos de inversión mostrando 0€ en el frontend
+  - ❌ Error 500 al crear nuevas inversiones
+  - ❌ Desincronización entre currentAmount en BD y inversiones reales
+- **Cambios realizados:**
+  - ✅ Sincronización de currentAmount de todos los proyectos con inversiones reales
+  - ✅ Creado script de diagnóstico de conexión a BD (`backend/test-db-connection.js`)
+  - ✅ Creado script de sincronización (`backend/fix-current-amounts.js`)
+  - ✅ Servicio simplificado de inversiones para diagnosticar problemas
+  - ✅ Reducción de validación de descripción de proyectos de 50 a 10 caracteres
+  - ✅ Corrección de consultas de usuarios con relaciones de roles
+  - ✅ Manejo mejorado de errores en transacciones
+
 ### ✅ **Optimización de Imágenes y Corrección de Errores (13/06/2025)**
 - **Ticket:** Corregir problemas de imágenes en producción y optimizar rendimiento
 - **Cambios realizados:**

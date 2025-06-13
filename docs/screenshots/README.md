@@ -70,5 +70,5 @@ Las capturas deben actualizarse cuando:
 
 ---
 
-**Última actualización**: Enero 2025  
+**Última actualización**: Junio 2025  
 **Versión de la aplicación**: MVP v1.0 

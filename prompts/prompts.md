@@ -470,6 +470,18 @@ Y tambien en el login: @https://coopco.vercel.app/login
 Yo voy a ir haciendo capturas para documentar el proyecto
 ```
 
+**Prompt 11:**
+```
+He detectado otro error: al dar a invertir ahora me salen los datos a 0€ , y al dar a confirmar invesrion da un error:
+Error al crear inversión: 
+Object { message: "Request failed with status code 500", name: "AxiosError", code: "ERR_BAD_RESPONSE", config: {…}, request: XMLHttpRequest, response: {…}, status: 500, stack: "", … }
+```
+
+**Prompt 12:**
+```
+Cambia la depuracion de la publicacion del proyecto para que admita descripciones cortas: ahora mismo como miniimo son 50 caracteres. Con 10 es suficiente
+```
+
 ## 8. Despliegue y configuración de entornos
 
 **Prompt 1:**
