@@ -1,12 +1,8 @@
 const express = require('express');
-const path = require('path');
-
-// Determinar la ruta base del backend
-const backendRoot = path.resolve(__dirname, '../../..');
-const jwtAuthMiddleware = require(path.join(backendRoot, 'middleware/jwtAuthMiddleware'));
-const roleAuthMiddleware = require(path.join(backendRoot, 'middleware/roleAuthMiddleware'));
+const jwtAuthMiddleware = require('../../../middleware/jwtAuthMiddleware');
+const roleAuthMiddleware = require('../../../middleware/roleAuthMiddleware');
 // Este controlador lo implementaremos después
-const projectController = require(path.join(__dirname, '../controllers/project.controller'));
+const projectController = require('../controllers/project.controller');
 
 const router = express.Router();
 

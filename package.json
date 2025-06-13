@@ -8,7 +8,7 @@
     "dev:frontend": "(lsof -t -i:3001 | xargs kill -9 || true) && cd frontend && next dev -p 3001",
     "dev:backend": "(lsof -t -i:8001 | xargs kill -9 || true) && cd backend && nodemon server.js",
     "build": "cd frontend && npm run build",
-    "start": "node backend/server.js",
+    "start": "cd backend && node server.js",
     "test": "jest",
     "lint": "eslint .",
     "test:unit": "echo \"Error: no test specified\" && exit 1",
